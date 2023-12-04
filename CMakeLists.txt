@@ -4,10 +4,13 @@ project(TimelessJourneys LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_PREFIX_PATH "C:/SDL2_sources")
+
 find_package(SDL2 CONFIG REQUIRED)
 if(NOT SDL2_FOUND)
-
 message(FATAL_ERROR "SDL2 not found")
+else()
+    message(status "Found SDL2 in;${SDL2_DIR}")
 endif()
 
 find_package(SDL2_image CONFIG REQUIRED)
