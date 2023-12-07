@@ -28,11 +28,13 @@ public:
 
     bool is_running() {return isRunning;}
 
+    static SDL_Renderer *renderer;
+    static SDL_Event event;
+
 private:
     int cnt = 0;
     bool isRunning;
     SDL_Window *window;
-    SDL_Renderer *renderer;
 };
 
 #endif // GAME_H

@@ -25,7 +25,21 @@ set(SOURCES
     main.cpp
     game.h game.cpp
     TextureManager.h
-    TextureManager.cpp)
+    TextureManager.cpp
+    Collision.cpp
+    map.cpp
+    gameobject.cpp
+    Vector2D.cpp
+    Collision.h
+    gameobject.h
+    Vector2D.h
+    map.h
+    ECS/Components.h
+    ECS/ColliderComponent.h
+    ECS/ECS.h
+    ECS/KeyboardController.h
+    ECS/SpriteComponent.h
+    ECS/TransformComponent.h)
 
 
 add_executable(TimelessJourneys ${SOURCES})

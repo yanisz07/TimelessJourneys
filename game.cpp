@@ -1,9 +1,20 @@
 #include "game.h"
 #include "TextureManager.h"
+#include "map.h"
+#include "ECS/Components.h"
+#include "Vector2D.h"
+#include "Collision.h"
 
-SDL_Texture* playerTex;
-SDL_Rect srcR, destR;
 
+Map* map;
+Manager manager;
+
+SDL_Renderer* Game::renderer = nullptr;
+
+SDL_Event Game::event;
+
+auto& player(manager.addEntity());
+auto& wall(manager.addEntity());
 
 Game::Game()
 {}
@@ -20,18 +31,18 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         flags=SDL_WINDOW_FULLSCREEN;
     }
 
-    if(SDL_Init(SDL_INIT_VIDEO)==0)
+    if(SDL_Init(SDL_INIT_EVERYTHING)==0)
     {
         std::cout << "Subsystems initialized!..." << std::endl;
 
-        window = SDL_CreateWindow(title, xpos, ypos, width, height, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 
         if (window)
         {
             std::cout << "Window created" << std::endl;
         }
 
-        renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+        renderer = SDL_CreateRenderer(window,-1,0);
 
         if(renderer)
         {
@@ -47,14 +58,25 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         isRunning = false;
     }
 
-    playerTex = TextureManager::LoadTexture("/assets/player.png",renderer);
+    map = new Map();
 
+    //ecs implementation
+
+    player.addComponent<TransformComponent>(2);
+    player.addComponent<SpriteComponent>("/assets/player.png");
+    player.addComponent<KeyboardController>();
+    player.addComponent<ColliderComponent>("player");
+
+    wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
+    wall.addComponent<SpriteComponent>("/assets/dirt.png");
+    wall.addComponent<ColliderComponent>("wall");
 }
 
 void Game::handleEvents()
 {
-    SDL_Event event;
+
     SDL_PollEvent(&event);
+
     switch (event.type) {
     case SDL_QUIT:
         isRunning = false;
@@ -66,19 +88,23 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    cnt++;
-    destR.h = 64;
-    destR.w = 64;
-    destR.x = cnt;
+    manager.refresh();
+    manager.update();
 
-    std::cout << cnt << std::endl;
+    if(Collision::AABB(player.getComponent<ColliderComponent>().collider,
+                        wall.getComponent<ColliderComponent>().collider))
+    {
+        player.getComponent<TransformComponent>().scale=1;
+        std::cout << "Wall Hit!" << std::endl;
+    }
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
     //this is were we would add stuff to render
-    SDL_RenderCopy(renderer, playerTex, NULL, &destR);
+    map->DrawMap();
+    manager.draw();
     SDL_RenderPresent(renderer);
 }
 
