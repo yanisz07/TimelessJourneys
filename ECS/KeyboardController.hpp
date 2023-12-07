@@ -1,9 +1,9 @@
 #ifndef KEYBOARDCONTROLLER_H
 #define KEYBOARDCONTROLLER_H
 
-#include "../game.h"
-#include "ECS.h"
-#include "Components.h"
+#include "../game.hpp"
+#include "ECS.hpp"
+#include "Components.hpp"
 
 class KeyboardController : public Component
 {

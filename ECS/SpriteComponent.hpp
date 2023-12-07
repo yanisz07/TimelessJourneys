@@ -1,9 +1,9 @@
 #ifndef SPRITECOMPONENT_H
 #define SPRITECOMPONENT_H
 
-#include "Components.h"
+#include "Components.hpp"
 #include "SDL.h"
-#include "../TextureManager.h"
+#include "../TextureManager.hpp"
 
 class SpriteComponent : public Component
 {

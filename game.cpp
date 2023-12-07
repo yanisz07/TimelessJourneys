@@ -1,9 +1,9 @@
-#include "game.h"
-#include "TextureManager.h"
-#include "map.h"
-#include "ECS/Components.h"
-#include "Vector2D.h"
-#include "Collision.h"
+#include "game.hpp"
+#include "TextureManager.hpp"
+#include "map.hpp"
+#include "ECS/Components.hpp"
+#include "Vector2D.hpp"
+#include "Collision.hpp"
 
 
 Map* map;
