@@ -23,23 +23,23 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 set(SOURCES
     main.cpp
-    game.h game.cpp
-    TextureManager.h
+    game.hpp game.cpp
+    TextureManager.hpp
     TextureManager.cpp
     Collision.cpp
     map.cpp
     gameobject.cpp
     Vector2D.cpp
-    Collision.h
-    gameobject.h
-    Vector2D.h
-    map.h
-    ECS/Components.h
-    ECS/ColliderComponent.h
-    ECS/ECS.h
-    ECS/KeyboardController.h
-    ECS/SpriteComponent.h
-    ECS/TransformComponent.h)
+    Collision.hpp
+    gameobject.hpp
+    Vector2D.hpp
+    map.hpp
+    ECS/Components.hpp
+    ECS/ColliderComponent.hpp
+    ECS/ECS.hpp
+    ECS/KeyboardController.hpp
+    ECS/SpriteComponent.hpp
+    ECS/TransformComponent.hpp)
 
 
 add_executable(TimelessJourneys ${SOURCES})

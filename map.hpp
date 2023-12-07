@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "game.h"
+#include "game.hpp"
 
 class Map{
 public:

@@ -3,7 +3,7 @@
 
 #include "string"
 #include "SDL.h"
-#include "Components.h"
+#include "Components.hpp"
 
 class ColliderComponent : public Component
 {
