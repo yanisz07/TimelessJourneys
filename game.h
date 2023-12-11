@@ -5,13 +5,17 @@
 #include <SDL_image.h>
 #include <iostream>
 #include "stdio.h"
-#include "iostream"
 #include "string"
 #include "charconv"
+#include "vector"
 
 #ifndef ROOT_DIR
 #define ROOT_DIR ""
 #endif
+
+class ColliderComponent;
+
+class AssetManager;
 
 class Game
 {
@@ -30,10 +34,21 @@ public:
 
     static SDL_Renderer *renderer;
     static SDL_Event event;
+    static bool isRunning;
+    static SDL_Rect camera;
+    static AssetManager* assets;
+
+    enum groupLabels : std::size_t //we can have up to 32 groups
+    {
+        groupMap,
+        groupPlayers,
+        groupColliders,
+        groupProjectiles,
+        groupEnemies
+    };
 
 private:
     int cnt = 0;
-    bool isRunning;
     SDL_Window *window;
 };
 

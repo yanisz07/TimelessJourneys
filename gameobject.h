@@ -1,7 +1,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include "game.hpp"
+#include "game.h"
 
 class GameObject
 {

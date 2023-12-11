@@ -1,95 +1,78 @@
-#include "map.hpp"
-#include "TextureManager.hpp"
+#include "map.h"
+#include "game.h"
+#include <fstream>
+#include "ECS/ECS.h"
+#include "ECS/Components.h"
 
-int lvl1[20][25] = {
-    {0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,1,1,1,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,1,1,1,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,1,1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-};
+extern Manager manager; //not the same as in game.cpp
 
-Map::Map()
+Map::Map(std::string tID, int ms, int ts) : texID(tID), mapScale(ms), tileSize(ts)
 {
-
-    dirt = TextureManager::LoadTexture("/assets/dirt.png");
-    grass = TextureManager::LoadTexture("/assets/grass.png");
-    water = TextureManager::LoadTexture("/assets/water.png");
-
-    LoadMap(lvl1);
-
-    src.x = 0;
-    src.y = 0;
-
-    src.w = 32;
-    src.h = 32;
-
-    dest.w = 32;
-    dest.h = 32;
-
-    dest.x = 0;
-    dest.y = 0;
+    scaledSize = ms*ts;
 }
 
 Map::~Map()
 {
-    SDL_DestroyTexture(grass);
-    SDL_DestroyTexture(water);
-    SDL_DestroyTexture(dirt);
 }
 
-void Map::LoadMap(int arr[20][25])
+void Map::LoadMap(std::string path, int sizeX, int sizeY)
 {
-    for (int row=0; row < 20; row++)
+    char c;
+    std::fstream mapFile;
+    mapFile.open(path);
+
+    int srcX, srcY;
+
+    if (!mapFile.is_open())
     {
-        for (int column=0; column < 25; column++)
-        {
-            map[row][column] = arr[row][column];
-        }
+        std::cerr << "Error opening file: " << path << std::endl;
+        return;
     }
-}
 
-void Map::DrawMap()
-{
-    int type=0;
-
-    for (int row=0; row < 20; row++)
+    for (int y = 0; y < sizeY; y++)
     {
-        for (int column=0; column < 25; column++)
+        for (int x = 0; x < sizeX; x++)
         {
-            type = map[row][column];
-            dest.x = column*32;
-            dest.y = row*32;
+            mapFile.get(c); //get y value of tile
+            //std::cout << 'c = ' << c << std::endl;
+            srcY = atoi(&c) * tileSize;
+            //std::cout << 'srcY = ' << srcY << std::endl;
+            mapFile.get(c); //get x value of tile
+            //std::cout << 'c = ' << c << std::endl;
+            srcX = atoi(&c) * tileSize;
+            //std::cout << 'srcX = ' << srcX << std::endl;
+            AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
+            mapFile.ignore(); //","
+        }
+        mapFile.ignore(); //'\n'
+    }
 
-            switch (type)
+    mapFile.ignore();
+    mapFile.ignore();
+
+    for (int y=0; y < sizeY; y++)
+    {
+        for (int x =0; x < sizeX; x++)
+        {
+            mapFile.get(c);
+            if ( c == '1' )
             {
-            case 0:
-                TextureManager::Draw(water, src, dest);
-                break;
-            case 1:
-                TextureManager::Draw(grass, src, dest);
-                break;
-            case 2:
-                TextureManager::Draw(dirt, src, dest);
-                break;
-            default:
-                break;
+                auto& tcol(manager.addEntity());
+                tcol.addComponent<ColliderComponent>("terrain", x*scaledSize , y*scaledSize, scaledSize);
+                tcol.addGroup(Game::groupColliders);
             }
+            mapFile.ignore(); //','
         }
+        mapFile.ignore(); //'\n'
     }
+
+    mapFile.close();
 }
+
+void Map::AddTile(int srcX, int srcY, int xpos, int ypos)
+{
+    auto& tile(manager.addEntity());
+    tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, tileSize, mapScale, texID);
+    tile.addGroup(Game::groupMap);
+}
+

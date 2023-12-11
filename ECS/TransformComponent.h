@@ -1,8 +1,8 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-#include "Components.hpp"
-#include "../Vector2D.hpp"
+#include "Components.h"
+#include "../Vector2D.h"
 
 class TransformComponent : public Component
 {
@@ -20,14 +20,13 @@ public:
 
     TransformComponent()
     {
-        position.x = 0.0f;
-        position.y = 0.0f;
+        position.Zero();
     }
 
     TransformComponent(int sc)
     {
-        position.x = 0.0f;
-        position.y = 0.0f;
+        position.x = 800;
+        position.y = 640;
         scale = sc;
     }
 
@@ -48,8 +47,7 @@ public:
 
     void init() override
     {
-        velocity.x = 0;
-        velocity.y = 0;
+        velocity.Zero();
     }
 
     void update() override
