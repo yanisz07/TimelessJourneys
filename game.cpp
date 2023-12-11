@@ -6,7 +6,6 @@
 #include "Collision.h"
 #include "AssetManager.h"
 #include <sstream>
-#include <mach-o/dyld.h>
 
 Map* map;
 Manager manager;
