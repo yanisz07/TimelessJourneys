@@ -44,10 +44,7 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
             AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
             mapFile.ignore(); //","
         }
-        mapFile.ignore(); //'\n'
     }
-
-    mapFile.ignore();
     mapFile.ignore();
 
     for (int y=0; y < sizeY; y++)
@@ -63,7 +60,6 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
             }
             mapFile.ignore(); //','
         }
-        mapFile.ignore(); //'\n'
     }
 
     mapFile.close();
