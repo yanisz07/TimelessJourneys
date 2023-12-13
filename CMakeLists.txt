@@ -15,19 +15,43 @@ if(NOT SDL2_image_FOUND)
     message(FATAL_ERROR "SDL2_image not found")
 endif()
 
-include_directories(${SDL2_INCLUDE_DIRS})
+find_package(SDL2_ttf CONFIG REQUIRED)
+if(NOT SDL2_ttf_FOUND)
+    message(FATAL_ERROR "SDL2_ttf not found")
+endif()
 
 
 set(SOURCES
     main.cpp
     game.h game.cpp
     TextureManager.h
-    TextureManager.cpp)
-
+    TextureManager.cpp
+    gameobject.h gameobject.cpp
+    map.h
+    map.cpp
+    ECS/ECS.h
+    ECS/Components.h
+    ECS/SpriteComponent.h
+    ECS/TransformComponent.h
+    Vector2D.h
+    Vector2D.cpp
+    ECS/KeyboardController.h
+    ECS/ColliderComponent.h
+    Collision.h
+    Collision.cpp
+    ECS/TileComponent.h
+    ECS/ECS.cpp
+    ECS/Animation.h
+    AssetManager.h
+    AssetManager.cpp
+    ECS/ProjectileComponent.h
+    ECS/UILabel.h
+    ECS/Stats.h
+    ECS/Stats.cpp)
 
 add_executable(TimelessJourneys ${SOURCES})
 
-target_link_libraries(TimelessJourneys PRIVATE SDL2_image::SDL2_image ${SDL2_LIBRARIES})
+target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
 
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_definitions(TimelessJourneys PRIVATE ROOT_DIR="${ROOT_DIR}")

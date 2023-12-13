@@ -12,7 +12,7 @@ int main(int argc, char* args[]) {
 
     game = new Game();
 
-    game->init("BirchEngine",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,600,true);
+    game->init("GameWindow",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,640,false);
 
     while(game->is_running())
     {
