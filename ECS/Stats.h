@@ -28,6 +28,9 @@ public:
 
     void AddHealth(int i);
     void SubtractHealth(int i);
+
+    static void Damage(Stats& entity1, Stats& entity2);
+
 private:
     int health;
     int damage; //this is the melee damage, so at collision with the ennemy the ennemy takes dmg (later we need to implement a button to trigger that)

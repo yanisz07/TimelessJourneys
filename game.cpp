@@ -173,7 +173,7 @@ void Game::update()
         if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
         {
             std::cout << "Hit player!" << std::endl;
-            player.getComponent<Stats>().SubtractHealth(2);
+            Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
             p->destroy();
         }
     }
@@ -185,7 +185,7 @@ void Game::update()
             std::cout << "Hit enemy" << std::endl;
             std::cout << "Damage done" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos;
-            enemy.getComponent<Stats>().SubtractHealth(5);
+            Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
         }
     }
 
