@@ -36,7 +36,7 @@ public:
                 //update direction
                 transform->y_direction = -1;
                 if (pressed_right) {transform->x_direction = 1;}
-                if (pressed_left) {transform->x_direction = -1;}
+                else if (pressed_left) {transform->x_direction = -1;}
                 else {transform->x_direction = 0;}
                 break;
             case SDLK_DOWN:
@@ -46,7 +46,7 @@ public:
                 //update direction
                 transform->y_direction = 1;
                 if (pressed_right) {transform->x_direction = 1;}
-                if (pressed_left) {transform->x_direction = -1;}
+                else if (pressed_left) {transform->x_direction = -1;}
                 else {transform->x_direction = 0;}
                 break;
             case SDLK_LEFT:
@@ -57,7 +57,7 @@ public:
                 //update direction
                 transform->x_direction = -1;
                 if (pressed_up) {transform->y_direction = -1;}
-                if (pressed_down) {transform->y_direction = 1;}
+                else if (pressed_down) {transform->y_direction = 1;}
                 else {transform->y_direction = 0;}
                 break;
             case SDLK_RIGHT:
@@ -67,7 +67,7 @@ public:
                 //update direction
                 transform->x_direction = 1;
                 if (pressed_up) {transform->y_direction = -1;}
-                if (pressed_down) {transform->y_direction = 1;}
+                else if (pressed_down) {transform->y_direction = 1;}
                 else {transform->y_direction = 0;}
                 break;
             case SDLK_SPACE:
@@ -90,7 +90,7 @@ public:
                     }
                     else
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,3,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
                     }
                 }
                 if (transform->y_direction==1)
