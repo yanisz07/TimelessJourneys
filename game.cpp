@@ -25,6 +25,7 @@ auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
+auto& enemy_health(manager.addEntity());
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
@@ -102,15 +103,21 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy.addComponent<TransformComponent>(600,600,32,32,4);
     enemy.addComponent<SpriteComponent>("enemy", false);
     enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
 
     SDL_Color white = {255,255,255,255};
     SDL_Color green = {0,255,0,255};
+    SDL_Color blue = {0,0,0,255};
     label.addComponent<UILabel>(10,10, "Test String", "arial", white, true);
 
     //display player's health on top of his head
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
     player_health.addComponent<UILabel>(playerPos.x, playerPos.y, "Test String2", "arial", green, false);
+
+    //display enemy's health on top of his head
+    Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
+    enemy_health.addComponent<UILabel>(enemyPos.x, enemyPos.y, "Test String2", "arial", green, false);
 
     lastProjectileTime = SDL_GetTicks();
 
@@ -144,6 +151,7 @@ void Game::update()
     std::stringstream ssp; //hold variables and turn them into strings
     ssp << "Player position: " << playerPos;
 
+
     label.getComponent<UILabel>().SetLabelText(ssp.str(), "arial"); //change the text
 
     manager.refresh();
@@ -174,7 +182,9 @@ void Game::update()
         if(Collision::AABB(playerCol,e->getComponent<ColliderComponent>().collider))
         {
             std::cout << "Hit enemy" << std::endl;
+            std::cout << "Damage done" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos;
+            enemy.getComponent<Stats>().SubtractHealth(5);
         }
     }
 
