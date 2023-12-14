@@ -79,7 +79,7 @@ public:
                     }
                     else
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y+(transform->height*transform->scale)),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
                     }
                 }
                 if (transform->y_direction == 0)
@@ -127,22 +127,34 @@ public:
             case SDLK_UP:
                 pressed_up = false;
                 transform->velocity.y = 0;
+                //change direction
+                if (!pressed_right && !pressed_left) {transform->y_direction=-1;}
+                else {transform->y_direction =0;}
                 sprite->Play("Idle");
                 break;
             case SDLK_DOWN:
                 pressed_down = false;
                 transform->velocity.y = 0;
+                //change direction
+                if (!pressed_right && !pressed_left) {transform->y_direction=1;}
+                else {transform->y_direction =0;}
                 sprite->Play("Idle");
                 break;
             case SDLK_LEFT:
                 pressed_left = false;
                 transform->velocity.x = 0;
+                //change direction
+                if (!pressed_up && !pressed_down) {transform->x_direction =-1;}
+                else {transform->x_direction =0;}
                 sprite->Play("Idle");
                 sprite->spriteFlip = SDL_FLIP_NONE; //resets horizontal flipping
                 break;
             case SDLK_RIGHT:
                 pressed_right = false;
                 transform->velocity.x = 0;
+                //change direction
+                if (!pressed_up && !pressed_down) {transform->x_direction =1;}
+                else {transform->x_direction =0;}
                 sprite->Play("Idle");
                 break;
             case SDLK_ESCAPE :
