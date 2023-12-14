@@ -11,8 +11,8 @@
 class UILabel : public Component
 {
 public:
-    UILabel(int xpos, int ypos, std::string text, std::string font, SDL_Color& colour) :
-        labelText(text), labelFont(font), textColour(colour)
+    UILabel(int xpos, int ypos, std::string text, std::string font, SDL_Color& colour, bool is_static) :
+        labelText(text), labelFont(font), textColour(colour), Static(is_static)
     {
         position.x = xpos;
         position.y = ypos;
@@ -30,13 +30,29 @@ public:
         SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
     }
 
+    void SetPositionText(int x, int y)
+    {
+        position.x = x;
+        position.y = y;
+    }
+
     void draw() override
     {
-        SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position);
+        if (Static)
+        {
+            SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position);
+        }
+        else
+        {
+            position.x -= Game::camera.x;
+            position.y -= Game::camera.y;
+            SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position);
+        }
     }
 
 private:
 
+    bool Static = true;
     SDL_Rect position;
     std::string labelText;
     std::string labelFont;

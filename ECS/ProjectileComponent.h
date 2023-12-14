@@ -26,7 +26,7 @@ public:
 
         if(distance > range)
         {
-            std::cout << "out of range" << std::endl;
+            //std::cout << "out of range" << std::endl;
             entity->destroy();
         }
         else if(transform->position.x > Game::camera.x + Game::camera.w ||
@@ -34,7 +34,7 @@ public:
                 transform->position.y > Game::camera.y + Game::camera.h ||
                 transform->position.y < Game::camera.y)
         {
-            std::cout << "out of bounds" << std::endl;
+            //std::cout << "out of bounds" << std::endl;
             entity->destroy();
         }
     }
@@ -47,6 +47,7 @@ private:
     int speed;
     int distance;
     Vector2D velocity;
+
 };
 
 #endif // PROJECTILE_H

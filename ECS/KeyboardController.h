@@ -41,6 +41,9 @@ public:
                 transform->velocity.x = 1;
                 sprite->Play("Walk");
                 break;
+            case SDLK_SPACE:
+                Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y),Vector2D(1,0),200,2,"projectile");
+                break;
             default:
                 break;
             }

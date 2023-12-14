@@ -23,7 +23,6 @@ if(NOT SDL2_ttf_FOUND)
     message(FATAL_ERROR "SDL2_ttf not found")
 endif()
 
-
 include_directories(${SDL2_INCLUDE_DIRS})
 
 
@@ -51,8 +50,9 @@ set(SOURCES
     AssetManager.h
     AssetManager.cpp
     ECS/ProjectileComponent.h
-    ECS/UILabel.h)
-
+    ECS/UILabel.h
+    ECS/Stats.h
+    ECS/Stats.cpp)
 
 add_executable(TimelessJourneys ${SOURCES})
 
