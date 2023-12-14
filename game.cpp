@@ -77,7 +77,14 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     }
 
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
-    assets->AddTexture("player" , "/assets/player_anims.png");
+
+    //Import player sprites
+    assets->AddTexture("player" , "/assets/Green_Slime/Idle.png");
+    assets -> AddTexture("player_attack1", "/assets/Green_Slime/Attack_1.png");
+    assets -> AddTexture("player_run","/assets/Green_Slime/Run.png");
+    std::cout << "Player textures added" << std::endl;
+    //End
+
     assets->AddTexture("projectile", "/assets/proj.png");
     assets->AddTexture("enemy" , "/assets/enemy.png");
 
@@ -92,11 +99,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     map->LoadMap(mapPath.c_str(), 25, 20);
 
-    player.addComponent<TransformComponent>(800,640,32,32,4);
+    player.addComponent<TransformComponent>(800,640,128,128,1);
     player.addComponent<SpriteComponent>("player", true);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>();
+    player.addComponent<WeaponComponent>();
     player.addGroup(Game::groupPlayers);
 
     enemy.addComponent<TransformComponent>(600,600,32,32,4);

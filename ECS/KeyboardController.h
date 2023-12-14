@@ -44,6 +44,11 @@ public:
             case SDLK_SPACE:
                 Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y),Vector2D(1,0),200,2,"projectile");
                 break;
+            case SDLK_z:
+                if(entity->hasComponent<WeaponComponent>())
+                {
+                    std::cout << "attack" << std::endl;
+                }
             default:
                 break;
             }

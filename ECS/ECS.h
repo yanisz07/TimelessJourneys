@@ -79,6 +79,7 @@ public:
         return groupBitset[mGroup];
     }
 
+
     void addGroup(Group mGroup);
     void delGroup(Group mGroup)
     {
@@ -108,8 +109,15 @@ public:
 
     template <typename T> T& getComponent() const //gives us access to a specific component
     {
+
         auto ptr(componentArray[getComponentTypeID<T>()]);
         return *static_cast<T*>(ptr);
+
+    }
+
+    template <typename T> bool hasComponent()
+    {
+        return componentBitSet[getComponentTypeID<T>()];
     }
 };
 

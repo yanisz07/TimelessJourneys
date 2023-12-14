@@ -36,8 +36,8 @@ public:
     {
         animated = isAnimated;
 
-        Animation idle = Animation(0, 3, 100); //y = 0 in sprites sheet
-        Animation walk = Animation(1, 8, 100); //y = 1 in sprites sheet
+        Animation idle = Animation(0, 8, 100); //y = 0 in sprites sheet
+        Animation walk = Animation(0, 7, 100); //y = 1 in sprites sheet
 
         animations.emplace("Idle", idle); //store animations
         animations.emplace("Walk",walk);

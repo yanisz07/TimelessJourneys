@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(TimelessJourneys LANGUAGES CXX)
+set(CMAKE_SIZEOF_VOID_P 8)
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -51,7 +53,10 @@ set(SOURCES
     ECS/Stats.h
     ECS/Stats.cpp)
 
-add_executable(TimelessJourneys ${SOURCES})
+add_executable(TimelessJourneys ${SOURCES}
+    timer.hpp
+    ECS/weaponComponent.h
+)
 
 target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
 
