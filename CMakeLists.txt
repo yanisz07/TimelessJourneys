@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(TimelessJourneys LANGUAGES CXX)
-set(CMAKE_SIZEOF_VOID_P 8)
+set(CMAKE_SIZEOF_VOID_P 4)
 
 
 set(CMAKE_CXX_STANDARD 17)
