@@ -1,0 +1,66 @@
+{
+    "characters": [
+      {
+        "name": "player",
+        "sprites": [
+          {
+            "name" : "Player_Idle_Sprite",
+            "path": "/assets/Green_Slime/Idle.png",
+            "actions": [
+              {
+                "name": "Idle",
+                "values": [
+                  60,
+                  8
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Attack_1_Sprite",
+            "path": "/assets/Green_Slime/Attack_1.png",
+            "actions": [
+              {
+                "name": "Attack_1",
+                "values": [
+                  60,
+                  4
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "enemy",
+        "sprites": [
+          {
+            "name" : "Enemy_Idel_Sprite",
+            "path": "/assets/Blue_Slime/Idle.png",
+            "actions": [
+              {
+                "name": "Idle",
+                "values": [
+                  60,
+                  8
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Attack_1_Sprite",
+            "path": "/assets/Blue_Slime/Attack_1.png",
+            "actions": [
+              {
+                "name": "Attack_1",
+                "values": [
+                  60,
+                  4
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

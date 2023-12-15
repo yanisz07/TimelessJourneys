@@ -24,7 +24,6 @@ if(NOT SDL2_ttf_FOUND)
     message(FATAL_ERROR "SDL2_ttf not found")
 endif()
 
-
 set(SOURCES
     main.cpp
     game.h game.cpp
@@ -51,11 +50,14 @@ set(SOURCES
     ECS/ProjectileComponent.h
     ECS/UILabel.h
     ECS/Stats.h
-    ECS/Stats.cpp)
+    ECS/Stats.cpp
+    json.hpp)
 
 add_executable(TimelessJourneys ${SOURCES}
     timer.hpp
     ECS/weaponComponent.h
+    world.hpp world.cpp
+
 )
 
 target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)

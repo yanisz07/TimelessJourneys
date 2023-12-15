@@ -15,6 +15,7 @@ private:
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;
 
+
     bool animated = false;
     int frames = 0;
     int speed = 100; //delay between frames in milliseconds

@@ -27,6 +27,7 @@ public:
     void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
     void handleEvents();
+    int  loadWorld();
     void update();
     void render();
     void clean();

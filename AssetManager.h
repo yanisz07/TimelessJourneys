@@ -7,6 +7,7 @@
 #include "Vector2D.h"
 #include "ECS/ECS.h"
 #include "SDL_ttf.h"
+#include "world.hpp"
 
 class AssetManager
 {
@@ -15,6 +16,10 @@ public:
     ~AssetManager();
 
     //gameobjects
+
+    World world;
+    void loadWorld(std::string path);
+
 
     void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id);
 

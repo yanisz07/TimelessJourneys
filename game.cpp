@@ -7,6 +7,7 @@
 #include "AssetManager.h"
 #include <sstream>
 #include <filesystem>
+#include "world.hpp"
 
 Map* map;
 Manager manager;
@@ -76,12 +77,27 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         std::cout << "Error : SDL_TTF" << std::endl;
     }
 
+
+    //Load game assets
+
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
 
     //Import player sprites
-    assets->AddTexture("player" , "/assets/Green_Slime/Idle.png");
-    assets -> AddTexture("player_attack1", "/assets/Green_Slime/Attack_1.png");
-    assets -> AddTexture("player_run","/assets/Green_Slime/Run.png");
+   // World world1;
+    /*world1.loadWorld("C:/Users/Joaquin/OneDrive - uc.cl/Ing UC Drive/Intercambio Francia/Courses/C++/VideoGameProject/TimelessJourneys/assets/World_1.json");
+    for (auto iter1 = world1.Characters.begin(); iter1 != world1.Characters.end(); ++iter1)
+    {
+        for(auto iter2 = iter1->second.Sprites.begin(); iter2 != iter1->second.Sprites.end(); ++iter2)
+        {
+            assets->AddTexture(iter2->first,iter2->second.path.c_str());
+        }
+    }*/
+
+    assets->loadWorld("C:/Users/Joaquin/OneDrive - uc.cl/Ing UC Drive/Intercambio Francia/Courses/C++/VideoGameProject/TimelessJourneys/assets/World_1.json");
+
+    //assets->AddTexture("player" , "/assets/Green_Slime/Idle.png");
+    //assets -> AddTexture("player_attack1", "/assets/Green_Slime/Attack_1.png");
+    //assets -> AddTexture("player_run","/assets/Green_Slime/Run.png");
     std::cout << "Player textures added" << std::endl;
     //End
 
@@ -100,7 +116,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     map->LoadMap(mapPath.c_str(), 25, 20);
 
     player.addComponent<TransformComponent>(800,640,128,128,1);
-    player.addComponent<SpriteComponent>("player", true);
+    player.addComponent<SpriteComponent>("Player_Idle_Sprite", true);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>();
