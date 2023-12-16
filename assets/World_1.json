@@ -28,6 +28,19 @@
                 ]
               }
             ]
+          },
+          {
+            "name" : "Player_Run_Sprite",
+            "path" : "/assets/Green_Slime/Run.png",
+            "actions": [
+              {
+                "name": "Run",
+                "values": [
+                  60,
+                  7
+                ]
+              }
+            ]
           }
         ]
       },

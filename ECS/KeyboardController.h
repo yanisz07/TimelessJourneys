@@ -26,20 +26,33 @@ public:
             {
             case SDLK_UP:
                 transform->velocity.y = -1;
-                sprite->Play("Walk");
+                if(sprite->currentAction != "Run")
+                {
+                    sprite->Play("Run");
+                }
+
                 break;
             case SDLK_DOWN:
                 transform->velocity.y = 1;
-                sprite->Play("Walk");
+                if(sprite->currentAction != "Run")
+                {
+                    sprite->Play("Run");
+                }
                 break;
             case SDLK_LEFT:
                 transform->velocity.x = -1;
-                sprite->Play("Walk");
+                if(sprite->currentAction != "Run")
+                {
+                    sprite->Play("Run");
+                }
                 sprite->spriteFlip = SDL_FLIP_HORIZONTAL; //flips on the x axis
                 break;
             case SDLK_RIGHT:
                 transform->velocity.x = 1;
-                sprite->Play("Walk");
+                if(sprite->currentAction != "Run")
+                {
+                    sprite->Play("Run");
+                }
                 break;
             case SDLK_SPACE:
                 Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y),Vector2D(1,0),200,2,"projectile");

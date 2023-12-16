@@ -8,6 +8,11 @@ World::World(){
     std::cout << "World created" << std::endl;
 }
 
+Action::Action()
+{
+    std::cout << "Action created" << std::endl;
+}
+
 Action::Action(nlohmann::json data, std::string sName)
 {
     y_0 = data["values"][0];
@@ -21,6 +26,11 @@ Sprite::Sprite(nlohmann::json data)
 {
     path = data["path"].get<std::string>();
     std::cout << "Sprite created: " << data["name"] << std::endl;
+}
+
+Character::Character()
+{
+        std::cout << "Character created" << std::endl;
 }
 
 Character::Character(nlohmann::json data){

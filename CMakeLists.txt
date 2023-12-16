@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(TimelessJourneys LANGUAGES CXX)
-set(CMAKE_SIZEOF_VOID_P 4)
+set(CMAKE_SIZEOF_VOID_P 8)
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,7 +10,6 @@ set(CMAKE_PREFIX_PATH "C:/SDL2_sources")
 
 find_package(SDL2 CONFIG REQUIRED)
 if(NOT SDL2_FOUND)
-
 message(FATAL_ERROR "SDL2 not found")
 endif()
 

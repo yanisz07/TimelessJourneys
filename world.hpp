@@ -22,6 +22,7 @@ public:
     std::map<std::string, Sprite> Sprites;
     std::map<std::string, Action> Actions;
     Character(nlohmann::json data);
+    Character();
 };
 class Sprite
 {
@@ -36,6 +37,7 @@ public:
     int y_0 = 0;
     int number_frames = 0;
     std::string spriteName;
+    Action();
     Action(nlohmann::json data, std::string sName);
 };
 

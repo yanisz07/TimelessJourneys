@@ -9,6 +9,7 @@
 #include <filesystem>
 #include "world.hpp"
 
+
 Map* map;
 Manager manager;
 
@@ -82,22 +83,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
 
-    //Import player sprites
-   // World world1;
-    /*world1.loadWorld("C:/Users/Joaquin/OneDrive - uc.cl/Ing UC Drive/Intercambio Francia/Courses/C++/VideoGameProject/TimelessJourneys/assets/World_1.json");
-    for (auto iter1 = world1.Characters.begin(); iter1 != world1.Characters.end(); ++iter1)
-    {
-        for(auto iter2 = iter1->second.Sprites.begin(); iter2 != iter1->second.Sprites.end(); ++iter2)
-        {
-            assets->AddTexture(iter2->first,iter2->second.path.c_str());
-        }
-    }*/
-
-    assets->loadWorld("C:/Users/Joaquin/OneDrive - uc.cl/Ing UC Drive/Intercambio Francia/Courses/C++/VideoGameProject/TimelessJourneys/assets/World_1.json");
-
-    //assets->AddTexture("player" , "/assets/Green_Slime/Idle.png");
-    //assets -> AddTexture("player_attack1", "/assets/Green_Slime/Attack_1.png");
-    //assets -> AddTexture("player_run","/assets/Green_Slime/Run.png");
+    //Load JSON data
+    std::string path = "";
+    std::string root2 = ROOT_DIR;
+    path += root2;
+    path += "/assets/World_1.json";
+    assets->loadWorld(path);
     std::cout << "Player textures added" << std::endl;
     //End
 
@@ -116,15 +107,21 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     map->LoadMap(mapPath.c_str(), 25, 20);
 
     player.addComponent<TransformComponent>(800,640,128,128,1);
-    player.addComponent<SpriteComponent>("Player_Idle_Sprite", true);
+    player.addComponent<SpriteComponent>( true, "player");
+    player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>();
     player.addComponent<WeaponComponent>();
     player.addGroup(Game::groupPlayers);
 
+    std::cout << "Player created" << std::endl;
+
+
+
     enemy.addComponent<TransformComponent>(600,600,32,32,4);
-    enemy.addComponent<SpriteComponent>("enemy", false);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addGroup(Game::groupEnemies);
 
@@ -207,7 +204,7 @@ void Game::update()
     if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
         // Create a projectile every two seconds
-        assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "projectile");
+        //assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "projectile");
         lastProjectileTime = currentTime;  // Update the last projectile creation time
     }
 

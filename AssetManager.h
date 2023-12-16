@@ -11,6 +11,7 @@
 
 class AssetManager
 {
+    friend Manager;
 public:
     AssetManager(Manager* man);
     ~AssetManager();

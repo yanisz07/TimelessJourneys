@@ -4,7 +4,9 @@
 //stores Assets and fonts in maps using string IDs
 
 AssetManager::AssetManager(Manager *man) : manager(man)
-{}
+{
+    manager->assetManager = this;
+}
 
 AssetManager::~AssetManager()
 {}
@@ -19,6 +21,8 @@ void AssetManager::loadWorld(std::string path)
             AddTexture(iter2->first,iter2->second.path.c_str());
         }
     }
+
+    std::cout << world.Characters["player"].Actions["Idle"].spriteName << std::endl;
 }
 
 void AssetManager::AddTexture(std::string id, const char *path)
@@ -35,7 +39,7 @@ void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int s
 {
     auto& projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(pos.x, pos.y, 32, 32, 1);
-    projectile.addComponent<SpriteComponent>(id,false);
+    projectile.addComponent<SpriteComponent>(false, "enemy");
     projectile.addComponent<ProjectileComponent>(range,speed, vel);
     projectile.addComponent<ColliderComponent>("projectile");
     projectile.addGroup(Game::groupProjectiles);
