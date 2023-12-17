@@ -27,6 +27,7 @@ auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
+auto& enemy_health(manager.addEntity());
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
@@ -123,15 +124,21 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
 
     SDL_Color white = {255,255,255,255};
     SDL_Color green = {0,255,0,255};
+    SDL_Color red = {255,0,0,255};
     label.addComponent<UILabel>(10,10, "Test String", "arial", white, true);
 
     //display player's health on top of his head
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
     player_health.addComponent<UILabel>(playerPos.x, playerPos.y, "Test String2", "arial", green, false);
+
+    //display enemy's health on top of his head
+    Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
+    enemy_health.addComponent<UILabel>(200, 200, "Test String3", "arial", red, false);
 
     lastProjectileTime = SDL_GetTicks();
 
@@ -162,6 +169,8 @@ void Game::update()
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
+    Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
+
     std::stringstream ssp; //hold variables and turn them into strings
     ssp << "Player position: " << playerPos;
 
@@ -185,7 +194,7 @@ void Game::update()
         if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
         {
             std::cout << "Hit player!" << std::endl;
-            player.getComponent<Stats>().SubtractHealth(2);
+            Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
             p->destroy();
         }
     }
@@ -195,7 +204,9 @@ void Game::update()
         if(Collision::AABB(playerCol,e->getComponent<ColliderComponent>().collider))
         {
             std::cout << "Hit enemy" << std::endl;
+            std::cout << "Damage done" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos;
+            Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
         }
     }
 
@@ -208,7 +219,7 @@ void Game::update()
         lastProjectileTime = currentTime;  // Update the last projectile creation time
     }
 
-    //update place of the health string
+    //update place of the player_health string
     playerPos = player.getComponent<TransformComponent>().position;
     player_health.getComponent<UILabel>().SetPositionText(playerPos.x, playerPos.y);
 
@@ -216,6 +227,15 @@ void Game::update()
     std::stringstream ssh;
     ssh << "Health: " << player.getComponent<Stats>().get_health();
     player_health.getComponent<UILabel>().SetLabelText(ssh.str(),"arial");
+
+    //update position of the enemy_player string
+    enemyPos = enemy.getComponent<TransformComponent>().position;
+    enemy_health.getComponent<UILabel>().SetPositionText(enemyPos.x, enemyPos.y);
+
+    //update text of health
+    std::stringstream sseh;
+    sseh << "Health: " << enemy.getComponent<Stats>().get_health();
+    enemy_health.getComponent<UILabel>().SetLabelText(sseh.str(),"arial");
 
     camera.x = player.getComponent<TransformComponent>().position.x- 400;
     camera.y = player.getComponent<TransformComponent>().position.y - 320;
@@ -280,6 +300,7 @@ void Game::render()
     }
 
     label.draw();
+    enemy_health.draw();
     player_health.draw();
 
     SDL_RenderPresent(renderer);
