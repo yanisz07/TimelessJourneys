@@ -22,7 +22,6 @@ void AssetManager::loadWorld(std::string path)
         }
     }
 
-    std::cout << world.Characters["player"].Actions["Idle"].spriteName << std::endl;
 }
 
 void AssetManager::AddTexture(std::string id, const char *path)
@@ -39,7 +38,8 @@ void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int s
 {
     auto& projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(pos.x, pos.y, 32, 32, 1);
-    projectile.addComponent<SpriteComponent>(false, "enemy");
+    projectile.addComponent<SpriteComponent>(true, "enemy");
+    projectile.getComponent<SpriteComponent>().setActions();
     projectile.addComponent<ProjectileComponent>(range,speed, vel);
     projectile.addComponent<ColliderComponent>("projectile");
     projectile.addComponent<Stats>(0,2);

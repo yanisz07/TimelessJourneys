@@ -32,7 +32,7 @@ public:
             case SDLK_UP:
                 pressed_up = true;
                 transform->velocity.y = -1;
-                sprite->Play("Walk");
+                sprite->Play("Run");
                 //update direction
                 transform->y_direction = -1;
                 if (pressed_right) {transform->x_direction = 1;}
@@ -42,7 +42,7 @@ public:
             case SDLK_DOWN:
                 pressed_down = true;
                 transform->velocity.y = 1;
-                sprite->Play("Walk");
+                sprite->Play("Run");
                 //update direction
                 transform->y_direction = 1;
                 if (pressed_right) {transform->x_direction = 1;}
@@ -52,7 +52,7 @@ public:
             case SDLK_LEFT:
                 pressed_left = true;
                 transform->velocity.x = -1;
-                sprite->Play("Walk");
+                sprite->Play("Run");
                 sprite->spriteFlip = SDL_FLIP_HORIZONTAL; //flips on the x axis
                 //update direction
                 transform->x_direction = -1;
@@ -63,7 +63,7 @@ public:
             case SDLK_RIGHT:
                 pressed_right = true;
                 transform->velocity.x = 1;
-                sprite->Play("Walk");
+                sprite->Play("Run");
                 //update direction
                 transform->x_direction = 1;
                 if (pressed_up) {transform->y_direction = -1;}

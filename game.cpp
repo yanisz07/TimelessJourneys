@@ -39,7 +39,8 @@ Game::~Game()
 
 void Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
-
+    //Initialize system section
+    {
     int flags = 0;
 
     if (fullscreen)
@@ -78,10 +79,11 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     {
         std::cout << "Error : SDL_TTF" << std::endl;
     }
+    }
 
 
     //Load game assets
-
+    {
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
 
     //Load JSON data
@@ -106,7 +108,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //ecs implementation
 
     map->LoadMap(mapPath.c_str(), 25, 20);
+    }
 
+    //Create player and enemy
+    {
     player.addComponent<TransformComponent>(800,640,128,128,1);
     player.addComponent<SpriteComponent>( true, "player");
     player.getComponent<SpriteComponent>().setActions();
@@ -114,6 +119,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>();
     player.addComponent<WeaponComponent>();
+    player.getComponent<WeaponComponent>().getTransformComponent();
     player.addGroup(Game::groupPlayers);
 
     std::cout << "Player created" << std::endl;
@@ -127,6 +133,11 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
 
+    std::cout << "Enemy created" << std::endl;
+    }
+
+    //Create labels
+    {
     SDL_Color white = {255,255,255,255};
     SDL_Color green = {0,255,0,255};
     SDL_Color red = {255,0,0,255};
@@ -139,6 +150,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //display enemy's health on top of his head
     Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
     enemy_health.addComponent<UILabel>(200, 200, "Test String3", "arial", red, false);
+    }
 
     lastProjectileTime = SDL_GetTicks();
 
@@ -166,6 +178,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
+    // Get player/enemy info.
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
@@ -175,10 +188,15 @@ void Game::update()
     ssp << "Player position: " << playerPos;
 
     label.getComponent<UILabel>().SetLabelText(ssp.str(), "arial"); //change the text
+    //End
 
+    // Clear inactive entities and run update
     manager.refresh();
     manager.update();
+    //End
 
+
+    //Check and solve player collisions.
     for (auto& c : colliders)
     {
         SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
@@ -188,7 +206,9 @@ void Game::update()
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
     }
+    //End
 
+    //Check if projectiles hit player
     for (auto& p : projectiles)
     {
         if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
@@ -198,7 +218,9 @@ void Game::update()
             p->destroy();
         }
     }
+    //End
 
+    //Check damage done to enemies by proximity
     for (auto& e : enemies)
     {
         if(Collision::AABB(playerCol,e->getComponent<ColliderComponent>().collider))
@@ -209,15 +231,17 @@ void Game::update()
             Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
         }
     }
+    //End
 
-    //projectiles shot from the enemy we can generalize this to all ennemies
+    //Projectiles shot from the enemy we can generalize this to all ennemies
     Uint32 currentTime = SDL_GetTicks();
     if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
         // Create a projectile every two seconds
-        //assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "projectile");
+        assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "projectile");
         lastProjectileTime = currentTime;  // Update the last projectile creation time
     }
+    //End
 
     //update place of the player_health string
     playerPos = player.getComponent<TransformComponent>().position;
