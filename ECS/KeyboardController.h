@@ -75,44 +75,44 @@ public:
                 {
                     if (transform->y_direction == -1)
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                     else
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                 }
                 if (transform->y_direction == 0)
                 {
                     if (transform->x_direction == -1)
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                     else
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                 }
                 if (transform->y_direction==1)
                 {
                     if (transform->x_direction == 1)
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                     if (transform->x_direction == -1)
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                 }
                 if (transform->y_direction==-1)
                 {
                     if (transform->x_direction == 1)
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                     if (transform->x_direction == -1)
                     {
-                        Game::assets->CreateProjectile(Vector2D(transform->position.x-50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"projectile");
+                        Game::assets->CreateProjectile(Vector2D(transform->position.x-50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"player_projectile",true);
                     }
                 }
                 break;
