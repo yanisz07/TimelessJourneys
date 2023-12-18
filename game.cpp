@@ -82,6 +82,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     }
 
 
+
     //Load game assets
     {
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
@@ -96,6 +97,14 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //End
 
     assets->AddTexture("projectile", "/assets/proj.png");
+
+    //Textures, map and fonts
+
+
+
+    assets->AddTexture("enemy_projectile", "/assets/proj.png");
+    assets->AddTexture("player_projectile", "/assets/proj.png");
+
     assets->AddTexture("enemy" , "/assets/enemy.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
@@ -149,8 +158,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //display enemy's health on top of his head
     Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
-    enemy_health.addComponent<UILabel>(200, 200, "Test String3", "arial", red, false);
-    }
+
+    enemy_health.addComponent<UILabel>(enemyPos.x, enemyPos.y, "Test String3", "arial", red, false);
+
 
     lastProjectileTime = SDL_GetTicks();
 
@@ -159,7 +169,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& colliders(manager.getGroup(Game::groupColliders));
-auto& projectiles(manager.getGroup(Game::groupProjectiles));
+auto& PlayerProjectiles(manager.getGroup(Game::groupPlayerProjectiles));
+auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 
 void Game::handleEvents()
@@ -208,8 +219,9 @@ void Game::update()
     }
     //End
 
-    //Check if projectiles hit player
-    for (auto& p : projectiles)
+
+    for (auto& p : EnemyProjectiles)
+
     {
         if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
         {
@@ -223,12 +235,25 @@ void Game::update()
     //Check damage done to enemies by proximity
     for (auto& e : enemies)
     {
-        if(Collision::AABB(playerCol,e->getComponent<ColliderComponent>().collider))
+        SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
+        if(Collision::AABB(playerCol,enemyCol))
         {
             std::cout << "Hit enemy" << std::endl;
             std::cout << "Damage done" << std::endl;
-            player.getComponent<TransformComponent>().position = playerPos;
+
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
             Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+        }
+
+        for (auto& p : PlayerProjectiles)
+        {
+            if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
+            {
+                std::cout << "Projectile hit enemy" << std::endl;
+                Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                p->destroy();
+            }
+
         }
     }
     //End
@@ -238,7 +263,7 @@ void Game::update()
     if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
         // Create a projectile every two seconds
-        assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "projectile");
+        assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
         lastProjectileTime = currentTime;  // Update the last projectile creation time
     }
     //End
@@ -318,7 +343,12 @@ void Game::render()
         e->draw();
     }
 
-    for (auto& p : projectiles)
+    for (auto& p : PlayerProjectiles)
+    {
+        p->draw();
+    }
+
+    for (auto& p : EnemyProjectiles)
     {
         p->draw();
     }

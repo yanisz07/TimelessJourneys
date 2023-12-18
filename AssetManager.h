@@ -18,11 +18,12 @@ public:
 
     //gameobjects
 
+
     World world;
     void loadWorld(std::string path);
 
+    void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, bool player );
 
-    void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id);
 
     //texture management
     void AddTexture(std::string id, const char* path);

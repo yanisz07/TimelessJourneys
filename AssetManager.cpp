@@ -34,16 +34,25 @@ SDL_Texture* AssetManager::GetTexture(std::string id)
     return textures[id];
 }
 
-void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id)
+void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, bool player)
 {
     auto& projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(pos.x, pos.y, 32, 32, 1);
     projectile.addComponent<SpriteComponent>(false, "player");
     projectile.getComponent<SpriteComponent>().setActions();
     projectile.addComponent<ProjectileComponent>(range,speed, vel);
-    projectile.addComponent<ColliderComponent>("projectile");
+
+    projectile.addComponent<ColliderComponent>(id);
     projectile.addComponent<Stats>(0,2);
-    projectile.addGroup(Game::groupProjectiles);
+    if (player)
+    {
+        projectile.addGroup(Game::groupPlayerProjectiles);
+    }
+    else
+    {
+        projectile.addGroup(Game::groupEnemyProjectiles);
+    }
+
 }
 
 void AssetManager::AddFont(std::string id, std::string path, int fontSize)
