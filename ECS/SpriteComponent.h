@@ -7,6 +7,8 @@
 #include "Animation.h"
 #include <map>
 #include "../AssetManager.h"
+#include "../world.hpp"
+#include "../timer.hpp"
 
 class SpriteComponent : public Component
 {
@@ -14,15 +16,19 @@ private:
     TransformComponent *transform;
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;
+    std::string type = "none";
+
+    Timer timer;
+
 
     bool animated = false;
     int frames = 0;
     int speed = 100; //delay between frames in milliseconds
 
 public:
-
+    std::string currentAction;
     int animIndex = 0; //update y index in the sprites sheet
-    std::map<const char*, Animation> animations; //stores animations
+    std::map<std::string , Animation> animations; //stores animations
 
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
@@ -30,20 +36,45 @@ public:
     SpriteComponent(std::string id)
     {
         setTex(id);
+        timer.start();
     }
 
-    SpriteComponent(std::string id, bool isAnimated)
+    SpriteComponent( bool isAnimated, std::string type)
     {
         animated = isAnimated;
+        this->type = type;
+        timer.start();
 
-        Animation idle = Animation(0, 3, 100); //y = 0 in sprites sheet
-        Animation walk = Animation(1, 8, 100); //y = 1 in sprites sheet
+        /*std::map<std::string, Action> actions;
+        Manager& manager = entity->manager;
 
-        animations.emplace("Idle", idle); //store animations
-        animations.emplace("Walk",walk);
+        actions = (entity->manager.getAssetManager()->world.Characters["player"].Actions);
 
+        for (auto it = actions.begin(); it != actions.end(); it++)
+        {
+            animations.emplace(it->first, Animation(it->second.y_0, it->second.number_frames, 100, it->second.spriteName));
+        }*/
+
+        //Animation idle = Animation(0, 8, 100); //y = 0 in sprites sheet
+        //Animation walk = Animation(0, 7, 100); //y = 1 in sprites sheet
+
+        //animations.emplace("Idle", idle); //store animations
+        //animations.emplace("Walk",walk);
+
+        //Play("Idle");
+        //setTex(id);
+    }
+
+    void setActions()
+    {
+        std::map<std::string, Action> actions;
+        actions = (entity->manager.getAssetManager()->world.Characters[type].Actions);
+
+        for (auto it = actions.begin(); it != actions.end(); it++)
+        {
+            animations.emplace(it->first, Animation(it->second.y_0, it->second.number_frames, 100, it->second.spriteName));
+        }
         Play("Idle");
-        setTex(id);
     }
 
     ~SpriteComponent()
@@ -68,11 +99,15 @@ public:
     void update() override
     {
         if(animated)
-        {
-            srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames); //update x index in the sprites sheet
+        {   
+            srcRect.x = srcRect.w * static_cast<int>((timer.getTimeDelta() / speed) % frames); //update x index in the sprites sheet
+            if(timer.getTimeDelta() > frames*speed)
+            {
+                timer.partial();
+            }
         }
 
-        srcRect.y = animIndex * transform->height; //update y index in the sprites sheet
+        srcRect.y = animIndex; // * transform->height; //update y index in the sprites sheet
 
         destRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
         destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
@@ -82,14 +117,22 @@ public:
 
     void draw() override
     {
+        SDL_Rect rectangle{0,0,128,128};
         TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
     }
 
     void Play(const char* animName)
     {
+        currentAction = animName;
         frames = animations[animName].frames;
         animIndex = animations[animName].index;
         speed = animations[animName].speed;
+        setTex(animations[animName].spriteName);
+        timer.partial();
+        int w, h;
+        SDL_QueryTexture(texture,NULL,NULL,&w,&h);
+        srcRect.h = h - animIndex;
+        srcRect.w = w/frames;
     }
 };
 

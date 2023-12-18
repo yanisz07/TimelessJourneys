@@ -16,6 +16,9 @@ public:
     int width = 32;
     int scale = 1;
 
+    int y_direction = 0;
+    int x_direction = 1;
+
     int speed = 3;
 
     TransformComponent()

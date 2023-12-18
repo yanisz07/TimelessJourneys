@@ -1,4 +1,4 @@
-#ifndef ECS_H
+ #ifndef ECS_H
 #define ECS_H
 
 #include <iostream>
@@ -7,10 +7,14 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
+#include "../world.hpp"
 
 class Component;
 class Entity;
 class Manager;
+
+//Forward declaration of asset manager to access world data
+class AssetManager;
 
 using ComponentID = std::size_t;
 using Group = std::size_t;
@@ -50,8 +54,9 @@ public:
 
 class Entity
 {
+    friend Component;
 private:
-    Manager& manager;
+    //Manager& manager;
     bool active = true;
     std::vector<std::unique_ptr<Component>> components;
 
@@ -60,6 +65,8 @@ private:
     GroupBitset groupBitset;
 
 public:
+    Manager& manager;
+
     Entity(Manager& mManager) : manager(mManager) {}
 
     void update()
@@ -78,6 +85,7 @@ public:
     {
         return groupBitset[mGroup];
     }
+
 
     void addGroup(Group mGroup);
     void delGroup(Group mGroup)
@@ -108,17 +116,27 @@ public:
 
     template <typename T> T& getComponent() const //gives us access to a specific component
     {
+
         auto ptr(componentArray[getComponentTypeID<T>()]);
         return *static_cast<T*>(ptr);
+
+    }
+
+    template <typename T> bool hasComponent()
+    {
+        return componentBitSet[getComponentTypeID<T>()];
     }
 };
 
 class Manager
 {
+    friend Entity;
 private:
     std::vector<std::unique_ptr<Entity>> entities;
     std::array<std::vector<Entity*>, maxGroups> groupedEntities;
 public:
+    AssetManager* assetManager;
+    AssetManager* getAssetManager(){return assetManager;}
     void update()
     {
         for (auto& e : entities) e->update();

@@ -3,8 +3,8 @@
 const char* root = ROOT_DIR;
 
 SDL_Texture* TextureManager::LoadTexture(const char* texture)
-{   
-    char result[120];
+{
+    char result[200];
 
     strcpy(result,root);
     strcat(result,texture);
