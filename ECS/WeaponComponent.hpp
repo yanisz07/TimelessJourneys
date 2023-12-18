@@ -1,7 +1,7 @@
 #ifndef WEAPONCOMPONENT_H
 #define WEAPONCOMPONENT_H
-#include "ECS.h"
-#include "Components.h"
+#include "ECS.hpp"
+#include "Components.hpp"
 #include <string.h>
 #include <SDL.h>
 

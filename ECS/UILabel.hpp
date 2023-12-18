@@ -1,9 +1,9 @@
 #ifndef UILABEL_H
 #define UILABEL_H
 
-#include "ECS.h"
-#include "../AssetManager.h"
-#include "../game.h"
+#include "ECS.hpp"
+#include "../AssetManager.hpp"
+#include "../game.hpp"
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include <string>

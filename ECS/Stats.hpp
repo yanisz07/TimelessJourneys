@@ -1,7 +1,7 @@
 #ifndef STATS_H
 #define STATS_H
-#include "ECS.h"
-#include "Components.h"
+#include "ECS.hpp"
+#include "Components.hpp"
 
 class Stats : public Component
 {

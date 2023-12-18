@@ -1,4 +1,4 @@
- #ifndef ECS_H
+#ifndef ECS_H
 #define ECS_H
 
 #include <iostream>

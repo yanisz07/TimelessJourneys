@@ -1,4 +1,4 @@
-#include "Stats.h"
+#include "Stats.hpp"
 
 void Stats::AddHealth(int i)
 {

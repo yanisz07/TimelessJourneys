@@ -3,9 +3,9 @@
 
 #include <map>
 #include <string>
-#include "TextureManager.h"
-#include "Vector2D.h"
-#include "ECS/ECS.h"
+#include "TextureManager.hpp"
+#include "Vector2D.hpp"
+#include "ECS/ECS.hpp"
 #include "SDL_ttf.h"
 #include "world.hpp"
 

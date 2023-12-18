@@ -1,12 +1,12 @@
 #ifndef SPRITECOMPONENT_H
 #define SPRITECOMPONENT_H
 
-#include "Components.h"
+#include "Components.hpp"
 #include "SDL.h"
-#include "../TextureManager.h"
-#include "Animation.h"
+#include "../TextureManager.hpp"
+#include "Animation.hpp"
 #include <map>
-#include "../AssetManager.h"
+#include "../AssetManager.hpp"
 #include "../world.hpp"
 #include "../timer.hpp"
 

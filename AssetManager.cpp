@@ -1,5 +1,5 @@
-#include "AssetManager.h"
-#include "ECS/Components.h"
+#include "AssetManager.hpp"
+#include "ECS/Components.hpp"
 
 //stores Assets and fonts in maps using string IDs
 

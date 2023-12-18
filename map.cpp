@@ -1,8 +1,8 @@
-#include "map.h"
-#include "game.h"
+#include "map.hpp"
+#include "game.hpp"
 #include <fstream>
-#include "ECS/ECS.h"
-#include "ECS/Components.h"
+#include "ECS/ECS.hpp"
+#include "ECS/Components.hpp"
 
 extern Manager manager; //not the same as in game.cpp
 

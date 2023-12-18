@@ -1,9 +1,9 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
-#include "ECS.h"
-#include "Components.h"
-#include "../Vector2D.h"
+#include "ECS.hpp"
+#include "Components.hpp"
+#include "../Vector2D.hpp"
 
 class ProjectileComponent : public Component
 {

@@ -1,10 +1,10 @@
 #ifndef TILECOMPONENT_H
 #define TILECOMPONENT_H
 
-#include "ECS.h"
-#include "../TextureManager.h"
+#include "ECS.hpp"
+#include "../TextureManager.hpp"
 #include "SDL.h"
-#include "../Vector2D.h"
+#include "../Vector2D.hpp"
 
 class TileComponent : public Component
 {

@@ -31,36 +31,36 @@ endif()
 
 set(SOURCES
     main.cpp
-    game.h game.cpp
-    TextureManager.h
+    game.hpp game.cpp
+    TextureManager.hpp
     TextureManager.cpp
-    gameobject.h gameobject.cpp
-    map.h
+    gameobject.hpp gameobject.cpp
+    map.hpp
     map.cpp
-    ECS/ECS.h
-    ECS/Components.h
-    ECS/SpriteComponent.h
-    ECS/TransformComponent.h
-    Vector2D.h
+    ECS/ECS.hpp
+    ECS/Components.hpp
+    ECS/SpriteComponent.hpp
+    ECS/TransformComponent.hpp
+    Vector2D.hpp
     Vector2D.cpp
-    ECS/KeyboardController.h
-    ECS/ColliderComponent.h
-    Collision.h
+    ECS/KeyboardController.hpp
+    ECS/ColliderComponent.hpp
+    Collision.hpp
     Collision.cpp
-    ECS/TileComponent.h
+    ECS/TileComponent.hpp
     ECS/ECS.cpp
-    ECS/Animation.h
-    AssetManager.h
+    ECS/Animation.hpp
+    AssetManager.hpp
     AssetManager.cpp
-    ECS/ProjectileComponent.h
-    ECS/UILabel.h
-    ECS/Stats.h
+    ECS/ProjectileComponent.hpp
+    ECS/UILabel.hpp
+    ECS/Stats.hpp
     ECS/Stats.cpp
     json.hpp)
 
 add_executable(TimelessJourneys ${SOURCES}
     timer.hpp
-    ECS/weaponComponent.h
+    ECS/weaponComponent.hpp
     world.hpp world.cpp
 
 )
