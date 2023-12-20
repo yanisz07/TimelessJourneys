@@ -1,0 +1,3 @@
+Week1: I spent most of the time installing SDL2 and trying to understand how the library works etc...
+Week2: Learnt to better familiarize myself with the libary, creating windows etc... Read the code of my teammates to understand how the overall game works. 
+Week3-4: Added an ability to play music when game is opened using the SDL2-mixer library. Will try to now work on developping the ability to display the map when the M key is pressed and also try to add a settings button to be able to adjust settings. 
