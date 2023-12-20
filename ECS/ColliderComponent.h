@@ -22,6 +22,13 @@ public:
         tag = t;
     }
 
+    ColliderComponent(std::string t, int h, int w)
+    {
+        tag = t;
+        collider.h = h;
+        collider.w = w;
+    }
+
     ColliderComponent(std::string t, int xpos, int ypos, int size)
     {
         tag = t;
@@ -48,10 +55,21 @@ public:
     {
         if(tag != "terrain")
         {
-            collider.x = static_cast<int>(transform->position.x);
-            collider.y = static_cast<int>(transform->position.y);
-            collider.w = transform->width * transform->scale;
-            collider.h = transform->height * transform->scale;
+            if (tag == "player" || tag == "enemy")
+            {
+                // fix collider for player and enemy
+                collider.x = static_cast<int>(transform->position.x)+35;
+                collider.y = static_cast<int>(transform->position.y)+80;
+                collider.w = transform->width * transform->scale-78;
+                collider.h = transform->height * transform->scale-80;
+            }
+            else
+            {
+                collider.x = static_cast<int>(transform->position.x);
+                collider.y = static_cast<int>(transform->position.y);
+                collider.w = transform->width * transform->scale;
+                collider.h = transform->height * transform->scale;
+            }
         }
 
         destR.x = collider.x - Game::camera.x;
@@ -60,6 +78,10 @@ public:
 
     void draw() override
     {
+        /*if (tag=="player")
+        {
+            std::cout << "collider drawn" << std::endl;
+        }*/
         TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
     }
 

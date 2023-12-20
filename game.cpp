@@ -122,7 +122,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Create player and enemy
     {
     player.addComponent<TransformComponent>(800,640,128,128,1);
-    player.addComponent<SpriteComponent>( true, "player");
+    player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
@@ -133,9 +133,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Player created" << std::endl;
 
-
-
-    enemy.addComponent<TransformComponent>(600,600,32,32,4);
+    enemy.addComponent<TransformComponent>(600,600,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
