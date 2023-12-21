@@ -18,6 +18,8 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
 SDL_Rect Game::camera = {0,0,1600,1280};
+int x_diff = 400;
+int y_diff = 320;
 
 AssetManager* Game::assets = new AssetManager(&manager);
 
@@ -52,6 +54,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     if (fullscreen)
     {
         flags=SDL_WINDOW_FULLSCREEN;
+
     }
 
     if(SDL_Init(SDL_INIT_EVERYTHING)==0)
@@ -336,8 +339,8 @@ void Game::update()
     sseh << "Health: " << enemy.getComponent<Stats>().get_health();
     enemy_health.getComponent<UILabel>().SetLabelText(sseh.str(),"arial");
 
-    camera.x = player.getComponent<TransformComponent>().position.x- 400;
-    camera.y = player.getComponent<TransformComponent>().position.y - 320;
+    camera.x = player.getComponent<TransformComponent>().position.x - x_diff;
+    camera.y = player.getComponent<TransformComponent>().position.y - y_diff;
 
     if(camera.x <0)
     {
