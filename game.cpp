@@ -210,7 +210,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
 
     lastProjectileTime = SDL_GetTicks();
-}
+    }
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -320,7 +320,7 @@ void Game::update()
 
 
     Uint32 currentTime = SDL_GetTicks();
-    //Test enemy knockback
+    //Enemy knockback
     for (std::size_t i = 0; i < enemies_hit.size(); ++i)
     {
         Entity* enemy = enemies_hit[i];
@@ -364,7 +364,7 @@ void Game::update()
     if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
         // Create a projectile every two seconds
-        assets->CreateProjectile(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
+        assets->CreateProjectile(Vector2D(enemy.getComponent<TransformComponent>().position.x, enemy.getComponent<TransformComponent>().position.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
         lastProjectileTime = currentTime;  // Update the last projectile creation time
     }
     //End
