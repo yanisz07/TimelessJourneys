@@ -202,11 +202,10 @@ void Game::handleEvents()
     }
 }
 
-Uint32 currentTime = SDL_GetTicks();
 
 void Game::update()
 {
-    Uint32 currentTime = SDL_GetTicks();
+    Uint32 currentTime0 = SDL_GetTicks();
     // Get player/enemy info.
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
@@ -263,7 +262,7 @@ void Game::update()
                     Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
 
                     playerInvincible = true;
-                    playerInvincibleStartTime = currentTime;
+                    playerInvincibleStartTime = currentTime0;
                 }
 
             for (auto& p : PlayerProjectiles)
@@ -285,7 +284,7 @@ void Game::update()
     //
 
 
-
+    Uint32 currentTime = SDL_GetTicks();
     //Test enemy knockback
     for (std::size_t i = 0; i < enemies_hit.size(); ++i)
     {
@@ -386,7 +385,7 @@ void Game::update()
     }*/
 
     //check invincibility duration and change status
-    if (playerInvincible && currentTime - playerInvincibleStartTime >= playerInvincibleDuration) {
+    if (playerInvincible && currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {
         playerInvincible = false;
     }
 }
