@@ -1,3 +1,9 @@
+#ifdef __APPLE__
+#include <CoreGraphics/CGDirectDisplay.h>
+#endif
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 #include "game.h"
 #include "TextureManager.h"
 #include "map.h"
@@ -8,12 +14,6 @@
 #include <sstream>
 #include <filesystem>
 #include "world.hpp"
-#ifdef __APPLE__
-#include <CoreGraphics/CGDirectDisplay.h>
-#endif
-#ifdef _WIN32
-#include <Windows.h>
-#endif
 
 Map* map;
 Manager manager;
@@ -66,8 +66,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     int final_width = width;
     int final_height = height;
 
-    camera.w = 2400 - width;
-    camera.h = 1920 - height;
+    camera.w = 3200 - width;
+    camera.h = 2560 - height;
     x_diff = (width - 128)/2;
     y_diff = (height - 128)/2;
 
@@ -88,8 +88,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
         x_diff = (screenWidth - 128)/2;
         y_diff = (screenHeight - 128)/2;
-        camera.w = 2400 - screenWidth;
-        camera.h = 1920 - screenHeight;
+        camera.w = 3200 - screenWidth;
+        camera.h = 2560 - screenHeight;
         final_width = screenWidth;
         final_height = screenHeight;
 
@@ -161,7 +161,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddFont("arial", fontPath.c_str(),16);
 
-    map = new Map("terrain", 3, 32);
+    map = new Map("terrain", 4, 32);
 
     //ecs implementation
 
@@ -170,7 +170,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player and enemy
     {
-    player.addComponent<TransformComponent>(800,640,128,128,1);
+    player.addComponent<TransformComponent>(1400,1100,128,128,1);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
@@ -182,7 +182,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Player created" << std::endl;
 
-    enemy.addComponent<TransformComponent>(600,600,128,128,1);
+    enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
