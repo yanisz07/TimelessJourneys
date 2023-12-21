@@ -11,5 +11,7 @@
 #include "ProjectileComponent.hpp"
 #include "UILabel.hpp"
 #include "Stats.hpp"
+#include "EnemyMovement.h"
+
 
 #endif // COMPONENTS_H

@@ -62,6 +62,7 @@ add_executable(TimelessJourneys ${SOURCES}
     timer.hpp
     ECS/weaponComponent.hpp
     world.hpp world.cpp
+    ECS/EnemyMovement.h
 
 )
 
