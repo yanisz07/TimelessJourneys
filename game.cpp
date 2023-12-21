@@ -264,7 +264,7 @@ void Game::update()
                     playerInvincible = true;
                     playerInvincibleStartTime = currentTime0;
                 }
-
+            }
             for (auto& p : PlayerProjectiles)
             {
                 if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
@@ -279,9 +279,12 @@ void Game::update()
                 }
 
             }
-        }
     }
     //
+
+    if (playerInvincible) {
+            player.getComponent<SpriteComponent>().Play("Hurt",3);
+    }
 
 
     Uint32 currentTime = SDL_GetTicks();

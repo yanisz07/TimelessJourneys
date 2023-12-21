@@ -55,6 +55,19 @@
                 ]
               }
             ]
+          },
+          {
+            "name" : "Player_Hurt_Sprite",
+            "path": "/assets/Green_Slime/Hurt.png",
+            "actions": [
+              {
+                "name": "Hurt",
+                "values": [
+                  32,
+                  6
+                ]
+              }
+            ]
           }
         ]
       },
