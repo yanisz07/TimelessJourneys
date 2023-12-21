@@ -44,25 +44,6 @@ public:
         animated = isAnimated;
         this->type = type;
         timer.start();
-
-        /*std::map<std::string, Action> actions;
-        Manager& manager = entity->manager;
-
-        actions = (entity->manager.getAssetManager()->world.Characters["player"].Actions);
-
-        for (auto it = actions.begin(); it != actions.end(); it++)
-        {
-            animations.emplace(it->first, Animation(it->second.y_0, it->second.number_frames, 100, it->second.spriteName));
-        }*/
-
-        //Animation idle = Animation(0, 8, 100); //y = 0 in sprites sheet
-        //Animation walk = Animation(0, 7, 100); //y = 1 in sprites sheet
-
-        //animations.emplace("Idle", idle); //store animations
-        //animations.emplace("Walk",walk);
-
-        //Play("Idle");
-        //setTex(id);
     }
 
     void setActions()
@@ -105,6 +86,7 @@ public:
             {
                 timer.partial();
             }
+            Play("Idle");
         }
 
         srcRect.y = animIndex; // * transform->height; //update y index in the sprites sheet
@@ -113,6 +95,7 @@ public:
         destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
         destRect.w = transform->width * transform->scale;
         destRect.h = transform->height * transform->scale;
+
     }
 
     void draw() override
@@ -121,18 +104,22 @@ public:
         TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
     }
 
-    void Play(const char* animName)
+    void Play(const char* animName, const int repeat = 1)
     {
-        currentAction = animName;
-        frames = animations[animName].frames;
-        animIndex = animations[animName].index;
-        speed = animations[animName].speed;
-        setTex(animations[animName].spriteName);
-        timer.partial();
-        int w, h;
-        SDL_QueryTexture(texture,NULL,NULL,&w,&h);
-        srcRect.h = h - animIndex;
-        srcRect.w = w/frames;
+        if (timer.timedOut() && currentAction != animName || strcmp( animName, "Idle") != 0)
+        {
+            currentAction = animName;
+            frames = animations[animName].frames;
+            animIndex = animations[animName].index;
+            speed = animations[animName].speed;
+            setTex(animations[animName].spriteName);
+            timer.partial();
+            int w, h;
+            SDL_QueryTexture(texture,NULL,NULL,&w,&h);
+            srcRect.h = h - animIndex;
+            srcRect.w = w/frames;
+            timer.setTimeOut(speed*frames*repeat);
+        }
     }
 };
 

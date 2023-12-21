@@ -276,7 +276,7 @@ void Game::update()
         Vector2D direction = projectiles_hit_enemies_directions[i];
         currentTime = SDL_GetTicks();
         Uint32 delay = currentTime - hit_time[i];
-        if (delay <= 1000)
+        if (delay <= 500)
         {
             if (delay <= 250)
             {
