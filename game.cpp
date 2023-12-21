@@ -45,6 +45,12 @@ std::vector<Vector2D> projectiles_hit_enemies_directions;
 std::vector<Uint32> hit_time;
 //
 
+
+bool playerInvincible = false;
+Uint32 playerInvincibleStartTime = 0; // the player invincibility start time
+Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
+
+
 Game::Game()
 {}
 
@@ -228,8 +234,10 @@ void Game::handleEvents()
     }
 }
 
+
 void Game::update()
 {
+    Uint32 currentTime0 = SDL_GetTicks();
     // Get player/enemy info.
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
@@ -276,34 +284,39 @@ void Game::update()
     for (auto& e : enemies)
     {
         SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
-        if(Collision::AABB(playerCol,enemyCol))
-        {
-            std::cout << "Hit enemy" << std::endl;
-            std::cout << "Damage done" << std::endl;
-
-            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-            Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-        }
-
-        for (auto& p : PlayerProjectiles)
-        {
-            if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
+            if(Collision::AABB(playerCol,enemyCol))
             {
-                std::cout << "Projectile hit enemy" << std::endl;
-                Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-                //Test for enemy knockback
-                enemies_hit.push_back(e);
-                hit_time.push_back(SDL_GetTicks());
-                projectiles_hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
-                p->destroy();
-            }
+                if (!playerInvincible) {
+                    std::cout << "Player Hit!" << std::endl;
+                    std::cout << "Damage done" << std::endl;
 
+                    player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+                    Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
+
+                    playerInvincible = true;
+                    playerInvincibleStartTime = currentTime0;
+                }
+
+            for (auto& p : PlayerProjectiles)
+            {
+                if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
+                {
+                    std::cout << "Projectile hit enemy" << std::endl;
+                    Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                    //Test for enemy knockback
+                    enemies_hit.push_back(e);
+                    hit_time.push_back(SDL_GetTicks());
+                    projectiles_hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
+                    p->destroy();
+                }
+
+            }
         }
     }
     //
 
-    Uint32 currentTime = SDL_GetTicks();
 
+    Uint32 currentTime = SDL_GetTicks();
     //Test enemy knockback
     for (std::size_t i = 0; i < enemies_hit.size(); ++i)
     {
@@ -402,6 +415,11 @@ void Game::update()
         //move tiles when player moving in y axis
         t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
     }*/
+
+    //check invincibility duration and change status
+    if (playerInvincible && currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {
+        playerInvincible = false;
+    }
 }
 
 void Game::render()
