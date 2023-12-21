@@ -23,6 +23,13 @@ if(NOT SDL2_ttf_FOUND)
     message(FATAL_ERROR "SDL2_ttf not found")
 endif()
 
+if (APPLE)
+    find_library(COREGRAPHICS_FRAMEWORK CoreGraphics)
+    if(NOT COREGRAPHICS_FRAMEWORK)
+        message(FATAL_ERROR "CoreGraphics framework not found")
+    endif()
+endif()
+
 set(SOURCES
     main.cpp
     game.h game.cpp
@@ -50,16 +57,20 @@ set(SOURCES
     ECS/UILabel.h
     ECS/Stats.h
     ECS/Stats.cpp
-    json.hpp)
-
-add_executable(TimelessJourneys ${SOURCES}
+    json.hpp
     timer.hpp
     ECS/weaponComponent.h
-    world.hpp world.cpp
+    world.hpp world.cpp)
 
-)
+add_executable(TimelessJourneys ${SOURCES})
 
-target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+if (APPLE)
+    target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK})
+endif()
+
+if (WIN32)
+    target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+endif()
 
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_definitions(TimelessJourneys PRIVATE ROOT_DIR="${ROOT_DIR}")

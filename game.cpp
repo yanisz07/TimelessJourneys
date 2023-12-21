@@ -8,7 +8,12 @@
 #include <sstream>
 #include <filesystem>
 #include "world.hpp"
-
+#ifdef __APPLE__
+#include <CoreGraphics/CGDirectDisplay.h>
+#endif
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 Map* map;
 Manager manager;
@@ -17,9 +22,10 @@ SDL_Renderer* Game::renderer = nullptr;
 
 SDL_Event Game::event;
 
+//Camera
 SDL_Rect Game::camera = {0,0,1600,1280};
-int x_diff = 400;
-int y_diff = 320;
+int x_diff = 400; //Camera.x with respect to the position x of the player
+int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
 
@@ -51,17 +57,46 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     {
     int flags = 0;
 
+    int final_width = width;
+    int final_height = height;
+
+    camera.w = 2400 - width;
+    camera.h = 1920 - height;
+    x_diff = (width - 128)/2;
+    y_diff = (height - 128)/2;
+
     if (fullscreen)
     {
         flags=SDL_WINDOW_FULLSCREEN;
 
+        #ifdef __APPLE__
+        CGDirectDisplayID displayID = kCGDirectMainDisplay;
+        int screenWidth = CGDisplayPixelsWide(displayID);
+        int screenHeight = CGDisplayPixelsHigh(displayID);
+        #endif
+
+        #ifdef _WIN32
+        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+        #endif
+
+        x_diff = (screenWidth - 128)/2;
+        y_diff = (screenHeight - 128)/2;
+        camera.w = 2400 - screenWidth;
+        camera.h = 1920 - screenHeight;
+        final_width = screenWidth;
+        final_height = screenHeight;
+
     }
+
+    std::cout << final_width << std::endl;
+    std::cout << final_height << std::endl;
 
     if(SDL_Init(SDL_INIT_EVERYTHING)==0)
     {
         std::cout << "Subsystems initialized!..." << std::endl;
 
-        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+        window = SDL_CreateWindow(title, xpos, ypos, final_width, final_height, flags);
 
         if (window)
         {
@@ -89,8 +124,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         std::cout << "Error : SDL_TTF" << std::endl;
     }
     }
-
-
 
     //Load game assets
     {
@@ -171,7 +204,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
 
     lastProjectileTime = SDL_GetTicks();
-
 }
 }
 
