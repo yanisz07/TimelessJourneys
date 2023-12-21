@@ -109,7 +109,7 @@ private:
     std::string name = "Standard weapon ";
     int damage = 0;
     TransformComponent* entityTransform;
-    Uint32 reloadTime = 500;
+    Uint32 reloadTime = 1000;
 };
 
 #endif // WEAPONCOMPONENT_H
