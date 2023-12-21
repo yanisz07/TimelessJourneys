@@ -48,7 +48,7 @@
         "name": "enemy",
         "sprites": [
           {
-            "name" : "Enemy_Idel_Sprite",
+            "name" : "Enemy_Idle_Sprite",
             "path": "/assets/Blue_Slime/Idle.png",
             "actions": [
               {
@@ -69,6 +69,19 @@
                 "values": [
                   32,
                   4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Hurt_Sprite",
+            "path": "/assets/Blue_Slime/Hurt.png",
+            "actions": [
+              {
+                "name": "Hurt",
+                "values": [
+                  32,
+                  6
                 ]
               }
             ]

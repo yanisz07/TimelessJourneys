@@ -31,6 +31,12 @@ auto& enemy_health(manager.addEntity());
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
+//Test for knockback on enemys
+std::vector<Entity*> enemies_hit;
+std::vector<Vector2D> projectiles_hit_enemies_directions;
+std::vector<Uint32> hit_time;
+//
+
 Game::Game()
 {}
 
@@ -105,7 +111,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
 
-    assets->AddTexture("enemy" , "/assets/enemy.png");
+    assets->AddTexture("green_blob_hurt", "/assets/Green_Slime/Hurt.png");
+    assets->AddTexture("blue_blob_hurt", "/assets/Blue_Slime/Hurt.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -172,8 +179,6 @@ auto& PlayerProjectiles(manager.getGroup(Game::groupPlayerProjectiles));
 auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 
-
-
 void Game::handleEvents()
 {
 
@@ -206,7 +211,6 @@ void Game::update()
     manager.refresh();
     manager.update();
     //End
-
 
     //Check and solve player collisions.
     for (auto& c : colliders)
@@ -252,15 +256,60 @@ void Game::update()
             {
                 std::cout << "Projectile hit enemy" << std::endl;
                 Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                //Test for enemy knockback
+                enemies_hit.push_back(e);
+                hit_time.push_back(SDL_GetTicks());
+                projectiles_hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
                 p->destroy();
             }
 
         }
     }
+    //
+
+    Uint32 currentTime = SDL_GetTicks();
+
+    //Test enemy knockback
+    for (std::size_t i = 0; i < enemies_hit.size(); ++i)
+    {
+        Entity* enemy = enemies_hit[i];
+        Vector2D direction = projectiles_hit_enemies_directions[i];
+        currentTime = SDL_GetTicks();
+        Uint32 delay = currentTime - hit_time[i];
+        if (delay <= 1000)
+        {
+            if (delay <= 250)
+            {
+                if (delay <= 0.1)
+                {
+                    enemy->getComponent<TransformComponent>().position.x += direction.x*10;
+                    enemy->getComponent<TransformComponent>().position.y += direction.y*10;
+                }
+                else if (delay <= 0.3)
+                {
+                    enemy->getComponent<TransformComponent>().position.x += direction.x*5;
+                    enemy->getComponent<TransformComponent>().position.y += direction.y*5;
+                }
+                else
+                {
+                    enemy->getComponent<TransformComponent>().position.x += direction.x*1;
+                    enemy->getComponent<TransformComponent>().position.y += direction.y*1;
+                }
+            }
+            enemy->getComponent<SpriteComponent>().Play("Hurt");
+        }
+        else
+        {
+            enemy->getComponent<TransformComponent>().velocity.x = 0;
+            enemies_hit.erase(enemies_hit.begin() + i);
+            hit_time.erase(hit_time.begin() + i);
+            projectiles_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
+            enemy->getComponent<SpriteComponent>().Play("Idle");
+        }
+    }
     //End
 
     //Projectiles shot from the enemy we can generalize this to all ennemies
-    Uint32 currentTime = SDL_GetTicks();
     if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
         // Create a projectile every two seconds
