@@ -4,3 +4,16 @@ With Lila, we were in charge of setting the rules and functionalities of the inv
 Week 2:
 Downloaded SDL2!
 
+Week 3:
+Understood how SDL2 works by reading documents and watching a BUNCH of videos
+
+
+Week 4:
+Started implementing the inventory. (Implemented the code so that the screen (inventory) appears)
+
+
+
+
+
+
+
