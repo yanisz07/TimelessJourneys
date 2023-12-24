@@ -32,7 +32,7 @@ auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
 auto& enemy_health(manager.addEntity());
 
-//std::filesystem::path projectDir = std::filesystem::current_path();
+std::filesystem::path projectDir = std::filesystem::current_path();
 
 Game::Game()
 {}

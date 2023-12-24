@@ -3,7 +3,6 @@
 #include <SDL_image.h>
 #include <filesystem>
 
-std::filesystem::path projectDir = std::filesystem::current_path();
 
 void Menu::toggleMenuState(bool &isMenuOpen) {
     isMenuOpen = !isMenuOpen;
@@ -26,7 +25,7 @@ void Menu::renderMenu(SDL_Renderer* renderer, bool isMenuOpen, const SDL_Point& 
         int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
 
         // Background
-        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "background_sample.png").string();
+        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "background_sample1.png").string();
         SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, backgroundPath.c_str());
         SDL_Rect backgroundRect = {0, 0, screenWidth, screenHeight};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect);
@@ -125,5 +124,6 @@ void Menu::renderMenu(SDL_Renderer* renderer, bool isMenuOpen, const SDL_Point& 
         SDL_FreeSurface(settingsSurface);
         TTF_CloseFont(font);
         SDL_DestroyTexture(backgroundTexture);
+        SDL_RenderPresent(renderer);
     }
 }
