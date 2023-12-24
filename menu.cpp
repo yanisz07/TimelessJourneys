@@ -1,7 +1,9 @@
 #include "menu.h"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <filesystem>
 
+std::filesystem::path projectDir = std::filesystem::current_path();
 
 void Menu::toggleMenuState(bool &isMenuOpen) {
     isMenuOpen = !isMenuOpen;
@@ -125,5 +127,3 @@ void Menu::renderMenu(SDL_Renderer* renderer, bool isMenuOpen, const SDL_Point& 
         SDL_DestroyTexture(backgroundTexture);
     }
 }
-
-

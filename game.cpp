@@ -32,7 +32,7 @@ auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
 auto& enemy_health(manager.addEntity());
 
-std::filesystem::path projectDir = std::filesystem::current_path();
+//std::filesystem::path projectDir = std::filesystem::current_path();
 
 Game::Game()
 {}
@@ -178,7 +178,7 @@ auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 
 
-
+bool isMenuOpen = false;
 void Game::handleEvents()
 {
     SDL_PollEvent(&event);
