@@ -2,3 +2,4 @@ During this week, i edited and animated the movement of the main character of ou
 During the second week, i am bringing my cntribution into the main code of the game, by editing the menu page
 of the project
 
+During weeks 3 and 4, I actively focused on developing the game's menu. Most of my time was dedicated to resolving a bug that prevented the game from functioning properly with my initial implementation. Additionaly, I refined the menu and its buttons, incorporating hover effects . I also supplied the sprites for the game's main character.
