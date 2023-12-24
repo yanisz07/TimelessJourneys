@@ -10,6 +10,9 @@
 #include "world.hpp"
 
 
+
+
+
 Map* map;
 Manager manager;
 
