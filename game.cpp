@@ -181,12 +181,16 @@ auto& enemies(manager.getGroup(Game::groupEnemies));
 
 void Game::handleEvents()
 {
-
     SDL_PollEvent(&event);
 
     switch (event.type) {
     case SDL_QUIT:
         isRunning = false;
+        break;
+    case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_m) { // If 'M' is pressed
+        Menu::toggleMenuState(isMenuOpen); // Toggle the menu state
+        }
         break;
     default:
         break;
@@ -328,7 +332,12 @@ void Game::update()
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    //this is were we would add stuff to render
+    if (isMenuOpen) {
+    Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
+    }
+    else{
+
+
     for (auto& t : tiles)
     {
         t->draw();
@@ -365,7 +374,7 @@ void Game::render()
 
     SDL_RenderPresent(renderer);
 }
-
+}
 void Game::clean()
 {
     SDL_DestroyWindow(window);
