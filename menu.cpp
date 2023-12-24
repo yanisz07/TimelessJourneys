@@ -65,24 +65,20 @@ void Menu::renderMenu(SDL_Renderer* renderer, bool isMenuOpen, const SDL_Point& 
         // hover effect for Play button
         if (isHoveringPlay) {
             SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
-            SDL_RenderFillRect(renderer, &playButton);
         } else {
             SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
-            SDL_RenderFillRect(renderer, &playButton);
         }
+        SDL_RenderFillRect(renderer, &playButton);
+
 
         // hover effect for Settings button
         if (isHoveringSettings) {
             SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
-            SDL_RenderFillRect(renderer, &settingsButton);
         } else {
             SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
-            SDL_RenderFillRect(renderer, &settingsButton);
         }
-
-        SDL_RenderFillRect(renderer, &titleButton);
-        SDL_RenderFillRect(renderer, &playButton);
         SDL_RenderFillRect(renderer, &settingsButton);
+
 
         // Text Rendering
         std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();

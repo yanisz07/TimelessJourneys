@@ -192,6 +192,11 @@ void Game::handleEvents()
         Menu::toggleMenuState(isMenuOpen); // Toggle the menu state
         }
         break;
+
+    case SDL_MOUSEMOTION:
+        mousePosition.x = event.motion.x;
+        mousePosition.y = event.motion.y;
+        break;
     default:
         break;
     }
