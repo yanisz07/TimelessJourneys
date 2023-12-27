@@ -198,6 +198,26 @@ void Game::handleEvents()
         mousePosition.x = event.motion.x;
         mousePosition.y = event.motion.y;
         break;
+    case SDL_MOUSEBUTTONDOWN:
+        if (isMenuOpen) {
+            // Get the mouse coordinates and screen size
+            int x, y ,screenWidth, screenHeight;
+            SDL_GetMouseState(&x, &y);
+            SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+            // Menu button dimensions
+            int buttonWidth = 150;
+            int buttonHeight = 40;
+            // Calculating location of buttons
+            int centerX = (screenWidth - buttonWidth) / 2;
+            int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+
+            //if click is within button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > centerY && y < centerY + buttonHeight) {
+                isMenuOpen = false;
+            }
+        }
+        break;
     default:
         break;
     }
