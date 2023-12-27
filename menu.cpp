@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <filesystem>
 
+//brief
 
 void Menu::toggleMenuState(bool &isMenuOpen) {
     isMenuOpen = !isMenuOpen;
