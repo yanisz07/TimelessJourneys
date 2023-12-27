@@ -35,7 +35,9 @@ auto& enemy_health(manager.addEntity());
 std::filesystem::path projectDir = std::filesystem::current_path();
 
 Game::Game()
-{}
+{
+    isMenuOpen = true;
+}
 
 Game::~Game()
 {}
@@ -178,7 +180,6 @@ auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 
 
-bool isMenuOpen = false;
 void Game::handleEvents()
 {
     SDL_PollEvent(&event);
@@ -204,6 +205,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
+    if (!isMenuOpen) {
     // Get player/enemy info.
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
@@ -333,6 +335,7 @@ void Game::update()
         t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
     }*/
 }
+}
 
 void Game::render()
 {
@@ -378,7 +381,7 @@ void Game::render()
     player_health.draw();
 
     SDL_RenderPresent(renderer);
-}
+    }
 }
 void Game::clean()
 {
