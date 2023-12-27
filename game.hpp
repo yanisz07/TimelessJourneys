@@ -9,10 +9,15 @@
 #include "string"
 #include "charconv"
 #include "vector"
+#include "menu.h"
+#include <filesystem>
+
+extern std::filesystem::path projectDir;
 
 #ifndef ROOT_DIR
 #define ROOT_DIR ""
 #endif
+
 
 class ColliderComponent;
 
@@ -31,6 +36,7 @@ public:
     void update();
     void render();
     void clean();
+    void toggleMenu();
 
     bool is_running() {return isRunning;}
 
@@ -54,6 +60,8 @@ private:
     int cnt = 0;
     SDL_Window *window;
     Uint32 lastProjectileTime;
+    bool isMenuOpen;
+    SDL_Point mousePosition;
 };
 
 #endif // GAME_H

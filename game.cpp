@@ -10,6 +10,9 @@
 #include "world.hpp"
 
 
+
+
+
 Map* map;
 Manager manager;
 
@@ -32,7 +35,9 @@ auto& enemy_health(manager.addEntity());
 std::filesystem::path projectDir = std::filesystem::current_path();
 
 Game::Game()
-{}
+{
+    isMenuOpen = true;
+}
 
 Game::~Game()
 {}
@@ -175,15 +180,43 @@ auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 
 
-
 void Game::handleEvents()
 {
-
     SDL_PollEvent(&event);
 
     switch (event.type) {
     case SDL_QUIT:
         isRunning = false;
+        break;
+    case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_m) { // If 'M' is pressed
+        Menu::toggleMenuState(isMenuOpen); // Toggle the menu state
+        }
+        break;
+
+    case SDL_MOUSEMOTION:
+        mousePosition.x = event.motion.x;
+        mousePosition.y = event.motion.y;
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+        if (isMenuOpen) {
+            // Get the mouse coordinates and screen size
+            int x, y ,screenWidth, screenHeight;
+            SDL_GetMouseState(&x, &y);
+            SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+            // Menu button dimensions
+            int buttonWidth = 150;
+            int buttonHeight = 40;
+            // Calculating location of buttons
+            int centerX = (screenWidth - buttonWidth) / 2;
+            int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+
+            //if click is within button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > centerY && y < centerY + buttonHeight) {
+                isMenuOpen = false;
+            }
+        }
         break;
     default:
         break;
@@ -192,6 +225,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
+    if (!isMenuOpen) {
     // Get player/enemy info.
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
@@ -321,11 +355,17 @@ void Game::update()
         t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
     }*/
 }
+}
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    //this is were we would add stuff to render
+    if (isMenuOpen) {
+    Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
+    }
+    else{
+
+
     for (auto& t : tiles)
     {
         t->draw();
@@ -361,8 +401,8 @@ void Game::render()
     player_health.draw();
 
     SDL_RenderPresent(renderer);
+    }
 }
-
 void Game::clean()
 {
     SDL_DestroyWindow(window);
