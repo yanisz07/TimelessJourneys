@@ -36,7 +36,8 @@ std::filesystem::path projectDir = std::filesystem::current_path();
 
 Game::Game()
 {
-    isMenuOpen = true;
+    isMenuOpen = true; // Menu status, starts with menu opened
+    isFullscreen = false; // full screen statusm, Starts in windowed mode
 }
 
 Game::~Game()
@@ -189,10 +190,23 @@ void Game::handleEvents()
         isRunning = false;
         break;
     case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_m) { // If 'M' is pressed
-        Menu::toggleMenuState(isMenuOpen); // Toggle the menu state
+        switch (event.key.keysym.sym) {
+        case SDLK_m:
+            Menu::toggleMenuState(isMenuOpen); // Existing menu toggle
+            break;
+        case SDLK_f:
+            if (isFullscreen) {
+                SDL_SetWindowFullscreen(window, 0); // Set to windowed mode
+                isFullscreen = false;
+            } else {
+                SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Set to fullscreen mode
+                isFullscreen = true;
+            }
+            break;
+
         }
         break;
+
 
     case SDL_MOUSEMOTION:
         mousePosition.x = event.motion.x;
