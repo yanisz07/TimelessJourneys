@@ -40,36 +40,36 @@ private:
         float deltaX = abs(positionToCheck.x - spawnPosition.x);
         float deltaY = abs(positionToCheck.y - spawnPosition.y);
 
-        return deltaX <= 40 && deltaY <= 40;
+        return deltaX <= 70 && deltaY <= 70;
     }
+
+
     void randomMoveWithinBounds()
     {
         moveTimer++;
         if (moveTimer >= moveInterval)
         {
             moveTimer = 0;
+            bool validMoveFound = false;
 
-            // Generate potential new velocity
-            Vector2D potentialVelocity = Vector2D(((rand() % 3) - 1) * velocityScale,
-                                                  ((rand() % 3) - 1) * velocityScale);
+            while (!validMoveFound) {
+                // Generate potential new position
+                Vector2D potentialPosition = transform->position;
+                potentialPosition.x += ((rand() % 3) - 1) * velocityScale * transform->speed;
+                potentialPosition.y += ((rand() % 3) - 1) * velocityScale * transform->speed;
 
-            // Calculate potential new position
-            Vector2D potentialPosition = transform->position + potentialVelocity;
-
-            // Check if the potential new position is within bounds
-            if (isInBound(potentialPosition))
-            {
-                transform->velocity = potentialVelocity;
-            }
-
-            else {
-
-                transform->velocity = Vector2D(0,0);
-
-
+                // Check if the potential new position is within bounds
+                if (isInBound(potentialPosition))
+                {
+                    // Directly update the position
+                    transform->position = potentialPosition;
+                    validMoveFound = true;
+                }
             }
         }
     }
+    }
+
 
 };
 
