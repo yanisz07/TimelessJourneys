@@ -5,4 +5,6 @@ As Git Leader, I made the research and implemented an efficient and safe git arc
 
 Week 2 Summary: Installed SDL2 with the other members of the team and made sure everything worked. Started to watch tutorials to learn how to use it.
 
-Week 3-4 Summary : Watching more tutorials on SDL2 / RPG development in C++. The goal is to be able to manage npc's / ennemies behaviour.
+Week 3-4 Summary: Watching more tutorials on SDL2 / RPG development in C++. The goal is to be able to manage NPCs / enemy's behavior. Implemented a very basic Enemy Movement component to test enemy movement. 
+
+Week 5 Summary: Implemented collisions with the map for the enemy. Improved the EnemyMovement component, Created two mods, one where the enemy moves randomly around the map (Passive mod), and one when the player gets close, where the enemy starts chasing the player (Chase mod). For now, there is only one enemy, but when the base is finished it will be easy to add many more with different behaviors.
