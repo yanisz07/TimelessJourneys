@@ -39,7 +39,7 @@ auto& enemy_health(manager.addEntity());
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
-//Test for knockback on enemys
+//Test for knockback on enemies
 std::vector<Entity*> enemies_hit;
 std::vector<Vector2D> projectiles_hit_enemies_directions;
 std::vector<Uint32> hit_time;
@@ -54,7 +54,7 @@ Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
 Game::Game()
 {
     isMenuOpen = true; // Menu status, starts with menu opened
-    isFullscreen = false; // full screen statusm, Starts in windowed mode
+    isFullscreen = false; // full screen statusm, Starts fullscreen mode
 }
 
 Game::~Game()
@@ -66,13 +66,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     {
     int flags = 0;
 
-    int final_width = width;
-    int final_height = height;
+    screen_width = width;
+    screen_height = height;
 
-    camera.w = 3200 - width;
-    camera.h = 2560 - height;
+    //3200 * 2560 is the size of the map
+
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
     x_diff = (width - 128)/2;
     y_diff = (height - 128)/2;
+
+    isFullscreen = fullscreen;
 
     if (fullscreen)
     {
@@ -80,32 +84,27 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
         #ifdef __APPLE__
         CGDirectDisplayID displayID = kCGDirectMainDisplay;
-        int screenWidth = CGDisplayPixelsWide(displayID);
-        int screenHeight = CGDisplayPixelsHigh(displayID);
+        screen_width = CGDisplayPixelsWide(displayID);
+        screen_height = CGDisplayPixelsHigh(displayID);
         #endif
 
         #ifdef _WIN32
-        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+        screen_width = GetSystemMetrics(SM_CXSCREEN);
+        screen_height = GetSystemMetrics(SM_CYSCREEN);
         #endif
 
-        x_diff = (screenWidth - 128)/2;
-        y_diff = (screenHeight - 128)/2;
-        camera.w = 3200 - screenWidth;
-        camera.h = 2560 - screenHeight;
-        final_width = screenWidth;
-        final_height = screenHeight;
+        x_diff = (screen_width - 128)/2;
+        y_diff = (screen_height - 128)/2;
+        camera.w = 3200 - screen_width;
+        camera.h = 2560 - screen_height;
 
     }
-
-    std::cout << final_width << std::endl;
-    std::cout << final_height << std::endl;
 
     if(SDL_Init(SDL_INIT_EVERYTHING)==0)
     {
         std::cout << "Subsystems initialized!..." << std::endl;
 
-        window = SDL_CreateWindow(title, xpos, ypos, final_width, final_height, flags);
+        window = SDL_CreateWindow(title, xpos, ypos, screen_width, screen_height, flags);
 
         if (window)
         {
@@ -237,13 +236,37 @@ void Game::handleEvents()
             Menu::toggleMenuState(isMenuOpen); // Existing menu toggle
             break;
         case SDLK_f:
+            //3200 * 2560 is the size of the map
             if (isFullscreen) {
-                SDL_SetWindowFullscreen(window, 0); // Set to windowed mode
+                SDL_SetWindowFullscreen(window, 0);// Set to windowed mode
+                SDL_SetWindowSize(window,800,640); //Fix size
+                //fix camera
+                screen_width = 800;
+                screen_height = 640;
                 isFullscreen = false;
-            } else {
+            } else
+            {
                 SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Set to fullscreen mode
                 isFullscreen = true;
+
+                //fix camera
+                #ifdef __APPLE__
+                CGDirectDisplayID displayID = kCGDirectMainDisplay;
+                screen_width = CGDisplayPixelsWide(displayID);
+                screen_height = CGDisplayPixelsHigh(displayID);
+                #endif
+
+                #ifdef _WIN32
+                screen_width = GetSystemMetrics(SM_CXSCREEN);
+                screen_height = GetSystemMetrics(SM_CYSCREEN);
+                #endif
             }
+            //fix camera
+            camera.w = 3200-screen_width;
+            camera.h = 2560-screen_height;
+            x_diff = (screen_width - 128)/2;
+            y_diff = (screen_height - 128)/2;
+
             break;
 
         }
@@ -376,14 +399,18 @@ void Game::update()
             Uint32 delay = currentTime - hit_time[i];
             if (delay <= 500)
             {
+                if(delay == 0)
+                {
+                    enemy->getComponent<SpriteComponent>().Play("Hurt");
+                }
                 if (delay <= 250)
                 {
-                    if (delay <= 0.1)
+                    if (delay <= 100)
                     {
                         enemy->getComponent<TransformComponent>().position.x += direction.x*10;
                         enemy->getComponent<TransformComponent>().position.y += direction.y*10;
                     }
-                    else if (delay <= 0.3)
+                    else if (delay <= 200)
                     {
                         enemy->getComponent<TransformComponent>().position.x += direction.x*5;
                         enemy->getComponent<TransformComponent>().position.y += direction.y*5;
@@ -394,11 +421,10 @@ void Game::update()
                         enemy->getComponent<TransformComponent>().position.y += direction.y*1;
                     }
                 }
-                enemy->getComponent<SpriteComponent>().Play("Hurt");
             }
             else
             {
-                enemy->getComponent<TransformComponent>().velocity.x = 0;
+                //enemy->getComponent<TransformComponent>().velocity.x = 0;
                 enemies_hit.erase(enemies_hit.begin() + i);
                 hit_time.erase(hit_time.begin() + i);
                 projectiles_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
@@ -453,18 +479,6 @@ void Game::update()
         {
             camera.y = camera.h;
         }
-
-        //get velocity and speed of the player to update the tiles
-        /*Vector2D pVel = player.getComponent<TransformComponent>().velocity;
-        int pSpeed = player.getComponent<TransformComponent>().speed;
-
-        for (auto t : tiles)
-        {
-            //move tiles when player moving in x axis
-            t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
-            //move tiles when player moving in y axis
-            t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
-        }*/
 
         //check invincibility duration and change status
         if (playerInvincible && currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {

@@ -46,6 +46,9 @@ public:
     bool isFullscreen;
 
     static SDL_Rect camera;
+    int screen_width;
+    int screen_height;
+
     static AssetManager* assets;
 
     enum groupLabels : std::size_t //we can have up to 32 groups
