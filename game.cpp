@@ -197,7 +197,7 @@ void Game::update()
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
-    SDL_Rect enemyCol = player.getComponent<ColliderComponent>().collider;
+    SDL_Rect enemyCol = enemy.getComponent<ColliderComponent>().collider;
     Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
 
     std::stringstream ssp; //hold variables and turn them into strings
@@ -218,7 +218,7 @@ void Game::update()
         SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
         if(Collision::AABB(cCol, playerCol))
         {
-            std::cout << "Hit wall" << std::endl;
+            std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
     }
@@ -228,8 +228,8 @@ void Game::update()
     //Check and solve player collisions.
     for (auto& c : colliders)
     {
-        SDL_Rect cCole = c->getComponent<ColliderComponent>().collider;
-        if(Collision::AABB(cCole, enemyCol))
+        SDL_Rect e_cCol = c->getComponent<ColliderComponent>().collider;
+        if(Collision::AABB(e_cCol, enemyCol))
         {
             std::cout << "Enemy hit wall" << std::endl;
             enemy.getComponent<TransformComponent>().position = enemyPos; // the enemy doesn't move

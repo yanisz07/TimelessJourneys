@@ -4,13 +4,14 @@
 #include "../game.hpp"
 #include "ECS.hpp"
 #include "Components.hpp"
-#include <stdlib.h>     // For random number generation
-#include <time.h>       // For seeding random number generator
+#include <stdlib.h>
+#include <time.h>
 
 class EnemyMovement : public Component
 {
 public:
     TransformComponent* transform;
+    SpriteComponent* sprite;
     int moveTimer = 0;
     int moveInterval = 120; // Number of frames to wait before changing direction
     float velocityScale = 0.5; // Scale factor for velocity
@@ -18,6 +19,7 @@ public:
     void init() override
     {
         transform = &entity->getComponent<TransformComponent>();
+        sprite = &entity->getComponent<SpriteComponent>();
         srand(time(NULL)); // Seed the random number generator
     }
 
@@ -28,8 +30,8 @@ public:
         {
             moveTimer = 0;
             // Randomly change direction with scaled velocity
-            transform->velocity.x = ((rand() % 3) - 1) * velocityScale; // Random number between -0.5 and 0.5
-            transform->velocity.y = ((rand() % 3) - 1) * velocityScale;
+            transform->velocity.x = ((rand() % 3) - 1) * velocityScale;
+            transform->velocity.y = ((rand() % 3) - 1) * velocityScale;           
         }
     }
 };
