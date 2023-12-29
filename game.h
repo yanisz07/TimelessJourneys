@@ -9,6 +9,7 @@
 #include "string"
 #include "charconv"
 #include "vector"
+#include "Vector2D.h"
 
 #ifndef ROOT_DIR
 #define ROOT_DIR ""
@@ -28,9 +29,18 @@ public:
 
     void handleEvents();
     int  loadWorld();
-    void update();
     void render();
     void clean();
+
+    void update();
+    void update_player_and_ennemies(Vector2D playerPos);
+    void update_collisions(Vector2D playerPos,SDL_Rect playerCol);
+    void update_damage_to_ennemies(Uint32 currentTime0,Vector2D playerPos,SDL_Rect playerCol);
+    void update_knockback(Uint32 currentTime);
+    void update_ennemy_projectiles(Uint32 currentTime);
+    void update_health(Vector2D playerPos, Vector2D enemyPos);
+    void update_camera();
+    void update_invincibility(Uint32 currentTime0);
 
     bool is_running() {return isRunning;}
 

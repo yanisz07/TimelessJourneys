@@ -8,7 +8,7 @@
 #include "TextureManager.h"
 #include "map.h"
 #include "ECS/Components.h"
-#include "Vector2D.h"
+
 #include "Collision.h"
 #include "AssetManager.h"
 #include <sstream>
@@ -238,11 +238,53 @@ void Game::handleEvents()
 void Game::update()
 {
     Uint32 currentTime0 = SDL_GetTicks();
-    // Get player/enemy info.
+
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
     Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
+
+
+    update_player_and_ennemies(playerPos);
+
+    update_collisions(playerPos,playerCol);
+
+    update_damage_to_ennemies(currentTime0,playerPos,playerCol);
+
+
+    if (playerInvincible) {
+            player.getComponent<SpriteComponent>().Play("Hurt",3);
+    }
+
+
+    Uint32 currentTime = SDL_GetTicks();
+
+    update_knockback(currentTime);
+
+    update_ennemy_projectiles(currentTime);
+
+    update_health(playerPos, enemyPos);
+
+    update_camera();
+
+    update_invincibility(currentTime0);
+
+    //get velocity and speed of the player to update the tiles
+    /*Vector2D pVel = player.getComponent<TransformComponent>().velocity;
+    int pSpeed = player.getComponent<TransformComponent>().speed;
+
+    for (auto t : tiles)
+    {
+        //move tiles when player moving in x axis
+        t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
+        //move tiles when player moving in y axis
+        t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
+    }*/ 
+}
+
+
+void Game::update_player_and_ennemies(Vector2D playerPos) {
+    // Get player/enemy info.
 
     std::stringstream ssp; //hold variables and turn them into strings
     ssp << "Player position: " << playerPos;
@@ -254,112 +296,120 @@ void Game::update()
     manager.refresh();
     manager.update();
     //End
+}
 
+void Game::update_collisions(Vector2D playerPos,SDL_Rect playerCol) {
     //Check and solve player collisions.
+
+    //With walls
     for (auto& c : colliders)
     {
-        SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
-        if(Collision::AABB(cCol, playerCol))
-        {
-            std::cout << "Hit wall" << std::endl;
-            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-        }
+            SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+            if(Collision::AABB(cCol, playerCol))
+            {
+        std::cout << "Hit wall" << std::endl;
+        player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+            }
     }
     //End
 
-
+    //with ennemy projectiles
     for (auto& p : EnemyProjectiles)
 
     {
-        if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
-        {
-            std::cout << "Hit player!" << std::endl;
-            Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
-            p->destroy();
-        }
+            if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
+            {
+        std::cout << "Hit player!" << std::endl;
+        Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
+        p->destroy();
+            }
     }
     //End
 
+}
+
+void Game::update_damage_to_ennemies(Uint32 currentTime0,Vector2D playerPos,SDL_Rect playerCol) {
     //Check damage done to enemies by proximity
     for (auto& e : enemies)
     {
-        SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
+            SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
             if(Collision::AABB(playerCol,enemyCol))
             {
-                if (!playerInvincible) {
-                    std::cout << "Player Hit!" << std::endl;
-                    std::cout << "Damage done" << std::endl;
+        if (!playerInvincible) {
+            std::cout << "Player Hit!" << std::endl;
+            std::cout << "Damage done" << std::endl;
 
-                    player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-                    Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+            Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
 
-                    playerInvincible = true;
-                    playerInvincibleStartTime = currentTime0;
-                }
+            playerInvincible = true;
+            playerInvincibleStartTime = currentTime0;
+        }
             }
+            //End
+
+            //Check damage by player projectile
             for (auto& p : PlayerProjectiles)
             {
-                if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
-                {
-                    std::cout << "Projectile hit enemy" << std::endl;
-                    Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-                    //Test for enemy knockback
-                    enemies_hit.push_back(e);
-                    hit_time.push_back(SDL_GetTicks());
-                    projectiles_hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
-                    p->destroy();
-                }
+        if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
+        {
+            std::cout << "Projectile hit enemy" << std::endl;
+            Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+            //Test for enemy knockback
+            enemies_hit.push_back(e);
+            hit_time.push_back(SDL_GetTicks());
+            projectiles_hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
+            p->destroy();
+        }
 
             }
     }
-    //
+    //End
+}
 
-    if (playerInvincible) {
-            player.getComponent<SpriteComponent>().Play("Hurt",3);
-    }
-
-
-    Uint32 currentTime = SDL_GetTicks();
+void Game::update_knockback(Uint32 currentTime) {
     //Enemy knockback
     for (std::size_t i = 0; i < enemies_hit.size(); ++i)
     {
-        Entity* enemy = enemies_hit[i];
-        Vector2D direction = projectiles_hit_enemies_directions[i];
-        currentTime = SDL_GetTicks();
-        Uint32 delay = currentTime - hit_time[i];
-        if (delay <= 500)
-        {
-            if (delay <= 250)
+            Entity* enemy = enemies_hit[i];
+            Vector2D direction = projectiles_hit_enemies_directions[i];
+            currentTime = SDL_GetTicks();
+            Uint32 delay = currentTime - hit_time[i];
+            if (delay <= 500)
             {
-                if (delay <= 0.1)
-                {
-                    enemy->getComponent<TransformComponent>().position.x += direction.x*10;
-                    enemy->getComponent<TransformComponent>().position.y += direction.y*10;
-                }
-                else if (delay <= 0.3)
-                {
-                    enemy->getComponent<TransformComponent>().position.x += direction.x*5;
-                    enemy->getComponent<TransformComponent>().position.y += direction.y*5;
-                }
-                else
-                {
-                    enemy->getComponent<TransformComponent>().position.x += direction.x*1;
-                    enemy->getComponent<TransformComponent>().position.y += direction.y*1;
-                }
-            }
-            enemy->getComponent<SpriteComponent>().Play("Hurt");
-        }
-        else
+        if (delay <= 250)
         {
-            enemy->getComponent<TransformComponent>().velocity.x = 0;
-            enemies_hit.erase(enemies_hit.begin() + i);
-            hit_time.erase(hit_time.begin() + i);
-            projectiles_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
-            enemy->getComponent<SpriteComponent>().Play("Idle");
+            if (delay <= 0.1)
+            {
+                enemy->getComponent<TransformComponent>().position.x += direction.x*10;
+                enemy->getComponent<TransformComponent>().position.y += direction.y*10;
+            }
+            else if (delay <= 0.3)
+            {
+                enemy->getComponent<TransformComponent>().position.x += direction.x*5;
+                enemy->getComponent<TransformComponent>().position.y += direction.y*5;
+            }
+            else
+            {
+                enemy->getComponent<TransformComponent>().position.x += direction.x*1;
+                enemy->getComponent<TransformComponent>().position.y += direction.y*1;
+            }
         }
+        enemy->getComponent<SpriteComponent>().Play("Hurt");
+            }
+            else
+            {
+        enemy->getComponent<TransformComponent>().velocity.x = 0;
+        enemies_hit.erase(enemies_hit.begin() + i);
+        hit_time.erase(hit_time.begin() + i);
+        projectiles_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
+        enemy->getComponent<SpriteComponent>().Play("Idle");
+            }
     }
     //End
+}
 
+void Game::update_ennemy_projectiles(Uint32 currentTime) {
     //Projectiles shot from the enemy we can generalize this to all ennemies
     if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
@@ -368,7 +418,9 @@ void Game::update()
         lastProjectileTime = currentTime;  // Update the last projectile creation time
     }
     //End
+}
 
+void Game::update_health(Vector2D playerPos, Vector2D enemyPos) {
     //update place of the player_health string
     playerPos = player.getComponent<TransformComponent>().position;
     player_health.getComponent<UILabel>().SetPositionText(playerPos.x, playerPos.y);
@@ -386,7 +438,9 @@ void Game::update()
     std::stringstream sseh;
     sseh << "Health: " << enemy.getComponent<Stats>().get_health();
     enemy_health.getComponent<UILabel>().SetLabelText(sseh.str(),"arial");
+}
 
+void Game::update_camera() {
     camera.x = player.getComponent<TransformComponent>().position.x - x_diff;
     camera.y = player.getComponent<TransformComponent>().position.y - y_diff;
 
@@ -406,24 +460,20 @@ void Game::update()
     {
         camera.y = camera.h;
     }
+}
 
-    //get velocity and speed of the player to update the tiles
-    /*Vector2D pVel = player.getComponent<TransformComponent>().velocity;
-    int pSpeed = player.getComponent<TransformComponent>().speed;
+void Game::update_invincibility(Uint32 currentTime0) {
 
-    for (auto t : tiles)
-    {
-        //move tiles when player moving in x axis
-        t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
-        //move tiles when player moving in y axis
-        t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
-    }*/
-
-    //check invincibility duration and change status
     if (playerInvincible && currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {
         playerInvincible = false;
     }
+
 }
+
+
+
+
+
 
 void Game::render()
 {
