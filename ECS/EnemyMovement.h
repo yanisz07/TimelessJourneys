@@ -4,73 +4,34 @@
 #include "../game.hpp"
 #include "ECS.hpp"
 #include "Components.hpp"
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
+#include <stdlib.h>     // For random number generation
+#include <time.h>       // For seeding random number generator
 
 class EnemyMovement : public Component
 {
 public:
     TransformComponent* transform;
-    TransformComponent* playerTransform; // Pointer to player's transform component
-    Vector2D spawnPosition;
     int moveTimer = 0;
-    int moveInterval = 200;
-    float velocityScale = 0.5;
-
+    int moveInterval = 120; // Number of frames to wait before changing direction
+    float velocityScale = 0.5; // Scale factor for velocity
 
     void init() override
     {
         transform = &entity->getComponent<TransformComponent>();
-        spawnPosition = transform->position;
-        srand(time(NULL));
+        srand(time(NULL)); // Seed the random number generator
     }
-
 
     void update() override
-    {
-        randomMoveWithinBounds();
-    }
-
-private:
-    bool isPlayerClose(){};
-
-    bool isInBound(Vector2D positionToCheck) {
-
-        float deltaX = abs(positionToCheck.x - spawnPosition.x);
-        float deltaY = abs(positionToCheck.y - spawnPosition.y);
-
-        return deltaX <= 70 && deltaY <= 70;
-    }
-
-
-    void randomMoveWithinBounds()
     {
         moveTimer++;
         if (moveTimer >= moveInterval)
         {
             moveTimer = 0;
-            bool validMoveFound = false;
-
-            while (!validMoveFound) {
-                // Generate potential new position
-                Vector2D potentialPosition = transform->position;
-                potentialPosition.x += ((rand() % 3) - 1) * velocityScale * transform->speed;
-                potentialPosition.y += ((rand() % 3) - 1) * velocityScale * transform->speed;
-
-                // Check if the potential new position is within bounds
-                if (isInBound(potentialPosition))
-                {
-                    // Directly update the position
-                    transform->position = potentialPosition;
-                    validMoveFound = true;
-                }
-            }
+            // Randomly change direction with scaled velocity
+            transform->velocity.x = ((rand() % 3) - 1) * velocityScale; // Random number between -0.5 and 0.5
+            transform->velocity.y = ((rand() % 3) - 1) * velocityScale;
         }
     }
-    }
-
-
 };
 
 #endif // ENEMYMOVEMENT_H
