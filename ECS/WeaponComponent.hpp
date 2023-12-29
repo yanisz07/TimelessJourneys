@@ -8,7 +8,8 @@
 class WeaponComponent : public Component
 {
 public:
-    WeaponComponent(){};
+    Timer timer;
+    WeaponComponent(){timer.start(); timer.setTimeOut(reloadTime);}
     void getTransformComponent()
     {
         entityTransform = &entity->getComponent<TransformComponent>();
@@ -18,17 +19,20 @@ public:
 
     void update() override
     {
-        if (Game::event.type == SDL_KEYDOWN)
+        if (Game::event.type == SDL_KEYDOWN && timer.timedOut())
         {
             switch(Game::event.key.keysym.sym)
             {
             case SDLK_z:
                 frontAttack();
+                entity->getComponent<SpriteComponent>().Play("Attack_1");
                 break;
             case SDLK_x:
                 roundAttack();
+                entity->getComponent<SpriteComponent>().Play("Attack_3");
                 break;
             }
+            timer.setTimeOut(reloadTime);
 
         }
     }
@@ -105,6 +109,7 @@ private:
     std::string name = "Standard weapon ";
     int damage = 0;
     TransformComponent* entityTransform;
+    Uint32 reloadTime = 1000;
 };
 
 #endif // WEAPONCOMPONENT_H

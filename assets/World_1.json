@@ -10,11 +10,25 @@
               {
                 "name": "Idle",
                 "values": [
-                  60,
+                  32,
                   8
                 ]
               }
             ]
+          },
+          {
+            "name" : "Player_Attack_3_Sprite",
+            "path" : "/assets/Green_Slime/Attack_3.png",
+            "actions": [
+              {
+                "name": "Attack_3",
+                "values": [
+                  32,
+                  5
+                ]
+              }
+            ]
+
           },
           {
             "name" : "Player_Attack_1_Sprite",
@@ -23,7 +37,7 @@
               {
                 "name": "Attack_1",
                 "values": [
-                  60,
+                  32,
                   4
                 ]
               }
@@ -36,8 +50,21 @@
               {
                 "name": "Run",
                 "values": [
-                  60,
+                  32,
                   7
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Hurt_Sprite",
+            "path": "/assets/Green_Slime/Hurt.png",
+            "actions": [
+              {
+                "name": "Hurt",
+                "values": [
+                  32,
+                  6
                 ]
               }
             ]
@@ -48,13 +75,13 @@
         "name": "enemy",
         "sprites": [
           {
-            "name" : "Enemy_Idel_Sprite",
+            "name" : "Enemy_Idle_Sprite",
             "path": "/assets/Blue_Slime/Idle.png",
             "actions": [
               {
                 "name": "Idle",
                 "values": [
-                  60,
+                  32,
                   8
                 ]
               }
@@ -67,8 +94,21 @@
               {
                 "name": "Attack_1",
                 "values": [
-                  60,
+                  32,
                   4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Hurt_Sprite",
+            "path": "/assets/Blue_Slime/Hurt.png",
+            "actions": [
+              {
+                "name": "Hurt",
+                "values": [
+                  32,
+                  6
                 ]
               }
             ]
