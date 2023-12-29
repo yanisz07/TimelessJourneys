@@ -285,7 +285,7 @@ void Game::update()
         t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
         //move tiles when player moving in y axis
         t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
-    }*/ 
+    }*/
 }
 
 
