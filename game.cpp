@@ -132,13 +132,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addGroup(Game::groupPlayers);
 
     std::cout << "Player created" << std::endl;
-
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
 
 
     enemy.addComponent<TransformComponent>(600,600,32,32,4);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
-    enemy.addComponent<EnemyMovement>();
+    enemy.addComponent<EnemyMovement>(&playerTransform);
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
