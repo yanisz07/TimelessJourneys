@@ -33,14 +33,14 @@ public:
     void clean();
 
     void update();
-    void update_player_and_ennemies(Vector2D playerPos);
-    void update_collisions(Vector2D playerPos,SDL_Rect playerCol);
-    void update_damage_to_ennemies(Uint32 currentTime0,Vector2D playerPos,SDL_Rect playerCol);
-    void update_knockback(Uint32 currentTime);
-    void update_ennemy_projectiles(Uint32 currentTime);
-    void update_health(Vector2D playerPos, Vector2D enemyPos);
+    void update_player_and_ennemies(Vector2D& refPlayerPos);
+    void update_collisions(Vector2D& refPlayerPos,SDL_Rect& refPlayerCol);
+    void update_damage_to_ennemies(Uint32& refCurrentTime0,Vector2D& refPlayerPos,SDL_Rect& refPlayerCol);
+    void update_knockback(Uint32& refCurrentTime);
+    void update_ennemy_projectiles(Uint32& refCurrentTime);
+    void update_health(Vector2D& refPlayerPos, Vector2D& refEnemyPos);
     void update_camera();
-    void update_invincibility(Uint32 currentTime0);
+    void update_invincibility(Uint32& refCurrentTime0);
 
     bool is_running() {return isRunning;}
 

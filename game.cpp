@@ -238,18 +238,23 @@ void Game::handleEvents()
 void Game::update()
 {
     Uint32 currentTime0 = SDL_GetTicks();
+    Uint32& refCurrentTime0 = currentTime0;
 
     SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
+    SDL_Rect& refPlayerCol = playerCol;
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
+    Vector2D& refPlayerPos = playerPos;
 
     Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
+    Vector2D& refEnemyPos = enemyPos;
 
 
-    update_player_and_ennemies(playerPos);
 
-    update_collisions(playerPos,playerCol);
+    update_player_and_ennemies(refPlayerPos);
 
-    update_damage_to_ennemies(currentTime0,playerPos,playerCol);
+    update_collisions(refPlayerPos,refPlayerCol);
+
+    update_damage_to_ennemies(refCurrentTime0,refPlayerPos,refPlayerCol);
 
 
     if (playerInvincible) {
@@ -258,16 +263,17 @@ void Game::update()
 
 
     Uint32 currentTime = SDL_GetTicks();
+    Uint32& refCurrentTime = currentTime;
 
-    update_knockback(currentTime);
+    update_knockback(refCurrentTime);
 
-    update_ennemy_projectiles(currentTime);
+    update_ennemy_projectiles(refCurrentTime);
 
-    update_health(playerPos, enemyPos);
+    update_health(refPlayerPos, refEnemyPos);
 
     update_camera();
 
-    update_invincibility(currentTime0);
+    update_invincibility(refCurrentTime0);
 
     //get velocity and speed of the player to update the tiles
     /*Vector2D pVel = player.getComponent<TransformComponent>().velocity;
@@ -283,11 +289,11 @@ void Game::update()
 }
 
 
-void Game::update_player_and_ennemies(Vector2D playerPos) {
+void Game::update_player_and_ennemies(Vector2D& refPlayerPos) {
     // Get player/enemy info.
 
     std::stringstream ssp; //hold variables and turn them into strings
-    ssp << "Player position: " << playerPos;
+    ssp << "Player position: " << refPlayerPos;
 
     label.getComponent<UILabel>().SetLabelText(ssp.str(), "arial"); //change the text
     //End
@@ -298,17 +304,17 @@ void Game::update_player_and_ennemies(Vector2D playerPos) {
     //End
 }
 
-void Game::update_collisions(Vector2D playerPos,SDL_Rect playerCol) {
+void Game::update_collisions(Vector2D& refPlayerPos,SDL_Rect& refPlayerCol) {
     //Check and solve player collisions.
 
     //With walls
     for (auto& c : colliders)
     {
             SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
-            if(Collision::AABB(cCol, playerCol))
+            if(Collision::AABB(cCol, refPlayerCol))
             {
         std::cout << "Hit wall" << std::endl;
-        player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        player.getComponent<TransformComponent>().position = refPlayerPos; // the player doesn't move
             }
     }
     //End
@@ -317,7 +323,7 @@ void Game::update_collisions(Vector2D playerPos,SDL_Rect playerCol) {
     for (auto& p : EnemyProjectiles)
 
     {
-            if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
+            if(Collision::AABB(refPlayerCol,p->getComponent<ColliderComponent>().collider))
             {
         std::cout << "Hit player!" << std::endl;
         Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
@@ -328,22 +334,22 @@ void Game::update_collisions(Vector2D playerPos,SDL_Rect playerCol) {
 
 }
 
-void Game::update_damage_to_ennemies(Uint32 currentTime0,Vector2D playerPos,SDL_Rect playerCol) {
+void Game::update_damage_to_ennemies(Uint32& refCurrentTime0,Vector2D& refPlayerPos,SDL_Rect& refPlayerCol) {
     //Check damage done to enemies by proximity
     for (auto& e : enemies)
     {
             SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
-            if(Collision::AABB(playerCol,enemyCol))
+            if(Collision::AABB(refPlayerCol,enemyCol))
             {
         if (!playerInvincible) {
             std::cout << "Player Hit!" << std::endl;
             std::cout << "Damage done" << std::endl;
 
-            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+            player.getComponent<TransformComponent>().position = refPlayerPos; // the player doesn't move
             Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
 
             playerInvincible = true;
-            playerInvincibleStartTime = currentTime0;
+            playerInvincibleStartTime = refCurrentTime0;
         }
             }
             //End
@@ -367,14 +373,14 @@ void Game::update_damage_to_ennemies(Uint32 currentTime0,Vector2D playerPos,SDL_
     //End
 }
 
-void Game::update_knockback(Uint32 currentTime) {
+void Game::update_knockback(Uint32& refCurrentTime) {
     //Enemy knockback
     for (std::size_t i = 0; i < enemies_hit.size(); ++i)
     {
             Entity* enemy = enemies_hit[i];
             Vector2D direction = projectiles_hit_enemies_directions[i];
-            currentTime = SDL_GetTicks();
-            Uint32 delay = currentTime - hit_time[i];
+            refCurrentTime = SDL_GetTicks();
+            Uint32 delay = refCurrentTime - hit_time[i];
             if (delay <= 500)
             {
         if (delay <= 250)
@@ -409,21 +415,21 @@ void Game::update_knockback(Uint32 currentTime) {
     //End
 }
 
-void Game::update_ennemy_projectiles(Uint32 currentTime) {
+void Game::update_ennemy_projectiles(Uint32& refCurrentTime) {
     //Projectiles shot from the enemy we can generalize this to all ennemies
-    if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
+    if (refCurrentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
     {
         // Create a projectile every two seconds
         assets->CreateProjectile(Vector2D(enemy.getComponent<TransformComponent>().position.x, enemy.getComponent<TransformComponent>().position.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
-        lastProjectileTime = currentTime;  // Update the last projectile creation time
+        lastProjectileTime = refCurrentTime;  // Update the last projectile creation time
     }
     //End
 }
 
-void Game::update_health(Vector2D playerPos, Vector2D enemyPos) {
+void Game::update_health(Vector2D& refPlayerPos, Vector2D& refEnemyPos) {
     //update place of the player_health string
-    playerPos = player.getComponent<TransformComponent>().position;
-    player_health.getComponent<UILabel>().SetPositionText(playerPos.x, playerPos.y);
+    refPlayerPos = player.getComponent<TransformComponent>().position;
+    player_health.getComponent<UILabel>().SetPositionText(refPlayerPos.x, refPlayerPos.y);
 
     //update text of health
     std::stringstream ssh;
@@ -431,8 +437,8 @@ void Game::update_health(Vector2D playerPos, Vector2D enemyPos) {
     player_health.getComponent<UILabel>().SetLabelText(ssh.str(),"arial");
 
     //update position of the enemy_player string
-    enemyPos = enemy.getComponent<TransformComponent>().position;
-    enemy_health.getComponent<UILabel>().SetPositionText(enemyPos.x, enemyPos.y);
+    refEnemyPos = enemy.getComponent<TransformComponent>().position;
+    enemy_health.getComponent<UILabel>().SetPositionText(refEnemyPos.x, refEnemyPos.y);
 
     //update text of health
     std::stringstream sseh;
@@ -462,9 +468,9 @@ void Game::update_camera() {
     }
 }
 
-void Game::update_invincibility(Uint32 currentTime0) {
+void Game::update_invincibility(Uint32& refCurrentTime0) {
 
-    if (playerInvincible && currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {
+    if (playerInvincible && refCurrentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {
         playerInvincible = false;
     }
 
