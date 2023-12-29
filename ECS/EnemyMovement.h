@@ -1,7 +1,6 @@
 #ifndef ENEMYMOVEMENT_H
 #define ENEMYMOVEMENT_H
 
-#include "../game.hpp"
 #include "ECS.hpp"
 #include "Components.hpp"
 #include <stdlib.h>
@@ -15,7 +14,7 @@ public:
     int moveTimer = 0;
     int moveInterval = 120;
     float velocityScale = 0.3;
-    const int chaseDistance = 300;
+    const int chaseDistance = 250;
     const int stopDistance = 60;
 
     EnemyMovement(TransformComponent* playerTrans) : playerTransform(playerTrans) {}
@@ -40,18 +39,18 @@ public:
                 transform->velocity.x = xDirection * velocityScale;
                 transform->velocity.y = yDirection * velocityScale;
             } else {
-                // Stop the enemy to maintain a distance of 50
+                // Stop the enemy to maintain a distance of stopDistance
                 transform->velocity.x = 0;
                 transform->velocity.y = 0;
             }
         }
         else
         {
+            // Move randomly around the map
             std::cout << "Passive mod active" << std::endl;
             moveTimer++;
             if (moveTimer >= moveInterval)
             {
-                // Move randomly
                 moveTimer = 0;
                 transform->velocity.x = ((rand() % 3) - 1) * velocityScale;
                 transform->velocity.y = ((rand() % 3) - 1) * velocityScale;
