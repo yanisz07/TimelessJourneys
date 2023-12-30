@@ -11,6 +11,12 @@ Understood how SDL2 works by reading documents and watching a BUNCH of videos
 Week 4:
 Started implementing the inventory. (Implemented the code so that the screen (inventory) appears)
 
+Week 5:
+Continuied working on implementing the inventory. (Implemented the grid, a function to add items and currently working on the interacting between them). 
+
+
+
+
 
 
 
