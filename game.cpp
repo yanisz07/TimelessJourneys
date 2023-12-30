@@ -240,36 +240,7 @@ void Game::handleEvents()
             break;
         case SDLK_f:
             //3200 * 2560 is the size of the map
-            if (isFullscreen) {
-                SDL_SetWindowFullscreen(window, 0);// Set to windowed mode
-                SDL_SetWindowSize(window,800,640); //Fix size
-                //fix camera
-                screen_width = 800;
-                screen_height = 640;
-                isFullscreen = false;
-            } else
-            {
-                SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Set to fullscreen mode
-                isFullscreen = true;
-
-                //fix camera
-                #ifdef __APPLE__
-                CGDirectDisplayID displayID = kCGDirectMainDisplay;
-                screen_width = CGDisplayPixelsWide(displayID);
-                screen_height = CGDisplayPixelsHigh(displayID);
-                #endif
-
-                #ifdef _WIN32
-                screen_width = GetSystemMetrics(SM_CXSCREEN);
-                screen_height = GetSystemMetrics(SM_CYSCREEN);
-                #endif
-            }
-            //fix camera
-            camera.w = 3200-screen_width;
-            camera.h = 2560-screen_height;
-            x_diff = (screen_width - 128)/2;
-            y_diff = (screen_height - 128)/2;
-
+            toggleFullScreen();
             break;
 
         }
@@ -318,7 +289,8 @@ void Game::handleEvents()
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
             int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
-            int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+            int ScreenDim_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 80 + buttonHeight;
 
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -327,20 +299,60 @@ void Game::handleEvents()
                 isMenuOpen = false;
 
             }
-            //if click is within Setting button boundary:
+            //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
-                y > Setting_centerY && y < Setting_centerY + buttonHeight) {
+                y > Back_centerY && y < Back_centerY + buttonHeight) {
                 isSettingsOpen = false;
                 isMenuOpen = true;
 
             }
+            //if click is within Screen Dimension button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > ScreenDim_centerY && y < ScreenDim_centerY + buttonHeight) {
+                //same thing as if key f is pressed:
+                toggleFullScreen();
+
+            }
         }
-
-
         break;
     default:
         break;
     }
+}
+
+
+// function called when changing screen dimensions
+void Game::toggleFullScreen() {
+    if (isFullscreen) {
+        SDL_SetWindowFullscreen(window, 0);// Set to windowed mode
+        SDL_SetWindowSize(window,800,640); //Fix size
+        //fix camera
+        screen_width = 800;
+        screen_height = 640;
+        isFullscreen = false;
+    } else
+    {
+        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Set to fullscreen mode
+        isFullscreen = true;
+
+        //fix camera
+        #ifdef __APPLE__
+        CGDirectDisplayID displayID = kCGDirectMainDisplay;
+        screen_width = CGDisplayPixelsWide(displayID);
+        screen_height = CGDisplayPixelsHigh(displayID);
+        #endif
+
+        #ifdef _WIN32
+        screen_width = GetSystemMetrics(SM_CXSCREEN);
+        screen_height = GetSystemMetrics(SM_CYSCREEN);
+        #endif
+    }
+    //fix camera
+    camera.w = 3200-screen_width;
+    camera.h = 2560-screen_height;
+    x_diff = (screen_width - 128)/2;
+    y_diff = (screen_height - 128)/2;
+
 }
 
 
