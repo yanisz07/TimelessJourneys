@@ -9,8 +9,8 @@ void Setting::toggleSettingState(bool &isSettingsOpen) {
     isSettingsOpen = !isSettingsOpen;
 }
 
-void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const SDL_Point& mousePosition) {
-    int buttonWidth = 150;
+void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const SDL_Point& mousePosition,bool isFullscreen) {
+    int buttonWidth = 250;
     int buttonHeight = 40;
     int titleButtonWidth = 300;
     int titleButtonHeight = 60;
@@ -120,14 +120,15 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_RenderCopy(renderer, startTexture, NULL, &startTextRect);
 
 
-        // Render Setting Text
-        SDL_Surface* ScreenDimSurface = TTF_RenderText_Solid(font, "Toggle Full Screen: On/Off", textColor);
+        // Render Full Screen Text
+        // adjusts text based on state of full screen function
+
+        std::string fullScreenText = isFullscreen ? "Toggle Full Screen: On" : "Toggle Full Screen: Off";
+        SDL_Surface* ScreenDimSurface = TTF_RenderText_Solid(font, fullScreenText.c_str(), textColor);
         SDL_Texture* ScreenDimTexture = SDL_CreateTextureFromSurface(renderer, ScreenDimSurface);
-        TTF_SizeText(font, "Toggle Full Screen: On/Off", &textWidth, &textHeight);
+        TTF_SizeText(font, fullScreenText.c_str(), &textWidth, &textHeight);
         SDL_Rect ScreenDimTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + buttonHeight + 20 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
         SDL_RenderCopy(renderer, ScreenDimTexture, NULL, &ScreenDimTextRect);
-
-
 
         // Render Back Text
         SDL_Surface* settingsSurface = TTF_RenderText_Solid(font, "back", textColor);
