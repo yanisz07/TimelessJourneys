@@ -66,6 +66,8 @@ private:
     SDL_Window *window;
     Uint32 lastProjectileTime;
     bool isMenuOpen;
+    bool isSettingsOpen;
+
     SDL_Point mousePosition;
 };
 
