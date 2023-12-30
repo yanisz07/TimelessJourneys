@@ -258,7 +258,7 @@ void Game::handleEvents()
             SDL_GetMouseState(&x, &y);
             SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
             // Menu button dimensions
-            int buttonWidth = 150;
+            int buttonWidth = 250;
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
@@ -284,7 +284,7 @@ void Game::handleEvents()
             SDL_GetMouseState(&x, &y);
             SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
             // Menu button dimensions
-            int buttonWidth = 150;
+            int buttonWidth = 250;
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
@@ -547,7 +547,7 @@ void Game::render()
     Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
     }
     else if (isSettingsOpen) {
-        Setting::renderSetting(renderer, isSettingsOpen, mousePosition); // Render the setting menu if it's open
+        Setting::renderSetting(renderer, isSettingsOpen, mousePosition, isFullscreen); // Render the setting menu if it's open
     }
     else{
 
