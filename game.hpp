@@ -37,6 +37,7 @@ public:
     void render();
     void clean();
     void toggleMenu();
+    void toggleFullScreen();
 
     bool is_running() {return isRunning;}
 
