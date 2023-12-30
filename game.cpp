@@ -5,6 +5,8 @@
 #include "Vector2D.hpp"
 #include "Collision.hpp"
 #include "AssetManager.hpp"
+#include "setting.h"
+
 #ifdef __APPLE__
 #include <CoreGraphics/CGDirectDisplay.h>
 #endif
@@ -54,6 +56,7 @@ Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
 Game::Game()
 {
     isMenuOpen = true; // Menu status, starts with menu opened
+    isSettingsOpen = false; // Menu status, starts with menu opened
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
 }
 
@@ -288,14 +291,52 @@ void Game::handleEvents()
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
-            int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+            int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+            int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
 
-            //if click is within button boundary:
+            //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
-                y > centerY && y < centerY + buttonHeight) {
+                y > Start_centerY && y < Start_centerY + buttonHeight) {
                 isMenuOpen = false;
             }
+            //if click is within Setting button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Setting_centerY && y < Setting_centerY + buttonHeight) {
+                isSettingsOpen = true;
+                isMenuOpen = false;
+
+            }
         }
+        else if (isSettingsOpen) {
+            // Get the mouse coordinates and screen size
+            int x, y ,screenWidth, screenHeight;
+            SDL_GetMouseState(&x, &y);
+            SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+            // Menu button dimensions
+            int buttonWidth = 150;
+            int buttonHeight = 40;
+            // Calculating location of buttons
+            int centerX = (screenWidth - buttonWidth) / 2;
+            int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+            int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+
+            //if click is within start button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Start_centerY && y < Start_centerY + buttonHeight) {
+                isSettingsOpen = false;
+                isMenuOpen = false;
+
+            }
+            //if click is within Setting button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Setting_centerY && y < Setting_centerY + buttonHeight) {
+                isSettingsOpen = false;
+                isMenuOpen = true;
+
+            }
+        }
+
+
         break;
     default:
         break;
@@ -492,6 +533,9 @@ void Game::render()
     SDL_RenderClear(renderer);
     if (isMenuOpen) {
     Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
+    }
+    else if (isSettingsOpen) {
+        Setting::renderSetting(renderer, isSettingsOpen, mousePosition); // Render the setting menu if it's open
     }
     else{
 
