@@ -40,6 +40,7 @@ set(SOURCES
     gameobject.hpp gameobject.cpp
     map.hpp
     map.cpp
+    setting.cpp setting.h
     ECS/ECS.hpp
     ECS/Components.hpp
     ECS/SpriteComponent.hpp
@@ -66,7 +67,9 @@ set(SOURCES
     menu.h
     menu.cpp)
 
-add_executable(TimelessJourneys ${SOURCES})
+add_executable(TimelessJourneys ${SOURCES}
+
+)
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK})
