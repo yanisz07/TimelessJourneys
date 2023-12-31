@@ -58,6 +58,8 @@ Game::Game()
     isMenuOpen = true; // Menu status, starts with menu opened
     isSettingsOpen = false; // Menu status, starts with menu opened
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
+    isMusic = false; // full screen statusm, Starts fullscreen mode
+
 }
 
 Game::~Game()
@@ -290,7 +292,8 @@ void Game::handleEvents()
             int centerX = (screenWidth - buttonWidth) / 2;
             int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int ScreenDim_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 80 + buttonHeight;
+            int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 120;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 180;
 
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -306,10 +309,23 @@ void Game::handleEvents()
                 isMenuOpen = true;
 
             }
+
+            //if click is within Music boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Music_centerY && y < Music_centerY + buttonHeight) {
+                if (!isMusic) {
+                    isMusic = true;
+                //add once music works
+                }
+                else{
+                    isMusic=false;
+
+                }
+
+            }
             //if click is within Screen Dimension button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > ScreenDim_centerY && y < ScreenDim_centerY + buttonHeight) {
-                //same thing as if key f is pressed:
                 toggleFullScreen();
 
             }
@@ -547,7 +563,7 @@ void Game::render()
     Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
     }
     else if (isSettingsOpen) {
-        Setting::renderSetting(renderer, isSettingsOpen, mousePosition, isFullscreen); // Render the setting menu if it's open
+        Setting::renderSetting(renderer, isSettingsOpen, mousePosition, isFullscreen, isMusic); // Render the setting menu if it's open
     }
     else{
 
