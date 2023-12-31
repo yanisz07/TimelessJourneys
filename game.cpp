@@ -382,15 +382,16 @@ void Game::update()
                 {
                     if(Collision::AABB(a->getComponent<ColliderComponent>().collider,enemyCol))
                     {
-                        //auto it = std::find(enemies_hit_melee.begin(), enemies_hit_melee.end(), e);
-                        //if (it == enemies_hit_melee.end()) //not in the enemies_hit_melee
-                        std::cout << "Melee hit enemy" << std::endl;
-                        Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-                        enemies_hit.push_back(e);
-                        hit_time.push_back(SDL_GetTicks());
-                        Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
-                        hit_enemies_directions.push_back(direction);
-                        a->destroy();
+                        auto it = std::find(enemies_hit.begin(), enemies_hit.end(), e);
+                        if (it == enemies_hit.end()) //not in the enemies_hit_melee
+                        {
+                            std::cout << "Melee hit enemy" << std::endl;
+                            Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                            enemies_hit.push_back(e);
+                            hit_time.push_back(SDL_GetTicks());
+                            Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
+                            hit_enemies_directions.push_back(direction);
+                        }
                     }
                 }
         }
@@ -553,6 +554,11 @@ void Game::render()
     for (auto& p : EnemyProjectiles)
     {
         p->draw();
+    }
+
+    for (auto& a : PlayerAttacks)
+    {
+        a->draw();
     }
 
     label.draw();

@@ -17,6 +17,8 @@ public:
 
     TransformComponent* transform;
 
+    Timer timer;
+
     ColliderComponent(std::string t)
     {
         tag = t;
@@ -45,6 +47,17 @@ public:
         collider.h = height;
         collider.w = width;
     }
+
+    ColliderComponent(std::string t, int xpos, int ypos, int width, int height, int timeOut)
+    {
+        tag = t;
+        collider.x = xpos;
+        collider.y = ypos;
+        collider.h = height;
+        collider.w = width;
+        timer.setTimeOut(timeOut);
+    }
+
 
     void init() override
     {
@@ -78,6 +91,14 @@ public:
                 collider.y = static_cast<int>(transform->position.y);
                 collider.w = transform->width * transform->scale;
                 collider.h = transform->height * transform->scale;
+            }
+        }
+
+        if(tag == "player_attack")
+        {
+            if (timer.timedOut())
+            {
+                entity->destroy();
             }
         }
 

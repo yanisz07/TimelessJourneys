@@ -153,14 +153,14 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(0,-1);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y-32,128,32);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y-32,128,32,500);
                 attackCol.addGroup(Game::groupPlayerAttack);
             }
             else
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(0,1);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+128,128,32);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+128,128,32,500);
                 attackCol.addGroup(Game::groupPlayerAttack);
             }
         }
@@ -170,14 +170,14 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(-1,0);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-32,entityPos.y,32,128);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-32,entityPos.y,32,128,500);
                 attackCol.addGroup(Game::groupPlayerAttack);
             }
             else
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(1,0);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+128,entityPos.y,32,128);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+128,entityPos.y,32,128,500);
                 attackCol.addGroup(Game::groupPlayerAttack);
             }
         }
