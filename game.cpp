@@ -330,7 +330,39 @@ void Game::handleEvents()
 
             }
         }
+        else if (isGameOverOpen) {
+            // Get the mouse coordinates and screen size
+            int x, y ,screenWidth, screenHeight;
+            SDL_GetMouseState(&x, &y);
+            SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+            // Menu button dimensions
+            int buttonWidth = 150;
+            int buttonHeight = 40;
+            // Calculating location of buttons
+            int centerX = (screenWidth - buttonWidth) / 2;
+            int retry_centerY = (screenHeight - 5 * buttonHeight - 20) / 2 + 100;
+            int exit_centerY = ((screenHeight - 5 * buttonHeight - 20) / 2 + 100) + buttonHeight + 20;
+
+            //if click is within retry button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > retry_centerY && y < retry_centerY + buttonHeight) {
+                isGameOverOpen = false;
+                isMenuOpen = true;
+
+            }
+
+            //if click is within Exit button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > exit_centerY && y < exit_centerY + buttonHeight) {
+
+                isRunning = false;
+            }
+
+        }
         break;
+
+
+
     default:
         break;
     }
