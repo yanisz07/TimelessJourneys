@@ -12,6 +12,7 @@
 #include <Windows.h>
 #endif
 #include <sstream>
+#include <variant>
 #include <filesystem>
 #include "world.hpp"
 
@@ -35,15 +36,11 @@ auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
+//test second enemy
+auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
 
 std::filesystem::path projectDir = std::filesystem::current_path();
-
-//knockback on enemies buy projectiles or melee attack
-std::vector<Entity*> enemies_hit;
-std::vector<Vector2D> hit_enemies_directions;
-std::vector<Uint32> hit_time;
-//end
 
 bool playerInvincible = false;
 int t = 0;
@@ -70,7 +67,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     screen_height = height;
 
     //3200 * 2560 is the size of the map
-
     camera.w = 3200 - screen_width;
     camera.h = 2560 - screen_height;
     x_diff = (width - 128)/2;
@@ -150,8 +146,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Textures, map and fonts
 
-
-
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
 
@@ -192,6 +186,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy.addGroup(Game::groupEnemies);
 
     std::cout << "Enemy created" << std::endl;
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
     }
 
     //Create labels
@@ -350,6 +354,9 @@ void Game::update()
         //End
 
         //Check damage done to enemies
+
+        Uint32 currentTime = SDL_GetTicks();
+
         for (auto& e : enemies)
         {
             SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
@@ -372,9 +379,10 @@ void Game::update()
                     {
                         std::cout << "Projectile hit enemy" << std::endl;
                         Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-                        enemies_hit.push_back(e);
-                        hit_time.push_back(SDL_GetTicks());
-                        hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
+                        e->getComponent<Stats>().set_hit(true);
+                        e->getComponent<Stats>().set_type_hit(false);
+                        e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
+                        e->getComponent<Stats>().set_hit_direction(p->getComponent<TransformComponent>().velocity);
                         p->destroy();
                     }
                 }
@@ -382,62 +390,79 @@ void Game::update()
                 {
                     if(Collision::AABB(a->getComponent<ColliderComponent>().collider,enemyCol))
                     {
-                        auto it = std::find(enemies_hit.begin(), enemies_hit.end(), e);
-                        if (it == enemies_hit.end()) //not in the enemies_hit_melee
-                        {
-                            std::cout << "Melee hit enemy" << std::endl;
-                            Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-                            enemies_hit.push_back(e);
-                            hit_time.push_back(SDL_GetTicks());
-                            Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
-                            hit_enemies_directions.push_back(direction);
-                        }
+                        if (!e->getComponent<Stats>().is_hit())
+                            {
+                                std::cout << "Melee hit enemy" << std::endl;
+                                Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                                e->getComponent<Stats>().set_hit(true);
+                                e->getComponent<Stats>().set_type_hit(true);
+                                e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
+                                Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
+                                e->getComponent<Stats>().set_hit_direction(direction);
+                            }
                     }
                 }
-        }
-        //
-
-        Uint32 currentTime = SDL_GetTicks();
-        //Enemy knockback
-        for (std::size_t i = 0; i < enemies_hit.size(); ++i)
-        {
-            Entity* enemy = enemies_hit[i];
-            Vector2D direction = hit_enemies_directions[i];
-            currentTime = SDL_GetTicks();
-            Uint32 delay = currentTime - hit_time[i];
-            if (delay <= 500)
-            {
-                if(delay == 0)
+                //Enemy knockback
+                if(e->getComponent<Stats>().is_hit())
                 {
-                    enemy->getComponent<SpriteComponent>().Play("Hurt");
-                }
-                if (delay <= 250)
-                {
+                    currentTime = SDL_GetTicks();
+                    Vector2D direction = e->getComponent<Stats>().direction_hit();
+                    Uint32 delay = currentTime - e->getComponent<Stats>().time_hit();
+                    bool type = e->getComponent<Stats>().type_hit();
                     if (delay <= 100)
                     {
-                        enemy->getComponent<TransformComponent>().position.x += direction.x*10;
-                        enemy->getComponent<TransformComponent>().position.y += direction.y*10;
-                    }
-                    else if (delay <= 200)
-                    {
-                        enemy->getComponent<TransformComponent>().position.x += direction.x*5;
-                        enemy->getComponent<TransformComponent>().position.y += direction.y*5;
+                        if(delay == 0)
+                        {
+                            e->getComponent<SpriteComponent>().Play("Hurt");
+                        }
+                        if (delay <= 50)
+                        {
+                            if (delay <= 20)
+                            {
+                                if(!type)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                }
+                                else
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*20;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*20;
+                                }
+                            }
+                            else if (delay <= 40)
+                            {
+                                if(!type)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                }
+                                else
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                }
+                            }
+                            else
+                            {
+                                if(!type)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*2;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*2;
+                                }
+                                else
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        enemy->getComponent<TransformComponent>().position.x += direction.x*1;
-                        enemy->getComponent<TransformComponent>().position.y += direction.y*1;
+                        e->getComponent<Stats>().set_hit(false);
                     }
                 }
-            }
-            else
-            {
-                //enemy->getComponent<TransformComponent>().velocity.x = 0;
-                enemies_hit.erase(enemies_hit.begin() + i);
-                hit_time.erase(hit_time.begin() + i);
-                hit_enemies_directions.erase(hit_enemies_directions.begin() + i);
-                //enemy->getComponent<SpriteComponent>().Play("Idle");
-            }
         }
         //End
 
