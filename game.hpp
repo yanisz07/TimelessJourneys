@@ -10,6 +10,7 @@
 #include "charconv"
 #include "vector"
 #include "menu.h"
+#include "game_over.h"
 #include <filesystem>
 
 extern std::filesystem::path projectDir;
@@ -68,7 +69,7 @@ private:
     Uint32 lastProjectileTime;
     bool isMenuOpen;
     bool isSettingsOpen;
-
+    bool isGameOverOpen;
     SDL_Point mousePosition;
 };
 
