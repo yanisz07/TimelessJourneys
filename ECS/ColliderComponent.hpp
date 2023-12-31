@@ -37,6 +37,15 @@ public:
         collider.h = collider.w = size;
     }
 
+    ColliderComponent(std::string t, int xpos, int ypos, int width, int height)
+    {
+        tag = t;
+        collider.x = xpos;
+        collider.y = ypos;
+        collider.h = height;
+        collider.w = width;
+    }
+
     void init() override
     {
         if(!(entity->hasComponent<TransformComponent>()))
@@ -53,7 +62,7 @@ public:
 
     void update() override
     {
-        if(tag != "terrain")
+        if(tag != "terrain" && tag != "player_attack")
         {
             if (tag == "player" || tag == "enemy")
             {
@@ -78,10 +87,6 @@ public:
 
     void draw() override
     {
-        /*if (tag=="player")
-        {
-            std::cout << "collider drawn" << std::endl;
-        }*/
         TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
     }
 

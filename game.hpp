@@ -55,10 +55,11 @@ public:
     {
         groupMap,
         groupPlayers,
-        groupColliders,
+        groupMapColliders,
         groupPlayerProjectiles,
         groupEnemyProjectiles,
-        groupEnemies
+        groupEnemies,
+        groupPlayerAttack
     };
 
 private:

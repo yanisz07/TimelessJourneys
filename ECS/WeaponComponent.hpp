@@ -5,11 +5,19 @@
 #include <string.h>
 #include <SDL.h>
 
+extern Manager manager; //not the same as in game.cpp
+
 class WeaponComponent : public Component
 {
 public:
     Timer timer;
-    WeaponComponent(){timer.start(); timer.setTimeOut(reloadTime);}
+    WeaponComponent(Manager *man){
+        timer.start();
+        timer.setTimeOut(reloadTime);
+        melee=true;
+        std::cout << "Melee Attack" << std::endl;
+        manager = man;
+    }
     void getTransformComponent()
     {
         entityTransform = &entity->getComponent<TransformComponent>();
@@ -19,17 +27,47 @@ public:
 
     void update() override
     {
+        if (Game::event.type == SDL_KEYDOWN)
+        {
+            switch(Game::event.key.keysym.sym)
+            {
+                case SDLK_a:
+                    if (melee){
+                        melee=false;
+                        std::cout << "Range" << std::endl;
+                    }
+                    else
+                    {
+                        melee = true;
+                        std::cout << "Melee" << std::endl;
+                    }
+                    break;
+            }
+        }
         if (Game::event.type == SDL_KEYDOWN && timer.timedOut())
         {
             switch(Game::event.key.keysym.sym)
             {
             case SDLK_z:
-                frontAttack();
-                entity->getComponent<SpriteComponent>().Play("Attack_1");
+                if(timer.timedOut())
+                if(!melee)
+                {
+                    rangeAttack();
+                    entity->getComponent<SpriteComponent>().Play("Attack_1");
+                }
+                else
+                {
+                    frontAttack();
+                    std::cout << "Melee Attack" << std::endl;
+                    entity->getComponent<SpriteComponent>().Play("Attack_2");
+                }
                 break;
             case SDLK_x:
-                roundAttack();
-                entity->getComponent<SpriteComponent>().Play("Attack_3");
+                if (!melee)
+                {
+                    roundAttack();
+                    entity->getComponent<SpriteComponent>().Play("Attack_3");
+                }
                 break;
             }
             timer.setTimeOut(reloadTime);
@@ -37,7 +75,7 @@ public:
         }
     }
 
-    int frontAttack()
+    int rangeAttack()
     {
 
         if (entityTransform->x_direction == 0)
@@ -105,11 +143,54 @@ public:
         return 0;
     }
 
+    int frontAttack()
+    {
+        Vector2D entityPos = entityTransform->position;
+        auto& attackCol(manager->addEntity());
+        if (entityTransform->x_direction == 0)
+        {
+            if (entityTransform->y_direction == -1)
+            {
+                attackCol.addComponent<TransformComponent>(entityPos.x,entityPos.y-32,128,32,1);
+                attackCol.getComponent<TransformComponent>().set_directions(0,-1);
+                attackCol.addComponent<ColliderComponent>("player_attack");
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+            else
+            {
+                attackCol.addComponent<TransformComponent>(entityPos.x,entityPos.y+128,128,32,1);
+                attackCol.getComponent<TransformComponent>().set_directions(0,1);
+                attackCol.addComponent<ColliderComponent>("player_attack");
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+        }
+        if (entityTransform->y_direction == 0)
+        {
+            if (entityTransform->x_direction == -1)
+            {
+                attackCol.addComponent<TransformComponent>(entityPos.x-32,entityPos.y,32,128,1);
+                attackCol.getComponent<TransformComponent>().set_directions(-1,0);
+                attackCol.addComponent<ColliderComponent>("player_attack");
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+            else
+            {
+                attackCol.addComponent<TransformComponent>(entityPos.x+128,entityPos.y,32,128,1);
+                attackCol.getComponent<TransformComponent>().set_directions(1,0);
+                attackCol.addComponent<ColliderComponent>("player_attack");
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+        }
+        return 0;
+    }
+
 private:
     std::string name = "Standard weapon ";
     int damage = 0;
     TransformComponent* entityTransform;
     Uint32 reloadTime = 1000;
+    bool melee;
+    Manager* manager;
 };
 
 #endif // WEAPONCOMPONENT_H

@@ -48,6 +48,12 @@ public:
         scale = sc;
     }
 
+    void set_directions (int x, int y)
+    {
+        x_direction=x;
+        y_direction=y;
+    }
+
     void init() override
     {
         velocity.Zero();
