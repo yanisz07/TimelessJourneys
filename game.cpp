@@ -260,12 +260,13 @@ void Game::handleEvents()
             SDL_GetMouseState(&x, &y);
             SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
             // Menu button dimensions
-            int buttonWidth = 250;
+            int buttonWidth = 150;
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
             int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+            int exitCenterY = Setting_centerY + buttonHeight + 20;
 
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -278,6 +279,11 @@ void Game::handleEvents()
                 isSettingsOpen = true;
                 isMenuOpen = false;
 
+            }
+            // Check if click is within the Exit button boundary
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > exitCenterY && y < exitCenterY + buttonHeight) {
+                isRunning = false;
             }
         }
         else if (isSettingsOpen) {
