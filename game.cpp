@@ -57,6 +57,7 @@ Game::Game()
 {
     isMenuOpen = true; // Menu status, starts with menu opened
     isSettingsOpen = false; // Menu status, starts with menu opened
+    isGameOverOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
     isMusic = false; // full screen statusm, Starts fullscreen mode
 
@@ -260,12 +261,13 @@ void Game::handleEvents()
             SDL_GetMouseState(&x, &y);
             SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
             // Menu button dimensions
-            int buttonWidth = 250;
+            int buttonWidth = 150;
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
             int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+            int exitCenterY = Setting_centerY + buttonHeight + 20;
 
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -278,6 +280,11 @@ void Game::handleEvents()
                 isSettingsOpen = true;
                 isMenuOpen = false;
 
+            }
+            // Check if click is within the Exit button boundary
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > exitCenterY && y < exitCenterY + buttonHeight) {
+                isRunning = false;
             }
         }
         else if (isSettingsOpen) {
@@ -367,7 +374,7 @@ void Game::toggleFullScreen() {
 
 void Game::update()
 {
-    if (!isMenuOpen)
+    if (!isMenuOpen && !isGameOverOpen)
     {
         Uint32 currentTime0 = SDL_GetTicks();
         // Get player/enemy info.
@@ -547,12 +554,22 @@ void Game::update()
             playerInvincible = false;
         }
     }
+    int playerHealth = player.getComponent<Stats>().get_health();
+    std::stringstream ssh;
+    ssh << "Health: " << playerHealth;
+    player_health.getComponent<UILabel>().SetLabelText(ssh.str(), "arial");
+    if (playerHealth <= 0) {
+        isGameOverOpen = true;
+    }
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    if (isMenuOpen) {
+    if (isGameOverOpen) {
+        Game_Over::renderGameOver(renderer, isGameOverOpen, mousePosition);
+    }
+    else if (isMenuOpen) {
     Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
     }
     else if (isSettingsOpen) {
@@ -600,6 +617,7 @@ void Game::render()
 }
 void Game::clean()
 {
+    isGameOverOpen = false;
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();

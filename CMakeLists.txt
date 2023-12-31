@@ -68,6 +68,8 @@ set(SOURCES
     menu.cpp)
 
 add_executable(TimelessJourneys ${SOURCES}
+    game_over.cpp
+    game_over.h
 
 )
 
