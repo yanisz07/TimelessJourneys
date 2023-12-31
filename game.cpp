@@ -290,18 +290,11 @@ void Game::handleEvents()
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
-            int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
-            int ScreenDim_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 120;
-            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 180;
+            int ScreenDim_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+            int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 120;
 
-            //if click is within start button boundary:
-            if (x > centerX && x < centerX + buttonWidth &&
-                y > Start_centerY && y < Start_centerY + buttonHeight) {
-                isSettingsOpen = false;
-                isMenuOpen = false;
 
-            }
             //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Back_centerY && y < Back_centerY + buttonHeight) {
