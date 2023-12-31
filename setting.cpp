@@ -36,14 +36,12 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
 
 
         SDL_Rect titleButtonBorder = {titleCenterX - borderThickness, titleCenterY - borderThickness, titleButtonWidth + borderThickness * 2, titleButtonHeight + borderThickness * 2};
-        SDL_Rect playButtonBorder = {centerX - borderThickness, centerY - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect screendimButtonBorder = {centerX - borderThickness, centerY + buttonHeight + 20 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect MusicButtonBorder = {centerX - borderThickness, centerY + 2*buttonHeight + 40 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect backButtonBorder = {centerX - borderThickness, centerY +3*buttonHeight + 60 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect screendimButtonBorder = {centerX - borderThickness, centerY  - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect MusicButtonBorder = {centerX - borderThickness, centerY + buttonHeight + 20 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect backButtonBorder = {centerX - borderThickness, centerY +2*buttonHeight + 40 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
 
 
         SDL_RenderDrawRect(renderer, &titleButtonBorder);
-        SDL_RenderDrawRect(renderer, &playButtonBorder);
         SDL_RenderDrawRect(renderer, &backButtonBorder);
         SDL_RenderDrawRect(renderer, &MusicButtonBorder);
         SDL_RenderDrawRect(renderer, &screendimButtonBorder);
@@ -54,21 +52,17 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
 
         // Buttons
         SDL_Rect titleButton = {titleCenterX, titleCenterY, titleButtonWidth, titleButtonHeight};
-        SDL_Rect playButton = {centerX, centerY, buttonWidth, buttonHeight};
-        SDL_Rect ScreenDimButton = {centerX, centerY + buttonHeight + 20, buttonWidth, buttonHeight};
+        SDL_Rect ScreenDimButton = {centerX, centerY, buttonWidth, buttonHeight};
         SDL_Rect MusicButton = {centerX, centerY + buttonHeight + 20, buttonWidth, buttonHeight};
         SDL_Rect backButton = {centerX, centerY + 2*buttonHeight + 40, buttonWidth, buttonHeight};
 
         //hover effect
-        bool isHoveringPlay = SDL_PointInRect(&mousePosition, &playButton);
-        bool isHoveringSettings = SDL_PointInRect(&mousePosition, &backButton);
         bool isHoveringScreenDim = SDL_PointInRect(&mousePosition, &ScreenDimButton);
         bool isHoveringMusic = SDL_PointInRect(&mousePosition, &ScreenDimButton);
-
+        bool isHoveringback = SDL_PointInRect(&mousePosition, &ScreenDimButton);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for borders
         SDL_RenderDrawRect(renderer, &titleButton);
-        SDL_RenderDrawRect(renderer, &playButton);
         SDL_RenderDrawRect(renderer, &backButton);
         SDL_RenderDrawRect(renderer, &ScreenDimButton);
         SDL_RenderDrawRect(renderer, &MusicButton);
@@ -76,13 +70,6 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Beige color for buttons
         SDL_RenderFillRect(renderer, &titleButton);
 
-        // hover effect for Play button
-        if (isHoveringPlay) {
-            SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
-        } else {
-            SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
-        }
-        SDL_RenderFillRect(renderer, &playButton);
 
 
         // hover effect for Screen Dimension button
@@ -102,7 +89,7 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_RenderFillRect(renderer, &MusicButton);
 
         // hover effect for Back button
-        if (isHoveringSettings) {
+        if (isHoveringback) {
             SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
         } else {
             SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
@@ -124,23 +111,15 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Rect titleTextRect = {titleCenterX + (titleButtonWidth - titleTextWidth) / 2, titleCenterY + (titleButtonHeight - titleTextHeight) / 2, titleTextWidth, titleTextHeight};
         SDL_RenderCopy(renderer, titleTexture, NULL, &titleTextRect);
 
-        // Render Play Text
-        SDL_Surface* startSurface = TTF_RenderText_Solid(font, "Startt", textColor);
-        SDL_Texture* startTexture = SDL_CreateTextureFromSurface(renderer, startSurface);
-        int textWidth, textHeight;
-        TTF_SizeText(font, "Startt", &textWidth, &textHeight);
-        SDL_Rect startTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + (buttonHeight - textHeight) / 2, textWidth, textHeight};
-        SDL_RenderCopy(renderer, startTexture, NULL, &startTextRect);
-
-
         // Render Full Screen Text
         // adjusts text based on state of full screen function
+        int textWidth, textHeight;
 
         std::string fullScreenText = isFullscreen ? "Toggle Full Screen: On" : "Toggle Full Screen: Off";
         SDL_Surface* ScreenDimSurface = TTF_RenderText_Solid(font, fullScreenText.c_str(), textColor);
         SDL_Texture* ScreenDimTexture = SDL_CreateTextureFromSurface(renderer, ScreenDimSurface);
         TTF_SizeText(font, fullScreenText.c_str(), &textWidth, &textHeight);
-        SDL_Rect ScreenDimTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + buttonHeight + 20 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_Rect ScreenDimTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + (buttonHeight - textHeight) / 2, textWidth, textHeight};
         SDL_RenderCopy(renderer, ScreenDimTexture, NULL, &ScreenDimTextRect);
 
         // Render Music Text
@@ -150,15 +129,15 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Surface* MusicSurface = TTF_RenderText_Solid(font, MusicText.c_str(), textColor);
         SDL_Texture*MusicTexture = SDL_CreateTextureFromSurface(renderer, MusicSurface);
         TTF_SizeText(font, MusicText.c_str(), &textWidth, &textHeight);
-        SDL_Rect MusicTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 2*buttonHeight + 40 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_Rect MusicTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + buttonHeight + 20 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
         SDL_RenderCopy(renderer, MusicTexture, NULL, &MusicTextRect);
 
         // Render Back Text
-        SDL_Surface* settingsSurface = TTF_RenderText_Solid(font, "back", textColor);
-        SDL_Texture* settingsTexture = SDL_CreateTextureFromSurface(renderer, settingsSurface);
+        SDL_Surface* backSurface = TTF_RenderText_Solid(font, "back", textColor);
+        SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backSurface);
         TTF_SizeText(font, "back", &textWidth, &textHeight);
-        SDL_Rect settingsTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 3*buttonHeight + 60 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
-        SDL_RenderCopy(renderer, settingsTexture, NULL, &settingsTextRect);
+        SDL_Rect backTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 2*buttonHeight + 40 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_RenderCopy(renderer, backTexture, NULL, &backTextRect);
 
 
 
@@ -166,10 +145,8 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
 
         SDL_DestroyTexture(titleTexture);
         SDL_FreeSurface(titleSurface);
-        SDL_DestroyTexture(startTexture);
-        SDL_FreeSurface(startSurface);
-        SDL_DestroyTexture(settingsTexture);
-        SDL_FreeSurface(settingsSurface);
+        SDL_DestroyTexture(backTexture);
+        SDL_FreeSurface(backSurface);
         SDL_DestroyTexture(MusicTexture);
         SDL_FreeSurface(MusicSurface);
         TTF_CloseFont(font);
