@@ -355,7 +355,7 @@ void Game::update()
         }
         //End
 
-        //Check damage done to enemies by proximity
+        //Check damage done to enemies
         for (auto& e : enemies)
         {
             SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
@@ -388,12 +388,15 @@ void Game::update()
                 {
                     if(Collision::AABB(a->getComponent<ColliderComponent>().collider,enemyCol))
                     {
+                        //auto it = std::find(enemies_hit_melee.begin(), enemies_hit_melee.end(), e);
+                        //if (it == enemies_hit_melee.end()) //not in the enemies_hit_melee
                         std::cout << "Melee hit enemy" << std::endl;
                         Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
                         enemies_hit_melee.push_back(e);
                         hit_time_melee.push_back(SDL_GetTicks());
                         Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
                         melee_hit_enemies_directions.push_back(direction);
+                        a->destroy();
                     }
                 }
         }
@@ -401,9 +404,10 @@ void Game::update()
 
         Uint32 currentTime = SDL_GetTicks();
         //Enemy knockback
+
+        //Range knockback
         for (std::size_t i = 0; i < enemies_hit_range.size(); ++i)
         {
-            //Range knockback
             Entity* enemy = enemies_hit_range[i];
             Vector2D direction = projectiles_hit_enemies_directions[i];
             currentTime = SDL_GetTicks();
@@ -441,7 +445,46 @@ void Game::update()
                 projectiles_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
                 //enemy->getComponent<SpriteComponent>().Play("Idle");
             }
-            //Melee knockback
+        //Melee knockback
+        for (std::size_t i = 0; i < enemies_hit_melee.size(); ++i)
+            {
+                Entity* enemy = enemies_hit_melee[i];
+                Vector2D direction = melee_hit_enemies_directions[i];
+                currentTime = SDL_GetTicks();
+                Uint32 delay = currentTime - hit_time_melee[i];
+                if (delay <= 500)
+                {
+                    if(delay == 0)
+                    {
+                        std::cout << "Melee knockback" << std::endl;
+                        enemy->getComponent<SpriteComponent>().Play("Hurt");
+                    }
+                    if (delay <= 250)
+                    {
+                        if (delay <= 100)
+                        {
+                            enemy->getComponent<TransformComponent>().position.x += direction.x*20;
+                            enemy->getComponent<TransformComponent>().position.y += direction.y*20;
+                        }
+                        else if (delay <= 200)
+                        {
+                            enemy->getComponent<TransformComponent>().position.x += direction.x*10;
+                            enemy->getComponent<TransformComponent>().position.y += direction.y*10;
+                        }
+                        else
+                        {
+                            enemy->getComponent<TransformComponent>().position.x += direction.x*2;
+                            enemy->getComponent<TransformComponent>().position.y += direction.y*2;
+                        }
+                    }
+                }
+                else
+                {
+                    enemies_hit_melee.erase(enemies_hit_melee.begin() + i);
+                    hit_time_melee.erase(hit_time_melee.begin() + i);
+                    melee_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
+                }
+            }
         }
         //End
 
