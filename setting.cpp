@@ -58,8 +58,8 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
 
         //hover effect
         bool isHoveringScreenDim = SDL_PointInRect(&mousePosition, &ScreenDimButton);
-        bool isHoveringMusic = SDL_PointInRect(&mousePosition, &ScreenDimButton);
-        bool isHoveringback = SDL_PointInRect(&mousePosition, &ScreenDimButton);
+        bool isHoveringMusic = SDL_PointInRect(&mousePosition, &MusicButton);
+        bool isHoveringback = SDL_PointInRect(&mousePosition, &backButton);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for borders
         SDL_RenderDrawRect(renderer, &titleButton);
