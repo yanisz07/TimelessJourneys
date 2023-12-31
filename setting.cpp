@@ -115,7 +115,7 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         // adjusts text based on state of full screen function
         int textWidth, textHeight;
 
-        std::string fullScreenText = isFullscreen ? "Toggle Full Screen: On" : "Toggle Full Screen: Off";
+        std::string fullScreenText = isFullscreen ? "Full Screen: On" : "Full Screen: Off";
         SDL_Surface* ScreenDimSurface = TTF_RenderText_Solid(font, fullScreenText.c_str(), textColor);
         SDL_Texture* ScreenDimTexture = SDL_CreateTextureFromSurface(renderer, ScreenDimSurface);
         TTF_SizeText(font, fullScreenText.c_str(), &textWidth, &textHeight);
