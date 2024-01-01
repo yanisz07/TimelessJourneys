@@ -19,9 +19,12 @@ public:
 
     Timer timer;
 
+    double angle;
+
     ColliderComponent(std::string t)
     {
         tag = t;
+        angle = 0;
     }
 
     ColliderComponent(std::string t, int h, int w)
@@ -29,6 +32,7 @@ public:
         tag = t;
         collider.h = h;
         collider.w = w;
+        angle = 0;
     }
 
     ColliderComponent(std::string t, int xpos, int ypos, int size)
@@ -37,6 +41,7 @@ public:
         collider.x = xpos;
         collider.y = ypos;
         collider.h = collider.w = size;
+        angle = 0;
     }
 
     ColliderComponent(std::string t, int xpos, int ypos, int width, int height)
@@ -46,6 +51,7 @@ public:
         collider.y = ypos;
         collider.h = height;
         collider.w = width;
+        angle = 0;
     }
 
     ColliderComponent(std::string t, int xpos, int ypos, int width, int height, int timeOut)
@@ -56,6 +62,18 @@ public:
         collider.h = height;
         collider.w = width;
         timer.setTimeOut(timeOut);
+        angle = 0;
+    }
+
+    ColliderComponent(std::string t, int xpos, int ypos, int width, int height, int timeOut, double angle)
+    {
+        tag = t;
+        collider.x = xpos;
+        collider.y = ypos;
+        collider.h = height;
+        collider.w = width;
+        timer.setTimeOut(timeOut);
+        this->angle=angle;
     }
 
 
@@ -108,7 +126,14 @@ public:
 
     void draw() override
     {
-        TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
+        if (angle == 0)
+        {
+            TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
+        }
+        else
+        {
+            TextureManager::Draw_rotation(tex,srcR,destR,SDL_FLIP_NONE,angle);
+        }
     }
 
 };

@@ -181,6 +181,41 @@ public:
                 attackCol.addGroup(Game::groupPlayerAttack);
             }
         }
+        if (entityTransform->x_direction == 1)
+        {
+            if (entityTransform->y_direction == -1)
+            {
+                attackCol.addComponent<TransformComponent>();
+                attackCol.getComponent<TransformComponent>().set_directions(1,-1);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+100,entityPos.y-20,128,32,500,45);
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+            if (entityTransform->y_direction == 1)
+            {
+                attackCol.addComponent<TransformComponent>();
+                attackCol.getComponent<TransformComponent>().set_directions(1,1);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+100,entityPos.y+100,128,32,500,135);
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+        }
+        if (entityTransform->x_direction == -1)
+        {
+            if (entityTransform->y_direction == -1)
+            {
+                attackCol.addComponent<TransformComponent>();
+                attackCol.getComponent<TransformComponent>().set_directions(-1,-1);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-100,entityPos.y-20,128,32,500,135);
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+            if (entityTransform->y_direction == 1)
+            {
+                std::cout << "Melee attack" << std::endl;
+                attackCol.addComponent<TransformComponent>();
+                attackCol.getComponent<TransformComponent>().set_directions(-1,1);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-100,entityPos.y+100,128,32,500,45);
+                attackCol.addGroup(Game::groupPlayerAttack);
+            }
+        }
         return 0;
     }
 
