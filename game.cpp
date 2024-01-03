@@ -135,6 +135,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Load game assets
     {
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
+    assets->AddTexture("projectile", "/assets/proj.png");
 
     //Load JSON data
     std::string path = "";
@@ -142,10 +143,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     path += root2;
     path += "/assets/World_1.json";
     assets->loadWorld(path);
-    std::cout << "Player textures added" << std::endl;
+    std::cout << "Character textures added" << std::endl;
     //End
-
-    assets->AddTexture("projectile", "/assets/proj.png");
 
     //Textures, map and fonts
 
@@ -169,7 +168,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player and enemy
     {
-    player.addComponent<TransformComponent>(1400,1100,128,128,1);
+    player.addComponent<TransformComponent>(1400,1100,48,48,2);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();

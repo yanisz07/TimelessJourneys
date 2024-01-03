@@ -4,14 +4,14 @@
         "name": "player",
         "sprites": [
           {
-            "name" : "Player_Idle_Sprite",
-            "path": "/assets/Green_Slime/Idle.png",
+            "name" : "Player_Sprite_Idle_Down",
+            "path": "/assets/player_game_idle_down.png",
             "actions": [
               {
                 "name": "Idle",
                 "values": [
-                  32,
-                  8
+                  48,
+                  6
                 ]
               }
             ]

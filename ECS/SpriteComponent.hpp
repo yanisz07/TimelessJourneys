@@ -100,7 +100,7 @@ public:
 
     void draw() override
     {
-        SDL_Rect rectangle{0,0,128,128};
+        //SDL_Rect rectangle{0,0,128,128};
         TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
     }
 
@@ -113,6 +113,7 @@ public:
             animIndex = animations[animName].index;
             speed = animations[animName].speed;
             setTex(animations[animName].spriteName);
+            std::cout << animations[animName].spriteName << std::endl;
             timer.partial();
             int w, h;
             SDL_QueryTexture(texture,NULL,NULL,&w,&h);
