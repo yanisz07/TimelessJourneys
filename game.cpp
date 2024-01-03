@@ -47,6 +47,9 @@ int t = 0;
 Uint32 playerInvincibleStartTime = 0; // the player invincibility start time
 Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
 
+//Test collision with rotated objects
+auto& TestCol(manager.addEntity());
+//
 
 Game::Game()
 {
@@ -217,6 +220,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     lastProjectileTime = SDL_GetTicks();
     }
+
+    //Test collision with rotated objects
+
+    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,200,100);
+    TestCol.getComponent<ColliderComponent>().SetAngle(135);
+
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -340,6 +349,13 @@ void Game::update()
         }
         //End
 
+        //Test collision with rotated objects
+
+        if (Collision::SAT(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+        {
+            std::cout << "Hit wall" << std::endl;
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        }
 
         for (auto& p : EnemyProjectiles)
 
@@ -360,6 +376,7 @@ void Game::update()
         for (auto& e : enemies)
         {
             SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
+            double angle = e->getComponent<ColliderComponent>().angle;
                 if(Collision::AABB(playerCol,enemyCol))
                 {
                     if (!playerInvincible) {
@@ -388,7 +405,7 @@ void Game::update()
                 }
                 for (auto& a : PlayerAttacks)
                 {
-                    if(Collision::AABB(a->getComponent<ColliderComponent>().collider,enemyCol))
+                    if(Collision::SAT(a->getComponent<ColliderComponent>().collider,a->getComponent<ColliderComponent>().angle,enemyCol,angle))
                     {
                         if (!e->getComponent<Stats>().is_hit())
                             {
@@ -589,6 +606,8 @@ void Game::render()
     label.draw();
     enemy_health.draw();
     player_health.draw();
+
+    TestCol.draw();
 
     SDL_RenderPresent(renderer);
     }

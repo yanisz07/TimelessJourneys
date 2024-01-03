@@ -76,6 +76,10 @@ public:
         this->angle=angle;
     }
 
+    void SetAngle(double angle)
+    {
+        this->angle = angle;
+    }
 
     void init() override
     {
