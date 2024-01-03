@@ -341,7 +341,7 @@ void Game::update()
         for (auto& c : MapColliders)
         {
             SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
-            if(Collision::AABB(cCol, playerCol))
+            if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit wall" << std::endl;
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
@@ -351,7 +351,7 @@ void Game::update()
 
         //Test collision with rotated objects
 
-        if (Collision::SAT(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+        if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
         {
             std::cout << "Hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
@@ -360,7 +360,7 @@ void Game::update()
         for (auto& p : EnemyProjectiles)
 
         {
-            if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
+            if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit player!" << std::endl;
                 Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
@@ -375,9 +375,7 @@ void Game::update()
 
         for (auto& e : enemies)
         {
-            SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
-            double angle = e->getComponent<ColliderComponent>().angle;
-                if(Collision::AABB(playerCol,enemyCol))
+            if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                 {
                     if (!playerInvincible) {
                         std::cout << "Player Hit!" << std::endl;
@@ -392,10 +390,10 @@ void Game::update()
                 }
                 for (auto& p : PlayerProjectiles)
                 {
-                    if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
+                    if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                     {
                         std::cout << "Projectile hit enemy" << std::endl;
-                        Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                        Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
                         e->getComponent<Stats>().set_hit(true);
                         e->getComponent<Stats>().set_type_hit(false);
                         e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
@@ -405,12 +403,12 @@ void Game::update()
                 }
                 for (auto& a : PlayerAttacks)
                 {
-                    if(Collision::SAT(a->getComponent<ColliderComponent>().collider,a->getComponent<ColliderComponent>().angle,enemyCol,angle))
+                    if(Collision::CheckCollision(a->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                     {
                         if (!e->getComponent<Stats>().is_hit())
                             {
                                 std::cout << "Melee hit enemy" << std::endl;
-                                Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
+                                Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
                                 e->getComponent<Stats>().set_hit(true);
                                 e->getComponent<Stats>().set_type_hit(true);
                                 e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
@@ -426,15 +424,15 @@ void Game::update()
                     Vector2D direction = e->getComponent<Stats>().direction_hit();
                     Uint32 delay = currentTime - e->getComponent<Stats>().time_hit();
                     bool type = e->getComponent<Stats>().type_hit();
-                    if (delay <= 100)
+                    if (delay <= 200)
                     {
                         if(delay == 0)
                         {
                             e->getComponent<SpriteComponent>().Play("Hurt");
                         }
-                        if (delay <= 50)
+                        if (delay <= 100)
                         {
-                            if (delay <= 20)
+                            if (delay <= 40)
                             {
                                 if(!type)
                                 {
@@ -447,7 +445,7 @@ void Game::update()
                                     e->getComponent<TransformComponent>().position.y += direction.y*20;
                                 }
                             }
-                            else if (delay <= 40)
+                            else if (delay <= 80)
                             {
                                 if(!type)
                                 {

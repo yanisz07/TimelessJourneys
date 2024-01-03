@@ -183,7 +183,7 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D LL_B = LowerLeft(recB,angleB);
 
     //Axis1
-    std::cout<< "Axis1" << std::endl;
+    //std::cout<< "Axis1" << std::endl;
 
     //compute director vector
     Vector2D u1 = Vector2D(UR_A.x-UL_A.x,UR_A.y-UL_A.y);
@@ -201,11 +201,6 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     Vector2D Max_B1 = MaxPoint(UR_B1,UL_B1,LL_B1,LR_B1);
     Vector2D Min_B1 = MinPoint(UR_B1,UL_B1,LL_B1,LR_B1);
-
-    std::cout << Min_B1.x << std::endl;
-    std::cout << Min_A1.x << std::endl;
-    std::cout << Max_B1.x << std::endl;
-    std::cout << Max_A1.x << std::endl;
 
     if (Min_B1.x <= Max_A1.x)
     {
@@ -225,7 +220,7 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //Axis2
 
-    std::cout<< "Axis2" << std::endl;
+    //std::cout<< "Axis2" << std::endl;
 
     //compute director vector
     Vector2D u2 = Vector2D(UR_A.x-LR_A.x,UR_A.y-LR_A.y);
@@ -262,7 +257,7 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //Axis3
 
-    std::cout<< "Axis3" << std::endl;
+    //std::cout<< "Axis3" << std::endl;
 
     //compute director vector
     Vector2D u3 = Vector2D(UL_B.x-LL_B.x,UL_B.y-LL_B.y);
@@ -299,7 +294,7 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //Axis4
 
-    std::cout<< "Axis4" << std::endl;
+    //std::cout<< "Axis4" << std::endl;
 
     //compute director vector
     Vector2D u4 = Vector2D(UL_B.x-UR_B.x,UL_B.y-UR_B.y);
@@ -341,3 +336,17 @@ bool Collision::SAT(const ColliderComponent& colA, const ColliderComponent& colB
 {
     return SAT(colA.collider, colA.angle, colB.collider, colB.angle);
 }
+
+bool Collision::CheckCollision(const ColliderComponent& colA, const ColliderComponent& colB)
+{
+    if (colA.angle==0 && colB.angle==0)
+    {
+        return AABB(colA,colB);
+    }
+    else
+    {
+        return SAT(colA,colB);
+    }
+}
+
+

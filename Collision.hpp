@@ -13,6 +13,7 @@ public:
     static bool AABB(const ColliderComponent& colA, const ColliderComponent& colB);
     static bool SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, double angleB);
     static bool SAT(const ColliderComponent& colA, const ColliderComponent& colB);
+    static bool CheckCollision(const ColliderComponent& colA, const ColliderComponent& colB);
 };
 
 #endif // COLLISION_H
