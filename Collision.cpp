@@ -168,8 +168,6 @@ Vector2D MaxPoint(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
 
 bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, double angleB)
 {
-    int t = 0;
-
     //corners of recA
     Vector2D UR_A = UpperRight(recA,angleA);
     Vector2D UL_A = UpperLeft(recA,angleA);
@@ -202,20 +200,16 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D Max_B1 = MaxPoint(UR_B1,UL_B1,LL_B1,LR_B1);
     Vector2D Min_B1 = MinPoint(UR_B1,UL_B1,LL_B1,LR_B1);
 
-    if (Min_B1.x <= Max_A1.x)
+    if (!(Min_B1.x <= Max_A1.x))
     {
-        if (Max_B1.x >= Min_A1.x)
-        {
-            t+=1;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     else
     {
-        return false;
+        if (!(Max_B1.x >= Min_A1.x))
+        {
+            return false;
+        }
     }
 
     //Axis2
@@ -239,20 +233,16 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D Max_B2 = MaxPoint(UR_B2,UL_B2,LL_B2,LR_B2);
     Vector2D Min_B2 = MinPoint(UR_B2,UL_B2,LL_B2,LR_B2);
 
-    if (Min_B2.x <= Max_A2.x)
+    if (!(Min_B2.x <= Max_A2.x))
     {
-        if (Max_B2.x >= Min_A2.x)
-        {
-            t+=1;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     else
     {
-        return false;
+        if (!(Max_B2.x >= Min_A2.x))
+        {
+            return false;
+        }
     }
 
     //Axis3
@@ -276,20 +266,16 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D Max_A3 = MaxPoint(UR_A3,UL_A3,LL_A3,LR_A3);
     Vector2D Min_A3 = MinPoint(UR_A3,UL_A3,LL_A3,LR_A3);
 
-    if (Min_B3.x <= Max_A3.x)
+    if (!(Min_B3.x <= Max_A3.x))
     {
-        if (Max_B3.x >= Min_A3.x)
-        {
-            t+=1;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     else
     {
-        return false;
+        if (!(Max_B3.x >= Min_A3.x))
+        {
+            return false;
+        }
     }
 
     //Axis4
@@ -313,20 +299,16 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D Max_A4 = MaxPoint(UR_A4,UL_A4,LL_A4,LR_A4);
     Vector2D Min_A4 = MinPoint(UR_A4,UL_A4,LL_A4,LR_A4);
 
-    if (Min_B4.x <= Max_A4.x)
+    if (!(Min_B4.x <= Max_A4.x))
     {
-        if (Max_B4.x >= Min_A4.x)
-        {
-            t+=1;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     else
     {
-        return false;
+        if (!(Max_B4.x >= Min_A4.x))
+        {
+            return false;
+        }
     }
 
     return true;
