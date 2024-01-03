@@ -33,19 +33,25 @@ public:
         scale = sc;
     }
 
-    TransformComponent(float x, float y)
+    TransformComponent(double x, double y)
     {
         position.x = x;
         position.y = y;
     }
 
-    TransformComponent(float x, float y, int h, int w, int sc)
+    TransformComponent(double x, double y, int h, int w, int sc)
     {
         position.x = x;
         position.y = y;
         height = h;
         width = w;
         scale = sc;
+    }
+
+    void set_directions (int x, int y)
+    {
+        x_direction=x;
+        y_direction=y;
     }
 
     void init() override

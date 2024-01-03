@@ -20,3 +20,9 @@ void TextureManager::Draw(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_Ren
 {
     SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, NULL, NULL, flip); //NULL -> no rotation for now
 }
+
+void TextureManager::Draw_rotation(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip, double angle)
+{
+    SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, angle, NULL, flip); //NULL -> no rotation for now
+}
+

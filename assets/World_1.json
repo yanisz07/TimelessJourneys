@@ -31,6 +31,20 @@
 
           },
           {
+            "name" : "Player_Attack_2_Sprite",
+            "path" : "/assets/Green_Slime/Attack_2.png",
+            "actions": [
+              {
+                "name": "Attack_2",
+                "values": [
+                  32,
+                  4
+                ]
+              }
+            ]
+
+          },
+          {
             "name" : "Player_Attack_1_Sprite",
             "path": "/assets/Green_Slime/Attack_1.png",
             "actions": [
