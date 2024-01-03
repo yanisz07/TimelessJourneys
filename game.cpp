@@ -177,7 +177,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
-    player.addComponent<Stats>();
+    player.addComponent<Stats>(true);
     player.addComponent<WeaponComponent>();
     player.getComponent<WeaponComponent>().getTransformComponent();
     player.addGroup(Game::groupPlayers);
