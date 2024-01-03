@@ -138,7 +138,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy.addComponent<TransformComponent>(600,600,32,32,4);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
-    enemy.addComponent<EnemyMovement>(250,100,400,60,&playerTransform); //To be changed later on
+    enemy.addComponent<EnemyMovement>(250,100,800,60,&playerTransform); //To be changed later on
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
@@ -228,11 +228,13 @@ void Game::update()
     //Check and solve player collisions.
     for (auto& c : colliders)
     {
+        if (enemy.getComponent<EnemyMovement>().collisionCooldown > 0) continue;
+
         SDL_Rect e_cCol = c->getComponent<ColliderComponent>().collider;
         if(Collision::AABB(e_cCol, enemyCol))
         {
             std::cout << "Enemy hit wall" << std::endl;
-            enemy.getComponent<TransformComponent>().position = enemyPos; // the enemy doesn't move
+            enemy.getComponent<EnemyMovement>().onCollision(); // the enemy doesn't move
         }
     }
     //End
