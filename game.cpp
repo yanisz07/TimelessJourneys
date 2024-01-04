@@ -59,7 +59,7 @@ Game::Game()
     isSettingsOpen = false; // Menu status, starts with menu opened
     isGameOverOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
-    isMusic = false; // full screen statusm, Starts fullscreen mode
+    isMusic = true; // full screen statusm, Starts fullscreen mode
 
 }
 
@@ -173,18 +173,22 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     map->LoadMap(mapPath.c_str(), 25, 20);
     }
 
-    //MUSIC
-    std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
+    //Handle the music
 
-    std::cout << MusicPath << std::endl;
-
-    bgMusic = Mix_LoadMUS(MusicPath.c_str()); // Use the correct path to your MP3 file
-    if (!bgMusic) {
-    std::cerr << "Failed to load background music! SDL_mixer Error: " << Mix_GetError() << std::endl;
-    } else {
-    if (Mix_PlayMusic(bgMusic, -1) < 0) { // -1 means loop indefinitely
-        std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
+        isRunning = false;
     }
+    std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
+    std::cout << "Trying to load music from: " << MusicPath << std::endl;
+    bgMusic = Mix_LoadMUS(MusicPath.c_str());
+    if (!bgMusic) {
+        std::cerr << "Failed to load background music from " << MusicPath << "! SDL_mixer Error: " << Mix_GetError() << std::endl;
+        // Handle the error, maybe exit or provide a notification
+    } else {
+        if (Mix_PlayMusic(bgMusic, -1) == -1) {
+            std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+        }
     }
 
     //Create player and enemy
@@ -342,15 +346,14 @@ void Game::handleEvents()
             //if click is within Music boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Music_centerY && y < Music_centerY + buttonHeight) {
-                if (!isMusic) {
-                    isMusic = true;
-                //add once music works
+                // Toggle music state
+                if (isMusic) { // Music is currently playing
+                    Mix_PauseMusic(); // Pause the music
+                    isMusic = false; // Update the flag
+                } else { // Music is currently paused
+                    Mix_ResumeMusic(); // Resume the music
+                    isMusic = true; // Update the flag
                 }
-                else{
-                    isMusic=false;
-
-                }
-
             }
             //if click is within Screen Dimension button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -741,6 +744,10 @@ void Game::render()
 }
 void Game::clean()
 {
+    if (bgMusic != nullptr) {
+        Mix_FreeMusic(bgMusic);
+        bgMusic = nullptr;
+    }
     isGameOverOpen = false;
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
