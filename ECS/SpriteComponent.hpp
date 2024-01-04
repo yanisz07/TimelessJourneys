@@ -133,6 +133,7 @@ public:
         currentAction = animName;
         //animIndex = animations[animName].index;
         setTex(animations[animName].spriteName);
+        srcRect.x = srcRect.y = 0;
         srcRect.h = animations[animName].wh;
         srcRect.w = animations[animName].wh;
         animations[currentAction].repeat = repeat;
