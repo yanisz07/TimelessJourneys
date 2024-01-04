@@ -144,7 +144,9 @@ public:
 
     int frontAttack()
     {
+        //attack implemented below only for player
         Vector2D entityPos = entityTransform->position;
+        int scale = entityTransform->scale;
         auto& attackCol(manager->addEntity());
         if (entityTransform->x_direction == 0)
         {
@@ -152,9 +154,10 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(0,-1);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y-32,128,32,100);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale,entityPos.y+13*scale-15,39,20,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
+                sprite->Play("Attack_Up",false,1);
             }
             else
             {
@@ -163,7 +166,7 @@ public:
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+128,128,32,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
-                sprite->Play("Attack_Down",false,1,400);
+                sprite->Play("Attack_Down",false,1);
             }
         }
         if (entityTransform->y_direction == 0)
@@ -174,6 +177,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(-1,0);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-32,entityPos.y,32,128,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Right",true,1);
             }
             else
             {
@@ -181,6 +186,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(1,0);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+128,entityPos.y,32,128,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Right",false,1);
             }
         }
         if (entityTransform->x_direction == 1)
@@ -191,6 +198,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(1,-1);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+100,entityPos.y-20,128,32,100,45);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Right",false,1);
             }
             if (entityTransform->y_direction == 1)
             {
@@ -198,6 +207,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(1,1);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+100,entityPos.y+100,128,32,100,135);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Right",false,1);
             }
         }
         if (entityTransform->x_direction == -1)
@@ -208,6 +219,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(-1,-1);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-100,entityPos.y-20,128,32,100,135);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Right",true,1);
             }
             if (entityTransform->y_direction == 1)
             {
@@ -216,6 +229,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(-1,1);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-100,entityPos.y+100,128,32,100,45);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Right",true,1);
             }
         }
         return 0;

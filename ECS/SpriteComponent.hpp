@@ -95,7 +95,7 @@ public:
                 if (animations[currentAction].repeat!=0)
                 {
                     srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames); //update x index in the sprites sheet
-                    if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
+                    if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed-50)
                     {
                         animations[currentAction].timer.start();
                         animations[currentAction].repeat-=1;
@@ -103,7 +103,14 @@ public:
                 }
                 else
                 {
-                    Play("Idle_Down");
+                    if (type=="player")
+                    {
+                        Play("Idle_Down");
+                    }
+                    else
+                    {
+                        Play("Idle");
+                    }
                 }
             }
         }
@@ -138,6 +145,7 @@ public:
         srcRect.w = animations[animName].wh;
         animations[currentAction].repeat = repeat;
         animations[currentAction].speed = speed;
+        animations[currentAction].timer.start();
     }
 };
 

@@ -353,6 +353,8 @@ void Game::update()
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
 
+        //
+
         for (auto& p : EnemyProjectiles)
 
         {
@@ -424,7 +426,7 @@ void Game::update()
                     {
                         if(delay == 0)
                         {
-                            e->getComponent<SpriteComponent>().Play("Hurt");
+                            e->getComponent<SpriteComponent>().Play("Hurt", false, 1);
                         }
                         if (delay <= 100)
                         {
@@ -530,22 +532,22 @@ void Game::update()
         if (playerInvincible) {
             if (currentTime0 - playerInvincibleStartTime >= 0 && currentTime0 - playerInvincibleStartTime < 1000 && t==0)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=1;
             }
             else if (currentTime0 - playerInvincibleStartTime >= 1000 && currentTime0 - playerInvincibleStartTime < 2000 && t==1)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=2;
             }
             else if (currentTime0 - playerInvincibleStartTime >= 2000 && currentTime0 - playerInvincibleStartTime < 3000 && t==2)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=3;
             }
             else if (currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration && t==3)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 playerInvincible = false;
                 t=0;
             }
