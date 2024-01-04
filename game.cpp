@@ -167,6 +167,20 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     map->LoadMap(mapPath.c_str(), 25, 20);
     }
 
+    //MUSIC
+    std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
+
+    std::cout << MusicPath << std::endl;
+
+    bgMusic = Mix_LoadMUS(MusicPath.c_str()); // Use the correct path to your MP3 file
+    if (!bgMusic) {
+    std::cerr << "Failed to load background music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    } else {
+    if (Mix_PlayMusic(bgMusic, -1) < 0) { // -1 means loop indefinitely
+        std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+    }
+
     //Create player and enemy
     {
     player.addComponent<TransformComponent>(1400,1100,128,128,1);

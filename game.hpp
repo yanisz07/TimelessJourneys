@@ -11,6 +11,7 @@
 #include "vector"
 #include "menu.h"
 #include <filesystem>
+#include "sdl_mixer.h"
 
 extern std::filesystem::path projectDir;
 
@@ -65,6 +66,7 @@ public:
 private:
     int cnt = 0;
     SDL_Window *window;
+    Mix_Music *bgMusic;
     Uint32 lastProjectileTime;
     bool isMenuOpen;
     SDL_Point mousePosition;

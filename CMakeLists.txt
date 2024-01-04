@@ -25,6 +25,11 @@ if(NOT SDL2_ttf_FOUND)
     message(FATAL_ERROR "SDL2_ttf not found")
 endif()
 
+find_package(SDL2_mixer CONFIG REQUIRED)
+if(NOT SDL2_mixer_FOUND)
+    message(FATAL_ERROR "SDL2_mixer not found")
+endif()
+
 if (APPLE)
     find_library(COREGRAPHICS_FRAMEWORK CoreGraphics)
     if(NOT COREGRAPHICS_FRAMEWORK)
@@ -69,11 +74,11 @@ set(SOURCES
 add_executable(TimelessJourneys ${SOURCES})
 
 if (APPLE)
-    target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK})
+    target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )
 endif()
 
 if (WIN32)
-    target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+    target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)
 endif()
 
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
