@@ -14,6 +14,7 @@
 #include <Windows.h>
 #endif
 #include <sstream>
+#include <variant>
 #include <filesystem>
 #include "world.hpp"
 
@@ -37,21 +38,20 @@ auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
+//test second enemy
+auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
-//Test for knockback on enemies
-std::vector<Entity*> enemies_hit;
-std::vector<Vector2D> projectiles_hit_enemies_directions;
-std::vector<Uint32> hit_time;
-//
-
-
 bool playerInvincible = false;
+int t = 0;
 Uint32 playerInvincibleStartTime = 0; // the player invincibility start time
 Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
 
+//Test collision with rotated objects
+auto& TestCol(manager.addEntity());
+//
 
 Game::Game()
 {
@@ -76,7 +76,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     screen_height = height;
 
     //3200 * 2560 is the size of the map
-
     camera.w = 3200 - screen_width;
     camera.h = 2560 - screen_height;
     x_diff = (width - 128)/2;
@@ -156,8 +155,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Textures, map and fonts
 
-
-
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
 
@@ -176,6 +173,20 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     map->LoadMap(mapPath.c_str(), 25, 20);
     }
 
+    //MUSIC
+    std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
+
+    std::cout << MusicPath << std::endl;
+
+    bgMusic = Mix_LoadMUS(MusicPath.c_str()); // Use the correct path to your MP3 file
+    if (!bgMusic) {
+    std::cerr << "Failed to load background music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    } else {
+    if (Mix_PlayMusic(bgMusic, -1) < 0) { // -1 means loop indefinitely
+        std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+    }
+
     //Create player and enemy
     {
     player.addComponent<TransformComponent>(1400,1100,128,128,1);
@@ -183,8 +194,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
-    player.addComponent<Stats>();
-    player.addComponent<WeaponComponent>();
+    player.addComponent<Stats>(true);
+    player.addComponent<WeaponComponent>(&manager);
+
     player.getComponent<WeaponComponent>().getTransformComponent();
     player.addGroup(Game::groupPlayers);
 
@@ -198,6 +210,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy.addGroup(Game::groupEnemies);
 
     std::cout << "Enemy created" << std::endl;
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
     }
 
     //Create labels
@@ -219,14 +241,21 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     lastProjectileTime = SDL_GetTicks();
     }
+
+    //Test collision with rotated objects
+
+    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,200,100);
+    TestCol.getComponent<ColliderComponent>().SetAngle(135);
+
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
-auto& colliders(manager.getGroup(Game::groupColliders));
+auto& MapColliders(manager.getGroup(Game::groupMapColliders));
 auto& PlayerProjectiles(manager.getGroup(Game::groupPlayerProjectiles));
 auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
+auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 
 void Game::handleEvents()
 {
@@ -413,8 +442,6 @@ void Game::update()
         SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
         Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
-        Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
-
         std::stringstream ssp; //hold variables and turn them into strings
         ssp << "Player position: " << playerPos;
 
@@ -427,10 +454,10 @@ void Game::update()
         //End
 
         //Check and solve player collisions.
-        for (auto& c : colliders)
+        for (auto& c : MapColliders)
         {
             SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
-            if(Collision::AABB(cCol, playerCol))
+            if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit wall" << std::endl;
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
@@ -438,11 +465,18 @@ void Game::update()
         }
         //End
 
+        //Test collision with rotated objects
+
+        if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+        {
+            std::cout << "Hit wall" << std::endl;
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        }
 
         for (auto& p : EnemyProjectiles)
 
         {
-            if(Collision::AABB(playerCol,p->getComponent<ColliderComponent>().collider))
+            if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit player!" << std::endl;
                 Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
@@ -451,11 +485,13 @@ void Game::update()
         }
         //End
 
-        //Check damage done to enemies by proximity
+        //Check damage done to enemies
+
+        Uint32 currentTime = SDL_GetTicks();
+
         for (auto& e : enemies)
         {
-            SDL_Rect enemyCol = e->getComponent<ColliderComponent>().collider;
-                if(Collision::AABB(playerCol,enemyCol))
+            if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                 {
                     if (!playerInvincible) {
                         std::cout << "Player Hit!" << std::endl;
@@ -470,75 +506,104 @@ void Game::update()
                 }
                 for (auto& p : PlayerProjectiles)
                 {
-                    if(Collision::AABB(p->getComponent<ColliderComponent>().collider,enemyCol))
+                    if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                     {
                         std::cout << "Projectile hit enemy" << std::endl;
-                        Stats::Damage(player.getComponent<Stats>(),enemy.getComponent<Stats>());
-                        //Test for enemy knockback
-                        enemies_hit.push_back(e);
-                        hit_time.push_back(SDL_GetTicks());
-                        projectiles_hit_enemies_directions.push_back(p->getComponent<TransformComponent>().velocity);
+                        Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
+                        e->getComponent<Stats>().set_hit(true);
+                        e->getComponent<Stats>().set_type_hit(false);
+                        e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
+                        e->getComponent<Stats>().set_hit_direction(p->getComponent<TransformComponent>().velocity);
                         p->destroy();
                     }
-
                 }
-        }
-        //
-
-        if (playerInvincible) {
-                player.getComponent<SpriteComponent>().Play("Hurt",3);
-        }
-
-
-        Uint32 currentTime = SDL_GetTicks();
-        //Enemy knockback
-        for (std::size_t i = 0; i < enemies_hit.size(); ++i)
-        {
-            Entity* enemy = enemies_hit[i];
-            Vector2D direction = projectiles_hit_enemies_directions[i];
-            currentTime = SDL_GetTicks();
-            Uint32 delay = currentTime - hit_time[i];
-            if (delay <= 500)
-            {
-                if(delay == 0)
+                for (auto& a : PlayerAttacks)
                 {
-                    enemy->getComponent<SpriteComponent>().Play("Hurt");
-                }
-                if (delay <= 250)
-                {
-                    if (delay <= 100)
+                    if(Collision::CheckCollision(a->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                     {
-                        enemy->getComponent<TransformComponent>().position.x += direction.x*10;
-                        enemy->getComponent<TransformComponent>().position.y += direction.y*10;
+                        if (!e->getComponent<Stats>().is_hit())
+                            {
+                                std::cout << "Melee hit enemy" << std::endl;
+                                Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
+                                e->getComponent<Stats>().set_hit(true);
+                                e->getComponent<Stats>().set_type_hit(true);
+                                e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
+                                Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
+                                e->getComponent<Stats>().set_hit_direction(direction);
+                            }
                     }
-                    else if (delay <= 200)
+                }
+                //Enemy knockback
+                if(e->getComponent<Stats>().is_hit())
+                {
+                    currentTime = SDL_GetTicks();
+                    Vector2D direction = e->getComponent<Stats>().direction_hit();
+                    Uint32 delay = currentTime - e->getComponent<Stats>().time_hit();
+                    bool type = e->getComponent<Stats>().type_hit();
+                    if (delay <= 200)
                     {
-                        enemy->getComponent<TransformComponent>().position.x += direction.x*5;
-                        enemy->getComponent<TransformComponent>().position.y += direction.y*5;
+                        if(delay == 0)
+                        {
+                            e->getComponent<SpriteComponent>().Play("Hurt");
+                        }
+                        if (delay <= 100)
+                        {
+                            if (delay <= 40)
+                            {
+                                if(!type)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                }
+                                else
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*20;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*20;
+                                }
+                            }
+                            else if (delay <= 80)
+                            {
+                                if(!type)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                }
+                                else
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                }
+                            }
+                            else
+                            {
+                                if(!type)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*2;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*2;
+                                }
+                                else
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        enemy->getComponent<TransformComponent>().position.x += direction.x*1;
-                        enemy->getComponent<TransformComponent>().position.y += direction.y*1;
+                        e->getComponent<Stats>().set_hit(false);
                     }
                 }
-            }
-            else
-            {
-                //enemy->getComponent<TransformComponent>().velocity.x = 0;
-                enemies_hit.erase(enemies_hit.begin() + i);
-                hit_time.erase(hit_time.begin() + i);
-                projectiles_hit_enemies_directions.erase(projectiles_hit_enemies_directions.begin() + i);
-                enemy->getComponent<SpriteComponent>().Play("Idle");
-            }
         }
         //End
+
+        Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
 
         //Projectiles shot from the enemy we can generalize this to all ennemies
         if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
         {
             // Create a projectile every two seconds
-            assets->CreateProjectile(Vector2D(enemy.getComponent<TransformComponent>().position.x, enemy.getComponent<TransformComponent>().position.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
+            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
             lastProjectileTime = currentTime;  // Update the last projectile creation time
         }
         //End
@@ -582,8 +647,28 @@ void Game::update()
         }
 
         //check invincibility duration and change status
-        if (playerInvincible && currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration) {
-            playerInvincible = false;
+        if (playerInvincible) {
+            if (currentTime0 - playerInvincibleStartTime >= 0 && currentTime0 - playerInvincibleStartTime < 1000 && t==0)
+            {
+                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                t=1;
+            }
+            else if (currentTime0 - playerInvincibleStartTime >= 1000 && currentTime0 - playerInvincibleStartTime < 2000 && t==1)
+            {
+                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                t=2;
+            }
+            else if (currentTime0 - playerInvincibleStartTime >= 2000 && currentTime0 - playerInvincibleStartTime < 3000 && t==2)
+            {
+                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                t=3;
+            }
+            else if (currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration && t==3)
+            {
+                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                playerInvincible = false;
+                t=0;
+            }
         }
     }
     int playerHealth = player.getComponent<Stats>().get_health();
@@ -615,7 +700,7 @@ void Game::render()
         t->draw();
     }
 
-    for (auto& c : colliders)
+    for (auto& c : MapColliders)
     {
         c->draw();
     }
@@ -640,9 +725,16 @@ void Game::render()
         p->draw();
     }
 
+    for (auto& a : PlayerAttacks)
+    {
+        a->draw();
+    }
+
     label.draw();
     enemy_health.draw();
     player_health.draw();
+
+    TestCol.draw();
 
     SDL_RenderPresent(renderer);
     }

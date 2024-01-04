@@ -12,6 +12,7 @@
 #include "menu.h"
 #include "game_over.h"
 #include <filesystem>
+#include "sdl_mixer.h"
 
 extern std::filesystem::path projectDir;
 
@@ -57,15 +58,17 @@ public:
     {
         groupMap,
         groupPlayers,
-        groupColliders,
+        groupMapColliders,
         groupPlayerProjectiles,
         groupEnemyProjectiles,
-        groupEnemies
+        groupEnemies,
+        groupPlayerAttack
     };
 
 private:
     int cnt = 0;
     SDL_Window *window;
+    Mix_Music *bgMusic;
     Uint32 lastProjectileTime;
     bool isMenuOpen;
     bool isSettingsOpen;
