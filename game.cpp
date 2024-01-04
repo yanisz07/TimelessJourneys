@@ -151,9 +151,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
 
-    assets->AddTexture("green_blob_hurt", "/assets/Green_Slime/Hurt.png");
-    assets->AddTexture("blue_blob_hurt", "/assets/Blue_Slime/Hurt.png");
-
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
 
@@ -168,7 +165,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player and enemy
     {
-    player.addComponent<TransformComponent>(1400,1100,48,48,2);
+    player.addComponent<TransformComponent>(1400,1100,48,48,3,5);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
@@ -176,7 +173,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Stats>(true);
     player.addComponent<WeaponComponent>(&manager);
 
-    player.getComponent<WeaponComponent>().getTransformComponent();
     player.addGroup(Game::groupPlayers);
 
     std::cout << "Player created" << std::endl;

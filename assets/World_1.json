@@ -8,7 +8,7 @@
             "path": "/assets/player_game_idle_down.png",
             "actions": [
               {
-                "name": "Idle",
+                "name": "Idle_Down",
                 "values": [
                   48,
                   6
@@ -17,68 +17,107 @@
             ]
           },
           {
-            "name" : "Player_Attack_3_Sprite",
-            "path" : "/assets/Green_Slime/Attack_3.png",
+            "name" : "Player_Sprite_Idle_Right",
+            "path" : "/assets/player_game_idle_right.png",
             "actions": [
               {
-                "name": "Attack_3",
+                "name": "Idle_Right",
                 "values": [
-                  32,
-                  5
-                ]
-              }
-            ]
-
-          },
-          {
-            "name" : "Player_Attack_2_Sprite",
-            "path" : "/assets/Green_Slime/Attack_2.png",
-            "actions": [
-              {
-                "name": "Attack_2",
-                "values": [
-                  32,
-                  4
-                ]
-              }
-            ]
-
-          },
-          {
-            "name" : "Player_Attack_1_Sprite",
-            "path": "/assets/Green_Slime/Attack_1.png",
-            "actions": [
-              {
-                "name": "Attack_1",
-                "values": [
-                  32,
-                  4
-                ]
-              }
-            ]
-          },
-          {
-            "name" : "Player_Run_Sprite",
-            "path" : "/assets/Green_Slime/Run.png",
-            "actions": [
-              {
-                "name": "Run",
-                "values": [
-                  32,
-                  7
-                ]
-              }
-            ]
-          },
-          {
-            "name" : "Player_Hurt_Sprite",
-            "path": "/assets/Green_Slime/Hurt.png",
-            "actions": [
-              {
-                "name": "Hurt",
-                "values": [
-                  32,
+                  48,
                   6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Idle_Up",
+            "path" : "/assets/player_game_idle_up.png",
+            "actions": [
+              {
+                "name": "Idle_Up",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Run_Down",
+            "path": "/assets/player_game_run_down.png",
+            "actions": [
+              {
+                "name": "Run_Down",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_Right",
+            "path" : "/assets/player_game_run_right.png",
+            "actions": [
+              {
+                "name": "Run_Right",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_Up",
+            "path": "/assets/player_game_run_up.png",
+            "actions": [
+              {
+                "name": "Run_Up",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Attack_Down",
+            "path": "/assets/player_game_attack_down.png",
+            "actions": [
+              {
+                "name": "Attack_Down",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Attack_Right",
+            "path": "/assets/player_game_attack_right.png",
+            "actions": [
+              {
+                "name": "Attack_Right",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Attack_Up",
+            "path": "/assets/player_game_attack_up.png",
+            "actions": [
+              {
+                "name": "Attack_Up",
+                "values": [
+                  48,
+                  4
                 ]
               }
             ]
@@ -95,7 +134,7 @@
               {
                 "name": "Idle",
                 "values": [
-                  32,
+                  128,
                   8
                 ]
               }
@@ -108,7 +147,7 @@
               {
                 "name": "Attack_1",
                 "values": [
-                  32,
+                  128,
                   4
                 ]
               }
@@ -121,7 +160,7 @@
               {
                 "name": "Hurt",
                 "values": [
-                  32,
+                  128,
                   6
                 ]
               }

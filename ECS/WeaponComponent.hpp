@@ -18,9 +18,11 @@ public:
         std::cout << "Melee Attack" << std::endl;
         manager = man;
     }
-    void getTransformComponent()
+
+    void init() override
     {
         entityTransform = &entity->getComponent<TransformComponent>();
+        sprite = &entity->getComponent<SpriteComponent>();
     }
 
     ~WeaponComponent() override = default;
@@ -53,20 +55,17 @@ public:
                 if(!melee)
                 {
                     rangeAttack();
-                    entity->getComponent<SpriteComponent>().Play("Attack_1");
                 }
                 else
                 {
                     frontAttack();
                     std::cout << "Melee Attack" << std::endl;
-                    entity->getComponent<SpriteComponent>().Play("Attack_2");
                 }
                 break;
             case SDLK_x:
                 if (!melee)
                 {
                     roundAttack();
-                    entity->getComponent<SpriteComponent>().Play("Attack_3");
                 }
                 break;
             }
@@ -155,6 +154,7 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(0,-1);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y-32,128,32,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
             }
             else
             {
@@ -162,6 +162,8 @@ public:
                 attackCol.getComponent<TransformComponent>().set_directions(0,1);
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+128,128,32,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
+
+                sprite->Play("Attack_Down",false,1,1000);
             }
         }
         if (entityTransform->y_direction == 0)
@@ -223,6 +225,7 @@ private:
     std::string name = "Standard weapon ";
     int damage = 0;
     TransformComponent* entityTransform;
+    SpriteComponent* sprite;
     Uint32 reloadTime = 1000;
     bool melee;
     Manager* manager;

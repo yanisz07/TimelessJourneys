@@ -13,7 +13,7 @@ private:
 public:
     Timer()
     {
-        std::cout << "Timer created successfully" << std::endl;
+        //std::cout << "Timer created successfully" << std::endl;
     }
     inline int start(){startTime_ = SDL_GetTicks(); partialTime_ = SDL_GetTicks(); return 0;}
     inline int partial(){partialTime_ = SDL_GetTicks(); return 0;}
