@@ -31,6 +31,8 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
+bool Game::DisplayMap = false;
+
 
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
@@ -531,6 +533,23 @@ void Game::update()
             camera.y = camera.h;
         }
 
+        if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+            case SDLK_l:
+                    if (!DisplayMap) {
+                        DisplayMap = true;
+
+                    }
+                    else {
+                        DisplayMap = false;
+                    }
+                    break;
+            default:
+                    break;
+
+            }
+        }
+
         //check invincibility duration and change status
         if (playerInvincible) {
             if (currentTime0 - playerInvincibleStartTime >= 0 && currentTime0 - playerInvincibleStartTime < 1000 && t==0)
@@ -560,56 +579,41 @@ void Game::update()
 
 void Game::render()
 {
+    // Clear the renderer with the current drawing color
     SDL_RenderClear(renderer);
+
+
+    // If the menu is open, render it and present immediately, then return
     if (isMenuOpen) {
-    Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
-    }
-    else{
-
-
-    for (auto& t : tiles)
-    {
-        t->draw();
+        Menu::renderMenu(renderer, isMenuOpen, mousePosition);
+        //SDL_RenderPresent(renderer);
+        return; // Skip the rest of the rendering if the menu is open
     }
 
-    for (auto& c : MapColliders)
-    {
-        c->draw();
+    // If the DisplayMap flag is true, render only the tiles with the correct scaling
+    if (DisplayMap) {
+        for (auto& t : tiles) {
+            auto& tileComponent = t->getComponent<TileComponent>();
+            tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
+            t->draw();
+        }
+    } else {
+        // Render all regular game objects when not in map view
+        for (auto& t : tiles) { t->draw(); }
+        for (auto& c : MapColliders) { c->draw(); }
+        for (auto& p : players) { p->draw(); }
+        for (auto& e : enemies) { e->draw(); }
+        for (auto& pp : PlayerProjectiles) { pp->draw(); }
+        for (auto& ep : EnemyProjectiles) { ep->draw(); }
+
+        // Render the UI elements over the game objects
+        label.draw();
+        enemy_health.draw();
+        player_health.draw();
     }
 
-    for (auto& p : players)
-    {
-        p->draw();
-    }
-
-    for (auto& e : enemies)
-    {
-        e->draw();
-    }
-
-    for (auto& p : PlayerProjectiles)
-    {
-        p->draw();
-    }
-
-    for (auto& p : EnemyProjectiles)
-    {
-        p->draw();
-    }
-
-    for (auto& a : PlayerAttacks)
-    {
-        a->draw();
-    }
-
-    label.draw();
-    enemy_health.draw();
-    player_health.draw();
-
-    TestCol.draw();
-
+    // Present the renderer's contents to the screen after all rendering is done
     SDL_RenderPresent(renderer);
-    }
 }
 void Game::clean()
 {

@@ -44,6 +44,7 @@ public:
     static SDL_Event event;
     static bool isRunning;
     bool isFullscreen;
+    static bool DisplayMap;
 
     static SDL_Rect camera;
     int screen_width;
