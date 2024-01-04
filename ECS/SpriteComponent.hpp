@@ -21,12 +21,10 @@ private:
     Timer timer;
 
     bool animated = false;
-    int frames = 0;
-    int speed = 100; //delay between frames in milliseconds
 
 public:
     std::string currentAction;
-    int animIndex = 0; //update x index in the sprites sheet
+    //int animIndex = 0; //update x index in the sprites sheet
     std::map<std::string , Animation> animations; //stores animations
 
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
@@ -86,8 +84,8 @@ public:
         {
             if(animations[currentAction].repeat==-1)
             {
-                srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / speed) % frames); //update x index in the sprites sheet
-                if(animations[currentAction].timer.getTimeStart() > frames*speed)
+                srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames); //update x index in the sprites sheet
+                if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
                 {
                     animations[currentAction].timer.start();
                 }
@@ -96,8 +94,8 @@ public:
             {
                 if (animations[currentAction].repeat!=0)
                 {
-                    srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / speed) % frames); //update x index in the sprites sheet
-                    if(animations[currentAction].timer.getTimeStart() > frames*speed)
+                    srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames); //update x index in the sprites sheet
+                    if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
                     {
                         animations[currentAction].timer.start();
                         animations[currentAction].repeat-=1;
@@ -133,14 +131,12 @@ public:
             spriteFlip = SDL_FLIP_NONE;
         }
         currentAction = animName;
-        frames = animations[animName].frames;
-        animIndex = animations[animName].index;
-        speed = animations[animName].speed;
+        //animIndex = animations[animName].index;
         setTex(animations[animName].spriteName);
         srcRect.h = animations[animName].wh;
         srcRect.w = animations[animName].wh;
         animations[currentAction].repeat = repeat;
-        this->speed = speed;
+        animations[currentAction].speed = speed;
     }
 };
 

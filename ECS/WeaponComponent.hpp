@@ -163,7 +163,7 @@ public:
                 attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+128,128,32,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
-                sprite->Play("Attack_Down",false,1,1000);
+                sprite->Play("Attack_Down",false,1,400);
             }
         }
         if (entityTransform->y_direction == 0)
