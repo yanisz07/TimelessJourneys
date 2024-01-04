@@ -271,7 +271,7 @@ void Game::handleEvents()
         break;
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
-        case SDLK_m:
+        case SDLK_ESCAPE:
             Menu::toggleMenuState(isMenuOpen); // Existing menu toggle
             break;
         case SDLK_f:
