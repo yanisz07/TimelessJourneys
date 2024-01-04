@@ -59,7 +59,7 @@ Game::Game()
     isSettingsOpen = false; // Menu status, starts with menu opened
     isGameOverOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
-    isMusic = true; // full screen statusm, Starts fullscreen mode
+    isMusic = true; // music state, music on by default
 
 }
 
