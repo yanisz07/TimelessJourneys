@@ -70,7 +70,9 @@ private:
     SDL_Window *window;
     Mix_Music *bgMusic;
     Uint32 lastProjectileTime;
+    bool isGameStarted;
     bool isMenuOpen;
+    bool isInGameMenuOpen;
     bool isSettingsOpen;
     bool isGameOverOpen;
     SDL_Point mousePosition;

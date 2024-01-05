@@ -6,7 +6,7 @@
 #include "Collision.hpp"
 #include "AssetManager.hpp"
 #include "setting.h"
-
+#include "ingame_menu.h"
 #ifdef __APPLE__
 #include <CoreGraphics/CGDirectDisplay.h>
 #endif
@@ -55,7 +55,9 @@ auto& TestCol(manager.addEntity());
 
 Game::Game()
 {
+    isGameStarted = false ; // tracks if player has started the game yet
     isMenuOpen = true; // Menu status, starts with menu opened
+    isInGameMenuOpen = false; //  status for in game menu, starts closed
     isSettingsOpen = false; // Menu status, starts with menu opened
     isGameOverOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
@@ -272,7 +274,7 @@ void Game::handleEvents()
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
         case SDLK_ESCAPE:
-            Menu::toggleMenuState(isMenuOpen); // Existing menu toggle
+            InGameMenu::toggleInGameMenuState(isInGameMenuOpen); // Existing menu toggle
             break;
         case SDLK_f:
             //3200 * 2560 is the size of the map
@@ -306,12 +308,45 @@ void Game::handleEvents()
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Start_centerY && y < Start_centerY + buttonHeight) {
                 isMenuOpen = false;
+                isGameStarted = true;
             }
             //if click is within Setting button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Setting_centerY && y < Setting_centerY + buttonHeight) {
                 isSettingsOpen = true;
                 isMenuOpen = false;
+
+            }
+            // Check if click is within the Exit button boundary
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > exitCenterY && y < exitCenterY + buttonHeight) {
+                isRunning = false;
+            }
+        }
+        else if (isInGameMenuOpen) {
+            // Get the mouse coordinates and screen size
+            int x, y ,screenWidth, screenHeight;
+            SDL_GetMouseState(&x, &y);
+            SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+            // Menu button dimensions
+            int buttonWidth = 150;
+            int buttonHeight = 40;
+            // Calculating location of buttons
+            int centerX = (screenWidth - buttonWidth) / 2;
+            int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
+            int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
+            int exitCenterY = Setting_centerY + buttonHeight + 20;
+
+            //if click is within resume button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Start_centerY && y < Start_centerY + buttonHeight) {
+                isInGameMenuOpen = false;
+            }
+            //if click is within Setting button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Setting_centerY && y < Setting_centerY + buttonHeight) {
+                isSettingsOpen = true;
+                isInGameMenuOpen = false;
 
             }
             // Check if click is within the Exit button boundary
@@ -338,9 +373,15 @@ void Game::handleEvents()
             //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Back_centerY && y < Back_centerY + buttonHeight) {
+                if (isGameStarted) {
+                isSettingsOpen = false;
+                isInGameMenuOpen = true;
+                }
+                else if (!isGameStarted){
                 isSettingsOpen = false;
                 isMenuOpen = true;
 
+                }
             }
 
             //if click is within Music boundary:
@@ -362,6 +403,8 @@ void Game::handleEvents()
 
             }
         }
+
+
         else if (isGameOverOpen) {
             // Get the mouse coordinates and screen size
             int x, y ,screenWidth, screenHeight;
@@ -438,7 +481,7 @@ void Game::toggleFullScreen() {
 
 void Game::update()
 {
-    if (!isMenuOpen && !isGameOverOpen)
+    if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen )
     {
         Uint32 currentTime0 = SDL_GetTicks();
         // Get player/enemy info.
@@ -691,6 +734,9 @@ void Game::render()
     }
     else if (isMenuOpen) {
     Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
+    }
+    else if (isInGameMenuOpen) {
+        InGameMenu::renderInGameMenu(renderer, isInGameMenuOpen, mousePosition); // Render the In game menu if it's open
     }
     else if (isSettingsOpen) {
         Setting::renderSetting(renderer, isSettingsOpen, mousePosition, isFullscreen, isMusic); // Render the setting menu if it's open
