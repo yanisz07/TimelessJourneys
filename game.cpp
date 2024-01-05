@@ -428,9 +428,9 @@ void Game::update()
                         {
                             e->getComponent<SpriteComponent>().Play("Hurt", false, 1);
                         }
-                        if (delay <= 100)
+                        if (delay >= 100)
                         {
-                            if (delay <= 40)
+                            if (delay <= 140)
                             {
                                 if(!type)
                                 {
@@ -443,7 +443,7 @@ void Game::update()
                                     e->getComponent<TransformComponent>().position.y += direction.y*20;
                                 }
                             }
-                            else if (delay <= 80)
+                            else if (delay <= 180)
                             {
                                 if(!type)
                                 {
@@ -594,10 +594,10 @@ void Game::render()
         p->draw();
     }
 
-    for (auto& a : PlayerAttacks)
+    /*for (auto& a : PlayerAttacks)
     {
         a->draw();
-    }
+    }*/
 
     label.draw();
     enemy_health.draw();

@@ -51,6 +51,10 @@ public:
                     {
                         sprite->Play("Run_Right",true);
                     }
+                    if(sprite->currentAction != "Run_Right")
+                    {
+                        sprite->Play("Run_Right",true);
+                    }
                 }
                 else
                 {
@@ -83,6 +87,10 @@ public:
                     {
                         sprite->Play("Run_Right",true);
                     }
+                    if(sprite->currentAction != "Run_Right")
+                    {
+                        sprite->Play("Run_Right",true);
+                    }
                 }
 
                 else
@@ -98,6 +106,10 @@ public:
                 pressed_left = true;
                 transform->velocity.x = -1;
                 if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
+                {
+                    sprite->Play("Run_Right",true);
+                }
+                if(sprite->currentAction != "Run_Right")
                 {
                     sprite->Play("Run_Right",true);
                 }

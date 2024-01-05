@@ -154,7 +154,7 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(0,-1);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale,entityPos.y+13*scale-15,39,20,100);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale,entityPos.y+13*scale-15,50,25,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
                 sprite->Play("Attack_Up",false,1);
@@ -163,7 +163,7 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(0,1);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+128,128,32,100);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale,entityPos.y+(13+19)*scale,50,25,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
                 sprite->Play("Attack_Down",false,1);
@@ -175,7 +175,7 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(-1,0);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-32,entityPos.y,32,128,100);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale-20,entityPos.y+13*scale,25,50,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
                 sprite->Play("Attack_Right",true,1);
@@ -184,7 +184,7 @@ public:
             {
                 attackCol.addComponent<TransformComponent>();
                 attackCol.getComponent<TransformComponent>().set_directions(1,0);
-                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+128,entityPos.y,32,128,100);
+                attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(18+13)*scale,entityPos.y+13*scale,25,50,100);
                 attackCol.addGroup(Game::groupPlayerAttack);
 
                 sprite->Play("Attack_Right",false,1);
@@ -241,7 +241,7 @@ private:
     int damage = 0;
     TransformComponent* entityTransform;
     SpriteComponent* sprite;
-    Uint32 reloadTime = 1000;
+    Uint32 reloadTime = 400;
     bool melee;
     Manager* manager;
 };
