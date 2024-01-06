@@ -277,7 +277,6 @@ void Game::handleEvents()
             InGameMenu::toggleInGameMenuState(isInGameMenuOpen); // Existing menu toggle
             break;
         case SDLK_f:
-            //3200 * 2560 is the size of the map
             toggleFullScreen();
             break;
 
