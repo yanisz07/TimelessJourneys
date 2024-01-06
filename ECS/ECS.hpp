@@ -66,9 +66,11 @@ private:
 
 public:
     Manager& manager;
+    std::string type = "any";
 
-    Entity(Manager& mManager) : manager(mManager) {}
+    Entity(Manager& mManager) : manager(mManager){}
 
+    void setType(std::string type){this->type = type;}
     void update()
     {
         for (auto& c : components) c->update();

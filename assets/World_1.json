@@ -82,7 +82,12 @@
                 ]
               }
             ]
-          },
+          }
+        ],
+        "attacks" : [
+          {
+            "name" : "sword",
+            "sprites" : [
           {
             "name" : "Player_Sprite_Attack_Down",
             "path": "/assets/player_game_attack_down.png",
@@ -122,6 +127,8 @@
               }
             ]
           }
+        ]
+        }
         ]
       },
       {

@@ -6,7 +6,9 @@
 
 class Action;
 class Sprite;
+class Attack;
 class Character;
+
 
 class World
 {
@@ -21,6 +23,7 @@ class Character
 public:
     std::map<std::string, Sprite> Sprites;
     std::map<std::string, Action> Actions;
+    std::map<std::string, Attack> Attacks;
     Character(nlohmann::json data);
     Character();
 };
@@ -39,6 +42,15 @@ public:
     std::string spriteName;
     Action();
     Action(nlohmann::json data, std::string sName);
+};
+
+class Attack
+{
+public:
+    std::map<std::string, Sprite> Sprites;
+    std::map<std::string, Action> Actions;
+    Attack(nlohmann::json data);
+    Attack();
 };
 
 

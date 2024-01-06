@@ -11,6 +11,9 @@ class WeaponComponent : public Component
 {
 public:
     Timer timer;
+    std::string attack;
+    bool melee;
+
     WeaponComponent(Manager *man){
         timer.start();
         timer.setTimeOut(reloadTime);
@@ -19,13 +22,31 @@ public:
         manager = man;
     }
 
+    ~WeaponComponent() override = default;
+
+    int equip()
+    {
+        std::string type = entity->type;
+        sprite = &(entity->getComponent<SpriteComponent>());
+
+        std::map<std::string, Action> actions;
+        actions = (entity->manager.getAssetManager()->world.Characters["player"].Attacks["sword"].Actions);
+        Animation anim;
+        for (auto it = actions.begin(); it != actions.end(); it++)
+        {
+            anim = Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName);
+            sprite->animations[it->first] = anim;
+        }
+        std::cout << "weapon equiped" << std::endl;
+        return 0;
+    }
+
     void init() override
     {
         entityTransform = &entity->getComponent<TransformComponent>();
         sprite = &entity->getComponent<SpriteComponent>();
     }
 
-    ~WeaponComponent() override = default;
 
     void update() override
     {
@@ -52,16 +73,19 @@ public:
             {
             case SDLK_z:
                 if(timer.timedOut())
-                if(!melee)
                 {
-                    rangeAttack();
-                }
-                else
-                {
-                    frontAttack();
-                    std::cout << "Melee Attack" << std::endl;
+                    if(!melee)
+                    {
+                        rangeAttack();
+                    }
+                    else
+                    {
+                        frontAttack();
+                        std::cout << "Melee Attack" << std::endl;
+                    }
                 }
                 break;
+
             case SDLK_x:
                 if (!melee)
                 {
@@ -241,9 +265,10 @@ private:
     int damage = 0;
     TransformComponent* entityTransform;
     SpriteComponent* sprite;
+    SDL_Texture *texture;
     Uint32 reloadTime = 400;
-    bool melee;
     Manager* manager;
+
 };
 
 #endif // WEAPONCOMPONENT_H

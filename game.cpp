@@ -32,6 +32,8 @@ AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
 
+
+//Add characters
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
@@ -39,6 +41,8 @@ auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
+//End
+
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
@@ -165,13 +169,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player and enemy
     {
+    player.setType("player");
     player.addComponent<TransformComponent>(1400,1100,48,48,3,5);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>(true);
+    //player.addComponent<WeaponComponent>(&manager);
     player.addComponent<WeaponComponent>(&manager);
+    player.getComponent<WeaponComponent>().equip();
 
     player.addGroup(Game::groupPlayers);
 
@@ -194,8 +201,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
-
     }
+
 
     //Create labels
     {

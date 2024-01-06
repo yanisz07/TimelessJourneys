@@ -11,5 +11,6 @@
 #include "ProjectileComponent.hpp"
 #include "UILabel.hpp"
 #include "Stats.hpp"
+#include "sword.h"
 
 #endif // COMPONENTS_H

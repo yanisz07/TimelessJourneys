@@ -10,6 +10,8 @@
 #include "../world.hpp"
 #include "../timer.hpp"
 
+class WeaponComponent;
+
 class SpriteComponent : public Component
 {
 private:
@@ -26,7 +28,6 @@ public:
     std::string currentAction;
     //int animIndex = 0; //update x index in the sprites sheet
     std::map<std::string , Animation> animations; //stores animations
-
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
     SpriteComponent() = default;
@@ -43,13 +44,25 @@ public:
 
     void setActions()
     {
+        //type = entity->type;
         std::map<std::string, Action> actions;
         actions = (entity->manager.getAssetManager()->world.Characters[type].Actions);
 
         for (auto it = actions.begin(); it != actions.end(); it++)
         {
-            animations.emplace(it->first, Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName));
+            //animations.emplace(it->first, Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName));
+            animations[it->first] =  Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName);
         }
+
+        actions = (entity->manager.getAssetManager()->world.Characters["player"].Attacks["sword"].Actions);
+        Animation anim;
+        for (auto it = actions.begin(); it != actions.end(); it++)
+        {
+            anim = Animation(128, 0, 8, 100, "Enemy_Idle_Sprite");
+            //animations[it->first] = anim;
+        }
+        //animations["Attack_Down"] = Animation(48,0,4,100,"Player_Sprite_Attack_Down");
+
         if (type=="player")
         {
             Play("Idle_Down");
@@ -58,6 +71,11 @@ public:
         {
             Play("Idle");
         }
+    }
+
+    void addAnimation(std::string animName,Animation animation)
+    {
+        animations[animName] = animation;
     }
 
     ~SpriteComponent()
@@ -139,6 +157,7 @@ public:
         }
         currentAction = animName;
         //animIndex = animations[animName].index;
+
         setTex(animations[animName].spriteName);
         srcRect.x = srcRect.y = 0;
         srcRect.h = animations[animName].wh;
