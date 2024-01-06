@@ -64,10 +64,10 @@ set(SOURCES
     ECS/weaponComponent.hpp
     world.hpp world.cpp
     menu.h
-    menu.cpp)
+    menu.cpp
+    ECS/sword.h)
 
-add_executable(TimelessJourneys ${SOURCES}
-    sword.h)
+add_executable(TimelessJourneys ${SOURCES})
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK})
