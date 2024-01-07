@@ -56,7 +56,6 @@ class Entity
 {
     friend Component;
 private:
-    //Manager& manager;
     bool active = true;
     std::vector<std::unique_ptr<Component>> components;
 

@@ -177,8 +177,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>(true);
     //player.addComponent<WeaponComponent>(&manager);
-    player.addComponent<WeaponComponent>(&manager);
-    player.getComponent<WeaponComponent>().equip();
+    player.addComponent<Sword>(&manager);
+    player.getComponent<Sword>().equip();
 
     player.addGroup(Game::groupPlayers);
 

@@ -13,6 +13,7 @@ public:
     Timer timer;
     std::string attack;
     bool melee;
+    SDL_Texture *texture;
 
     WeaponComponent(Manager *man){
         timer.start();
@@ -30,7 +31,7 @@ public:
         sprite = &(entity->getComponent<SpriteComponent>());
 
         std::map<std::string, Action> actions;
-        actions = (entity->manager.getAssetManager()->world.Characters["player"].Attacks["sword"].Actions);
+        actions = (entity->manager.getAssetManager()->world.Characters[type].Attacks[attack].Actions);
         Animation anim;
         for (auto it = actions.begin(); it != actions.end(); it++)
         {
@@ -260,12 +261,52 @@ public:
         return 0;
     }
 
+    void draw() override
+    {
+        if(sprite->currentAction == "Attack_Down")
+        {
+            std::vector<SDL_Point> handLocation;
+            handLocation.push_back({29,27});
+            handLocation.push_back({29,27});
+            handLocation.push_back({20,26});
+            SDL_Rect destRect;
+            SDL_Rect srcRect = {0,0,380,870};
+            destRect.h = 48;
+            destRect.w = 32;
+            entityTransform = &(entity->getComponent<TransformComponent>());
+            destRect.x = (entityTransform->position.x) -  Game::camera.x +
+                         (entityTransform->width * entityTransform->scale)*0.41 - destRect.w;
+            destRect.y = (entityTransform->position.y) -  Game::camera.y +
+                         (entityTransform->height * entityTransform->scale)*0.54 - destRect.h;
+
+            if(sprite->frame != 3)
+            {
+                SDL_Point center = {8,48};
+                destRect.x = (entityTransform->position.x) -  Game::camera.x +
+                             (entityTransform->width * entityTransform->scale) * handLocation[sprite->frame].x/48 - destRect.w;
+                destRect.y = (entityTransform->position.y) -  Game::camera.y +
+                             (entityTransform->height * entityTransform->scale)* handLocation[sprite->frame].y/48 - destRect.h;
+                if(sprite->frame == 0)
+                {
+                    SDL_RenderCopyEx(Game::renderer,texture,&srcRect,&destRect,-30,&center,SDL_FLIP_NONE);
+                }
+                else if(sprite->frame == 1)
+                {
+                    SDL_RenderCopyEx(Game::renderer,texture,&srcRect,&destRect,90,&center,SDL_FLIP_NONE);
+                }
+                else if(sprite->frame == 2)
+                {
+                    SDL_RenderCopyEx(Game::renderer,texture,&srcRect,&destRect,60,&center,SDL_FLIP_NONE);
+                }
+            }
+        }
+    }
 private:
     std::string name = "Standard weapon ";
     int damage = 0;
     TransformComponent* entityTransform;
     SpriteComponent* sprite;
-    SDL_Texture *texture;
+
     Uint32 reloadTime = 400;
     Manager* manager;
 

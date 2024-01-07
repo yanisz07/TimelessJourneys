@@ -29,6 +29,7 @@ public:
     //int animIndex = 0; //update x index in the sprites sheet
     std::map<std::string , Animation> animations; //stores animations
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
+    int frame;
 
     SpriteComponent() = default;
     SpriteComponent(std::string id)
@@ -50,18 +51,8 @@ public:
 
         for (auto it = actions.begin(); it != actions.end(); it++)
         {
-            //animations.emplace(it->first, Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName));
             animations[it->first] =  Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName);
         }
-
-        actions = (entity->manager.getAssetManager()->world.Characters["player"].Attacks["sword"].Actions);
-        Animation anim;
-        for (auto it = actions.begin(); it != actions.end(); it++)
-        {
-            anim = Animation(128, 0, 8, 100, "Enemy_Idle_Sprite");
-            //animations[it->first] = anim;
-        }
-        //animations["Attack_Down"] = Animation(48,0,4,100,"Player_Sprite_Attack_Down");
 
         if (type=="player")
         {
@@ -102,7 +93,10 @@ public:
         {
             if(animations[currentAction].repeat==-1)
             {
-                srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames); //update x index in the sprites sheet
+                frame = static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames);
+                srcRect.x = srcRect.w * frame; //update x index in the sprites sheet
+
+
                 if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
                 {
                     animations[currentAction].timer.start();
@@ -112,7 +106,8 @@ public:
             {
                 if (animations[currentAction].repeat!=0)
                 {
-                    srcRect.x = srcRect.w * static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames); //update x index in the sprites sheet
+                    frame = static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames);
+                    srcRect.x = srcRect.w * frame; //update x index in the sprites sheet
                     if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed-50)
                     {
                         animations[currentAction].timer.start();
