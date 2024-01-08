@@ -10,6 +10,15 @@ enum WeaponType {
     // Add more weapon types here as needed
 };
 
+enum ArmourType {
+    NO_ARMOUR,
+    HELMET,
+    CHESTPLATE,
+    LEGGINGS,
+    BOOTS,
+    // Add more weapon types here as needed
+};
+
 class GameObject
 {
 public:
