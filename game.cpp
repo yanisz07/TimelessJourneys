@@ -590,6 +590,9 @@ void Game::render()
         return; // Skip the rest of the rendering if the menu is open
     }
 
+    int screenWidth, screenHeight;
+    SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
         // Render all regular game objects when not in map view
@@ -606,6 +609,8 @@ void Game::render()
         player_health.draw();
 
     } else {
+
+
         for (auto& t : tiles) {
             auto& tileComponent = t->getComponent<TileComponent>();
             tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
