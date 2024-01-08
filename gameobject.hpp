@@ -3,6 +3,13 @@
 
 #include "game.hpp"
 
+enum WeaponType {
+    NO_WEAPON,
+    SWORD,
+    CANON,
+    // Add more weapon types here as needed
+};
+
 class GameObject
 {
 public:
@@ -12,14 +19,20 @@ public:
     void Update();
     void Render();
 
-private:
+    void EquipWeapon(WeaponType weapon);
+    void Attack();
 
+private:
     int xpos;
     int ypos;
 
     SDL_Texture* objTexture;
     SDL_Rect srcRect, destRect;
 
+    WeaponType equippedWeapon;
+    int weaponDamage;
+    int weaponDurability;
 };
 
 #endif // GAMEOBJECT_H
+
