@@ -77,6 +77,8 @@ add_executable(TimelessJourneys ${SOURCES}
     game_over.h
     ingame_menu.cpp
     ingame_menu.h
+    leggings.h leggings.cpp
+    boots.h boots.cpp
 
 )
 
