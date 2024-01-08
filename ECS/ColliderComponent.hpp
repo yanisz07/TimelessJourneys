@@ -91,6 +91,7 @@ public:
 
         tex = TextureManager::LoadTexture("/assets/ColTex.png");
         srcR = {0, 0, 32, 32 };
+
         destR = { collider.x, collider.y, collider.w, collider.h };
 
     }
@@ -99,9 +100,17 @@ public:
     {
         if(tag != "terrain" && tag != "player_attack")
         {
-            if (tag == "player" || tag == "enemy")
+            if (tag=="player")
             {
-                // fix collider for player and enemy
+                // fix collider for player
+                collider.x = static_cast<int>(transform->position.x+18*transform->scale);
+                collider.y = static_cast<int>(transform->position.y+13*transform->scale);
+                collider.w = 13 * transform->scale;
+                collider.h = 19 * transform->scale;
+            }
+            else if (tag == "enemy")
+            {
+                // fix collider for enemy
                 collider.x = static_cast<int>(transform->position.x)+35;
                 collider.y = static_cast<int>(transform->position.y)+80;
                 collider.w = transform->width * transform->scale-78;

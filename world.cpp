@@ -13,6 +13,11 @@ Action::Action()
     std::cout << "Action created" << std::endl;
 }
 
+Attack::Attack()
+{
+    std::cout << "Attack created" << std::endl;
+}
+
 Action::Action(nlohmann::json data, std::string sName)
 {
     y_0 = data["values"][0];
@@ -48,8 +53,33 @@ Character::Character(nlohmann::json data){
             Actions.emplace(aName,Action(actionData,sName));
         }
     }
+
+    for(int i=0; i<size(data["attacks"]);i++)
+    {
+        nlohmann::json attackData = data["attacks"][i];
+        std::string name = attackData["name"].get<std::string>();
+        Attacks.emplace(name,Attack(attackData));
+    }
     std::cout << "Character created" << std::endl;
 }
+
+Attack::Attack(nlohmann::json data)
+{
+    for(int i=0; i<size(data["sprites"]);i++)
+    {
+        nlohmann::json spriteData = data["sprites"][i];
+        std::string sName = spriteData["name"].get<std::string>();
+        Sprites.emplace(sName,Sprite(spriteData));
+
+        for(int i=0; i<size(spriteData["actions"]);i++)
+        {
+            nlohmann::json actionData = spriteData["actions"][i];
+            std::string aName = actionData["name"].get<std::string>();
+            Actions.emplace(aName,Action(actionData,sName));
+        }
+    }
+}
+
 int World::loadWorld(std::string path)
 {
     std::ifstream jsonFileStream(path);

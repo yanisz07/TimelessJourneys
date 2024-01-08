@@ -34,6 +34,8 @@ AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
 
+
+//Add characters
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
@@ -41,6 +43,8 @@ auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
+//End
+
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
@@ -143,6 +147,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Load game assets
     {
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
+    assets->AddTexture("projectile", "/assets/proj.png");
 
     //Load JSON data
     std::string path = "";
@@ -150,18 +155,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     path += root2;
     path += "/assets/World_1.json";
     assets->loadWorld(path);
-    std::cout << "Player textures added" << std::endl;
+    std::cout << "Character textures added" << std::endl;
     //End
-
-    assets->AddTexture("projectile", "/assets/proj.png");
 
     //Textures, map and fonts
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
-
-    assets->AddTexture("green_blob_hurt", "/assets/Green_Slime/Hurt.png");
-    assets->AddTexture("blue_blob_hurt", "/assets/Blue_Slime/Hurt.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -195,15 +195,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player and enemy
     {
-    player.addComponent<TransformComponent>(1400,1100,128,128,1);
+    player.setType("player");
+    player.addComponent<TransformComponent>(1400,1100,48,48,3,5);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addComponent<Stats>(true);
-    player.addComponent<WeaponComponent>(&manager);
+    //player.addComponent<WeaponComponent>(&manager);
+    player.addComponent<Sword>(&manager);
+    player.getComponent<Sword>().equip();
 
-    player.getComponent<WeaponComponent>().getTransformComponent();
     player.addGroup(Game::groupPlayers);
 
     std::cout << "Player created" << std::endl;
@@ -225,8 +227,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
-
     }
+
 
     //Create labels
     {
@@ -516,6 +518,8 @@ void Game::update()
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
 
+        //
+
         for (auto& p : EnemyProjectiles)
 
         {
@@ -552,6 +556,7 @@ void Game::update()
                     if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                     {
                         std::cout << "Projectile hit enemy" << std::endl;
+                        //p->getComponent<ProjectileComponent>().doDamage(e->getComponent<Stats>());
                         Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
                         e->getComponent<Stats>().set_hit(true);
                         e->getComponent<Stats>().set_type_hit(false);
@@ -587,11 +592,11 @@ void Game::update()
                     {
                         if(delay == 0)
                         {
-                            e->getComponent<SpriteComponent>().Play("Hurt");
+                            e->getComponent<SpriteComponent>().Play("Hurt", false, 1);
                         }
-                        if (delay <= 100)
+                        if (delay >= 100)
                         {
-                            if (delay <= 40)
+                            if (delay <= 140)
                             {
                                 if(!type)
                                 {
@@ -604,7 +609,7 @@ void Game::update()
                                     e->getComponent<TransformComponent>().position.y += direction.y*20;
                                 }
                             }
-                            else if (delay <= 80)
+                            else if (delay <= 180)
                             {
                                 if(!type)
                                 {
@@ -693,22 +698,22 @@ void Game::update()
         if (playerInvincible) {
             if (currentTime0 - playerInvincibleStartTime >= 0 && currentTime0 - playerInvincibleStartTime < 1000 && t==0)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=1;
             }
             else if (currentTime0 - playerInvincibleStartTime >= 1000 && currentTime0 - playerInvincibleStartTime < 2000 && t==1)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=2;
             }
             else if (currentTime0 - playerInvincibleStartTime >= 2000 && currentTime0 - playerInvincibleStartTime < 3000 && t==2)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=3;
             }
             else if (currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration && t==3)
             {
-                player.getComponent<SpriteComponent>().Play("Hurt",1);
+                //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 playerInvincible = false;
                 t=0;
             }
@@ -771,10 +776,10 @@ void Game::render()
         p->draw();
     }
 
-    for (auto& a : PlayerAttacks)
+    /*for (auto& a : PlayerAttacks)
     {
         a->draw();
-    }
+    }*/
 
     label.draw();
     enemy_health.draw();
