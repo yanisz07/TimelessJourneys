@@ -591,7 +591,9 @@ void Game::update()
                     }
                 }
             }
+
             //Enemy knockback
+
             if(e->getComponent<Stats>().is_hit())
             {
                 currentTime = SDL_GetTicks();
