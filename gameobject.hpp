@@ -16,7 +16,7 @@ enum ArmourType {
     CHESTPLATE,
     LEGGINGS,
     BOOTS,
-    // Add more weapon types here as needed
+    // Add more armour types here as needed
 };
 
 class GameObject
