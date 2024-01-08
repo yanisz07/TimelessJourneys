@@ -13,7 +13,8 @@ public:
     {
         melee = true;
         attack = "sword";
-        std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword.png").string();
+        damage = 5;
+        std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword2.png").string();
         texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
     }
 };

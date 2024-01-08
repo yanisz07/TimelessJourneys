@@ -398,6 +398,7 @@ void Game::update()
                     if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                     {
                         std::cout << "Projectile hit enemy" << std::endl;
+                        //p->getComponent<ProjectileComponent>().doDamage(e->getComponent<Stats>());
                         Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
                         e->getComponent<Stats>().set_hit(true);
                         e->getComponent<Stats>().set_type_hit(false);

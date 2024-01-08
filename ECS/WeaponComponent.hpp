@@ -14,6 +14,7 @@ public:
     std::string attack;
     bool melee;
     SDL_Texture *texture;
+    int damage = 0;
 
     WeaponComponent(Manager *man){
         timer.start();
@@ -53,9 +54,10 @@ public:
     {
         if (Game::event.type == SDL_KEYDOWN)
         {
-            switch(Game::event.key.keysym.sym)
+            switch(Game::event.key.keysym.scancode)
             {
-                case SDLK_a:
+                case
+                SDL_SCANCODE_Q:
                     if (melee){
                         melee=false;
                         std::cout << "Range" << std::endl;
@@ -70,9 +72,10 @@ public:
         }
         if (Game::event.type == SDL_KEYDOWN && timer.timedOut())
         {
-            switch(Game::event.key.keysym.sym)
+            switch(Game::event.key.keysym.scancode)
             {
-            case SDLK_z:
+            case
+                SDL_SCANCODE_W:
                 if(timer.timedOut())
                 {
                     if(!melee)
@@ -87,7 +90,7 @@ public:
                 }
                 break;
 
-            case SDLK_x:
+            case SDL_SCANCODE_X:
                 if (!melee)
                 {
                     roundAttack();
@@ -106,44 +109,44 @@ public:
         {
             if (entityTransform->y_direction == -1)
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)*0.5,entityTransform->position.y-50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)*0.5,entityTransform->position.y-50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
             else
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)*0.5,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)*0.5,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
         }
         if (entityTransform->y_direction == 0)
         {
             if (entityTransform->x_direction == -1)
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)*0.5),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)*0.5),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
             else
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale),entityTransform->position.y+(entityTransform->height*entityTransform->scale)*0.5),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale),entityTransform->position.y+(entityTransform->height*entityTransform->scale)*0.5),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
         }
         if (entityTransform->y_direction==1)
         {
             if (entityTransform->x_direction == 1)
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)+50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)+50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
             if (entityTransform->x_direction == -1)
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
         }
         if (entityTransform->y_direction==-1)
         {
             if (entityTransform->x_direction == 1)
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)+50,entityTransform->position.y-50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)+50,entityTransform->position.y-50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
             if (entityTransform->x_direction == -1)
             {
-                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y-50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true);
+                Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y-50),Vector2D(entityTransform->x_direction,entityTransform->y_direction),200,5,"projectile",true,damage);
             }
         }
         return 0;
@@ -157,13 +160,13 @@ public:
         Vector2D goRight = Vector2D(1,0);
 
         Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)*0.5,entityTransform->position.y-50),
-                                       goUp,200,5,"projectile",true);
+                                       goUp,200,5,"projectile",true,damage);
         Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale)*0.5,entityTransform->position.y+(entityTransform->height*entityTransform->scale)+50),
-                                       goDown,200,5,"projectile",true);
+                                       goDown,200,5,"projectile",true,damage);
         Game::assets->CreateProjectile(Vector2D(entityTransform->position.x-50,entityTransform->position.y+(entityTransform->height*entityTransform->scale)*0.5),
-                                       goLeft,200,5,"projectile",true);
+                                       goLeft,200,5,"projectile",true,damage);
         Game::assets->CreateProjectile(Vector2D(entityTransform->position.x+(entityTransform->width*entityTransform->scale),entityTransform->position.y+(entityTransform->height*entityTransform->scale)*0.5),
-                                       goRight,200,5,"projectile",true);
+                                       goRight,200,5,"projectile",true,damage);
         return 0;
     }
 
@@ -265,45 +268,38 @@ public:
     {
         if(sprite->currentAction == "Attack_Down")
         {
-            std::vector<SDL_Point> handLocation;
-            handLocation.push_back({29,27});
-            handLocation.push_back({29,27});
-            handLocation.push_back({20,26});
-            SDL_Rect destRect;
-            SDL_Rect srcRect = {0,0,380,870};
-            destRect.h = 48;
-            destRect.w = 32;
+            std::cout<< "Draw attack" << std::endl;
+            float handLocation[3][2] = {{20.0/48.0,26.0/48.0},{29.0/48.0,27.0/48.0},{29.0/48.0,27.0/48.0}};
+            //SDL_Rect srcRect = {0,0,380,870};
             entityTransform = &(entity->getComponent<TransformComponent>());
-            destRect.x = (entityTransform->position.x) -  Game::camera.x +
-                         (entityTransform->width * entityTransform->scale)*0.41 - destRect.w;
-            destRect.y = (entityTransform->position.y) -  Game::camera.y +
-                         (entityTransform->height * entityTransform->scale)*0.54 - destRect.h;
-
+            SDL_Rect destRect;
+            destRect.h = (1.0/4.0)*entityTransform->height*entityTransform->scale;
+            destRect.w = (2.0/3.0)*destRect.h;
             if(sprite->frame != 3)
             {
                 SDL_Point center = {8,48};
                 destRect.x = (entityTransform->position.x) -  Game::camera.x +
-                             (entityTransform->width * entityTransform->scale) * handLocation[sprite->frame].x/48 - destRect.w;
+                             (entityTransform->width * entityTransform->scale) * handLocation[sprite->frame][0]-destRect.w/2;
                 destRect.y = (entityTransform->position.y) -  Game::camera.y +
-                             (entityTransform->height * entityTransform->scale)* handLocation[sprite->frame].y/48 - destRect.h;
+                             (entityTransform->height * entityTransform->scale)* handLocation[sprite->frame][1]-destRect.h*0.95;
                 if(sprite->frame == 0)
                 {
-                    SDL_RenderCopyEx(Game::renderer,texture,&srcRect,&destRect,-30,&center,SDL_FLIP_NONE);
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,-30,&center,SDL_FLIP_NONE);
                 }
                 else if(sprite->frame == 1)
                 {
-                    SDL_RenderCopyEx(Game::renderer,texture,&srcRect,&destRect,90,&center,SDL_FLIP_NONE);
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,90,&center,SDL_FLIP_NONE);
                 }
                 else if(sprite->frame == 2)
                 {
-                    SDL_RenderCopyEx(Game::renderer,texture,&srcRect,&destRect,60,&center,SDL_FLIP_NONE);
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,60,&center,SDL_FLIP_NONE);
                 }
             }
         }
     }
 private:
     std::string name = "Standard weapon ";
-    int damage = 0;
+
     TransformComponent* entityTransform;
     SpriteComponent* sprite;
 
