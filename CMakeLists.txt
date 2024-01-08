@@ -71,15 +71,14 @@ set(SOURCES
     world.hpp world.cpp
     menu.h
     menu.cpp
-    ECS/sword.h)
-
-add_executable(TimelessJourneys ${SOURCES}
+    ECS/sword.h
     game_over.cpp
     game_over.h
     ingame_menu.cpp
     ingame_menu.h
+    ECS/EnemyMovement.h)
 
-)
+add_executable(TimelessJourneys ${SOURCES})
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )

@@ -211,8 +211,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     std::cout << "Player created" << std::endl;
 
     enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<EnemyMovement>(250,100,800,60,&playerTransform); //To be changed later on
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
@@ -482,10 +484,11 @@ void Game::update()
 {
     if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen )
     {
-        Uint32 currentTime0 = SDL_GetTicks();
         // Get player/enemy info.
         SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
         Vector2D playerPos = player.getComponent<TransformComponent>().position;
+
+        SDL_Rect enemyCol = enemy.getComponent<ColliderComponent>().collider;
 
         std::stringstream ssp; //hold variables and turn them into strings
         ssp << "Player position: " << playerPos;
@@ -507,6 +510,15 @@ void Game::update()
                 std::cout << "Hit wall" << std::endl;
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
             }
+
+            if (enemy.getComponent<EnemyMovement>().collisionCooldown > 0) continue;
+
+            SDL_Rect e_cCol = c->getComponent<ColliderComponent>().collider;
+            if(Collision::AABB(e_cCol, enemyCol))
+            {
+                std::cout << "Enemy hit wall" << std::endl;
+                enemy.getComponent<EnemyMovement>().onCollision(); // the enemy doesn't move
+            }
         }
         //End
 
@@ -514,14 +526,12 @@ void Game::update()
 
         if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
         {
-            std::cout << "Hit wall" << std::endl;
+            std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
 
-        //
 
         for (auto& p : EnemyProjectiles)
-
         {
             if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
             {
@@ -539,109 +549,109 @@ void Game::update()
         for (auto& e : enemies)
         {
             if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
-                {
-                    if (!playerInvincible) {
-                        std::cout << "Player Hit!" << std::endl;
-                        std::cout << "Damage done" << std::endl;
+            {
+                if (!playerInvincible) {
+                    std::cout << "Player Hit!" << std::endl;
+                    std::cout << "Damage done" << std::endl;
 
-                        player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-                        Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
+                    player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+                    Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
 
-                        playerInvincible = true;
-                        playerInvincibleStartTime = currentTime0;
-                    }
+                    playerInvincible = true;
+                    playerInvincibleStartTime = currentTime;
                 }
-                for (auto& p : PlayerProjectiles)
+            }
+            for (auto& p : PlayerProjectiles)
+            {
+                if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                 {
-                    if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
+                    std::cout << "Projectile hit enemy" << std::endl;
+                    //p->getComponent<ProjectileComponent>().doDamage(e->getComponent<Stats>());
+                    Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
+                    e->getComponent<Stats>().set_hit(true);
+                    e->getComponent<Stats>().set_type_hit(false);
+                    e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
+                    e->getComponent<Stats>().set_hit_direction(p->getComponent<TransformComponent>().velocity);
+                    p->destroy();
+                }
+            }
+            for (auto& a : PlayerAttacks)
+            {
+                if(Collision::CheckCollision(a->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
+                {
+                    if (!e->getComponent<Stats>().is_hit())
                     {
-                        std::cout << "Projectile hit enemy" << std::endl;
-                        //p->getComponent<ProjectileComponent>().doDamage(e->getComponent<Stats>());
+                        std::cout << "Melee hit enemy" << std::endl;
                         Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
                         e->getComponent<Stats>().set_hit(true);
-                        e->getComponent<Stats>().set_type_hit(false);
+                        e->getComponent<Stats>().set_type_hit(true);
                         e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
-                        e->getComponent<Stats>().set_hit_direction(p->getComponent<TransformComponent>().velocity);
-                        p->destroy();
+                        Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
+                        e->getComponent<Stats>().set_hit_direction(direction);
                     }
                 }
-                for (auto& a : PlayerAttacks)
+            }
+            //Enemy knockback
+            if(e->getComponent<Stats>().is_hit())
+            {
+                currentTime = SDL_GetTicks();
+                Vector2D direction = e->getComponent<Stats>().direction_hit();
+                Uint32 delay = currentTime - e->getComponent<Stats>().time_hit();
+                bool type = e->getComponent<Stats>().type_hit();
+                if (delay <= 200)
                 {
-                    if(Collision::CheckCollision(a->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
+                    if(delay == 0)
                     {
-                        if (!e->getComponent<Stats>().is_hit())
-                            {
-                                std::cout << "Melee hit enemy" << std::endl;
-                                Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
-                                e->getComponent<Stats>().set_hit(true);
-                                e->getComponent<Stats>().set_type_hit(true);
-                                e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
-                                Vector2D direction = Vector2D(a->getComponent<TransformComponent>().x_direction,a->getComponent<TransformComponent>().y_direction);
-                                e->getComponent<Stats>().set_hit_direction(direction);
-                            }
+                        e->getComponent<SpriteComponent>().Play("Hurt", false, 1);
                     }
-                }
-                //Enemy knockback
-                if(e->getComponent<Stats>().is_hit())
-                {
-                    currentTime = SDL_GetTicks();
-                    Vector2D direction = e->getComponent<Stats>().direction_hit();
-                    Uint32 delay = currentTime - e->getComponent<Stats>().time_hit();
-                    bool type = e->getComponent<Stats>().type_hit();
-                    if (delay <= 200)
+                    if (delay >= 100)
                     {
-                        if(delay == 0)
+                        if (delay <= 140)
                         {
-                            e->getComponent<SpriteComponent>().Play("Hurt", false, 1);
-                        }
-                        if (delay >= 100)
-                        {
-                            if (delay <= 140)
+                            if(!type)
                             {
-                                if(!type)
-                                {
-                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
-                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
-                                }
-                                else
-                                {
-                                    e->getComponent<TransformComponent>().position.x += direction.x*20;
-                                    e->getComponent<TransformComponent>().position.y += direction.y*20;
-                                }
-                            }
-                            else if (delay <= 180)
-                            {
-                                if(!type)
-                                {
-                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
-                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
-                                }
-                                else
-                                {
-                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
-                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
-                                }
+                                e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                e->getComponent<TransformComponent>().position.y += direction.y*10;
                             }
                             else
                             {
-                                if(!type)
-                                {
-                                    e->getComponent<TransformComponent>().position.x += direction.x*2;
-                                    e->getComponent<TransformComponent>().position.y += direction.y*2;
-                                }
-                                else
-                                {
-                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
-                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
-                                }
+                                e->getComponent<TransformComponent>().position.x += direction.x*20;
+                                e->getComponent<TransformComponent>().position.y += direction.y*20;
+                            }
+                        }
+                        else if (delay <= 180)
+                        {
+                            if(!type)
+                            {
+                                e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                e->getComponent<TransformComponent>().position.y += direction.y*5;
+                            }
+                            else
+                            {
+                                e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                e->getComponent<TransformComponent>().position.y += direction.y*10;
+                            }
+                        }
+                        else
+                        {
+                            if(!type)
+                            {
+                                e->getComponent<TransformComponent>().position.x += direction.x*2;
+                                e->getComponent<TransformComponent>().position.y += direction.y*2;
+                            }
+                            else
+                            {
+                                e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                e->getComponent<TransformComponent>().position.y += direction.y*5;
                             }
                         }
                     }
-                    else
-                    {
-                        e->getComponent<Stats>().set_hit(false);
-                    }
                 }
+                else
+                {
+                    e->getComponent<Stats>().set_hit(false);
+                }
+            }
         }
         //End
 
@@ -695,36 +705,35 @@ void Game::update()
         }
 
         //check invincibility duration and change status
-        if (playerInvincible) {
-            if (currentTime0 - playerInvincibleStartTime >= 0 && currentTime0 - playerInvincibleStartTime < 1000 && t==0)
+        if (playerInvincible)
+        {
+            if (currentTime - playerInvincibleStartTime >= 0 && currentTime - playerInvincibleStartTime < 1000 && t==0)
             {
                 //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=1;
             }
-            else if (currentTime0 - playerInvincibleStartTime >= 1000 && currentTime0 - playerInvincibleStartTime < 2000 && t==1)
+            else if (currentTime - playerInvincibleStartTime >= 1000 && currentTime - playerInvincibleStartTime < 2000 && t==1)
             {
                 //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=2;
             }
-            else if (currentTime0 - playerInvincibleStartTime >= 2000 && currentTime0 - playerInvincibleStartTime < 3000 && t==2)
+            else if (currentTime - playerInvincibleStartTime >= 2000 && currentTime - playerInvincibleStartTime < 3000 && t==2)
             {
                 //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 t=3;
             }
-            else if (currentTime0 - playerInvincibleStartTime >= playerInvincibleDuration && t==3)
+            else if (currentTime - playerInvincibleStartTime >= playerInvincibleDuration && t==3)
             {
                 //player.getComponent<SpriteComponent>().Play("Hurt",1);
                 playerInvincible = false;
                 t=0;
             }
         }
-    }
-    int playerHealth = player.getComponent<Stats>().get_health();
-    std::stringstream ssh;
-    ssh << "Health: " << playerHealth;
-    player_health.getComponent<UILabel>().SetLabelText(ssh.str(), "arial");
-    if (playerHealth <= 0) {
-        isGameOverOpen = true;
+        int playerHealth = player.getComponent<Stats>().get_health();
+        if (playerHealth <= 0)
+        {
+            isGameOverOpen = true;
+        }
     }
 }
 
