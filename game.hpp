@@ -76,6 +76,8 @@ private:
     bool isSettingsOpen;
     bool isGameOverOpen;
     SDL_Point mousePosition;
+    SDL_Rect retryButtonRect;
+    SDL_Rect exitButtonRect;
 };
 
 #endif // GAME_H

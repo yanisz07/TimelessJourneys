@@ -405,34 +405,32 @@ void Game::handleEvents()
 
 
         else if (isGameOverOpen) {
-            // Get the mouse coordinates and screen size
             int x, y ,screenWidth, screenHeight;
             SDL_GetMouseState(&x, &y);
             SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
-            // Menu button dimensions
             int buttonWidth = 150;
             int buttonHeight = 40;
-            // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
-            int retry_centerY = (screenHeight - 5 * buttonHeight - 20) / 2 + 100;
-            int exit_centerY = ((screenHeight - 5 * buttonHeight - 20) / 2 + 100) + buttonHeight + 20;
+            int centerY = (screenHeight - 5 * buttonHeight - 20) / 2 + 100;
+            SDL_Rect retryButtonRect = {centerX, centerY, buttonWidth, buttonHeight};
+            SDL_Rect exitButtonRect = {centerX, centerY + buttonHeight + 20, buttonWidth, buttonHeight};
 
-            //if click is within retry button boundary:
-            if (x > centerX && x < centerX + buttonWidth &&
-                y > retry_centerY && y < retry_centerY + buttonHeight) {
+
+            if (x > retryButtonRect.x && x < retryButtonRect.x + retryButtonRect.w &&
+                y > retryButtonRect.y && y < retryButtonRect.y + retryButtonRect.h) {
+                // Reset game state to start again
+                player.getComponent<Stats>().set_health(10);
+                player.getComponent<TransformComponent>().position = Vector2D(1400, 1100);
                 isGameOverOpen = false;
-                isMenuOpen = true;
-
             }
 
-            //if click is within Exit button boundary:
-            if (x > centerX && x < centerX + buttonWidth &&
-                y > exit_centerY && y < exit_centerY + buttonHeight) {
-
-                isRunning = false;
+            // Check if click is within exit button boundary
+            if (x > exitButtonRect.x && x < exitButtonRect.x + exitButtonRect.w &&
+                y > exitButtonRect.y && y < exitButtonRect.y + exitButtonRect.h) {
+                isRunning = false; // Exit the game
             }
-
         }
+
         break;
 
 
