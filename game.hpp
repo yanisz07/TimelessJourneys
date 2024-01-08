@@ -48,6 +48,7 @@ public:
     static bool isRunning;
     bool isFullscreen;
     bool isMusic;
+    static bool DisplayMap;
     static SDL_Rect camera;
     int screen_width;
     int screen_height;

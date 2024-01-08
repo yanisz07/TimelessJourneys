@@ -33,6 +33,8 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
+bool Game::DisplayMap = false;
+
 
 
 //Add characters
@@ -706,6 +708,23 @@ void Game::update()
             camera.y = camera.h;
         }
 
+        if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+            case SDLK_l:
+                    if (!DisplayMap) {
+                        DisplayMap = true;
+
+                    }
+                    else {
+                        DisplayMap = false;
+                    }
+                    break;
+            default:
+                    break;
+
+            }
+        }
+
         //check invincibility duration and change status
         if (playerInvincible)
         {
@@ -741,6 +760,7 @@ void Game::update()
 
 void Game::render()
 {
+    // Clear the renderer with the current drawing color
     SDL_RenderClear(renderer);
     if (isGameOverOpen) {
         Game_Over::renderGameOver(renderer, isGameOverOpen, mousePosition);
@@ -756,51 +776,63 @@ void Game::render()
     }
     else{
 
+    int screenWidth, screenHeight;
+    SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
 
-    for (auto& t : tiles)
-    {
-        t->draw();
+    // If the DisplayMap flag is true, render only the tiles with the correct scaling
+    if (!DisplayMap) {
+        // Render all regular game objects when not in map view
+        for (auto& t : tiles) { t->draw(); }
+        for (auto& c : MapColliders) { c->draw(); }
+        for (auto& p : players) { p->draw(); }
+        for (auto& e : enemies) { e->draw(); }
+        for (auto& pp : PlayerProjectiles) { pp->draw(); }
+        for (auto& ep : EnemyProjectiles) { ep->draw(); }
+
+        // Render the UI elements over the game objects
+        label.draw();
+        enemy_health.draw();
+        player_health.draw();
+
+        TestCol.draw();
+
+    } else {
+
+        for (auto& t : tiles) {
+            auto& tileComponent = t->getComponent<TileComponent>();
+            tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
+            t->draw();
+        }
+
+        // Gets the scaled position of the player from the TransformComponent.
+        Vector2D playerPosition = player.getComponent<TransformComponent>().position;
+
+        // Adjust player's position for the scaling factor.
+        Vector2D scaledPlayerPosition;
+        scaledPlayerPosition.x = playerPosition.x / 3; // Assuming 'scale' is your scaling factor (3 in this case).
+        scaledPlayerPosition.y = playerPosition.y / 3;
+
+        // Set the drawing color to red for the dot.
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red.
+
+        // Define the size of the dot, considering the scale.
+        const int dotSize = 10; // You might want to scale this size as well.
+
+        // Calculate the rectangle where the dot will be drawn, centering it around the scaled player's position.
+        SDL_Rect dotRect = {
+            static_cast<int>(scaledPlayerPosition.x) - dotSize / 2,
+            static_cast<int>(scaledPlayerPosition.y) - dotSize / 2,
+            dotSize,
+            dotSize
+        };
+
+        SDL_RenderFillRect(renderer, &dotRect);
     }
-
-    for (auto& c : MapColliders)
-    {
-        c->draw();
-    }
-
-    for (auto& p : players)
-    {
-        p->draw();
-    }
-
-    for (auto& e : enemies)
-    {
-        e->draw();
-    }
-
-    for (auto& p : PlayerProjectiles)
-    {
-        p->draw();
-    }
-
-    for (auto& p : EnemyProjectiles)
-    {
-        p->draw();
-    }
-
-    /*for (auto& a : PlayerAttacks)
-    {
-        a->draw();
-    }*/
-
-    label.draw();
-    enemy_health.draw();
-    player_health.draw();
-
-    TestCol.draw();
 
     SDL_RenderPresent(renderer);
     }
 }
+
 void Game::clean()
 {
     if (bgMusic != nullptr) {
