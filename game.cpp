@@ -591,13 +591,7 @@ void Game::render()
     }
 
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
-    if (DisplayMap) {
-        for (auto& t : tiles) {
-            auto& tileComponent = t->getComponent<TileComponent>();
-            tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
-            t->draw();
-        }
-    } else {
+    if (!DisplayMap) {
         // Render all regular game objects when not in map view
         for (auto& t : tiles) { t->draw(); }
         for (auto& c : MapColliders) { c->draw(); }
@@ -610,6 +604,37 @@ void Game::render()
         label.draw();
         enemy_health.draw();
         player_health.draw();
+
+    } else {
+        for (auto& t : tiles) {
+            auto& tileComponent = t->getComponent<TileComponent>();
+            tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
+            t->draw();
+        }
+
+        // Gets the scaled position of the player from the TransformComponent.
+        Vector2D playerPosition = player.getComponent<TransformComponent>().position;
+
+        // Adjust player's position for the scaling factor.
+        Vector2D scaledPlayerPosition;
+        scaledPlayerPosition.x = playerPosition.x / 3; // Assuming 'scale' is your scaling factor (3 in this case).
+        scaledPlayerPosition.y = playerPosition.y / 3;
+
+        // Set the drawing color to red for the dot.
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red.
+
+        // Define the size of the dot, considering the scale.
+        const int dotSize = 10; // You might want to scale this size as well.
+
+        // Calculate the rectangle where the dot will be drawn, centering it around the scaled player's position.
+        SDL_Rect dotRect = {
+            static_cast<int>(scaledPlayerPosition.x) - dotSize / 2,
+            static_cast<int>(scaledPlayerPosition.y) - dotSize / 2,
+            dotSize,
+            dotSize
+        };
+
+        SDL_RenderFillRect(renderer, &dotRect);
     }
 
     // Present the renderer's contents to the screen after all rendering is done
