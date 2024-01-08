@@ -10,6 +10,8 @@
 #include "../world.hpp"
 #include "../timer.hpp"
 
+class WeaponComponent;
+
 class SpriteComponent : public Component
 {
 private:
@@ -20,47 +22,55 @@ private:
 
     Timer timer;
 
-
     bool animated = false;
-    int frames = 0;
-    int speed = 100; //delay between frames in milliseconds
 
 public:
     std::string currentAction;
-    int animIndex = 0; //update y index in the sprites sheet
+    //int animIndex = 0; //update x index in the sprites sheet
     std::map<std::string , Animation> animations; //stores animations
-
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
+    int frame;
 
     SpriteComponent() = default;
     SpriteComponent(std::string id)
     {
         setTex(id);
-        timer.start();
     }
 
     SpriteComponent( bool isAnimated, std::string type)
     {
         animated = isAnimated;
         this->type = type;
-        timer.start();
     }
 
     void setActions()
     {
+        //type = entity->type;
         std::map<std::string, Action> actions;
         actions = (entity->manager.getAssetManager()->world.Characters[type].Actions);
 
         for (auto it = actions.begin(); it != actions.end(); it++)
         {
-            animations.emplace(it->first, Animation(it->second.y_0, it->second.number_frames, 100, it->second.spriteName));
+            animations[it->first] =  Animation(it->second.y_0, 0, it->second.number_frames, 100, it->second.spriteName);
         }
-        Play("Idle");
+
+        if (type=="player")
+        {
+            Play("Idle_Down");
+        }
+        else
+        {
+            Play("Idle");
+        }
+    }
+
+    void addAnimation(std::string animName,Animation animation)
+    {
+        animations[animName] = animation;
     }
 
     ~SpriteComponent()
-    {
-    }
+    {}
 
     void setTex(std::string id)
     {
@@ -80,46 +90,76 @@ public:
     void update() override
     {
         if(animated)
-        {   
-            srcRect.x = srcRect.w * static_cast<int>((timer.getTimeDelta() / speed) % frames); //update x index in the sprites sheet
-            if(timer.getTimeDelta() > frames*speed)
+        {
+            if(animations[currentAction].repeat==-1)
             {
-                timer.partial();
-            }
-            Play("Idle");
-        }
+                frame = static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames);
+                srcRect.x = srcRect.w * frame; //update x index in the sprites sheet
 
-        srcRect.y = animIndex; // * transform->height; //update y index in the sprites sheet
+
+                if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
+                {
+                    animations[currentAction].timer.start();
+                }
+            }
+            else
+            {
+                if (animations[currentAction].repeat!=0)
+                {
+                    frame = static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames);
+                    srcRect.x = srcRect.w * frame; //update x index in the sprites sheet
+                    if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed-50)
+                    {
+                        animations[currentAction].timer.start();
+                        animations[currentAction].repeat-=1;
+                    }
+                }
+                else
+                {
+                    if (type=="player")
+                    {
+                        Play("Idle_Down");
+                    }
+                    else
+                    {
+                        Play("Idle");
+                    }
+                }
+            }
+        }
 
         destRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
         destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
         destRect.w = transform->width * transform->scale;
         destRect.h = transform->height * transform->scale;
-
     }
 
     void draw() override
     {
-        SDL_Rect rectangle{0,0,128,128};
+        //SDL_Rect rectangle{0,0,128,128};
         TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
     }
 
-    void Play(const char* animName, const int repeat = 1)
+    void Play(const char* animName, bool flip = false, const int repeat = -1, int speed = 100)
     {
-        if (timer.timedOut() && currentAction != animName || strcmp( animName, "Idle") != 0)
+        if (flip)
         {
-            currentAction = animName;
-            frames = animations[animName].frames;
-            animIndex = animations[animName].index;
-            speed = animations[animName].speed;
-            setTex(animations[animName].spriteName);
-            timer.partial();
-            int w, h;
-            SDL_QueryTexture(texture,NULL,NULL,&w,&h);
-            srcRect.h = h - animIndex;
-            srcRect.w = w/frames;
-            timer.setTimeOut(speed*frames*repeat);
+            spriteFlip = SDL_FLIP_HORIZONTAL;
         }
+        else
+        {
+            spriteFlip = SDL_FLIP_NONE;
+        }
+        currentAction = animName;
+        //animIndex = animations[animName].index;
+
+        setTex(animations[animName].spriteName);
+        srcRect.x = srcRect.y = 0;
+        srcRect.h = animations[animName].wh;
+        srcRect.w = animations[animName].wh;
+        animations[currentAction].repeat = repeat;
+        animations[currentAction].speed = speed;
+        animations[currentAction].timer.start();
     }
 };
 

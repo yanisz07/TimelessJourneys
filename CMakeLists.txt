@@ -70,7 +70,8 @@ set(SOURCES
     ECS/weaponComponent.hpp
     world.hpp world.cpp
     menu.h
-    menu.cpp)
+    menu.cpp
+    ECS/sword.h)
 
 add_executable(TimelessJourneys ${SOURCES}
     game_over.cpp

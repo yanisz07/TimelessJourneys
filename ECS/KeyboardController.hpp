@@ -34,41 +34,85 @@ public:
                 pressed_up = true;
                 transform->velocity.y = -1;
 
-                if(entity->getComponent<SpriteComponent>().currentAction != "Run")
-                {
-                    sprite->Play("Run");
-                }
-
                 //update direction
                 transform->y_direction = -1;
-                if (pressed_right) {transform->x_direction = 1;}
-                else if (pressed_left) {transform->x_direction = -1;}
-                else {transform->x_direction = 0;}
+                if (pressed_right)
+                {
+                    transform->x_direction = 1;
+                    if(sprite->currentAction != "Run_Right")
+                    {
+                        sprite->Play("Run_Right");
+                    }
+                }
+                else if (pressed_left)
+                {
+                    transform->x_direction = -1;
+                    if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
+                    {
+                        sprite->Play("Run_Right",true);
+                    }
+                    if(sprite->currentAction != "Run_Right")
+                    {
+                        sprite->Play("Run_Right",true);
+                    }
+                }
+                else
+                {
+                    transform->x_direction = 0;
+                    if(sprite->currentAction != "Run_Up")
+                    {
+                        sprite->Play("Run_Up");
+                    }
+                }
                 break;
             case SDLK_DOWN:
                 pressed_down = true;
                 transform->velocity.y = 1;
 
-                if(entity->getComponent<SpriteComponent>().currentAction != "Run")
-                {
-                    sprite->Play("Run");
-                }
-
                 //update direction
                 transform->y_direction = 1;
-                if (pressed_right) {transform->x_direction = 1;}
-                else if (pressed_left) {transform->x_direction = -1;}
-                else {transform->x_direction = 0;}
+                if (pressed_right)
+                {
+                    transform->x_direction = 1;
+                    if(sprite->currentAction != "Run_Right")
+                    {
+                        sprite->Play("Run_Right");
+                    }
+                }
+
+                else if (pressed_left)
+                {
+                    transform->x_direction = -1;
+                    if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
+                    {
+                        sprite->Play("Run_Right",true);
+                    }
+                    if(sprite->currentAction != "Run_Right")
+                    {
+                        sprite->Play("Run_Right",true);
+                    }
+                }
+
+                else
+                {
+                    transform->x_direction = 0;
+                    if(sprite->currentAction != "Run_Down")
+                    {
+                        sprite->Play("Run_Down");
+                    }
+                }
                 break;
             case SDLK_LEFT:
                 pressed_left = true;
                 transform->velocity.x = -1;
-                if(entity->getComponent<SpriteComponent>().currentAction != "Run")
+                if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
                 {
-                    sprite->Play("Run");
+                    sprite->Play("Run_Right",true);
                 }
-                sprite->spriteFlip = SDL_FLIP_HORIZONTAL; //flips on the x axis
-                //update direction
+                if(sprite->currentAction != "Run_Right")
+                {
+                    sprite->Play("Run_Right",true);
+                }
                 transform->x_direction = -1;
                 if (pressed_up) {transform->y_direction = -1;}
                 else if (pressed_down) {transform->y_direction = 1;}
@@ -78,9 +122,9 @@ public:
                 pressed_right = true;
                 transform->velocity.x = 1;
 
-                if(entity->getComponent<SpriteComponent>().currentAction != "Run")
+                if(sprite->currentAction != "Run_Right")
                 {
-                    sprite->Play("Run");
+                    sprite->Play("Run_Right");
                 }
 
                 //update direction
@@ -101,34 +145,57 @@ public:
                 pressed_up = false;
                 transform->velocity.y = 0;
                 //change direction
-                if (!pressed_right && !pressed_left) {transform->y_direction=-1;}
-                else {transform->y_direction =0;}
-                sprite->Play("Idle");
+                if (!pressed_right && !pressed_left)
+                {
+                    transform->y_direction=-1;
+                    sprite->Play("Idle_Up");
+                }
+                else
+                {
+                    transform->y_direction =0;
+                }
                 break;
             case SDLK_DOWN:
                 pressed_down = false;
                 transform->velocity.y = 0;
                 //change direction
-                if (!pressed_right && !pressed_left) {transform->y_direction=1;}
-                else {transform->y_direction =0;}
-                sprite->Play("Idle");
+                if (!pressed_right && !pressed_left)
+                {
+                    transform->y_direction=1;
+                    sprite->Play("Idle_Down");
+                }
+                else
+                {
+                    transform->y_direction =0;
+                }
                 break;
             case SDLK_LEFT:
                 pressed_left = false;
                 transform->velocity.x = 0;
                 //change direction
-                if (!pressed_up && !pressed_down) {transform->x_direction =-1;}
-                else {transform->x_direction =0;}
-                sprite->Play("Idle");
-                sprite->spriteFlip = SDL_FLIP_NONE; //resets horizontal flipping
+                if (!pressed_up && !pressed_down)
+                {
+                    transform->x_direction =-1;
+                    sprite->Play("Idle_Right",true);
+                }
+                else
+                {
+                    transform->x_direction =0;
+                }
                 break;
             case SDLK_RIGHT:
                 pressed_right = false;
                 transform->velocity.x = 0;
                 //change direction
-                if (!pressed_up && !pressed_down) {transform->x_direction =1;}
-                else {transform->x_direction =0;}
-                sprite->Play("Idle");
+                if (!pressed_up && !pressed_down)
+                {
+                    transform->x_direction =1;
+                    sprite->Play("Idle_Right");
+                }
+                else
+                {
+                    transform->x_direction =0;
+                }
                 break;
 
             default:

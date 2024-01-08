@@ -48,6 +48,16 @@ public:
         scale = sc;
     }
 
+    TransformComponent(double x, double y, int h, int w, int sc, int speed)
+    {
+        position.x = x;
+        position.y = y;
+        height = h;
+        width = w;
+        scale = sc;
+        this->speed = speed;
+    }
+
     void set_directions (int x, int y)
     {
         x_direction=x;
