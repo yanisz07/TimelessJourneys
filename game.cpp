@@ -419,7 +419,7 @@ void Game::handleEvents()
             if (x > retryButtonRect.x && x < retryButtonRect.x + retryButtonRect.w &&
                 y > retryButtonRect.y && y < retryButtonRect.y + retryButtonRect.h) {
                 // Reset game state to start again
-                player.getComponent<Stats>().set_health(10);
+                player.getComponent<Stats>().set_health(50);
                 player.getComponent<TransformComponent>().position = Vector2D(1400, 1100);
                 isGameOverOpen = false;
             }
