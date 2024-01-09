@@ -1,8 +1,9 @@
 #ifndef SWORD_H
 #define SWORD_H
 #include <filesystem>
-#include "Components.hpp"
+//#include "Components.hpp"
 #include "../game.hpp"
+#include "WeaponComponent.hpp"
 
 
 class Sword : public WeaponComponent

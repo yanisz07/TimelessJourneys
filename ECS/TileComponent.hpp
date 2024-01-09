@@ -5,6 +5,7 @@
 #include "../TextureManager.hpp"
 #include "SDL.h"
 #include "../Vector2D.hpp"
+#include "../AssetManager.hpp"
 
 class TileComponent : public Component
 {

@@ -1,7 +1,9 @@
 #ifndef STATS_H
 #define STATS_H
 #include "ECS.hpp"
-#include "Components.hpp"
+#include <SDL.h>
+#include "../Vector2D.hpp"
+//#include "Components.hpp"
 
 class Stats : public Component
 {

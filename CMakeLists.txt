@@ -76,7 +76,14 @@ set(SOURCES
     game_over.h
     ingame_menu.cpp
     ingame_menu.h
-    ECS/EnemyMovement.h)
+    ECS/EnemyMovement.h
+    ECS/Animation.cpp
+    ECS/ColliderComponent.cpp
+    ECS/KeyboardController.cpp
+    ECS/ProjectileComponent.cpp
+    ECS/SpriteComponent.cpp
+    ECS/WeaponComponent.cpp
+    ECS/EnemyMovement.cpp)
 
 add_executable(TimelessJourneys ${SOURCES})
 

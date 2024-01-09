@@ -1,7 +1,7 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-#include "Components.hpp"
+//#include "Components.hpp"
 #include "../Vector2D.hpp"
 
 class TransformComponent : public Component

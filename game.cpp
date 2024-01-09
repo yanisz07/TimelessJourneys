@@ -170,7 +170,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddFont("arial", fontPath.c_str(),16);
 
-    map = new Map("terrain", 4, 32);
+    map = new Map("terrain", 4, 32, &manager);
 
     //ecs implementation
 
@@ -203,6 +203,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
+
     player.addComponent<Stats>(true);
     //player.addComponent<WeaponComponent>(&manager);
     player.addComponent<Sword>(&manager);

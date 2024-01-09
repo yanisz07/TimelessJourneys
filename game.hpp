@@ -20,7 +20,6 @@ extern std::filesystem::path projectDir;
 #define ROOT_DIR ""
 #endif
 
-
 class ColliderComponent;
 
 class AssetManager;
