@@ -4,57 +4,144 @@
         "name": "player",
         "sprites": [
           {
-            "name" : "Player_Idle_Sprite",
-            "path": "/assets/Green_Slime/Idle.png",
+            "name" : "Player_Sprite_Idle_Down",
+            "path": "/assets/player_game_idle_down.png",
             "actions": [
               {
-                "name": "Idle",
+                "name": "Idle_Down",
                 "values": [
-                  60,
-                  8
+                  48,
+                  6
                 ]
               }
             ]
           },
           {
-            "name" : "Player_Attack_1_Sprite",
-            "path": "/assets/Green_Slime/Attack_1.png",
+            "name" : "Player_Sprite_Idle_Right",
+            "path" : "/assets/player_game_idle_right.png",
             "actions": [
               {
-                "name": "Attack_1",
+                "name": "Idle_Right",
                 "values": [
-                  60,
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Idle_Up",
+            "path" : "/assets/player_game_idle_up.png",
+            "actions": [
+              {
+                "name": "Idle_Up",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Run_Down",
+            "path": "/assets/player_game_run_down.png",
+            "actions": [
+              {
+                "name": "Run_Down",
+                "values": [
+                  48,
                   4
                 ]
               }
             ]
           },
           {
-            "name" : "Player_Run_Sprite",
-            "path" : "/assets/Green_Slime/Run.png",
+            "name" : "Player_Sprite_Run_Right",
+            "path" : "/assets/player_game_run_right.png",
             "actions": [
               {
-                "name": "Run",
+                "name": "Run_Right",
                 "values": [
-                  60,
-                  7
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_Up",
+            "path": "/assets/player_game_run_up.png",
+            "actions": [
+              {
+                "name": "Run_Up",
+                "values": [
+                  48,
+                  6
                 ]
               }
             ]
           }
+        ],
+        "attacks" : [
+          {
+            "name" : "sword",
+            "sprites" : [
+          {
+            "name" : "Player_Sprite_Attack_Down",
+            "path": "/assets/player_game_attack_down.png",
+            "actions": [
+              {
+                "name": "Attack_Down",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Attack_Right",
+            "path": "/assets/player_game_attack_right.png",
+            "actions": [
+              {
+                "name": "Attack_Right",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Attack_Up",
+            "path": "/assets/player_game_attack_up.png",
+            "actions": [
+              {
+                "name": "Attack_Up",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          }
+        ]
+        }
         ]
       },
       {
         "name": "enemy",
         "sprites": [
           {
-            "name" : "Enemy_Idel_Sprite",
+            "name" : "Enemy_Idle_Sprite",
             "path": "/assets/Blue_Slime/Idle.png",
             "actions": [
               {
                 "name": "Idle",
                 "values": [
-                  60,
+                  128,
                   8
                 ]
               }
@@ -67,8 +154,21 @@
               {
                 "name": "Attack_1",
                 "values": [
-                  60,
+                  128,
                   4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Hurt_Sprite",
+            "path": "/assets/Blue_Slime/Hurt.png",
+            "actions": [
+              {
+                "name": "Hurt",
+                "values": [
+                  128,
+                  6
                 ]
               }
             ]

@@ -1,10 +1,13 @@
 #ifndef COLLIDERCOMPONENT_H
 #define COLLIDERCOMPONENT_H
 
+#include "ECS.hpp"
 #include "string"
 #include "SDL.h"
-#include "Components.hpp"
+#include "../timer.hpp"
+//#include "Components.hpp"
 #include "../TextureManager.hpp"
+#include "TransformComponent.hpp"
 
 class ColliderComponent : public Component
 {
@@ -17,51 +20,29 @@ public:
 
     TransformComponent* transform;
 
-    ColliderComponent(std::string t)
-    {
-        tag = t;
-    }
+    Timer timer;
 
-    ColliderComponent(std::string t, int xpos, int ypos, int size)
-    {
-        tag = t;
-        collider.x = xpos;
-        collider.y = ypos;
-        collider.h = collider.w = size;
-    }
+    double angle;
 
-    void init() override
-    {
-        if(!(entity->hasComponent<TransformComponent>()))
-        {
-            entity->addComponent<TransformComponent>();
-        }
-        transform = &entity->getComponent<TransformComponent>();
+    ColliderComponent(std::string t);
 
-        tex = TextureManager::LoadTexture("/assets/ColTex.png");
-        srcR = {0, 0, 32, 32 };
-        destR = { collider.x, collider.y, collider.w, collider.h };
+    ColliderComponent(std::string t, int h, int w);
 
-    }
+    ColliderComponent(std::string t, int xpos, int ypos, int size);
 
-    void update() override
-    {
-        if(tag != "terrain")
-        {
-            collider.x = static_cast<int>(transform->position.x);
-            collider.y = static_cast<int>(transform->position.y);
-            collider.w = transform->width * transform->scale;
-            collider.h = transform->height * transform->scale;
-        }
+    ColliderComponent(std::string t, int xpos, int ypos, int width, int height);
 
-        destR.x = collider.x - Game::camera.x;
-        destR.y = collider.y - Game::camera.y;
-    }
+    ColliderComponent(std::string t, int xpos, int ypos, int width, int height, int timeOut);
 
-    void draw() override
-    {
-        TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
-    }
+    ColliderComponent(std::string t, int xpos, int ypos, int width, int height, int timeOut, double angle);
+
+    void SetAngle(double angle);
+
+    void init() override;
+
+    void update() override;
+
+    void draw() override;
 
 };
 

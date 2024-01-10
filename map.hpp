@@ -1,12 +1,13 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "ECS/ECS.hpp"
 #include <string>
 
 class Map{
 public:
 
-    Map(std::string tID, int ms, int ts); //mfp=map file path, ms = map scale, ts = tile size
+    Map(std::string tID, int ms, int ts, Manager *man); //mfp=map file path, ms = map scale, ts = tile size
     ~Map();
 
     void LoadMap(std::string path, int sizeX, int sizeY);
@@ -17,6 +18,8 @@ private:
     int mapScale;
     int tileSize;
     int scaledSize;
+
+    Manager* manager;
 };
 
 #endif // MAP_H

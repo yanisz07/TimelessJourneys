@@ -1,7 +1,7 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-#include "Components.hpp"
+//#include "Components.hpp"
 #include "../Vector2D.hpp"
 
 class TransformComponent : public Component
@@ -33,19 +33,35 @@ public:
         scale = sc;
     }
 
-    TransformComponent(float x, float y)
+    TransformComponent(double x, double y)
     {
         position.x = x;
         position.y = y;
     }
 
-    TransformComponent(float x, float y, int h, int w, int sc)
+    TransformComponent(double x, double y, int h, int w, int sc)
     {
         position.x = x;
         position.y = y;
         height = h;
         width = w;
         scale = sc;
+    }
+
+    TransformComponent(double x, double y, int h, int w, int sc, int speed)
+    {
+        position.x = x;
+        position.y = y;
+        height = h;
+        width = w;
+        scale = sc;
+        this->speed = speed;
+    }
+
+    void set_directions (int x, int y)
+    {
+        x_direction=x;
+        y_direction=y;
     }
 
     void init() override

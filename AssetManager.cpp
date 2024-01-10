@@ -14,11 +14,19 @@ AssetManager::~AssetManager()
 void AssetManager::loadWorld(std::string path)
 {
     world.loadWorld(path);
+
     for (auto iter1 = world.Characters.begin(); iter1 != world.Characters.end(); ++iter1)
     {
-        for(auto iter2 = iter1->second.Sprites.begin(); iter2 != iter1->second.Sprites.end(); ++iter2)
+        for(auto iter2_1 = iter1->second.Sprites.begin(); iter2_1 != iter1->second.Sprites.end(); ++iter2_1)
         {
-            AddTexture(iter2->first,iter2->second.path.c_str());
+            AddTexture(iter2_1->first,iter2_1->second.path.c_str());
+        }
+        for(auto iter2_2 = iter1->second.Attacks.begin();iter2_2 != iter1->second.Attacks.end(); ++iter2_2 )
+        {
+            for(auto iter3 = iter2_2->second.Sprites.begin(); iter3 != iter2_2->second.Sprites.end(); ++iter3)
+            {
+                AddTexture(iter3->first,iter3->second.path.c_str());
+            }
         }
     }
 
@@ -34,13 +42,13 @@ SDL_Texture* AssetManager::GetTexture(std::string id)
     return textures[id];
 }
 
-void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, bool player)
+void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, bool player, int dam)
 {
     auto& projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(pos.x, pos.y, 32, 32, 1);
     projectile.addComponent<SpriteComponent>(false, "player");
     projectile.getComponent<SpriteComponent>().setActions();
-    projectile.addComponent<ProjectileComponent>(range,speed, vel);
+    projectile.addComponent<ProjectileComponent>(range,speed,vel,dam);
 
     projectile.addComponent<ColliderComponent>(id);
     projectile.addComponent<Stats>(0,2);

@@ -56,7 +56,6 @@ class Entity
 {
     friend Component;
 private:
-    //Manager& manager;
     bool active = true;
     std::vector<std::unique_ptr<Component>> components;
 
@@ -66,9 +65,11 @@ private:
 
 public:
     Manager& manager;
+    std::string type = "any";
 
-    Entity(Manager& mManager) : manager(mManager) {}
+    Entity(Manager& mManager) : manager(mManager){}
 
+    void setType(std::string type){this->type = type;}
     void update()
     {
         for (auto& c : components) c->update();
