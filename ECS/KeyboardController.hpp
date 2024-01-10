@@ -6,6 +6,7 @@
 //#include "Components.hpp"
 #include "SpriteComponent.hpp"
 #include "TransformComponent.hpp"
+#include "armor.h"
 
 class KeyboardController : public Component
 {
@@ -13,6 +14,8 @@ public:
     TransformComponent* transform;
 
     SpriteComponent* sprite;
+
+    Armor* armor;
 
     bool pressed_right = false;
     bool pressed_left = false;

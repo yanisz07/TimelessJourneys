@@ -4,6 +4,7 @@ void KeyboardController::init()
 {
     transform = &entity->getComponent<TransformComponent>();
     sprite = &entity->getComponent<SpriteComponent>();
+    armor = &entity->getComponent<Armor>();
 }
 
 void KeyboardController::update()
@@ -22,29 +23,29 @@ void KeyboardController::update()
             if (pressed_right)
             {
                 transform->x_direction = 1;
-                if(sprite->currentAction != "Run_Right")
+                if(sprite->currentAction != "Run_Right" + armor->get_type())
                 {
-                    sprite->Play("Run_Right");
+                    sprite->Play("Run_Right" + armor->get_type());
                 }
             }
             else if (pressed_left)
             {
                 transform->x_direction = -1;
-                if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
+                if(sprite->currentAction != "Run_Right" + armor->get_type() && sprite->spriteFlip==SDL_FLIP_NONE)
                 {
-                    sprite->Play("Run_Right",true);
+                    sprite->Play("Run_Right" + armor->get_type(),true);
                 }
-                if(sprite->currentAction != "Run_Right")
+                if(sprite->currentAction != "Run_Right" + armor->get_type())
                 {
-                    sprite->Play("Run_Right",true);
+                    sprite->Play("Run_Right" + armor->get_type(),true);
                 }
             }
             else
             {
                 transform->x_direction = 0;
-                if(sprite->currentAction != "Run_Up")
+                if(sprite->currentAction != "Run_Up" + armor->get_type())
                 {
-                    sprite->Play("Run_Up");
+                    sprite->Play("Run_Up" + armor->get_type());
                 }
             }
             break;
@@ -57,44 +58,44 @@ void KeyboardController::update()
             if (pressed_right)
             {
                 transform->x_direction = 1;
-                if(sprite->currentAction != "Run_Right")
+                if(sprite->currentAction != "Run_Right" + armor->get_type())
                 {
-                    sprite->Play("Run_Right");
+                    sprite->Play("Run_Right" + armor->get_type());
                 }
             }
 
             else if (pressed_left)
             {
                 transform->x_direction = -1;
-                if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
+                if(sprite->currentAction != "Run_Right" + armor->get_type() && sprite->spriteFlip==SDL_FLIP_NONE)
                 {
-                    sprite->Play("Run_Right",true);
+                    sprite->Play("Run_Right" + armor->get_type(),true);
                 }
-                if(sprite->currentAction != "Run_Right")
+                if(sprite->currentAction != "Run_Right" + armor->get_type())
                 {
-                    sprite->Play("Run_Right",true);
+                    sprite->Play("Run_Right" + armor->get_type(),true);
                 }
             }
 
             else
             {
                 transform->x_direction = 0;
-                if(sprite->currentAction != "Run_Down")
+                if(sprite->currentAction != "Run_Down" + armor->get_type())
                 {
-                    sprite->Play("Run_Down");
+                    sprite->Play("Run_Down" + armor->get_type());
                 }
             }
             break;
         case SDLK_LEFT:
             pressed_left = true;
             transform->velocity.x = -1;
-            if(sprite->currentAction != "Run_Right" && sprite->spriteFlip==SDL_FLIP_NONE)
+            if((sprite->currentAction != "Run_Right" + armor->get_type()) && sprite->spriteFlip==SDL_FLIP_NONE)
             {
-                sprite->Play("Run_Right",true);
+                sprite->Play("Run_Right" + armor->get_type(),true);
             }
-            if(sprite->currentAction != "Run_Right")
+            if(sprite->currentAction != "Run_Right" + armor->get_type())
             {
-                sprite->Play("Run_Right",true);
+                sprite->Play("Run_Right" + armor->get_type(),true);
             }
             transform->x_direction = -1;
             if (pressed_up) {transform->y_direction = -1;}
@@ -105,9 +106,9 @@ void KeyboardController::update()
             pressed_right = true;
             transform->velocity.x = 1;
 
-            if(sprite->currentAction != "Run_Right")
+            if(sprite->currentAction != "Run_Right" + armor->get_type())
             {
-                sprite->Play("Run_Right");
+                sprite->Play("Run_Right" + armor->get_type());
             }
 
             //update direction
@@ -115,6 +116,39 @@ void KeyboardController::update()
             if (pressed_up) {transform->y_direction = -1;}
             else if (pressed_down) {transform->y_direction = 1;}
             else {transform->y_direction = 0;}
+            break;
+        case SDLK_s:
+            if (armor->get_type()=="")
+            {
+                armor->set_type("Silver");
+                if (sprite->spriteFlip==SDL_FLIP_HORIZONTAL)
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type(),true);
+                }
+                else
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type());
+                }
+            }
+            else
+            {
+                armor->set_type("");
+                // Find the position of the substring "Silver"
+                size_t pos = sprite->currentAction.find("Silver");
+                // Check if the substring was found
+                if (pos != std::string::npos) {
+                    // Erase the substring from the original string
+                    sprite->currentAction.erase(pos, 6);  // Assuming "Silver" is 6 characters long
+                }
+                if (sprite->spriteFlip==SDL_FLIP_HORIZONTAL)
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type(),true);
+                }
+                else
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type());
+                }
+            }
             break;
         default:
             break;
@@ -131,7 +165,7 @@ void KeyboardController::update()
             if (!pressed_right && !pressed_left)
             {
                 transform->y_direction=-1;
-                sprite->Play("Idle_Up");
+                sprite->Play("Idle_Up" + armor->get_type());
             }
             else
             {
@@ -145,7 +179,7 @@ void KeyboardController::update()
             if (!pressed_right && !pressed_left)
             {
                 transform->y_direction=1;
-                sprite->Play("Idle_Down");
+                sprite->Play("Idle_Down" + armor->get_type());
             }
             else
             {
@@ -159,7 +193,7 @@ void KeyboardController::update()
             if (!pressed_up && !pressed_down)
             {
                 transform->x_direction =-1;
-                sprite->Play("Idle_Right",true);
+                sprite->Play("Idle_Right" + armor->get_type(),true);
             }
             else
             {
@@ -173,7 +207,7 @@ void KeyboardController::update()
             if (!pressed_up && !pressed_down)
             {
                 transform->x_direction =1;
-                sprite->Play("Idle_Right");
+                sprite->Play("Idle_Right" + armor->get_type());
             }
             else
             {

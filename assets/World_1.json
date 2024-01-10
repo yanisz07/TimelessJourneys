@@ -82,6 +82,86 @@
                 ]
               }
             ]
+          },
+          {
+            "name" : "Player_Sprite_Idle_DownSilver",
+            "path": "/assets/player_game_idle_downSilver.png",
+            "actions": [
+              {
+                "name": "Idle_DownSilver",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Idle_RightSilver",
+            "path" : "/assets/player_game_idle_rightSilver.png",
+            "actions": [
+              {
+                "name": "Idle_RightSilver",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Idle_UpSilver",
+            "path" : "/assets/player_game_idle_upSilver.png",
+            "actions": [
+              {
+                "name": "Idle_UpSilver",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Run_DownSilver",
+            "path": "/assets/player_game_run_downSilver.png",
+            "actions": [
+              {
+                "name": "Run_DownSilver",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_RightSilver",
+            "path" : "/assets/player_game_run_rightSilver.png",
+            "actions": [
+              {
+                "name": "Run_RightSilver",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_UpSilver",
+            "path": "/assets/player_game_run_upSilver.png",
+            "actions": [
+              {
+                "name": "Run_UpSilver",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
           }
         ],
         "attacks" : [

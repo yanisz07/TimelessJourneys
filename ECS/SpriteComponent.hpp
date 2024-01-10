@@ -11,7 +11,8 @@
 #include "../timer.hpp"
 #include "TransformComponent.hpp"
 
-//class WeaponComponent;
+//forward decleration
+class Armor;
 
 class SpriteComponent : public Component
 {
@@ -39,7 +40,7 @@ public:
 
     void setActions();
 
-        void addAnimation(std::string animName,Animation animation);
+    void addAnimation(std::string animName,Animation animation);
 
     ~SpriteComponent()
     {}
@@ -52,7 +53,7 @@ public:
 
     void draw() override;
 
-    void Play(const char* animName, bool flip = false, const int repeat = -1, int speed = 100);
+    void Play(const std::string animName, bool flip = false, const int repeat = -1, int speed = 100);
 
 };
 

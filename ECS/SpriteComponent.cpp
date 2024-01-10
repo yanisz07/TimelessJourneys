@@ -1,4 +1,5 @@
 #include "SpriteComponent.hpp"
+#include "armor.h""
 
 SpriteComponent::SpriteComponent(std::string id)
 {
@@ -61,9 +62,9 @@ void SpriteComponent::update()
             frame = static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames);
             srcRect.x = srcRect.w * frame; //update x index in the sprites sheet
 
-
             if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
             {
+                //std::cout << currentAction << std::endl;
                 animations[currentAction].timer.start();
             }
         }
@@ -105,7 +106,7 @@ void SpriteComponent::draw()
     TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
 }
 
-void SpriteComponent::Play(const char *animName, bool flip, const int repeat, int speed)
+void SpriteComponent::Play(const std::string animName, bool flip, const int repeat, int speed)
 {
     if (flip)
     {
@@ -115,9 +116,10 @@ void SpriteComponent::Play(const char *animName, bool flip, const int repeat, in
     {
         spriteFlip = SDL_FLIP_NONE;
     }
-    currentAction = animName;
-    //animIndex = animations[animName].index;
 
+    currentAction = animName;
+
+    //animIndex = animations[animName].index;
     setTex(animations[animName].spriteName);
     srcRect.x = srcRect.y = 0;
     srcRect.h = animations[animName].wh;

@@ -201,6 +201,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<TransformComponent>(1400,1100,48,48,3,5);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
+    player.addComponent<Armor>();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
 
