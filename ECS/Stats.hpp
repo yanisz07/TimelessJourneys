@@ -1,5 +1,6 @@
 #ifndef STATS_H
 #define STATS_H
+#pragma once
 #include "ECS.hpp"
 #include <SDL.h>
 #include "../Vector2D.hpp"
@@ -59,6 +60,8 @@ public:
     int get_experience() {return experience;}
     int get_level() {return level;}
 
+    void draw() override;
+
     void set_health(int i) {health = i;} // Should not be used on players! Or anyone really, only debug.
 
     void SubtractHealth(int); // Supports negative values for healing.
@@ -115,7 +118,7 @@ private:
     float damage_mult; // The multiplier of the base damage.
     int exp_worth; // Only for enemies.
     bool player; // Stats pertaining to the player if true underneath.
-    int max_health;
+    int max_health = 10;
     int experience;
     int level;
     bool hit;

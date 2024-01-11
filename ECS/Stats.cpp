@@ -1,4 +1,8 @@
 #include "Stats.hpp"
+#include <SDL.h>
+#include "TransformComponent.hpp"
+#include "../game.hpp"
+
 
 void Stats::SubtractHealth(int i)
 {
@@ -25,6 +29,24 @@ void Stats::GameOver() {
 
 void Stats::KillEntity() {
     // TODO
+}
+
+void Stats::draw()
+{
+    TransformComponent* entityTransform = &(entity->getComponent<TransformComponent>());
+    SDL_Rect destRect;
+    SDL_SetRenderDrawColor(Game::renderer,34,139,34,1);
+    destRect.w = entityTransform->width*entityTransform->scale*(static_cast<float>(health)/static_cast<float>(max_health));
+    destRect.h = destRect.w*(1.0/8.0);
+    destRect.x = entityTransform->position.x-Game::camera.x;
+    destRect.y = entityTransform->position.y-Game::camera.y-destRect.h;
+    SDL_RenderFillRect(Game::renderer,&destRect);
+    SDL_SetRenderDrawColor(Game::renderer,254,254,254,1);
+    destRect.x = entityTransform->position.x-Game::camera.x+destRect.w;
+    destRect.w = entityTransform->width*entityTransform->scale*(1-(static_cast<float>(health)/static_cast<float>(max_health)));
+    destRect.h = destRect.w*(1.0/8.0);
+    destRect.y = entityTransform->position.y-Game::camera.y-destRect.h;
+    SDL_RenderFillRect(Game::renderer,&destRect);
 }
 
 void Stats::GainExp(int exp) {
