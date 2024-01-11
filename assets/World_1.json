@@ -162,6 +162,166 @@
                 ]
               }
             ]
+          },
+          {
+            "name" : "Player_Sprite_Idle_DownGold",
+            "path": "/assets/player_game_idle_downGold.png",
+            "actions": [
+              {
+                "name": "Idle_DownGold",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Idle_RightGold",
+            "path" : "/assets/player_game_idle_rightGold.png",
+            "actions": [
+              {
+                "name": "Idle_RightGold",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Idle_UpGold",
+            "path" : "/assets/player_game_idle_upGold.png",
+            "actions": [
+              {
+                "name": "Idle_UpGold",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Run_DownGold",
+            "path": "/assets/player_game_run_downGold.png",
+            "actions": [
+              {
+                "name": "Run_DownGold",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_RightGold",
+            "path" : "/assets/player_game_run_rightGold.png",
+            "actions": [
+              {
+                "name": "Run_RightGold",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_UpGold",
+            "path": "/assets/player_game_run_upGold.png",
+            "actions": [
+              {
+                "name": "Run_UpGold",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Idle_DownDiamond",
+            "path": "/assets/player_game_idle_downDiamond.png",
+            "actions": [
+              {
+                "name": "Idle_DownDiamond",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Idle_RightDiamond",
+            "path" : "/assets/player_game_idle_rightDiamond.png",
+            "actions": [
+              {
+                "name": "Idle_RightDiamond",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Idle_UpDiamond",
+            "path" : "/assets/player_game_idle_upDiamond.png",
+            "actions": [
+              {
+                "name": "Idle_UpDiamond",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+
+          },
+          {
+            "name" : "Player_Sprite_Run_DownDiamond",
+            "path": "/assets/player_game_run_downDiamond.png",
+            "actions": [
+              {
+                "name": "Run_DownDiamond",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_RightDiamond",
+            "path" : "/assets/player_game_run_rightDiamond.png",
+            "actions": [
+              {
+                "name": "Run_RightDiamond",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Player_Sprite_Run_UpDiamond",
+            "path": "/assets/player_game_run_upDiamond.png",
+            "actions": [
+              {
+                "name": "Run_UpDiamond",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
           }
         ],
         "attacks" : [
