@@ -1,6 +1,8 @@
 #include "inventoryscreen.h"
 #include "SDL_image.h"
 #include <iostream>
+#include "items.h"
+#include "TextureManager.hpp"
 using namespace std;
 
 
@@ -54,8 +56,8 @@ void InventoryScreen::addItem(const InventoryItem& item) {
     items.push_back(item);
 }
 
-void InventoryScreen::addNewItem(const std::string& itemName, const std::string& iconPath, SDL_Renderer* renderer) {
-    SDL_Texture* iconTexture = loadTexture(iconPath, renderer);
+void InventoryScreen::addNewItem(const items::ItemType itemName,const string iconPath, SDL_Renderer* renderer) {
+    SDL_Texture* iconTexture = TextureManager::LoadTexture(iconPath.c_str());
     if (iconTexture) {
         InventoryItem newItem(iconTexture, itemName);
         addItem(newItem);

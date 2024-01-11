@@ -3,15 +3,15 @@
 #include <string>
 #include <vector>
 #include "SDL.h"
-
+#include "items.h"
 
 
 class InventoryItem {
 public:
     SDL_Texture* icon;
-    std::string name;
+    items::ItemType name;
 
-    InventoryItem(SDL_Texture* icon, std::string name) : icon(icon), name(name) {}
+    InventoryItem(SDL_Texture* icon, items::ItemType name) : icon(icon), name(name) {}
     ~InventoryItem() {
         if (icon != nullptr) {
             SDL_DestroyTexture(icon);  // Free the texture
@@ -35,7 +35,7 @@ public:
     void removeItem(const InventoryItem& item);
     InventoryItem* getItem(int index);
     void clearInventory();
-    void addNewItem(const std::string& itemName, const std::string& iconPath, SDL_Renderer* renderer);
+    void addNewItem(const items::ItemType itemName,const std::string iconPath, SDL_Renderer* renderer);
     void useSelectedItem();
 
 

@@ -260,6 +260,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     TestCol.addComponent<ColliderComponent>("terrain",1700,1300,200,100);
     TestCol.getComponent<ColliderComponent>().SetAngle(135);
 
+
+    //Initialize all items as hide
+    std::string handPath =  (projectDir / ".." / "TimelessJourneys" / "assets" / "hand.png").string();
+
+    inventoryScreen.addNewItem(items::ItemType::Hand,handPath,renderer);
+
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
