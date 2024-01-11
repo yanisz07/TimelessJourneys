@@ -67,31 +67,23 @@ void EnemyMovement::update()
                     // Inside the update method, within the chase logic
                     int xDirection = 0;  // Start with no movement
                     int yDirection = 0;
-                    float tolerance = 5.0f; // Define a tolerance interval (e.g., 10 units)
 
-                    // Determine horizontal direction
-                    float xDistance = std::abs(playerTransform->position.x - transform->position.x);
-                    if (xDistance > mindist_enemy_player && xDistance > tolerance) {
-                        if (playerTransform->position.x > transform->position.x) {
-                            xDirection = 1;  // Player is to the right of the enemy, move right
-                        } else {
-                            xDirection = -1; // Player is to the left of the enemy, move left
-                        }
-                    } else {
-                        xDirection = 0; // Enemy is within tolerance range, do not move horizontally
+                    if (playerTransform->position.x > transform->position.x) {
+                        xDirection = 1;  // Player is to the right of the enemy, move right
+                    }
+                    else {
+                        xDirection = -1; // Player is to the left of the enemy, move left
                     }
 
-                    // Determine vertical direction
-                    float yDistance = std::abs(playerTransform->position.y - transform->position.y);
-                    if (yDistance > mindist_enemy_player && yDistance > tolerance) {
-                        if (playerTransform->position.y > transform->position.y) {
-                            yDirection = 1;  // Player is below the enemy, move down
-                        } else {
-                            yDirection = -1; // Player is above the enemy, move up
-                        }
-                    } else {
-                        yDirection = 0; // Enemy is within tolerance range, do not move vertically
+
+                    if (playerTransform->position.y > transform->position.y) {
+                         yDirection = 1;  // Player is below the enemy, move down
                     }
+
+                    else {
+                        yDirection = -1; // Player is above the enemy, move up
+                    }
+
 
                     transform->velocity.x = xDirection * velocityScale;
                     transform->velocity.y = yDirection * velocityScale;
