@@ -14,6 +14,7 @@
 #include <filesystem>
 #include "sdl_mixer.h"
 #include "inventoryscreen.h"
+#include "items.h"
 
 extern std::filesystem::path projectDir;
 
@@ -53,6 +54,8 @@ public:
     int screen_width;
     int screen_height;
     InventoryScreen inventoryScreen;
+    InventoryScreen addNewItem(items::ItemType Hand);
+    InventoryScreen show();
 
     static AssetManager* assets;
 

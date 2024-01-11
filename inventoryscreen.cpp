@@ -77,9 +77,6 @@ void InventoryScreen::removeItem(const InventoryItem& item) {
     }
 }
 
-
-
-
 InventoryItem* InventoryScreen::getItem(int index) {
     if (index >= 0 && index < items.size()) {
         return &items[index];
