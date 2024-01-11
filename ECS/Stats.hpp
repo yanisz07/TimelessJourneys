@@ -54,7 +54,7 @@ public:
     ~Stats() override = default;
 
     int get_health() {return health;}
-    int get_damage_mult() {return damage_mult;}
+    float get_damage_mult() {return damage_mult;}
     bool is_player() {return player;}
     int get_max_health() {return max_health;}
     int get_experience() {return experience;}
