@@ -60,11 +60,11 @@ void SpriteComponent::update()
         if(animations[currentAction].repeat==-1)
         {
             frame = static_cast<int>((animations[currentAction].timer.getTimeStart() / animations[currentAction].speed) % animations[currentAction].frames);
-            srcRect.x = srcRect.w * frame; //update x index in the sprites sheet
+            animations[currentAction].index = srcRect.w * frame;//update x index in the sprites sheet
+            srcRect.x = animations[currentAction].index;
 
             if(animations[currentAction].timer.getTimeStart() > animations[currentAction].frames*animations[currentAction].speed)
             {
-                //std::cout << currentAction << std::endl;
                 animations[currentAction].timer.start();
             }
         }
@@ -106,7 +106,7 @@ void SpriteComponent::draw()
     TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
 }
 
-void SpriteComponent::Play(const std::string animName, bool flip, const int repeat, int speed)
+void SpriteComponent::Play(const std::string animName, bool flip, const int repeat, int speed, bool armorchange)
 {
     if (flip)
     {
@@ -117,13 +117,22 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
         spriteFlip = SDL_FLIP_NONE;
     }
 
+    if (armorchange)
+    {
+        animations[animName].index = animations[currentAction].index;
+    }
+    else
+    {
+        animations[animName].index = 0;
+    }
+
     currentAction = animName;
 
-    //animIndex = animations[animName].index;
-    setTex(animations[animName].spriteName);
-    srcRect.x = srcRect.y = 0;
-    srcRect.h = animations[animName].wh;
-    srcRect.w = animations[animName].wh;
+    setTex(animations[currentAction].spriteName);
+    srcRect.y = 0;
+    srcRect.x = animations[currentAction].index;
+    srcRect.h = animations[currentAction].wh;
+    srcRect.w = animations[currentAction].wh;
     animations[currentAction].repeat = repeat;
     animations[currentAction].speed = speed;
     animations[currentAction].timer.start();

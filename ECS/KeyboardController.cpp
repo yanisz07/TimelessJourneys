@@ -123,16 +123,16 @@ void KeyboardController::update()
                 armor->set_type("Silver");
                 if (sprite->spriteFlip==SDL_FLIP_HORIZONTAL)
                 {
-                    sprite->Play(sprite->currentAction + armor->get_type(),true);
+                    sprite->Play(sprite->currentAction + armor->get_type(),true,-1,100,true);
                 }
                 else
                 {
-                    sprite->Play(sprite->currentAction + armor->get_type());
+                    sprite->Play(sprite->currentAction + armor->get_type(),false,-1,100,true);
                 }
             }
-            else
+            else if (armor->get_type()=="Silver")
             {
-                armor->set_type("");
+                armor->set_type("Gold");
                 // Find the position of the substring "Silver"
                 size_t pos = sprite->currentAction.find("Silver");
                 // Check if the substring was found
@@ -142,11 +142,49 @@ void KeyboardController::update()
                 }
                 if (sprite->spriteFlip==SDL_FLIP_HORIZONTAL)
                 {
+                    sprite->Play(sprite->currentAction + armor->get_type(),true,-1,100,true);
+                }
+                else
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type(),false,-1,100,true);
+                }
+            }
+            else if (armor->get_type()=="Gold")
+            {
+                armor->set_type("Diamond");
+                // Find the position of the substring "Silver"
+                size_t pos = sprite->currentAction.find("Gold");
+                // Check if the substring was found
+                if (pos != std::string::npos) {
+                    // Erase the substring from the original string
+                    sprite->currentAction.erase(pos, 4);  // Assuming "Silver" is 6 characters long
+                }
+                if (sprite->spriteFlip==SDL_FLIP_HORIZONTAL)
+                {
                     sprite->Play(sprite->currentAction + armor->get_type(),true);
                 }
                 else
                 {
-                    sprite->Play(sprite->currentAction + armor->get_type());
+                    sprite->Play(sprite->currentAction + armor->get_type(),false,-1,100,true);
+                }
+            }
+            else if(armor->get_type()=="Diamond")
+            {
+                armor->set_type("");
+                // Find the position of the substring "Silver"
+                size_t pos = sprite->currentAction.find("Diamond");
+                // Check if the substring was found
+                if (pos != std::string::npos) {
+                    // Erase the substring from the original string
+                    sprite->currentAction.erase(pos, 7);  // Assuming "Silver" is 6 characters long
+                }
+                if (sprite->spriteFlip==SDL_FLIP_HORIZONTAL)
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type(),true,-1,100,true);
+                }
+                else
+                {
+                    sprite->Play(sprite->currentAction + armor->get_type(),false,-1,100,true);
                 }
             }
             break;

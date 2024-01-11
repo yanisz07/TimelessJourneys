@@ -10,7 +10,8 @@
 #include "charconv"
 #include "vector"
 #include "menu.h"
-#include "game_over.h"
+#include "game_over.hpp"
+#include <filesystem>
 #include "sdl_mixer.h"
 
 extern std::filesystem::path projectDir;

@@ -3,6 +3,7 @@
 
 //#include "Components.hpp"
 #include "../Vector2D.hpp"
+#include "ECS.hpp"
 
 class TransformComponent : public Component
 {

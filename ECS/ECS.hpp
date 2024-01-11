@@ -42,11 +42,22 @@ using ComponentArray = std::array<Component*, maxComponents>;
 class Component
 {
 public:
+    int priority = 1;
     Entity* entity;
+
+    static  bool checkPriority(const std::unique_ptr<Component>& component1, const std::unique_ptr<Component>& component2)
+    {
+        if(component1->priority < component2->priority)
+        {
+            return true;
+        }
+        return false;
+    }
 
     virtual void init() {}
     virtual void update() {}
     virtual void draw() {}
+    virtual void setPriority(int priorityLevel);
 
     virtual ~Component() = default;
 
@@ -85,6 +96,11 @@ public:
     bool hasGroup(Group mGroup)
     {
         return groupBitset[mGroup];
+    }
+
+    void orderComponents()
+    {
+        std::stable_sort(components.begin(),components.end(),Component::checkPriority);
     }
 
 
