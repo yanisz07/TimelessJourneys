@@ -286,7 +286,30 @@ void Game::handleEvents()
         case SDLK_f:
             toggleFullScreen();
             break;
+        case SDLK_e:  // Check for 'E' key
+            inventoryScreen.toggle();  // Toggle the inventory screen
+            break;
 
+        }
+
+        if (inventoryScreen.isCurrentlyVisible()) {
+            switch (event.key.keysym.sym) {
+            case SDLK_UP:
+            inventoryScreen.moveSelection(-inventoryScreen.getGridCols());
+            break;
+            case SDLK_DOWN:
+            inventoryScreen.moveSelection(inventoryScreen.getGridCols());
+            break;
+            case SDLK_LEFT:
+            inventoryScreen.moveSelection(-1);
+            break;
+            case SDLK_RIGHT:
+            inventoryScreen.moveSelection(1);
+            break;
+            case SDLK_u: // Assuming 'U' key is used to use an item
+            inventoryScreen.useSelectedItem();
+            break;
+            }
         }
         break;
 
@@ -797,6 +820,8 @@ void Game::render()
 
         TestCol.draw();
 
+
+
     } else {
 
         for (auto& t : tiles) {
@@ -829,6 +854,8 @@ void Game::render()
 
         SDL_RenderFillRect(renderer, &dotRect);
     }
+
+    inventoryScreen.render(renderer);
 
     SDL_RenderPresent(renderer);
     }
