@@ -5,3 +5,9 @@ void Entity::addGroup(Group mGroup)
     groupBitset[mGroup] = true;
     manager.AddToGroup(this, mGroup);
 }
+
+void Component::setPriority(int priorityLevel)
+{
+    priority = priorityLevel;
+    entity->orderComponents();
+}

@@ -3,6 +3,7 @@
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"
 #include "Stats.hpp"
+#include <math.h>
 
 WeaponComponent::WeaponComponent(Manager *man)
 {
@@ -82,6 +83,9 @@ void WeaponComponent::update()
                 roundAttack();
             }
             break;
+        case SDL_SCANCODE_P:
+            setPriority((entity->getComponent<SpriteComponent>().priority)-1);
+            std::cout << "Set priority to " << priority << std::endl;
         }
         timer.setTimeOut(reloadTime);
 
@@ -252,10 +256,86 @@ int WeaponComponent::frontAttack()
 
 void WeaponComponent::draw()
 {
-    if(sprite->currentAction == "Attack_Down")
+    if(attack == "sword")
     {
         std::cout<< "Draw attack" << std::endl;
-        float handLocation[3][2] = {{20.0/48.0,26.0/48.0},{29.0/48.0,27.0/48.0},{29.0/48.0,27.0/48.0}};
+        float handLocation[3][2] = {{20.0/48.0,215.0/48.0},{29.0/48.0,27.0/48.0},{29.0/48.0,27.0/48.0}};
+        //SDL_Rect srcRect = {0,0,380,870};
+        entityTransform = &(entity->getComponent<TransformComponent>());
+        SDL_Rect destRect;
+        destRect.h = (1.0/4.0)*entityTransform->height*entityTransform->scale;
+        destRect.w = (2.0/3.0)*destRect.h;
+        if(sprite->frame != 3)
+        {
+            SDL_Point center = {destRect.w/2,int(destRect.h*0.93)};
+            destRect.x = (entityTransform->position.x) -  Game::camera.x +
+                         (entityTransform->width * entityTransform->scale) /2 -destRect.w/2;
+            destRect.y = (entityTransform->position.y) -  Game::camera.y +
+                         (entityTransform->height * entityTransform->scale)*(3.0/5.0) - destRect.h*0.95;
+            if(entityTransform->x_direction == 0)
+            {
+                if(entityTransform->y_direction == 1)
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority + 1);
+                    destRect.y += (sprite->frame+1)*5*entityTransform->scale;
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,-180,&center,SDL_FLIP_NONE);
+                }
+                else
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority - 1);
+                    destRect.y -= (sprite->frame+1)*5*entityTransform->scale;
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,0,&center,SDL_FLIP_NONE);
+                }
+            }
+            else if(entityTransform->x_direction == 1)
+            {
+                destRect.x += (sprite->frame+1)*5*entityTransform->scale;
+                if(entityTransform->y_direction == 1)
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority + 1);
+                    destRect.y += (sprite->frame+1)*5*entityTransform->scale;
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,-225,&center,SDL_FLIP_NONE);
+                }
+                else if(entityTransform->y_direction == -1)
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority - 1);
+                    destRect.y -= (sprite->frame+1)*5*entityTransform->scale;
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,45,&center,SDL_FLIP_NONE);
+                }
+                else
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority + 1);
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,90,&center,SDL_FLIP_NONE);
+                }
+            }
+            else if(entityTransform->x_direction == -1)
+            {
+                destRect.x -= (sprite->frame+1)*5*entityTransform->scale;
+                if(entityTransform->y_direction == 1)
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority + 1);
+                    destRect.y += (sprite->frame+1)*5*entityTransform->scale;
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,-135,&center,SDL_FLIP_NONE);
+                }
+                else if(entityTransform->y_direction == -1)
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority - 1);
+                    destRect.y -= (sprite->frame+1)*5*entityTransform->scale;
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,-45,&center,SDL_FLIP_NONE);
+                }
+                else
+                {
+                    setPriority(entity->getComponent<SpriteComponent>().priority + 1);
+                    SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,-90,&center,SDL_FLIP_NONE);
+                }
+            }
+        }
+    }
+
+    /*if(sprite->currentAction == "Attack_Down")
+    {
+        std::cout<< "Draw attack" << std::endl;
+        float handLocation[3][2] = {{20.0/48.0,215.0/48.0},{29.0/48.0,27.0/48.0},{29.0/48.0,27.0/48.0}};
         //SDL_Rect srcRect = {0,0,380,870};
         entityTransform = &(entity->getComponent<TransformComponent>());
         SDL_Rect destRect;
@@ -278,10 +358,12 @@ void WeaponComponent::draw()
             }
             else if(sprite->frame == 2)
             {
-                SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,60,&center,SDL_FLIP_NONE);
+                SDL_RenderCopyEx(Game::renderer,texture,NULL,&destRect,100,&center,SDL_FLIP_NONE);
             }
+            destRect = {destRect.x-200,destRect.y,400,400};
+            SDL_RenderCopy(Game::renderer,texture,NULL,&destRect);
         }
-    }
+    }*/
 }
 
 int WeaponComponent::DoDamage(Stats &entity1)
