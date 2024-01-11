@@ -87,7 +87,8 @@ set(SOURCES
 
 add_executable(TimelessJourneys ${SOURCES}
     inventoryscreen.cpp
-    inventoryscreen.h)
+    inventoryscreen.h
+    ECS/InteractComponent.h)
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )
