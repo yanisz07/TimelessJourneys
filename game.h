@@ -32,6 +32,7 @@ public:
     void render();
     void clean();
 
+    //UPDATE
     void update();
     void update_player_and_ennemies(Vector2D& refPlayerPos);
     void update_collisions(Vector2D& refPlayerPos,SDL_Rect& refPlayerCol);
@@ -41,6 +42,7 @@ public:
     void update_health(Vector2D& refPlayerPos, Vector2D& refEnemyPos);
     void update_camera();
     void update_invincibility(Uint32& refCurrentTime0);
+    //END
 
     bool is_running() {return isRunning;}
 
