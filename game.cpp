@@ -487,7 +487,7 @@ void Game::toggleFullScreen() {
 
 void Game::update()
 {
-    if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen )
+    if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen && !isSettingsOpen)
     {
         // Get player/enemy info.
         SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
