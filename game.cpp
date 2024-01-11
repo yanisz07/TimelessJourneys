@@ -783,22 +783,63 @@ void Game::render()
 
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
-        // Render all regular game objects when not in map view
-        for (auto& t : tiles) { t->draw(); }
-        for (auto& c : MapColliders) { c->draw(); }
-        for (auto& p : players) { p->draw(); }
-        for (auto& e : enemies) { e->draw(); }
-        for (auto& pp : PlayerProjectiles) { pp->draw(); }
-        for (auto& ep : EnemyProjectiles) { ep->draw(); }
+            // Render all regular game objects when not in map view
+            for (auto& t : tiles) { t->draw(); }
+            for (auto& c : MapColliders) { c->draw(); }
+            for (auto& p : players) { p->draw(); }
+            for (auto& e : enemies) { e->draw(); }
+            for (auto& pp : PlayerProjectiles) { pp->draw(); }
+            for (auto& ep : EnemyProjectiles) { ep->draw(); }
 
-        // Render the UI elements over the game objects
-        label.draw();
-        enemy_health.draw();
-        player_health.draw();
+            // Render the UI elements over the game objects
+            label.draw();
+            enemy_health.draw();
+            player_health.draw();
+            TestCol.draw();
 
-        TestCol.draw();
+            // Define mini-map properties
+            const int miniMapScale = 3; // Mini-map scale factor
+            const int miniMapX = screenWidth - 300; // Top-right corner position
+            const int miniMapY = 10;
+            const int miniMapWidth = 290;
+            const int miniMapHeight = 290;
 
-    } else {
+            // Mini-map border rendering
+            const int borderSize = 2; // Thickness of the border
+            SDL_Rect borderRect = {
+                miniMapX - borderSize,
+                miniMapY - borderSize,
+                miniMapWidth + (borderSize * 2),
+                miniMapHeight + (borderSize * 2)
+            };
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for the border
+            SDL_RenderFillRect(renderer, &borderRect);
+
+            // Mini-map rendering inside the border
+            SDL_Rect miniMapRect = {miniMapX, miniMapY, miniMapWidth, miniMapHeight};
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background for the mini-map
+            SDL_RenderFillRect(renderer, &miniMapRect);
+
+            // Get the player's current position
+            Vector2D playerPosition = player.getComponent<TransformComponent>().position;
+
+            // Render the entire map within the mini-map area
+            for (auto& t : tiles) {
+                auto& tileComponent = t->getComponent<TileComponent>();
+
+                // Offset the tile's position so that it's drawn relative to the mini-map's position
+                SDL_Rect destRect = tileComponent.destRect;
+                destRect.x += (miniMapX - Game::camera.x);
+                destRect.y += (miniMapY - Game::camera.y);
+
+                // Check if the tile is within the mini-map's viewport and draw it
+                if (destRect.x + destRect.w > miniMapX && destRect.x < miniMapX + miniMapWidth &&
+                    destRect.y + destRect.h > miniMapY && destRect.y < miniMapY + miniMapHeight) {
+                        TextureManager::Draw(tileComponent.texture, tileComponent.srcRect, destRect, SDL_FLIP_NONE);
+                }
+            }
+    }
+     else {
 
         for (auto& t : tiles) {
             auto& tileComponent = t->getComponent<TileComponent>();
