@@ -49,6 +49,7 @@ auto& enemy_health(manager.addEntity());
 auto& chest(manager.addEntity());
 //End
 
+bool chest_open = false;
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
@@ -242,9 +243,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //create first chest
 
     chest.addComponent<TransformComponent>(900,900,16,16,5);
-    chest.addComponent<SpriteComponent>(true, "chest");
+    chest.addComponent<SpriteComponent>(true, "player");
     chest.getComponent<SpriteComponent>().setActions();
-    chest.addComponent<ColliderComponent>("terrain");
+    chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
     chest.addGroup(Game::groupChests);
     }
@@ -306,19 +307,27 @@ void Game::handleEvents()
             inventoryScreen.toggle();  // Toggle the inventory screen
             break;
         case SDLK_RETURN:
-            std::cout << "Pressed return" << std::endl;
 
             for (auto& ch : chests)
             {
                 InteractComponent& interact = ch->getComponent<InteractComponent>();
 
-
+               if (chest_open == false) {
                 if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
                 {
                     std::cout << "Opened chest" << std::endl;
-                    ch->getComponent<SpriteComponent>().Play("Idle");
+                    chest.getComponent<SpriteComponent>().Play("Run_Right");
+                    chest_open = true;
+                    chestScreen.toggle();
 
                 }
+               }
+               else {
+                chest_open = false;
+                std::cout << "Closed chest" << std::endl;
+                chest.getComponent<SpriteComponent>().Play("Idle_Down");
+                chestScreen.toggle();
+               }
             }
             }
 
@@ -902,6 +911,7 @@ void Game::render()
     }
 
     inventoryScreen.render(renderer);
+    chestScreen.render(renderer);
 
     SDL_RenderPresent(renderer);
     }
