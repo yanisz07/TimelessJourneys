@@ -6,7 +6,11 @@
 #include <string.h>
 #include <SDL.h>
 
+
 extern Manager manager; //not the same as in game.cpp
+
+extern std::filesystem::path projectDir;
+
 
 //forward decleration
 class TransformComponent;
@@ -23,6 +27,7 @@ public:
     bool melee;
     SDL_Texture *texture;
     int damage = 0;
+    Mix_Chunk* swordSwooshSound;
 
     WeaponComponent(Manager *man);
 
@@ -52,6 +57,7 @@ private:
 
     Uint32 reloadTime = 400;
     Manager* manager;
+
 
 };
 

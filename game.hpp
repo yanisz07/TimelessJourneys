@@ -11,7 +11,6 @@
 #include "vector"
 #include "menu.h"
 #include "game_over.h"
-#include <filesystem>
 #include "sdl_mixer.h"
 
 extern std::filesystem::path projectDir;

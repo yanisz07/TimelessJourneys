@@ -183,6 +183,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
         isRunning = false;
     }
+    if (!(Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3)) {
+        std::cerr << "Mix_Init failed: " << Mix_GetError() << std::endl;
+    }
+     Mix_AllocateChannels(2);
     std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
     std::cout << "Trying to load music from: " << MusicPath << std::endl;
     bgMusic = Mix_LoadMUS(MusicPath.c_str());

@@ -4,6 +4,8 @@
 #include "ColliderComponent.hpp"
 #include "Stats.hpp"
 
+
+
 WeaponComponent::WeaponComponent(Manager *man)
 {
     timer.start();
@@ -11,8 +13,13 @@ WeaponComponent::WeaponComponent(Manager *man)
     melee=true;
     std::cout << "Melee Attack" << std::endl;
     manager = man;
+    std::string swoosh_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword_swoosh_effect.mp3").string();
+    swordSwooshSound = Mix_LoadWAV(swoosh_effect_path.c_str());
+    if (!swordSwooshSound) {
+        // Handle loading error
+        std::cerr << "Failed to load sword_swoosh_effect.mp3: " << Mix_GetError() << std::endl;
+    }
 }
-
 int WeaponComponent::equip()
 {
     std::string type = entity->type;
@@ -247,6 +254,7 @@ int WeaponComponent::frontAttack()
             sprite->Play("Attack_Right",true,1);
         }
     }
+    Mix_PlayChannel(-1,swordSwooshSound, 0);
     return 0;
 }
 
