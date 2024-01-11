@@ -19,10 +19,10 @@ void EnemyMovement::init()
 
 void EnemyMovement::onCollision()
 {
-    transform->velocity.x *= -1.5;
-    transform->velocity.y *= -1.5;
-    transform->position.x += transform->velocity.x * 3;
-    transform->position.y += transform->velocity.y * 3;
+    transform->velocity.x = -transform->velocity.y;
+    transform->velocity.y = transform->velocity.x;
+    transform->position.x += transform->velocity.x;
+    transform->position.y += transform->velocity.y;
     collisionCooldown = collisionCooldownMax;
 }
 
@@ -68,7 +68,7 @@ void EnemyMovement::update()
                     int xDirection = 0;  // Start with no movement
                     int yDirection = 0;
 
-                    float tolerance = 1; // Define a tolerance interval
+                    float tolerance = 0; // Define a tolerance interval
 
                     // Determine horizontal direction
                     float xDistance = std::abs(playerTransform->position.x - transform->position.x);

@@ -18,7 +18,7 @@ public:
     int collisionCooldown = 0;
     const int collisionCooldownMax = 10;
     int moveTimer = 0;
-    int moveInterval = 20;
+    int moveInterval = 40;
     float velocityScale = 0.65;
     float radius_of_attack;
     float radius_of_displacement;
