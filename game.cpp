@@ -374,8 +374,9 @@ void Game::handleEvents()
             int centerX = (screenWidth - buttonWidth) / 2;
             int ScreenDim_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 120;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 180;
 
+            Setting::handleSliderEvent({event.button.x, event.button.y});
 
             //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -486,7 +487,7 @@ void Game::toggleFullScreen() {
 
 void Game::update()
 {
-    if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen )
+    if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen &&!isSettingsOpen)
     {
         // Get player/enemy info.
         SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;

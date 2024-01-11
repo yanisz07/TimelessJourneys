@@ -2,8 +2,12 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>
+#include <SDL_mixer.h>
 
-//brief
+
+int Setting::currentVolume = 50; // Starting volume
+SDL_Rect Setting::volumeSliderBar = {0, 0, 250, 40};
+SDL_Rect Setting::volumeSliderHandle = {0 + (currentVolume * 2), 100, 20, 40};
 
 void Setting::toggleSettingState(bool &isSettingsOpen) {
     isSettingsOpen = !isSettingsOpen;
@@ -38,8 +42,15 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Rect titleButtonBorder = {titleCenterX - borderThickness, titleCenterY - borderThickness, titleButtonWidth + borderThickness * 2, titleButtonHeight + borderThickness * 2};
         SDL_Rect screendimButtonBorder = {centerX - borderThickness, centerY  - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
         SDL_Rect MusicButtonBorder = {centerX - borderThickness, centerY + buttonHeight + 20 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect backButtonBorder = {centerX - borderThickness, centerY +2*buttonHeight + 40 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect backButtonBorder = {centerX - borderThickness, centerY +3*buttonHeight + 60 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
 
+        int volumeSliderX = (screenWidth - volumeSliderBar.w) / 2;
+        int volumeSliderY = centerY + 2*buttonHeight + 40;
+
+        volumeSliderBar.x = volumeSliderX;
+        volumeSliderBar.y = volumeSliderY;
+        volumeSliderHandle.x = volumeSliderBar.x + (currentVolume * (volumeSliderBar.w - volumeSliderHandle.w) / 100);
+        volumeSliderHandle.y = volumeSliderY;
 
         SDL_RenderDrawRect(renderer, &titleButtonBorder);
         SDL_RenderDrawRect(renderer, &backButtonBorder);
@@ -54,7 +65,7 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Rect titleButton = {titleCenterX, titleCenterY, titleButtonWidth, titleButtonHeight};
         SDL_Rect ScreenDimButton = {centerX, centerY, buttonWidth, buttonHeight};
         SDL_Rect MusicButton = {centerX, centerY + buttonHeight + 20, buttonWidth, buttonHeight};
-        SDL_Rect backButton = {centerX, centerY + 2*buttonHeight + 40, buttonWidth, buttonHeight};
+        SDL_Rect backButton = {centerX, centerY + 3*buttonHeight + 60, buttonWidth, buttonHeight};
 
         //hover effect
         bool isHoveringScreenDim = SDL_PointInRect(&mousePosition, &ScreenDimButton);
@@ -136,12 +147,16 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Surface* backSurface = TTF_RenderText_Solid(font, "back", textColor);
         SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backSurface);
         TTF_SizeText(font, "back", &textWidth, &textHeight);
-        SDL_Rect backTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 2*buttonHeight + 40 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_Rect backTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 3*buttonHeight + 60 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
         SDL_RenderCopy(renderer, backTexture, NULL, &backTextRect);
 
 
+        // Draw the volume slider
+        SDL_SetRenderDrawColor(renderer, 180, 180, 180, 255); // Color for the slider bar
+        SDL_RenderFillRect(renderer, &volumeSliderBar);
 
-
+        SDL_SetRenderDrawColor(renderer, 0, 122, 204, 255); // Color for the slider handle
+        SDL_RenderFillRect(renderer, &volumeSliderHandle);
 
         SDL_DestroyTexture(titleTexture);
         SDL_FreeSurface(titleSurface);
@@ -152,5 +167,23 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         TTF_CloseFont(font);
         SDL_DestroyTexture(backgroundTexture);
         SDL_RenderPresent(renderer);
+    }
+}
+
+void Setting::handleSliderEvent(const SDL_Point& mousePosition) {
+    // Check if the mouse is within the slider bar
+    if (mousePosition.x >= volumeSliderBar.x && mousePosition.x <= volumeSliderBar.x + volumeSliderBar.w &&
+        mousePosition.y >= volumeSliderBar.y && mousePosition.y <= volumeSliderBar.y + volumeSliderBar.h) {
+        // Calculate the new volume based on the mouse position
+        currentVolume = (mousePosition.x - volumeSliderBar.x) * 100 / volumeSliderBar.w;
+        if (currentVolume > 100) currentVolume = 100;
+        if (currentVolume < 0) currentVolume = 0;
+
+        // Update slider handle position
+        volumeSliderHandle.x = volumeSliderBar.x + (currentVolume * (volumeSliderBar.w - volumeSliderHandle.w) / 100);
+
+        // Here you can also add code to adjust the actual volume of the game
+        Mix_VolumeMusic(currentVolume * 128 / 100); // SDL_mixer uses a range of 0-128 for volume
+
     }
 }
