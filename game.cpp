@@ -45,6 +45,7 @@ auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
+auto& npc(manager.addEntity());
 //End
 
 
@@ -226,14 +227,29 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     std::cout << "Enemy created" << std::endl;
 
     //create second enemy
-
+    /*
     enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
     enemy2.addComponent<SpriteComponent>(true, "enemy");
     enemy2.getComponent<SpriteComponent>().setActions();
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
+
+    std::cout << "Second Enemy created" << std::endl;
+    */
+    //creates npc
+    npc.addComponent<TransformComponent>(1200,800,128,128,1);
+    npc.addComponent<SpriteComponent>(true,"player");
+    npc.getComponent<SpriteComponent>().setActions();
+    npc.addComponent<NPCBehavior>(500,&playerTransform);
+    npc.addGroup(Game::groupNPC);
+
+    std::cout << "npc created" << std::endl;
+
+
     }
+
+
 
 
     //Create labels
@@ -269,6 +285,7 @@ auto& MapColliders(manager.getGroup(Game::groupMapColliders));
 auto& PlayerProjectiles(manager.getGroup(Game::groupPlayerProjectiles));
 auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
+auto& npcs(manager.getGroup(Game::groupNPC));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 
 void Game::handleEvents()
@@ -788,6 +805,7 @@ void Game::render()
         for (auto& c : MapColliders) { c->draw(); }
         for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
+        for (auto& n : npcs) {n->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
 

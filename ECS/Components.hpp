@@ -16,5 +16,5 @@
 #include "sword.h"
 #include "EnemyMovement.h"
 #include "armor.h"
-
+#include "NPCBehavior.h"
 #endif // COMPONENTS_H

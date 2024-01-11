@@ -62,7 +62,8 @@ public:
         groupPlayerProjectiles,
         groupEnemyProjectiles,
         groupEnemies,
-        groupPlayerAttack
+        groupPlayerAttack,
+        groupNPC
     };
 
 private:
