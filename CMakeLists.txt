@@ -73,7 +73,7 @@ set(SOURCES
     menu.cpp
     ECS/sword.h
     game_over.cpp
-    game_over.h
+    game_over.hpp
     ingame_menu.cpp
     ingame_menu.h
     ECS/EnemyMovement.h
