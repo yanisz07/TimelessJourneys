@@ -7,3 +7,6 @@ During weeks 3 and 4, I actively focused on developing the game's menu. Most of 
 During week 5, i have been working on a new feature of the game: the game over screen. additionally i have been fixing some bugs in the setting page.
 
 During Week 6, I provided the sprites for our hero (melee attack, different armor, etc.). I have also finished the 'Game Over' screen, implementing two functional buttons.
+i also started to work on the sound design of the game.
+
+
