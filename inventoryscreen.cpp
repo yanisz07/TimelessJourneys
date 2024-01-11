@@ -46,9 +46,7 @@ void InventoryScreen::toggle() {
     isVisible = !isVisible;
 }
 
-
-
-
+//Manage items
 
 void InventoryScreen::addItem(const InventoryItem& item) {
     items.push_back(item);
@@ -76,9 +74,6 @@ void InventoryScreen::removeItem(const InventoryItem& item) {
         items.erase(it);
     }
 }
-
-
-
 
 InventoryItem* InventoryScreen::getItem(int index) {
     if (index >= 0 && index < items.size()) {

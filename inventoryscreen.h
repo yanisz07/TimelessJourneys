@@ -20,8 +20,6 @@ public:
     }
 };
 
-
-\
     class InventoryScreen {
 public:
     InventoryScreen();
