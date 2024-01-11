@@ -31,6 +31,7 @@ int x_diff = 400; //Camera.x with respect to the position x of the player
 int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
+InventoryScreen* Game::inventoryScreen = new InventoryScreen();
 
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
@@ -287,27 +288,27 @@ void Game::handleEvents()
             toggleFullScreen();
             break;
         case SDLK_e:  // Check for 'E' key
-            inventoryScreen.toggle();  // Toggle the inventory screen
+            inventoryScreen->toggle();  // Toggle the inventory screen
             break;
 
         }
 
-        if (inventoryScreen.isCurrentlyVisible()) {
+        if (inventoryScreen->isCurrentlyVisible()) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-            inventoryScreen.moveSelection(-inventoryScreen.getGridCols());
+            inventoryScreen->moveSelection(-inventoryScreen->getGridCols());
             break;
             case SDLK_DOWN:
-            inventoryScreen.moveSelection(inventoryScreen.getGridCols());
+            inventoryScreen->moveSelection(inventoryScreen->getGridCols());
             break;
             case SDLK_LEFT:
-            inventoryScreen.moveSelection(-1);
+            inventoryScreen->moveSelection(-1);
             break;
             case SDLK_RIGHT:
-            inventoryScreen.moveSelection(1);
+            inventoryScreen->moveSelection(1);
             break;
             case SDLK_u: // Assuming 'U' key is used to use an item
-            inventoryScreen.useSelectedItem();
+            inventoryScreen->useSelectedItem();
             break;
             }
         }
@@ -855,7 +856,7 @@ void Game::render()
         SDL_RenderFillRect(renderer, &dotRect);
     }
 
-    inventoryScreen.render(renderer);
+    inventoryScreen->render(renderer);
 
     SDL_RenderPresent(renderer);
     }

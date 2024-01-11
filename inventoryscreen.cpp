@@ -1,6 +1,7 @@
 #include "inventoryscreen.h"
 #include "SDL_image.h"
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 
@@ -67,7 +68,7 @@ void InventoryScreen::addNewItem(const std::string& itemName, const std::string&
 
 void InventoryScreen::removeItem(const InventoryItem& item) {
     auto it = std::find_if(items.begin(), items.end(),
-                           [&item](const InventoryItem& i) { return i.name == item.name; });
+                         [&item](const InventoryItem& i) { return i.name == item.name; });
     if (it != items.end()) {
         if (it->icon != nullptr) {
             SDL_DestroyTexture(it->icon);  // Free the texture
@@ -76,9 +77,6 @@ void InventoryScreen::removeItem(const InventoryItem& item) {
         items.erase(it);
     }
 }
-
-
-
 
 InventoryItem* InventoryScreen::getItem(int index) {
     if (index >= 0 && index < items.size()) {
