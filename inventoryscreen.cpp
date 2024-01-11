@@ -48,9 +48,7 @@ void InventoryScreen::toggle() {
     isVisible = !isVisible;
 }
 
-
-
-
+//Manage items
 
 void InventoryScreen::addItem(const InventoryItem& item) {
     items.push_back(item);
