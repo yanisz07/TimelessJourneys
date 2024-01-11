@@ -21,8 +21,6 @@ public:
 
     void set_type(std::string t);
 
-    //void update() override;
-
 private:
     std::string type;
     int armor;
