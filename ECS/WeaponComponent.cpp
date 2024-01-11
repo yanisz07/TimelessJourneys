@@ -14,7 +14,7 @@ WeaponComponent::WeaponComponent(Manager *man)
     melee=true;
     std::cout << "Melee Attack" << std::endl;
     manager = man;
-    std::string swoosh_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword_swoosh_effect.mp3").string();
+    std::string swoosh_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword_swoosh_effect1.mp3").string();
     swordSwooshSound = Mix_LoadWAV(swoosh_effect_path.c_str());
     if (!swordSwooshSound) {
         // Handle loading error
