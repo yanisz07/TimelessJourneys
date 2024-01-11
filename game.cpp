@@ -46,8 +46,11 @@ auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
+// Add chests
+auto& chest(manager.addEntity());
 //End
 
+bool chest_open = false;
 
 std::filesystem::path projectDir = std::filesystem::current_path();
 
@@ -165,6 +168,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+    assets->AddTexture("chest", "/assets/chest_01.png");
+
+
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -233,6 +239,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
+
+
+    //create first chest
+
+    chest.addComponent<TransformComponent>(900,900,16,16,5);
+    chest.addComponent<SpriteComponent>(true, "player");
+    chest.getComponent<SpriteComponent>().setActions();
+    chest.addComponent<ColliderComponent>("chest");
+    chest.addComponent<InteractComponent>();
+    chest.addGroup(Game::groupChests);
     }
 
 
@@ -270,6 +286,7 @@ auto& PlayerProjectiles(manager.getGroup(Game::groupPlayerProjectiles));
 auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
+auto& chests(manager.getGroup(Game::groupChests));
 
 void Game::handleEvents()
 {
@@ -290,8 +307,30 @@ void Game::handleEvents()
         case SDLK_e:  // Check for 'E' key
             inventoryScreen->toggle();  // Toggle the inventory screen
             break;
+        case SDLK_RETURN:
 
-        }
+            for (auto& ch : chests)
+            {
+                InteractComponent& interact = ch->getComponent<InteractComponent>();
+
+               if (chest_open == false) {
+                if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
+                {
+                    std::cout << "Opened chest" << std::endl;
+                    chest.getComponent<SpriteComponent>().Play("Run_Right");
+                    chest_open = true;
+                    chestScreen.toggle();
+
+                }
+               }
+               else {
+                chest_open = false;
+                std::cout << "Closed chest" << std::endl;
+                chest.getComponent<SpriteComponent>().Play("Idle_Down");
+                chestScreen.toggle();
+               }
+            }
+            }
 
         if (inventoryScreen->isCurrentlyVisible()) {
             switch (event.key.keysym.sym) {
@@ -619,6 +658,21 @@ void Game::update()
                 }
             }
 
+            //Check if the player collides with the chest
+            for (auto& ch : chests)
+            {
+                InteractComponent& interact = ch->getComponent<InteractComponent>();
+
+                if(Collision::AABB(playerCol,ch->getComponent<ColliderComponent>().collider))
+                {
+                    //std::cout << "Hit chest" << std::endl;
+                    player.getComponent<TransformComponent>().position = playerPos;
+                }
+
+            }
+
+
+
             //Enemy knockback
 
             if(e->getComponent<Stats>().is_hit())
@@ -812,7 +866,7 @@ void Game::render()
         for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
-        for (auto& ep : EnemyProjectiles) { ep->draw(); }
+        for (auto& ch: chests) { ch->draw(); }
 
         // Render the UI elements over the game objects
         label.draw();
@@ -830,6 +884,7 @@ void Game::render()
             tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
             t->draw();
         }
+
 
         // Gets the scaled position of the player from the TransformComponent.
         Vector2D playerPosition = player.getComponent<TransformComponent>().position;
@@ -857,6 +912,8 @@ void Game::render()
     }
 
     inventoryScreen->render(renderer);
+    chestScreen.render(renderer);
+
 
     SDL_RenderPresent(renderer);
     }

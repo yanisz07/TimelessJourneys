@@ -15,5 +15,6 @@
 #include "UILabel.hpp"
 #include "sword.h"
 #include "EnemyMovement.h"
+#include "InteractComponent.h"
 
 #endif // COMPONENTS_H
