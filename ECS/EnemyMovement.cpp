@@ -63,10 +63,40 @@ void EnemyMovement::update()
                 if (dist_from_player > mindist_enemy_player) { // If enemy not too close from the player
                     // Enemy chases the player
                     //std::cout << "Chase mode active" << std::endl;
-                    int xDirection = playerTransform->position.x > transform->position.x ? 1 : -1;  //if  player.x_coord > enemy.x_coord : x_direction = 1 else -1
-                    int yDirection = playerTransform->position.y > transform->position.y ? 1 : -1;  //if  player.y_coord > enemy.y_coord : y_direction = 1 else -1
+
+                    // Inside the update method, within the chase logic
+                    int xDirection = 0;  // Start with no movement
+                    int yDirection = 0;
+                    float tolerance = 10.0f; // Define a tolerance interval (e.g., 10 units)
+
+                    // Determine horizontal direction
+                    float xDistance = std::abs(playerTransform->position.x - transform->position.x);
+                    if (xDistance > mindist_enemy_player && xDistance > tolerance) {
+                        if (playerTransform->position.x > transform->position.x) {
+                            xDirection = 1;  // Player is to the right of the enemy, move right
+                        } else {
+                            xDirection = -1; // Player is to the left of the enemy, move left
+                        }
+                    } else {
+                        xDirection = 0; // Enemy is within tolerance range, do not move horizontally
+                    }
+
+                    // Determine vertical direction
+                    float yDistance = std::abs(playerTransform->position.y - transform->position.y);
+                    if (yDistance > mindist_enemy_player && yDistance > tolerance) {
+                        if (playerTransform->position.y > transform->position.y) {
+                            yDirection = 1;  // Player is below the enemy, move down
+                        } else {
+                            yDirection = -1; // Player is above the enemy, move up
+                        }
+                    } else {
+                        yDirection = 0; // Enemy is within tolerance range, do not move vertically
+                    }
+
                     transform->velocity.x = xDirection * velocityScale;
                     transform->velocity.y = yDirection * velocityScale;
+
+
                 }
                 else { // Otherwise, if enemy too close from player, it stops until the player is far enough
                     transform->velocity.x = 0;
