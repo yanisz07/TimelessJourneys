@@ -12,7 +12,14 @@ Week 4:
 Started implementing the inventory. (Implemented the code so that the screen (inventory) appears)
 
 Week 5:
-Continuied working on implementing the inventory. (Implemented the grid, a function to add items and currently working on the interacting between them). 
+Continued working on implementing the inventory. (Implemented the grid, a function to add items and currently working on the interacting between them). 
+
+Week 6:
+Continued working on implementing the inventory. (worked on Handling Arrow Key Inputs; The logic for selecting, moving.. )
+
+
+
+
 
 
 
