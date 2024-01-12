@@ -169,7 +169,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
-    assets->AddTexture("chest", "/assets/chest_01.png");
+    //assets->AddTexture("chest", "/assets/chest_01.png");
 
 
 
@@ -250,11 +250,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //create first chest
 
     chest.addComponent<TransformComponent>(900,900,16,16,5);
-    chest.addComponent<SpriteComponent>(true, "player");
+    chest.addComponent<SpriteComponent>(true, "chest");
     chest.getComponent<SpriteComponent>().setActions();
     chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
     chest.addGroup(Game::groupChests);
+    std::cout << "Chest created" << std::endl;
     }
 
 
@@ -323,7 +324,7 @@ void Game::handleEvents()
                 if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
                 {
                     std::cout << "Opened chest" << std::endl;
-                    chest.getComponent<SpriteComponent>().Play("Run_Right");
+                    chest.getComponent<SpriteComponent>().Play("Active");
                     chest_open = true;
                     chestScreen.toggle();
 
@@ -332,7 +333,7 @@ void Game::handleEvents()
                else {
                 chest_open = false;
                 std::cout << "Closed chest" << std::endl;
-                chest.getComponent<SpriteComponent>().Play("Idle_Down");
+                chest.getComponent<SpriteComponent>().Play("Inactive");
                 chestScreen.toggle();
                }
             }

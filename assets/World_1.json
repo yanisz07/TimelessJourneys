@@ -419,21 +419,32 @@
         "name": "chest",
         "sprites" : [
            {
-            "name" : "chest",
-            "path" : "/assests/chest_01.png",
+            "name" : "chest_closed_sprite",
+            "path" : "/assets/chest_01_closed.png",
             "actions": [
                 {
-                "name" : "Idle",
+                "name" : "Inactive",
                 "values": [
-                  16,
-                  4
+                    16,
+                    2
                 ]
               }
             ]
-
+          },
+            {
+            "name": "chest_open_sprite",
+            "path":"/assets/chest_01_open.png",
+            "actions":[
+                {
+                "name":"Active",
+                "values":[
+                    16,
+                    2
+                ]
+              }
+            ]
           }
         ]
       }
-
     ]
  }

@@ -27,6 +27,10 @@ void SpriteComponent::setActions()
     {
         Play("Idle_Down");
     }
+    else if(type == "chest")
+    {
+        Play("Inactive");
+    }
     else
     {
         Play("Idle");
@@ -85,6 +89,10 @@ void SpriteComponent::update()
                 if (type=="player")
                 {
                     Play("Idle_Down");
+                }
+                else if(type == "chest")
+                {
+                    Play("Inactive");
                 }
                 else
                 {
