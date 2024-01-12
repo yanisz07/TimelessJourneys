@@ -414,6 +414,26 @@
             ]
           }
         ]
+      },
+      {
+        "name": "chest",
+        "sprites" : [
+           {
+            "name" : "chest",
+            "path" : "/assests/chest_01.png",
+            "actions": [
+                {
+                "name" : "Idle",
+                "values": [
+                  16,
+                  4
+                ]
+              }
+            ]
+
+          }
+        ]
       }
+
     ]
-  }
+ }

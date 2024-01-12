@@ -13,6 +13,8 @@
 #include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
+#include "inventoryscreen.h"
+#include "chestScreen.h"
 
 extern std::filesystem::path projectDir;
 
@@ -52,6 +54,8 @@ public:
     int screen_width;
     int screen_height;
 
+    static InventoryScreen* inventoryScreen;
+    ChestScreen chestScreen;
     static AssetManager* assets;
 
     enum groupLabels : std::size_t //we can have up to 32 groups
@@ -62,7 +66,8 @@ public:
         groupPlayerProjectiles,
         groupEnemyProjectiles,
         groupEnemies,
-        groupPlayerAttack
+        groupPlayerAttack,
+        groupChests
     };
 
 private:

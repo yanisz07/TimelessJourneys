@@ -16,5 +16,6 @@
 #include "sword.h"
 #include "EnemyMovement.h"
 #include "armor.h"
+#include "InteractComponent.h"
 
 #endif // COMPONENTS_H
