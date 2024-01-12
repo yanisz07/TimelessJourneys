@@ -10,10 +10,16 @@ SDL_Texture* TextureManager::LoadTexture(const char* texture)
     strcat(result,texture);
 
     SDL_Surface* tempSurface = IMG_Load(result);
+
+    if(tempSurface == NULL)
+    {
+        std::cout << "Error loading image from: " << result <<std::endl;
+    }
+    else{
     SDL_Texture* tex = SDL_CreateTextureFromSurface(Game::renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
-
     return tex;
+    }
 }
 
 void TextureManager::Draw(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip)
