@@ -130,6 +130,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         }
 
         renderer = SDL_CreateRenderer(window,-1,0);
+        SDL_SetRenderDrawBlendMode(renderer,
+                                       SDL_BLENDMODE_BLEND);
 
         if(renderer)
         {

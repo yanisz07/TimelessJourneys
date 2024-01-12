@@ -35,7 +35,7 @@ public:
             health = 50;
             damage_mult = 1.0;
             max_health = 50;
-            experience = 0;
+            experience = 500;
             level = 1;
         } else {
             health = 10;
@@ -119,7 +119,7 @@ private:
     int exp_worth; // Only for enemies.
     bool player; // Stats pertaining to the player if true underneath.
     int max_health = 10;
-    int experience;
+    int experience = 500;
     int level;
     bool hit;
     bool hit_type; //false -> projectile, true -> melee

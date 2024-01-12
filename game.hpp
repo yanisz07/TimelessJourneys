@@ -41,6 +41,7 @@ public:
     void clean();
     void toggleMenu();
     void toggleFullScreen();
+    //static void getWindowSize(int*w, int*h);
 
     bool is_running() {return isRunning;}
 
