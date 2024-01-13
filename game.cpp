@@ -223,6 +223,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.getComponent<Sword>().equip();
 
     player.addGroup(Game::groupPlayers);
+    timeElapsed = Timer();
+    timeElapsed.start();
 
     std::cout << "Player created" << std::endl;
 
@@ -498,6 +500,7 @@ void Game::handleEvents()
                 // Reset game state to start again
                 player.getComponent<Stats>().set_health(50);
                 player.getComponent<TransformComponent>().position = Vector2D(1400, 1100);
+                timeElapsed.start();
                 isGameOverOpen = false;
             }
 
@@ -839,6 +842,9 @@ void Game::update()
         int playerHealth = player.getComponent<Stats>().get_health();
         if (playerHealth <= 0)
         {
+            isGameOverOpen = true;
+        }
+        if (timeElapsed.getTimeStart() > 300000) {
             isGameOverOpen = true;
         }
     }

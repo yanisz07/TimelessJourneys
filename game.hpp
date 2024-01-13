@@ -15,6 +15,7 @@
 #include "sdl_mixer.h"
 #include "inventoryscreen.h"
 #include "chestScreen.h"
+#include "timer.hpp"
 
 extern std::filesystem::path projectDir;
 
@@ -83,6 +84,7 @@ private:
     SDL_Point mousePosition;
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
+    Timer timeElapsed;
 };
 
 #endif // GAME_H
