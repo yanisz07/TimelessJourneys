@@ -79,7 +79,7 @@ void WeaponComponent::update()
                 else
                 {
                     frontAttack();
-                    std::cout << "Melee Attack" << std::endl;
+                    is_attacking_melee=true;
                 }
             }
             break;
@@ -95,7 +95,6 @@ void WeaponComponent::update()
             std::cout << "Set priority to " << priority << std::endl;
         }
         timer.setTimeOut(reloadTime);
-
     }
 }
 
@@ -179,19 +178,19 @@ int WeaponComponent::frontAttack()
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(0,-1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale,entityPos.y+13*scale-15,50,25,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale+6,entityPos.y+13*scale-15,27,54,100);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Up",false,1);
+            //sprite->Play("Attack_Up",false,1);
         }
         else
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(0,1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale,entityPos.y+(13+19)*scale,50,25,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale+6,entityPos.y+(13+19)*scale,27,54,100);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Down",false,1);
+            //sprite->Play("Attack_Down",false,1);
         }
     }
     if (entityTransform->y_direction == 0)
@@ -200,19 +199,19 @@ int WeaponComponent::frontAttack()
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(-1,0);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale-20,entityPos.y+13*scale,25,50,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+13*scale+15,54,27,100);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Right",true,1);
+            //sprite->Play("Attack_Right",true,1);
         }
         else
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(1,0);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(18+13)*scale,entityPos.y+13*scale,25,50,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(18+13)*scale,entityPos.y+13*scale+15,54,27,100);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Right",false,1);
+            //sprite->Play("Attack_Right",false,1);
         }
     }
     if (entityTransform->x_direction == 1)
@@ -221,19 +220,19 @@ int WeaponComponent::frontAttack()
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(1,-1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+100,entityPos.y-20,128,32,100,45);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-10,entityPos.y-10,27,54,100,45);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Right",false,1);
+            //sprite->Play("Attack_Right",false,1);
         }
         if (entityTransform->y_direction == 1)
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(1,1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+100,entityPos.y+100,128,32,100,135);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-10,entityPos.y+(13+19)*scale-10,27,54,100,135);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Right",false,1);
+            //sprite->Play("Attack_Right",false,1);
         }
     }
     if (entityTransform->x_direction == -1)
@@ -242,20 +241,20 @@ int WeaponComponent::frontAttack()
         {
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(-1,-1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-100,entityPos.y-20,128,32,100,135);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-10,entityPos.y-10,27,54,100,135);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Right",true,1);
+            //sprite->Play("Attack_Right",true,1);
         }
         if (entityTransform->y_direction == 1)
         {
             std::cout << "Melee attack" << std::endl;
             attackCol.addComponent<TransformComponent>();
             attackCol.getComponent<TransformComponent>().set_directions(-1,1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-100,entityPos.y+100,128,32,100,45);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-10,entityPos.y+(13+19)*scale-10,27,54,100,225);
             attackCol.addGroup(Game::groupPlayerAttack);
 
-            sprite->Play("Attack_Right",true,1);
+            //sprite->Play("Attack_Right",true,1);
         }
     }
     Mix_PlayChannel(-1,swordSwooshSound, 0);

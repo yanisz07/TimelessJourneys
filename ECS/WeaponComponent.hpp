@@ -25,9 +25,15 @@ public:
     Timer timer;
     std::string attack;
     bool melee;
-    SDL_Texture *texture;
+    SDL_Texture* texture;
     int damage = 0;
     Mix_Chunk* swordSwooshSound;
+
+    TransformComponent* entityTransform;
+    SpriteComponent* sprite;
+
+
+    bool is_attacking_melee = false;
 
     WeaponComponent(Manager *man);
 
@@ -51,10 +57,6 @@ public:
 
 private:
     std::string name = "Standard weapon ";
-
-    TransformComponent* entityTransform;
-    SpriteComponent* sprite;
-
     Uint32 reloadTime = 400;
     Manager* manager;
 

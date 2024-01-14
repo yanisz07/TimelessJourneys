@@ -795,6 +795,7 @@ void Game::render()
         for (auto& e : enemies) { e->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
+        for (auto& p : PlayerAttacks) {p->draw();}
 
         // Render the UI elements over the game objects
         label.draw();
