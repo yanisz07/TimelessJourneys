@@ -152,6 +152,10 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_SetRenderDrawColor(renderer, 0, 122, 204, 255); // Blue color for handle
         SDL_RenderFillRect(renderer, &volumeSliderHandle);
 
+
+
+        TTF_SetFontStyle(font, TTF_STYLE_ITALIC); // font for slider in italics
+
         SDL_Surface* sliderTextSurface = TTF_RenderText_Solid(font, "Slide to adjust music", textColor);
         SDL_Texture* sliderTextTexture = SDL_CreateTextureFromSurface(renderer, sliderTextSurface);
         int sliderTextWidth, sliderTextHeight;
@@ -164,7 +168,7 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         };
         SDL_RenderCopy(renderer, sliderTextTexture, NULL, &sliderTextRect);
 
-
+        TTF_SetFontStyle(font, TTF_STYLE_NORMAL); // reset to not italics
 
 
         // Render Back Text
