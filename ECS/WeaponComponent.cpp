@@ -258,7 +258,7 @@ void WeaponComponent::draw()
 {
     if(attack == "sword")
     {
-        std::cout<< "Draw attack" << std::endl;
+        //std::cout<< "Draw attack" << std::endl;
         float handLocation[3][2] = {{20.0/48.0,215.0/48.0},{29.0/48.0,27.0/48.0},{29.0/48.0,27.0/48.0}};
         //SDL_Rect srcRect = {0,0,380,870};
         entityTransform = &(entity->getComponent<TransformComponent>());

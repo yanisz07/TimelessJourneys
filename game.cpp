@@ -218,7 +218,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
-    enemy.addComponent<EnemyMovement>(500,200,1200,60,&playerTransform); //To be changed later on
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform); //To be changed later on
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     enemy.addGroup(Game::groupEnemies);
