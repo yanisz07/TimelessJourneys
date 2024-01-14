@@ -1,4 +1,6 @@
 #include "KeyboardController.hpp"
+#include "sword.h"
+#include "range_weapon.h"
 
 void KeyboardController::init()
 {
@@ -11,7 +13,6 @@ void KeyboardController::update()
 {
     if (Game::event.type == SDL_KEYDOWN)
     {
-
         switch (Game::event.key.keysym.sym)
         {
         case SDLK_UP:
@@ -190,6 +191,23 @@ void KeyboardController::update()
             break;
         default:
             break;
+        }
+        switch(Game::event.key.keysym.scancode)
+        {
+        case
+            SDL_SCANCODE_Q:
+            if (entity->getComponent<Sword>().is_equiped)
+            {
+                std::cout << "Range Weapon" << std::endl;
+                entity->getComponent<Sword>().is_equiped=false;
+                entity->getComponent<Range_Weapon>().is_equiped=true;
+            }
+            else
+            {
+                std::cout << "Melee Weapon" << std::endl;
+                entity->getComponent<Sword>().is_equiped=true;
+                entity->getComponent<Range_Weapon>().is_equiped=false;
+            }
         }
     }
     if (Game::event.type == SDL_KEYUP)

@@ -165,6 +165,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+    assets->AddTexture("arrow", "/assets/arrow.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -211,9 +212,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<ColliderComponent>("player");
 
     player.addComponent<Stats>(true);
-    //player.addComponent<WeaponComponent>(&manager);
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
+    player.addComponent<Range_Weapon>(&manager);
 
     player.addGroup(Game::groupPlayers);
 
@@ -672,7 +673,7 @@ void Game::update()
         if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
         {
             // Create a projectile every two seconds
-            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
+            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false,32,32,3);
             lastProjectileTime = currentTime;  // Update the last projectile creation time
         }
         //End

@@ -24,18 +24,19 @@ public:
 
     Timer timer;
     std::string attack;
-    bool melee;
     SDL_Texture* texture;
     int damage = 0;
     Mix_Chunk* swordSwooshSound;
 
     std::string spritePath;
+    //do an Animation object to store this
     int frames = 4;
     int frame = 0;
     int index = 0;
     int speed = 100;
     int width = 276;
     int height = 539;
+    //
     SDL_Rect srcR, destR;
 
     bool is_attacking = false;

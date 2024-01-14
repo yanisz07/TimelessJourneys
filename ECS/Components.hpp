@@ -6,7 +6,6 @@
 #include "ECS.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
-#include "WeaponComponent.hpp"
 #include "KeyboardController.hpp"
 #include "ColliderComponent.hpp"
 #include "TileComponent.hpp"
@@ -16,5 +15,6 @@
 #include "sword.h"
 #include "EnemyMovement.h"
 #include "armor.h"
+#include "range_weapon.h"
 
 #endif // COMPONENTS_H

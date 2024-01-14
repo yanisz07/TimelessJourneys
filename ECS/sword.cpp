@@ -9,7 +9,6 @@ Sword::Sword(Manager *man)
 {
     timer.start();
     timer.setTimeOut(reloadTime);
-    melee=true;
     std::cout << "Melee Attack" << std::endl;
     manager = man;
     std::string swoosh_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword_swoosh_effect1.mp3").string();
@@ -53,29 +52,32 @@ void Sword::init()
 
 void Sword::update()
 {
-    if (Game::event.type == SDL_KEYDOWN && timer.timedOut())
+    if (is_equiped)
     {
-        switch(Game::event.key.keysym.scancode)
+        if (Game::event.type == SDL_KEYDOWN && timer.timedOut())
         {
-        case
-            SDL_SCANCODE_W:
-            if(timer.timedOut())
+            switch(Game::event.key.keysym.scancode)
             {
-                direction.x = entityTransform->x_direction;
-                direction.y = entityTransform->y_direction;
-                frontAttack();
-                is_attacking=true;
+            case
+                SDL_SCANCODE_W:
+                if(timer.timedOut())
+                {
+                    direction.x = entityTransform->x_direction;
+                    direction.y = entityTransform->y_direction;
+                    frontAttack();
+                    is_attacking=true;
+                }
+                break;
             }
-            break;
+            timer.setTimeOut(reloadTime);
         }
-        timer.setTimeOut(reloadTime);
-    }
 
-    if (is_attacking)
-    {
-        if (timer.timedOut())
+        if (is_attacking)
         {
-            update_sword();
+            if (timer.timedOut())
+            {
+                update_sword();
+            }
         }
     }
 }
@@ -225,7 +227,7 @@ void Sword::draw()
                     destR.y = entityPos.y-10-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,45,NULL,SDL_FLIP_NONE);
                 }
-                if (entityTransform->y_direction == 1)
+                if (direction.y == 1)
                 {
                     setPriority(sprite->priority + 1);
                     destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
