@@ -399,9 +399,13 @@ void Game::handleEvents()
                 if (isMusic) { // Music is currently playing
                     Mix_PauseMusic(); // Pause the music
                     isMusic = false; // Update the flag
+                    Setting::volume_onoff(isMusic);
+
                 } else { // Music is currently paused
                     Mix_ResumeMusic(); // Resume the music
                     isMusic = true; // Update the flag
+                    Setting::volume_onoff(isMusic);
+
                 }
             }
             //if click is within Screen Dimension button boundary:

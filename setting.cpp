@@ -202,3 +202,17 @@ void Setting::handleSliderEvent(const SDL_Point& mousePosition) {
 
     }
 }
+
+
+void Setting::volume_onoff(bool isMusic) {
+    if (isMusic){
+        currentVolume = 100;
+        Mix_VolumeMusic(currentVolume * 128 / 100);
+
+    }
+    else if (!isMusic){
+        currentVolume = 0;
+        Mix_VolumeMusic(currentVolume * 128 / 100);
+
+    }
+}

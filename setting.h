@@ -10,6 +10,8 @@ public:
     static void toggleSettingState(bool &isSettingsOpen);
     static void renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const SDL_Point& mousePosition, bool isFullscreen, bool isMusic);
     static void handleSliderEvent(const SDL_Point& mousePosition);
+    static void volume_onoff(bool isMusic);
+
 
 private:
     static int currentVolume;  // Range 0-100
