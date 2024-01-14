@@ -32,7 +32,6 @@ public:
     TransformComponent* entityTransform;
     SpriteComponent* sprite;
 
-
     bool is_attacking_melee = false;
 
     WeaponComponent(Manager *man);
@@ -57,7 +56,7 @@ public:
 
 private:
     std::string name = "Standard weapon ";
-    Uint32 reloadTime = 400;
+    Uint32 reloadTime = 200;
     Manager* manager;
 
 

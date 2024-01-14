@@ -264,7 +264,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Test collision with rotated objects
 
     TestCol.addComponent<ColliderComponent>("terrain",1700,1300,200,100);
-    TestCol.getComponent<ColliderComponent>().SetAngle(135);
+    TestCol.getComponent<ColliderComponent>().SetAngle(227);
 
 }
 
