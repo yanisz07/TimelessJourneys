@@ -299,7 +299,15 @@ void Game::handleEvents()
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
         case SDLK_ESCAPE:
+             if (chest_open == false) {
             InGameMenu::toggleInGameMenuState(isInGameMenuOpen); // Existing menu toggle
+             }
+             else {
+            chest_open = false;
+            std::cout << "Closed chest" << std::endl;
+            chest.getComponent<SpriteComponent>().Play("Idle_Down");
+            chestScreen.toggle();
+             }
             break;
         case SDLK_f:
             toggleFullScreen();
@@ -324,10 +332,8 @@ void Game::handleEvents()
                 }
                }
                else {
-                chest_open = false;
-                std::cout << "Closed chest" << std::endl;
-                chest.getComponent<SpriteComponent>().Play("Idle_Down");
-                chestScreen.toggle();
+                //move item if there is one
+                //else do nothing
                }
             }
             }
@@ -351,8 +357,27 @@ void Game::handleEvents()
             break;
             }
         }
-        break;
 
+            if (chestScreen.isCurrentlyVisible()) {
+            switch (event.key.keysym.sym) {
+            case SDLK_UP:
+                chestScreen.moveSelection(-chestScreen.getTotalCols());
+                break;
+            case SDLK_DOWN:
+                chestScreen.moveSelection(chestScreen.getTotalCols());
+                break;
+            case SDLK_LEFT:
+                chestScreen.moveSelection(-1);
+                break;
+            case SDLK_RIGHT:
+                chestScreen.moveSelection(1);
+                break;
+            case SDLK_RETURN:
+                //move object
+                break;
+            }
+        }
+        break;
 
     case SDL_MOUSEMOTION:
         mousePosition.x = event.motion.x;
