@@ -242,6 +242,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     npc.addComponent<SpriteComponent>(true,"player");
     npc.getComponent<SpriteComponent>().setActions();
     npc.addComponent<NPCBehavior>(500,&playerTransform);
+    npc.addComponent<ColliderComponent>("terrain",1200+32,800+32,64,64);
     npc.addGroup(Game::groupNPC);
 
     std::cout << "npc created" << std::endl;
@@ -541,6 +542,26 @@ void Game::update()
                 enemy.getComponent<EnemyMovement>().onCollision(); // the enemy doesn't move
             }
         }
+        //with npcs:
+        for (auto& c : npcs)
+        {
+            SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+            if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
+            {
+                std::cout << "Hit wall" << std::endl;
+                player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+            }
+
+            if (enemy.getComponent<EnemyMovement>().collisionCooldown > 0) continue;
+
+            SDL_Rect e_cCol = c->getComponent<ColliderComponent>().collider;
+            if(Collision::AABB(e_cCol, enemyCol))
+            {
+                std::cout << "Enemy hit wall" << std::endl;
+                enemy.getComponent<EnemyMovement>().onCollision(); // the enemy doesn't move
+            }
+        }
+        //End
         //End
 
         //Test collision with rotated objects
