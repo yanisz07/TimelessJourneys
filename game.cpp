@@ -17,6 +17,7 @@
 #include <variant>
 #include <filesystem>
 #include "world.hpp"
+#include "items.h"
 
 Map* map;
 Manager manager;

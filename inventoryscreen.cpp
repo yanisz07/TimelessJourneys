@@ -56,7 +56,7 @@ void InventoryScreen::addItem(const InventoryItem& item) {
 
 void InventoryScreen::addNewItem(const items::ItemType itemName,const string iconPath, SDL_Renderer* renderer) {
     SDL_Texture* iconTexture = TextureManager::LoadTexture(iconPath.c_str());
-    if (iconTexture) {
+    if (iconTexture != nullptr) {
         InventoryItem newItem(iconTexture, itemName);
         addItem(newItem);
     } else {
@@ -151,6 +151,7 @@ void InventoryScreen::handleEvents(SDL_Event& event) {
 
 const int ITEM_ICON_WIDTH = 32;
 const int ITEM_ICON_HEIGHT = 32;
+
 
 void InventoryScreen::render(SDL_Renderer* renderer) {
     if (!isVisible) return;
