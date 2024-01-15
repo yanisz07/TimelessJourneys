@@ -3,6 +3,7 @@
 #include "TransformComponent.hpp"
 #include "../game.hpp"
 #include "sword.h"
+#include "range_weapon.h"
 
 
 void Stats::SubtractHealth(int i)
@@ -18,6 +19,24 @@ void Stats::SubtractHealth(int i)
         KillEntity();
     }
 }
+
+void Stats::init()
+{
+    std::string font = "arial";
+    std::string text;
+    SDL_Colour color = {0,0,0,255};
+    //Draw healthLabel
+    text = "Health";
+    SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
+    healthLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
+    SDL_FreeSurface(surf);
+    //Draw expLabel
+    text = "Experience";
+    surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
+    expLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
+    SDL_FreeSurface(surf);
+}
+
 
 void Stats::Damage(Stats& entity1, Stats& entity2)
 { // TODO To be deleted. Weapons should handle damage and use SubtractHealth and read damage_mult.
@@ -35,6 +54,7 @@ void Stats::KillEntity() {
 void Stats::draw()
 {
     SDL_Rect destRect;
+    SDL_Rect srcRect = {0,0,0,0};
     //Draw stats display
     //TODO: need to somehow get the current window size
     if(entity->type == "player")
@@ -53,6 +73,16 @@ void Stats::draw()
     destRect.h = h;
     SDL_SetRenderDrawColor(Game::renderer,255,255,255,150);
     SDL_RenderFillRect(Game::renderer,&destRect);
+
+    //Render labels
+    destRect.x = 20;
+    destRect.y = 10;
+    destRect.w = 100;
+    destRect.h = (1.0/3.0)*h;
+    SDL_RenderCopy(Game::renderer,healthLabel,NULL,&destRect);
+    destRect.y += (1.0/2.0)*h;
+    SDL_RenderCopy(Game::renderer,expLabel,NULL,&destRect);
+
 
     //Render health bar
     SDL_SetRenderDrawColor(Game::renderer,34,139,34,200);
@@ -82,10 +112,30 @@ void Stats::draw()
     //TODO: what component keeps track of the current weapon
     destRect.h = h-20;
     destRect.w = h;
-    destRect.x = 150;
+    destRect.x = 170;
     destRect.y = 20;
-    WeaponComponent* weapon = &(entity->getComponent<Sword>());
-    SDL_RenderCopy(Game::renderer,weapon->texture,NULL,&destRect);
+
+    Sword* weapon1 = &(entity->getComponent<Sword>());
+    srcRect.h = weapon1->height;
+    srcRect.w = weapon1->width;
+    if(weapon1->is_equiped)
+    {
+        SDL_SetRenderDrawColor(Game::renderer,0,254,100,240);
+            SDL_RenderFillRect(Game::renderer,&destRect);
+    }
+    SDL_RenderCopy(Game::renderer,weapon1->texture,&srcRect,&destRect);
+
+    Range_Weapon* weapon2 = &(entity->getComponent<Range_Weapon>());
+    destRect.x += destRect.w;
+    srcRect.h = weapon2->height;
+    srcRect.w = weapon2->width;
+    if(weapon2->is_equiped)
+    {
+            SDL_SetRenderDrawColor(Game::renderer,0,254,100,240);
+            SDL_RenderFillRect(Game::renderer,&destRect);
+    }
+    SDL_RenderCopy(Game::renderer,weapon2->texture,&srcRect,&destRect);
+
     }
 
     //

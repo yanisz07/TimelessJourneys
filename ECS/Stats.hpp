@@ -61,6 +61,7 @@ public:
     int get_level() {return level;}
 
     void draw() override;
+    void init() override;
 
     void set_health(int i) {health = i;} // Should not be used on players! Or anyone really, only debug.
 
@@ -125,6 +126,8 @@ private:
     bool hit_type; //false -> projectile, true -> melee
     Uint32 hit_time;
     Vector2D hit_direction;
+    SDL_Texture* healthLabel;
+    SDL_Texture* expLabel;
 
 };
 
