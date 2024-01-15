@@ -446,8 +446,9 @@ void Game::handleEvents()
             int centerX = (screenWidth - buttonWidth) / 2;
             int ScreenDim_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 120;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 180;
 
+            Setting::handleSliderEvent({event.button.x, event.button.y});
 
             //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -470,9 +471,13 @@ void Game::handleEvents()
                 if (isMusic) { // Music is currently playing
                     Mix_PauseMusic(); // Pause the music
                     isMusic = false; // Update the flag
+                    Setting::volume_onoff(isMusic);
+
                 } else { // Music is currently paused
                     Mix_ResumeMusic(); // Resume the music
                     isMusic = true; // Update the flag
+                    Setting::volume_onoff(isMusic);
+
                 }
             }
             //if click is within Screen Dimension button boundary:
