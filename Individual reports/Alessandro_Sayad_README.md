@@ -13,3 +13,7 @@ I devoted my time this week to the SDL2 youtube tutorial to further understand t
 <br>
 Week 4: <br>
 During this week I first fixed what I did in week 3 and made it so that the player takes damage when in colision whith an ennemy and not the opposite, moreover, I implemented a feature where theplayer is invincible for a chosen amount of time after taking melee damage from an ennemy. 
+<br>
+<br>
+Week 5: <br>
+Created an item file that is meant to display the items in the inventory. Changed a few functions in the inventory files, added an asset, then I got to a point where it displayed the "Hand" text on the first slot, but more will be done next week in order to complete this feature.
