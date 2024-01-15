@@ -50,6 +50,7 @@ void InventoryScreen::toggle() {
 
 //Manage items
 
+//Implement this
 void InventoryScreen::addItem(const InventoryItem& item) {
     items.push_back(item);
 }
@@ -58,7 +59,7 @@ void InventoryScreen::addNewItem(const items::ItemType itemName,const string ico
     SDL_Texture* iconTexture = TextureManager::LoadTexture(iconPath.c_str());
     if (iconTexture != nullptr) {
         InventoryItem newItem(iconTexture, itemName);
-        addItem(newItem);
+        addItem(newItem); //We have to implement this
     } else {
         cerr << "Failed to load texture for item: " << itemName << endl;
     }

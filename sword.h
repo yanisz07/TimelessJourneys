@@ -7,14 +7,11 @@
 #include "inventoryscreen.h"
 #include "items.h"
 
-class Sword1 : public InventoryItem {
+
+class Melee : public InventoryItem {
 public:
     // Constructor for Sword
-    Sword1(SDL_Texture* icon, int damage, int durability)
-        : InventoryItem(icon, items::Sword){
-        this->damage = damage;
-        this->durability = durability;
-    }
+    Melee(SDL_Texture* icon, int damage, int durability);
 
 private:
     int damage;
