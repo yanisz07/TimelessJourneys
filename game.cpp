@@ -250,7 +250,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     std::cout << "npc created" << std::endl;
 
     // create first version of a bubble text
-    bubble.addComponent<TransformComponent>(1400,1100,50,70,1);//First version of a bubble text.##############
+    bubble.addComponent<TransformComponent>(1200+80,800-40,100,140,1);//First version of a bubble text.##############
     bubble.addComponent<SpriteComponent>("bubble");
     bubble.addGroup(Game::groupBubbles);
 
