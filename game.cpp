@@ -46,6 +46,7 @@ auto& enemy(manager.addEntity());
 auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
 auto& npc(manager.addEntity());
+auto& bubble(manager.addEntity());//Add bubble as an
 //End
 
 
@@ -247,6 +248,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "npc created" << std::endl;
 
+    // create first version of a bubble text
+    bubble.addComponent<TransformComponent>(1400,1100,50,70,1);//First version of a bubble text.##############
+    bubble.addComponent<SpriteComponent>("bubble");
+    bubble.addGroup(Game::groupBubbles);
+
+
 
     }
 
@@ -288,6 +295,7 @@ auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& npcs(manager.getGroup(Game::groupNPC));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
+auto& bubbles(manager.getGroup(Game::groupBubbles));
 
 void Game::handleEvents()
 {
@@ -829,6 +837,7 @@ void Game::render()
         for (auto& n : npcs) {n->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
+        for (auto& b : bubbles) { b->draw(); } //#########################################################################
 
         // Render the UI elements over the game objects
         label.draw();
