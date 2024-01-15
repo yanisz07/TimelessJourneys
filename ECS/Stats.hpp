@@ -117,9 +117,9 @@ private:
 
     float damage_mult; // The multiplier of the base damage.
     int exp_worth; // Only for enemies.
-    bool player; // Stats pertaining to the player if true underneath.
     int max_health = 10;
     int experience = 500;
+    bool player = false; // Stats pertaining to the player if true underneath.
     int level;
     bool hit;
     bool hit_type; //false -> projectile, true -> melee

@@ -21,9 +21,7 @@
 
 Map* map;
 Manager manager;
-
 SDL_Renderer* Game::renderer = nullptr;
-
 SDL_Event Game::event;
 
 //Camera
@@ -37,6 +35,7 @@ InventoryScreen* Game::inventoryScreen = new InventoryScreen();
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
 
+//click Button sound
 
 
 //Add characters
@@ -171,9 +170,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+
     //assets->AddTexture("chest", "/assets/chest_01.png");
 
-
+    assets->AddTexture("arrow", "/assets/arrow.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -220,11 +220,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<ColliderComponent>("player");
 
     player.addComponent<Stats>(true);
-    //player.addComponent<WeaponComponent>(&manager);
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
+    player.addComponent<Range_Weapon>(&manager);
 
     player.addGroup(Game::groupPlayers);
+    timeElapsed = Timer();
+    timeElapsed.start();
 
     std::cout << "Player created" << std::endl;
 
@@ -284,7 +286,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Test collision with rotated objects
 
     TestCol.addComponent<ColliderComponent>("terrain",1700,1300,200,100);
-    TestCol.getComponent<ColliderComponent>().SetAngle(135);
+    TestCol.getComponent<ColliderComponent>().SetAngle(227);
 
 }
 
@@ -300,7 +302,8 @@ auto& chests(manager.getGroup(Game::groupChests));
 void Game::handleEvents()
 {
     SDL_PollEvent(&event);
-
+    std::string click_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "click_button1.mp3").string();
+    clickButton = Mix_LoadWAV(click_path.c_str());
     switch (event.type) {
     case SDL_QUIT:
         isRunning = false;
@@ -385,12 +388,14 @@ void Game::handleEvents()
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Start_centerY && y < Start_centerY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isMenuOpen = false;
                 isGameStarted = true;
             }
             //if click is within Setting button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Setting_centerY && y < Setting_centerY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isSettingsOpen = true;
                 isMenuOpen = false;
 
@@ -398,6 +403,7 @@ void Game::handleEvents()
             // Check if click is within the Exit button boundary
             if (x > centerX && x < centerX + buttonWidth &&
                 y > exitCenterY && y < exitCenterY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isRunning = false;
             }
         }
@@ -418,11 +424,13 @@ void Game::handleEvents()
             //if click is within resume button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Start_centerY && y < Start_centerY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isInGameMenuOpen = false;
             }
             //if click is within Setting button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Setting_centerY && y < Setting_centerY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isSettingsOpen = true;
                 isInGameMenuOpen = false;
 
@@ -430,6 +438,7 @@ void Game::handleEvents()
             // Check if click is within the Exit button boundary
             if (x > centerX && x < centerX + buttonWidth &&
                 y > exitCenterY && y < exitCenterY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isRunning = false;
             }
         }
@@ -445,17 +454,20 @@ void Game::handleEvents()
             int centerX = (screenWidth - buttonWidth) / 2;
             int ScreenDim_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 120;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 180;
 
+            Setting::handleSliderEvent({event.button.x, event.button.y});
 
             //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Back_centerY && y < Back_centerY + buttonHeight) {
                 if (isGameStarted) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isSettingsOpen = false;
                 isInGameMenuOpen = true;
                 }
                 else if (!isGameStarted){
+                Mix_PlayChannel(-1,clickButton, 0);
                 isSettingsOpen = false;
                 isMenuOpen = true;
 
@@ -467,16 +479,23 @@ void Game::handleEvents()
                 y > Music_centerY && y < Music_centerY + buttonHeight) {
                 // Toggle music state
                 if (isMusic) { // Music is currently playing
+                    Mix_PlayChannel(-1,clickButton, 0);
                     Mix_PauseMusic(); // Pause the music
                     isMusic = false; // Update the flag
+                    Setting::volume_onoff(isMusic);
+
                 } else { // Music is currently paused
+                    Mix_PlayChannel(-1,clickButton, 0);
                     Mix_ResumeMusic(); // Resume the music
                     isMusic = true; // Update the flag
+                    Setting::volume_onoff(isMusic);
+
                 }
             }
             //if click is within Screen Dimension button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > ScreenDim_centerY && y < ScreenDim_centerY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 toggleFullScreen();
 
             }
@@ -498,14 +517,17 @@ void Game::handleEvents()
             if (x > retryButtonRect.x && x < retryButtonRect.x + retryButtonRect.w &&
                 y > retryButtonRect.y && y < retryButtonRect.y + retryButtonRect.h) {
                 // Reset game state to start again
+                Mix_PlayChannel(-1,clickButton, 0);
                 player.getComponent<Stats>().set_health(50);
                 player.getComponent<TransformComponent>().position = Vector2D(1400, 1100);
+                timeElapsed.start();
                 isGameOverOpen = false;
             }
 
             // Check if click is within exit button boundary
             if (x > exitButtonRect.x && x < exitButtonRect.x + exitButtonRect.w &&
                 y > exitButtonRect.y && y < exitButtonRect.y + exitButtonRect.h) {
+                Mix_PlayChannel(-1,clickButton, 0);
                 isRunning = false; // Exit the game
             }
         }
@@ -753,7 +775,7 @@ void Game::update()
         if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
         {
             // Create a projectile every two seconds
-            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
+            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false,32,32,3);
             lastProjectileTime = currentTime;  // Update the last projectile creation time
         }
         //End
@@ -843,6 +865,9 @@ void Game::update()
         {
             isGameOverOpen = true;
         }
+        if (timeElapsed.getTimeStart() > 300000) {
+            isGameOverOpen = true;
+        }
     }
 }
 
@@ -876,6 +901,8 @@ void Game::render()
         for (auto& e : enemies) { e->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
         for (auto& ch: chests) { ch->draw(); }
+        for (auto& ep : EnemyProjectiles) { ep->draw(); }
+        for (auto& p : PlayerAttacks) {p->draw();}
 
         // Render the UI elements over the game objects
         label.draw();

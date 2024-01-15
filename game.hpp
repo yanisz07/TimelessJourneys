@@ -15,6 +15,7 @@
 #include "sdl_mixer.h"
 #include "inventoryscreen.h"
 #include "chestScreen.h"
+#include "timer.hpp"
 
 extern std::filesystem::path projectDir;
 
@@ -58,6 +59,7 @@ public:
     static InventoryScreen* inventoryScreen;
     ChestScreen chestScreen;
     static AssetManager* assets;
+    Mix_Chunk* clickButton;
 
     enum groupLabels : std::size_t //we can have up to 32 groups
     {
@@ -84,6 +86,7 @@ private:
     SDL_Point mousePosition;
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
+    Timer timeElapsed;
 };
 
 #endif // GAME_H

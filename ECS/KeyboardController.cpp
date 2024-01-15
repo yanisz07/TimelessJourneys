@@ -1,5 +1,7 @@
 #include "KeyboardController.hpp"
 #include "../game.hpp"
+#include "sword.h"
+#include "range_weapon.h"
 
 void KeyboardController::init()
 {
@@ -14,7 +16,6 @@ void KeyboardController::update()
     {
         if (Game::event.type == SDL_KEYDOWN)
         {
-
             switch (Game::event.key.keysym.sym)
             {
             case SDLK_UP:
@@ -194,71 +195,91 @@ void KeyboardController::update()
             default:
                 break;
             }
-        }
-        if (Game::event.type == SDL_KEYUP)
-        {
-            switch (Game::event.key.keysym.sym)
+            switch(Game::event.key.keysym.scancode)
             {
-            case SDLK_UP:
-                pressed_up = false;
-                transform->velocity.y = 0;
-                //change direction
-                if (!pressed_right && !pressed_left)
+            case
+                SDL_SCANCODE_Q:
+                if (entity->getComponent<Sword>().is_equiped)
                 {
-                    transform->y_direction=-1;
-                    sprite->Play("Idle_Up" + armor->get_type());
+                    std::cout << "Range Weapon" << std::endl;
+                    entity->getComponent<Sword>().is_equiped=false;
+                    entity->getComponent<Range_Weapon>().is_equiped=true;
                 }
                 else
                 {
-                    transform->y_direction =0;
+                    std::cout << "Melee Weapon" << std::endl;
+                    entity->getComponent<Sword>().is_equiped=true;
+                    entity->getComponent<Range_Weapon>().is_equiped=false;
                 }
                 break;
-            case SDLK_DOWN:
-                pressed_down = false;
-                transform->velocity.y = 0;
-                //change direction
-                if (!pressed_right && !pressed_left)
-                {
-                    transform->y_direction=1;
-                    sprite->Play("Idle_Down" + armor->get_type());
-                }
-                else
-                {
-                    transform->y_direction =0;
-                }
-                break;
-            case SDLK_LEFT:
-                pressed_left = false;
-                transform->velocity.x = 0;
-                //change direction
-                if (!pressed_up && !pressed_down)
-                {
-                    transform->x_direction =-1;
-                    sprite->Play("Idle_Right" + armor->get_type(),true);
-                }
-                else
-                {
-                    transform->x_direction =0;
-                }
-                break;
-            case SDLK_RIGHT:
-                pressed_right = false;
-                transform->velocity.x = 0;
-                //change direction
-                if (!pressed_up && !pressed_down)
-                {
-                    transform->x_direction =1;
-                    sprite->Play("Idle_Right" + armor->get_type());
-                }
-                else
-                {
-                    transform->x_direction =0;
-                }
-                break;
-
             default:
                 break;
             }
+        }
+        if (Game::event.type == SDL_KEYUP)
+        {
+                switch (Game::event.key.keysym.sym)
+                {
+                case SDLK_UP:
+                    pressed_up = false;
+                    transform->velocity.y = 0;
+                    //change direction
+                    if (!pressed_right && !pressed_left)
+                    {
+                        transform->y_direction=-1;
+                        sprite->Play("Idle_Up" + armor->get_type());
+                    }
+                    else
+                    {
+                        transform->y_direction =0;
+                    }
+                    break;
+                case SDLK_DOWN:
+                    pressed_down = false;
+                    transform->velocity.y = 0;
+                    //change direction
+                    if (!pressed_right && !pressed_left)
+                    {
+                        transform->y_direction=1;
+                        sprite->Play("Idle_Down" + armor->get_type());
+                    }
+                    else
+                    {
+                        transform->y_direction =0;
+                    }
+                    break;
+                case SDLK_LEFT:
+                    pressed_left = false;
+                    transform->velocity.x = 0;
+                    //change direction
+                    if (!pressed_up && !pressed_down)
+                    {
+                        transform->x_direction =-1;
+                        sprite->Play("Idle_Right" + armor->get_type(),true);
+                    }
+                    else
+                    {
+                        transform->x_direction =0;
+                    }
+                    break;
+                case SDLK_RIGHT:
+                    pressed_right = false;
+                    transform->velocity.x = 0;
+                    //change direction
+                    if (!pressed_up && !pressed_down)
+                    {
+                        transform->x_direction =1;
+                        sprite->Play("Idle_Right" + armor->get_type());
+                    }
+                    else
+                    {
+                        transform->x_direction =0;
+                    }
+                    break;
+
+                default:
+                    break;
+                }
         }
     }
 }
