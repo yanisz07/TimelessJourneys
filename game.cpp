@@ -32,6 +32,8 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
 
+
+
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
 

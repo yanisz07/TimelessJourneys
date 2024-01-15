@@ -17,6 +17,8 @@ Melee::Melee(SDL_Texture* icon, int damage, int durability)
     std::string swordIconPath = (ProjectDir / ".." / "TimelessJourneys" / "assets" / "sword.png").string();
     SDL_Texture* swordIcon = TextureManager::LoadTexture(swordIconPath.c_str());
 
+    //Game::inventoryScreen.addNewItem(items::Sword, swordIcon, Game::renderer);
+
     /* if (swordIcon) {
         int swordDamage = 20; // Adjust as needed
         int swordDurability = 100; // Adjust as needed
