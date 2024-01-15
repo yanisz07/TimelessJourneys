@@ -58,6 +58,7 @@ public:
     static InventoryScreen* inventoryScreen;
     ChestScreen chestScreen;
     static AssetManager* assets;
+    Mix_Chunk* clickButton;
 
     enum groupLabels : std::size_t //we can have up to 32 groups
     {
