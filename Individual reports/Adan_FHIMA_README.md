@@ -9,4 +9,4 @@ During week 5, i have been working on a new feature of the game: the game over s
 During Week 6, I provided the sprites for our hero (melee attack, different armor, etc.). I have also finished the 'Game Over' screen, implementing two functional buttons.
 i also started to work on the sound design of the game.
 
-
+During week 7; i kept working on the sound design. i implemented a sword swooch sound effect and a click button effect. But i have been principaly working on fixing bugs in the game e.g the character moving alone..
