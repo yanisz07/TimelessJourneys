@@ -166,6 +166,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+    assets->AddTexture("bubble", "/assets/bubble.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
