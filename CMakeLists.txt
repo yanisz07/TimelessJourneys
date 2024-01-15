@@ -67,7 +67,7 @@ set(SOURCES
     ECS/Stats.cpp
     json.hpp
     timer.hpp
-    ECS/WeaponComponent.hpp
+
     world.hpp world.cpp
     menu.h
     menu.cpp
@@ -82,17 +82,18 @@ set(SOURCES
     ECS/KeyboardController.cpp
     ECS/ProjectileComponent.cpp
     ECS/SpriteComponent.cpp
-    ECS/WeaponComponent.cpp
-    ECS/EnemyMovement.cpp)
+    ECS/EnemyMovement.cpp
+    ECS/armor.h ECS/armor.cpp
+    ECS/sword.cpp
+    ECS/range_weapon.h ECS/range_weapon.cpp
+    ECS/TransformComponent.cpp)
 
 add_executable(TimelessJourneys ${SOURCES}
-    ECS/armor.h ECS/armor.cpp
     inventoryscreen.cpp
     inventoryscreen.h
     ECS/InteractComponent.h
     chestScreen.cpp
     chestScreen.h)
-
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )

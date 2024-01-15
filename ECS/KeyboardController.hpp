@@ -8,6 +8,11 @@
 #include "TransformComponent.hpp"
 #include "armor.h"
 
+//forward decleration
+class Sword;
+class Range_Weapong;
+//end
+
 class KeyboardController : public Component
 {
 public:
