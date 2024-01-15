@@ -21,12 +21,31 @@ void EnemyMovement::init()
     srand(time(NULL));
 }
 
-void EnemyMovement::onCollision()
-{
-    transform->velocity.x = -transform->velocity.y;
-    transform->velocity.y = transform->velocity.x;
-    transform->position.x += transform->velocity.x;
-    transform->position.y += transform->velocity.y;
+void EnemyMovement::onCollision(SDL_Rect collider_rect) {
+    Vector2D enemyCenter(transform->position.x + transform->width / 2, transform->position.y + transform->height / 2);
+    Vector2D colliderCenter(collider_rect.x + collider_rect.w / 2, collider_rect.y + collider_rect.h / 2);
+
+    // Determine the side of the collision (left, right, top, bottom)
+    bool collisionOnX = (enemyCenter.x < colliderCenter.x && transform->velocity.x > 0) || (enemyCenter.x > colliderCenter.x && transform->velocity.x < 0);
+    bool collisionOnY = (enemyCenter.y < colliderCenter.y && transform->velocity.y > 0) || (enemyCenter.y > colliderCenter.y && transform->velocity.y < 0);
+
+    if (collisionOnX) {
+        // Reflect the velocity on the X axis
+        transform->velocity.x = -transform->velocity.x;
+    }
+    if (collisionOnY) {
+        // Reflect the velocity on the Y axis
+        transform->velocity.y = -transform->velocity.y;
+    }
+
+    // Adjust position slightly to prevent sticking to the collider
+    if (collisionOnX) {
+        transform->position.x += (collisionOnY ? 1 : -1) * abs(transform->velocity.x);
+    }
+    if (collisionOnY) {
+        transform->position.y += (collisionOnX ? 1 : -1) * abs(transform->velocity.y);
+    }
+
     collisionCooldown = collisionCooldownMax;
 }
 
