@@ -521,7 +521,7 @@ void Game::update()
             if(Collision::AABB(e_cCol, enemyCol))
             {
                 std::cout << "Enemy hit wall" << std::endl;
-                enemy.getComponent<EnemyMovement>().onCollision(); // the enemy doesn't move
+                enemy.getComponent<EnemyMovement>().onCollision(e_cCol); // the enemy doesn't move
             }
         }
         //End

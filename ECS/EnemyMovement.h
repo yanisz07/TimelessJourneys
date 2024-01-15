@@ -2,6 +2,7 @@
 #define ENEMYMOVEMENT_H
 
 #include "ECS.hpp"
+#include <SDL.h>
 #include <stdlib.h>
 #include <math.h>
 #include "../Vector2D.hpp"
@@ -43,7 +44,7 @@ public:
 
     void init() override;
 
-    void onCollision();
+    void onCollision(SDL_Rect collider_rect);
 
     void returnToInitialPosition();
 
