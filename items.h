@@ -7,7 +7,8 @@ class items
 public:
     items();
     enum ItemType{
-        Hand
+        Hand,
+        Sword
     };
 };
 

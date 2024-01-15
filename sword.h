@@ -5,12 +5,15 @@
 #include <vector>
 #include "SDL.h"
 #include "inventoryscreen.h"
+#include "items.h"
 
-class Sword : public InventoryItem {
+class Sword1 : public InventoryItem {
 public:
     // Constructor for Sword
-    Sword(SDL_Texture* icon, const std::string& name, int damage, int durability)
-        : InventoryItem(icon, name), damage(damage), durability(durability) {
+    Sword1(SDL_Texture* icon, int damage, int durability)
+        : InventoryItem(icon, items::Sword){
+        this->damage = damage;
+        this->durability = durability;
     }
 
 private:

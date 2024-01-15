@@ -9,7 +9,7 @@ using namespace std;
 std::filesystem::path ProjectDir = std::filesystem::current_path();
 
 // Function to create a Sword item
-Sword createSword(SDL_Renderer* renderer) {
+/* Sword createSword(SDL_Renderer* renderer) {
     std::string swordName = "Excalibur";
     std::string swordIconPath = (ProjectDir / ".." / "TimelessJourneys" / "assets" / "sword.png").string();
     SDL_Texture* swordIcon = TextureManager::LoadTexture(swordIconPath.c_str());
@@ -26,3 +26,5 @@ Sword createSword(SDL_Renderer* renderer) {
         return Sword(nullptr, swordName, 0, 0);
     }
 }
+
+*/

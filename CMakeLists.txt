@@ -59,6 +59,7 @@ set(SOURCES
     ECS/TileComponent.hpp
     ECS/ECS.cpp
     ECS/Animation.hpp
+    items.h
     AssetManager.hpp
     AssetManager.cpp
     ECS/ProjectileComponent.hpp
