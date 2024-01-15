@@ -154,12 +154,14 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
 
 
 
+        TTF_CloseFont(font);
+        font = TTF_OpenFont(fontPath.c_str(), 18);
         TTF_SetFontStyle(font, TTF_STYLE_ITALIC); // font for slider in italics
 
-        SDL_Surface* sliderTextSurface = TTF_RenderText_Solid(font, "Slide to adjust music", textColor);
+        SDL_Surface* sliderTextSurface = TTF_RenderText_Solid(font, "Click to adjust music volume", textColor);
         SDL_Texture* sliderTextTexture = SDL_CreateTextureFromSurface(renderer, sliderTextSurface);
         int sliderTextWidth, sliderTextHeight;
-        TTF_SizeText(font, "Slide to adjust music", &sliderTextWidth, &sliderTextHeight);
+        TTF_SizeText(font, "Click to adjust music volume", &sliderTextWidth, &sliderTextHeight);
         SDL_Rect sliderTextRect = {
             volumeSliderBar.x + (volumeSliderBar.w - sliderTextWidth) / 2,
             volumeSliderBar.y + volumeSliderBar.h - 35, // Adjust Y position as needed
@@ -168,6 +170,8 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         };
         SDL_RenderCopy(renderer, sliderTextTexture, NULL, &sliderTextRect);
 
+        TTF_CloseFont(font);
+        font = TTF_OpenFont(fontPath.c_str(), 24);
         TTF_SetFontStyle(font, TTF_STYLE_NORMAL); // reset to not italics
 
 
