@@ -66,14 +66,19 @@ Vector2D& Vector2D::Normalize() {
 }
 
 
+
+double Vector2D::angle(const Vector2D &vec){
+    return acos((x*vec.x + y*vec.y)/((sqrt(x*x+y*y))*(sqrt(vec.x*vec.x+vec.y*vec.y))));
+}
+
 Vector2D& operator+(Vector2D& v1, const Vector2D& v2)
 {
     return v1.Add(v2);
 }
 
-Vector2D& operator-(Vector2D& v1, const Vector2D& v2)
+Vector2D operator-(const Vector2D& v1, const Vector2D& v2)
 {
-    return v1.Subtract(v2);
+    return Vector2D(v1.x-v2.x,v1.y-v2.y);
 }
 
 Vector2D& operator*(Vector2D& v1, const Vector2D& v2)

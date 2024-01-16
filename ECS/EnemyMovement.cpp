@@ -1,5 +1,9 @@
 #include "EnemyMovement.h"
 #include "TransformComponent.hpp"
+#include <iostream>
+#include <vector>
+#include <tuple>
+//#include <cmath>
 #include "Stats.hpp"
 
 
@@ -22,32 +26,49 @@ void EnemyMovement::init()
 }
 
 void EnemyMovement::onCollision(SDL_Rect collider_rect) {
+
     Vector2D enemyCenter(transform->position.x + transform->width / 2, transform->position.y + transform->height / 2);
-    Vector2D colliderCenter(collider_rect.x + collider_rect.w / 2, collider_rect.y + collider_rect.h / 2);
+    Vector2D collidertopleft(collider_rect.x, collider_rect.y + collider_rect.h);
+    Vector2D collidertopright(collider_rect.x + collider_rect.w, collider_rect.y + collider_rect.h);
+    Vector2D colliderbottomleft(collider_rect.x, collider_rect.y);
+    Vector2D colliderbottomright(collider_rect.x + collider_rect.w, collider_rect.y);
 
-    // Determine the side of the collision (left, right, top, bottom)
-    bool collisionOnX = (enemyCenter.x < colliderCenter.x && transform->velocity.x > 0) || (enemyCenter.x > colliderCenter.x && transform->velocity.x < 0);
-    bool collisionOnY = (enemyCenter.y < colliderCenter.y && transform->velocity.y > 0) || (enemyCenter.y > colliderCenter.y && transform->velocity.y < 0);
+    Vector2D rightanticlock = collidertopright - colliderbottomright;
+    Vector2D topanticlock = collidertopleft -  collidertopright;
+    Vector2D leftanticlock = colliderbottomleft - collidertopleft;
+    Vector2D bottomanticlock = colliderbottomright - colliderbottomleft;
 
-    if (collisionOnX) {
-        // Reflect the velocity on the X axis
-        transform->velocity.x = -transform->velocity.x;
-    }
-    if (collisionOnY) {
-        // Reflect the velocity on the Y axis
-        transform->velocity.y = -transform->velocity.y;
+    std::vector<std::tuple<Vector2D,Vector2D,Vector2D>> list_of_tuples;
+
+    list_of_tuples.push_back(std::make_tuple(rightanticlock,colliderbottomright,collidertopright));
+    list_of_tuples.push_back(std::make_tuple(topanticlock,collidertopright,collidertopleft));
+    list_of_tuples.push_back(std::make_tuple(leftanticlock,collidertopleft,colliderbottomleft));
+    list_of_tuples.push_back(std::make_tuple(bottomanticlock,colliderbottomleft,colliderbottomright));
+
+    int mini_idx = 0;
+    double mini_dist_wall = enemyCenter.distance(std::get<1>(list_of_tuples[0]))+enemyCenter.distance(std::get<2>(list_of_tuples[0]));
+
+    for (size_t i = 1; i < list_of_tuples.size(); i++) {
+        double candidate = enemyCenter.distance(std::get<1>(list_of_tuples[i]))+enemyCenter.distance(std::get<2>(list_of_tuples[i]));
+        if (candidate<mini_dist_wall){
+            mini_dist_wall = candidate;
+            mini_idx = i;
+        }
     }
 
-    // Adjust position slightly to prevent sticking to the collider
-    if (collisionOnX) {
-        transform->position.x += (collisionOnY ? 1 : -1) * abs(transform->velocity.x);
-    }
-    if (collisionOnY) {
-        transform->position.y += (collisionOnX ? 1 : -1) * abs(transform->velocity.y);
-    }
+    Vector2D wall_vector = std::get<0>(list_of_tuples[mini_idx]);
+    //double Angle = transform->velocity.angle(wall_vector);
+    //const double pi = M_PI;
+    //angle may not be needed
 
+    if (wall_vector.x == 0){
+        transform->velocity.x *= -1;
+    }else if (wall_vector.y == 0){
+        transform->velocity.y *= -1;
+    }
     collisionCooldown = collisionCooldownMax;
 }
+
 
 void EnemyMovement::returnToInitialPosition()
 { // PAY ATTETION WITH VECTOR2D OPERATIONS.

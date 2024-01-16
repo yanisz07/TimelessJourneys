@@ -21,8 +21,10 @@ public:
     Vector2D& Normalize();
 
 
+    double angle(const Vector2D& vec);
+
     friend Vector2D& operator+(Vector2D& v1, const Vector2D& v2);
-    friend Vector2D& operator-(Vector2D& v1, const Vector2D& v2);
+    friend Vector2D operator-(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator*(Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator/(Vector2D& v1, const Vector2D& v2);
 
