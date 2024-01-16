@@ -122,15 +122,15 @@ void Range_Weapon::draw()
                 if (direction.y == -1)
                 {
                     setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x+18*scale+4 - Game::camera.x;
-                    destR.y = entityPos.y+13*scale - Game::camera.y;
+                    destR.x = entityPos.x+16*scale - Game::camera.x;
+                    destR.y = entityPos.y+8*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-90,NULL,SDL_FLIP_NONE);
                 }
                 else
                 {
                     setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+18*scale+4 - Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale - Game::camera.y;
+                    destR.x = entityPos.x+16*scale - Game::camera.x;
+                    destR.y = entityPos.y+(13+19-8)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,90,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -139,15 +139,15 @@ void Range_Weapon::draw()
                 if (direction.x == -1)
                 {
                     setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+18*scale - Game::camera.x;
-                    destR.y = entityPos.y+13*scale - Game::camera.y;
+                    destR.x = entityPos.x+6*scale - Game::camera.x;
+                    destR.y = entityPos.y+(13+2)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_HORIZONTAL);
                 }
                 else
                 {
-                    setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x - Game::camera.x;
-                    destR.y = entityPos.y+13*scale - Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+(18+13-4)*scale - Game::camera.x;
+                    destR.y = entityPos.y+(13+2)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -155,16 +155,16 @@ void Range_Weapon::draw()
             {
                 if (direction.y == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
-                    destR.y = entityPos.y-10-Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x+(13+18-8)*scale-Game::camera.x;
+                    destR.y = entityPos.y+(13-8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-45,NULL,SDL_FLIP_NONE);
                 }
                 if (direction.y == 1)
                 {
-                    //setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale-10-Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+(13+18-8)*scale-Game::camera.x;
+                    destR.y = entityPos.y+(13+19-8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,45,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -172,16 +172,16 @@ void Range_Weapon::draw()
             {
                 if (direction.y == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x-10-Game::camera.x;
-                    destR.y = entityPos.y-10-Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x+10*scale-Game::camera.x;
+                    destR.y = entityPos.y+5*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-135,NULL,SDL_FLIP_NONE);
                 }
                 if (direction.y == 1)
                 {
-                    //setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x-10-Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale-10-Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+10*scale-Game::camera.x;
+                    destR.y = entityPos.y+(13+19+8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,135,NULL,SDL_FLIP_NONE);
                 }
             }

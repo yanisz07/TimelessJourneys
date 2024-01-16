@@ -27,8 +27,8 @@ public:
     int frame = 0;
     int index = 0;
     int speed = 100;
-    int width = 32;
-    int height = 20;
+    int width = 16;
+    int height = 16;
     //
 
     SDL_Rect srcR,destR;
