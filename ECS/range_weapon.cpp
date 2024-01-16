@@ -36,7 +36,7 @@ void Range_Weapon::update()
             case
                 SDL_SCANCODE_W:
                 direction.x = transform->x_direction;
-                direction.y = transform->y_direction;
+                direction.y = trransform->y_direction;
                 rangeAttack();
                 is_attacking=true;
                 break;
@@ -56,49 +56,51 @@ void Range_Weapon::update()
 
 int Range_Weapon::rangeAttack()
 {
-
-    if (transform->x_direction == 0)
+    Vector2D entityPos = transform->position;
+    Vector2D direction = Vector2D(direction.x,direction.y);
+    int scale = transform->scale;
+    if (direction.x == 0)
     {
-        if (transform->y_direction == -1)
+        if (direction.y == -1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,1,damage);
+            CreateArrow(Vector2D(entityPos.x+16*scale,entityPos.y+8*scale),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,1,damage);
         }
         else
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D()*0.D(entityPos.y+(transform->height*transform->scale)+50),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
         }
     }
-    if (transform->y_direction == 0)
+    if (direction.y == 0)
     {
-        if (transform->x_direction == -1)
+        if (direction.x == -1)
         {
-            CreateArrow(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
         }
         else
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
         }
     }
-    if (transform->y_direction==1)
+    if (direction.y==1)
     {
-        if (transform->x_direction == 1)
+        if (direction.x == 1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
         }
-        if (transform->x_direction == -1)
+        if (direction.x == -1)
         {
-            CreateArrow(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
         }
     }
-    if (transform->y_direction==-1)
+    if (direction.y==-1)
     {
-        if (transform->x_direction == 1)
+        if (direction.x == 1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
         }
-        if (transform->x_direction == -1)
+        if (direction.x == -1)
         {
-            CreateArrow(Vector2D(transform->position.x-50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(),200,5,"arrow",32,32,3,damage);
         }
     }
     return 0;
@@ -181,7 +183,7 @@ void Range_Weapon::draw()
                 {
                     setPriority(sprite->priority + 1);
                     destR.x = entityPos.x+10*scale-Game::camera.x;
-                    destR.y = entityPos.y+(13+19+8)*scale-Game::camera.y;
+                    destR.y = entityPos.y+(13+19-8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,135,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -200,12 +202,13 @@ void Range_Weapon::update_range_weapon()
     is_attacking = false;
 }
 
-void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam)
+void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam,double angle)
 {
     auto& arrow(manager->addEntity());
     arrow.addComponent<TransformComponent>(pos.x, pos.y, w, h, sc);
     arrow.addComponent<SpriteComponent>("arrow");
     arrow.addComponent<ProjectileComponent>(range,speed,vel,dam);
     arrow.addComponent<ColliderComponent>(id);
+    arrow.getComponent<ColliderComponent>().SetAngle(angle);
     arrow.addGroup(Game::groupPlayerProjectiles);
 }

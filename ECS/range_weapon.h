@@ -52,7 +52,7 @@ public:
 
     void update_range_weapon();
 
-    void CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam);
+    void CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
 
     void draw() override;
 
