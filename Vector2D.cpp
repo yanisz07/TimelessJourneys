@@ -51,7 +51,20 @@ Vector2D& Vector2D::Divide(const Vector2D &vec)
 
 float Vector2D::distance(const Vector2D &vec){
     return sqrt(pow(x-vec.x,2)+pow(y-vec.y,2));
+
 }
+
+Vector2D& Vector2D::Normalize() {
+    double length = magnitude();
+
+    if (length > 0) { // To avoid division by zero
+        x /= length;
+        y /= length;
+    }
+
+    return *this;
+}
+
 
 Vector2D& operator+(Vector2D& v1, const Vector2D& v2)
 {
