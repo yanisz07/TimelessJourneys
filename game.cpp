@@ -168,10 +168,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+    assets->AddTexture("arrow", "/assets/arrow.png");
 
     //assets->AddTexture("chest", "/assets/chest_01.png");
-
-    assets->AddTexture("arrow", "/assets/arrow.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -802,7 +801,7 @@ void Game::update()
         if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
         {
             // Create a projectile every two seconds
-            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false,32,32,3);
+            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
             lastProjectileTime = currentTime;  // Update the last projectile creation time
         }
         //End
@@ -926,10 +925,10 @@ void Game::render()
         for (auto& c : MapColliders) { c->draw(); }
         for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
-        for (auto& pp : PlayerProjectiles) { pp->draw(); }
         for (auto& ch: chests) { ch->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
         for (auto& p : PlayerAttacks) {p->draw();}
+        for (auto& pp : PlayerProjectiles) { pp->draw(); }
 
         // Render the UI elements over the game objects
         label.draw();

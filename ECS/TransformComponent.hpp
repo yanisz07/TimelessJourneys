@@ -1,7 +1,6 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-//#include "Components.hpp"
 #include "../Vector2D.hpp"
 #include "ECS.hpp"
 

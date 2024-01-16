@@ -61,7 +61,7 @@ int Range_Weapon::rangeAttack()
     {
         if (transform->y_direction == -1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,1,damage);
         }
         else
         {
@@ -121,15 +121,15 @@ void Range_Weapon::draw()
             {
                 if (direction.y == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x+18*scale+6 - Game::camera.x;
-                    destR.y = entityPos.y+13*scale-15 - Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x+18*scale+4 - Game::camera.x;
+                    destR.y = entityPos.y+13*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-90,NULL,SDL_FLIP_NONE);
                 }
                 else
                 {
-                    //setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+18*scale+6 - Game::camera.x;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+18*scale+4 - Game::camera.x;
                     destR.y = entityPos.y+(13+19)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,90,NULL,SDL_FLIP_NONE);
                 }
@@ -138,18 +138,16 @@ void Range_Weapon::draw()
             {
                 if (direction.x == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    Vector2D center = Vector2D(entityPos.x+27,entityPos.y+13*scale+29);
-                    destR.x = center.x - 14 - Game::camera.x;
-                    destR.y = center.y - 27 - Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+18*scale - Game::camera.x;
+                    destR.y = entityPos.y+13*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_HORIZONTAL);
                 }
                 else
                 {
-                    //setPriority(sprite->priority - 1);
-                    Vector2D center = Vector2D(entityPos.x+(18+13)*scale+27,entityPos.y+13*scale+29);
-                    destR.x = center.x - 14 - Game::camera.x;
-                    destR.y = center.y - 27 - Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x - Game::camera.x;
+                    destR.y = entityPos.y+13*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -206,10 +204,8 @@ void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed,
 {
     auto& arrow(manager->addEntity());
     arrow.addComponent<TransformComponent>(pos.x, pos.y, w, h, sc);
-    arrow.addComponent<SpriteComponent>(false, id);
+    arrow.addComponent<SpriteComponent>("arrow");
     arrow.addComponent<ProjectileComponent>(range,speed,vel,dam);
-
     arrow.addComponent<ColliderComponent>(id);
-    arrow.addComponent<Stats>(0,2);
     arrow.addGroup(Game::groupPlayerProjectiles);
 }
