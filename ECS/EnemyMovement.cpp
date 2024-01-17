@@ -111,40 +111,41 @@ void EnemyMovement:: explosion(){
 void EnemyMovement::update()
 {
 
+    // Note that we only have to update velocities as they will influence the update of the position in the transform component
+    if (collisionCooldown > 0) {
+        collisionCooldown--;
+        return; // Skip collision checks
+    }
+
     if (exploded){
         Uint32 currentTime = SDL_GetTicks(); // Get the current time
         Uint32 delay = currentTime - startExpTime; // Calculate elapsed time since explosion started
         if (in_range){
             if (delay <= 200)
             {
-                    if (delay >= 100)
+                if (delay >= 100)
+                {
+                    if (delay <= 140)
                     {
-                        if (delay <= 140)
-                        {
-                            playerTransform->position.x += knock_direction.x * 20;
-                            playerTransform->position.y += knock_direction.y * 20;
-                        }
-                        else if (delay <= 180)
-                        {
-                            playerTransform->position.x += knock_direction.x * 10;
-                            playerTransform->position.y += knock_direction.y * 10;
-                        }
-                        else
-                        {
-                            playerTransform->position.x += knock_direction.x * 5;
-                            playerTransform->position.y += knock_direction.y * 5;
-                        }
+                        playerTransform->position.x += knock_direction.x * 20;
+                        playerTransform->position.y += knock_direction.y * 20;
                     }
+                    else if (delay <= 180)
+                    {
+                        playerTransform->position.x += knock_direction.x * 10;
+                        playerTransform->position.y += knock_direction.y * 10;
+                    }
+                    else
+                    {
+                        playerTransform->position.x += knock_direction.x * 5;
+                        playerTransform->position.y += knock_direction.y * 5;
+                    }
+                }
             }
         }
 
     }
 
-    // Note that we only have to update velocities as they will influence the update of the position in the transform component
-    if (collisionCooldown > 0) {
-        collisionCooldown--;
-        return; // Skip collision checks
-    }
     if (enemyType == 1){
         swordsmanBehavior();
     }
