@@ -9,3 +9,6 @@ This week, I continued on learning on how to use SDL2. This was done mainly thro
 
 Week 4 Summary:
 This week, I looked into how to implement textures inside the game, as well as other mechanics necessary for coding the player character. I also read and played with some of the existing code that my teammates already wrote so that I understand it more. 
+
+Week 5 Summary: 
+This week, I started working on the developement of items, specifically on how to link them to the already developped inventory. The item I'm developping is a sword, an item in the class of melee items.
