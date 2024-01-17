@@ -4,36 +4,46 @@
 #include <vector>
 #include "SDL.h"
 #include "items.h"
+#include "TextureManager.hpp"
 
-
+/*
 class InventoryItem {
 public:
     SDL_Texture* icon;
-    items::ItemType name;
+    Item* item;
 
-    InventoryItem(SDL_Texture* icon, items::ItemType name) : icon(icon), name(name) {}
+    InventoryItem(SDL_Texture* icon, Item* item) : icon(icon), item(item) {}
     ~InventoryItem() {
+        delete item;
         if (icon != nullptr) {
             SDL_DestroyTexture(icon);  // Free the texture
             icon = nullptr;
         }
     }
 };
+*/
 
-    class InventoryScreen {
+class Inventory {
 public:
-    InventoryScreen();
-    ~InventoryScreen();
+    Inventory();
+    ~Inventory();
 
     void show();
     void hide();
     void toggle();
 
+    /*
     void addItem(const InventoryItem& item);
     void removeItem(const InventoryItem& item);
     InventoryItem* getItem(int index);
+    */
+
+    void addItem(const Item* item);
+    void removeItem(const Item* item);
+    Item* getItem(int index);
+
     void clearInventory();
-    void addNewItem(const items::ItemType itemName,const std::string iconPath, SDL_Renderer* renderer);
+    void addNewItem(const Item* item,const std::string iconPath, SDL_Renderer* renderer);
     void useSelectedItem();
 
 
@@ -54,7 +64,7 @@ public:
 private:
     bool isVisible;
     SDL_Rect windowRect;
-    std::vector<InventoryItem> items;
+    //std::vector<InventoryItem> items;
     int gridRows;
     int gridCols;
     SDL_Rect itemSlot;

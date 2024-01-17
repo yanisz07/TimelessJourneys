@@ -1,4 +1,4 @@
-#include "inventoryscreen.h"
+#include "inventory.h"
 #include "SDL_image.h"
 #include <iostream>
 #include "items.h"
@@ -20,7 +20,7 @@ SDL_Texture* loadTexture(const std::string& filePath, SDL_Renderer* renderer) {
 }
 
 // Constructor
-InventoryScreen::InventoryScreen() : pickedUpItemIndex(-1) {
+Inventory::Inventory() : pickedUpItemIndex(-1) {
     isVisible = false;
     windowRect = {100, 100, 400, 300};
     gridRows = 4; // Example: 4 rows
@@ -31,42 +31,47 @@ InventoryScreen::InventoryScreen() : pickedUpItemIndex(-1) {
 
 
 // Destructor
-InventoryScreen::~InventoryScreen() {
+Inventory::~Inventory() {
     // Clean up if needed
 }
 
-void InventoryScreen::show() {
+void Inventory::show() {
     isVisible = true;
 }
 
 
-void InventoryScreen::hide() {
+void Inventory::hide() {
     isVisible = false;
 }
 
-void InventoryScreen::toggle() {
+void Inventory::toggle() {
     isVisible = !isVisible;
 }
 
 //Manage items
 
+void addItem(const Item* item);
+void removeItem(const Item* item);
+Item* getItem(int index);
+
+
 //Implement this
-void InventoryScreen::addItem(const InventoryItem& item) {
+void Inventory::addItem(const InventoryItem& item) {
     items.push_back(item);
 }
 
-void InventoryScreen::addNewItem(const items::ItemType itemName,const string iconPath, SDL_Renderer* renderer) {
+void Inventory::addNewItem(const Item* item,const string iconPath, SDL_Renderer* renderer) {
     SDL_Texture* iconTexture = TextureManager::LoadTexture(iconPath.c_str());
     if (iconTexture != nullptr) {
-        InventoryItem newItem(iconTexture, itemName);
+        Item newItem(iconTexture, item);
         addItem(newItem); //We have to implement this
     } else {
-        cerr << "Failed to load texture for item: " << itemName << endl;
+        cerr << "Failed to load texture for item: " << item << endl;
     }
 }
 
 
-void InventoryScreen::removeItem(const InventoryItem& item) {
+void Inventory::removeItem(const InventoryItem& item) {
     auto it = std::find_if(items.begin(), items.end(),
                            [&item](const InventoryItem& i) { return i.name == item.name; });
     if (it != items.end()) {
@@ -78,7 +83,7 @@ void InventoryScreen::removeItem(const InventoryItem& item) {
     }
 }
 
-InventoryItem* InventoryScreen::getItem(int index) {
+InventoryItem* Inventory::getItem(int index) {
     if (index >= 0 && index < items.size()) {
         return &items[index];
     }
@@ -87,7 +92,7 @@ InventoryItem* InventoryScreen::getItem(int index) {
 
 
 //In the useItem method, you would include the logic specific to each item's effect:
-void InventoryScreen::useItem(int index) {
+void Inventory::useItem(int index) {
     if (index >= 0 && index < items.size()) {
         // i have not done it yet
 
@@ -103,7 +108,7 @@ void InventoryScreen::useItem(int index) {
         player.restoreHealth(50); // Assuming 'player' is an instance of the Player class
         removeItem(items[index]); */
 
-void InventoryScreen::useSelectedItem() {
+void Inventory::useSelectedItem() {
     if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
         useItem(selectedSlotIndex);
         // Optionally, after using the item, unselect it or select the next one
@@ -112,7 +117,7 @@ void InventoryScreen::useSelectedItem() {
 }
 
 
-void InventoryScreen::pickUpItem(int index) {
+void Inventory::pickUpItem(int index) {
     if (index >= 0 && index < items.size()) {
         // i didn't implement the logic for picking up an item yet
         std::cout << "Picked up item: " << items[index].name << std::endl;
@@ -120,7 +125,7 @@ void InventoryScreen::pickUpItem(int index) {
     }
 }
 
-void InventoryScreen::clearInventory() {
+void Inventory::clearInventory() {
     for (auto& item : items) {
         if (item.icon != nullptr) {
             SDL_DestroyTexture(item.icon);
@@ -130,7 +135,7 @@ void InventoryScreen::clearInventory() {
     items.clear();
 }
 
-void InventoryScreen::moveSelection(int offset) {
+void Inventory::moveSelection(int offset) {
     int newIndex = selectedSlotIndex + offset;
 
     // Calculate current row and column
@@ -147,14 +152,14 @@ void InventoryScreen::moveSelection(int offset) {
     }
 }
 
-void InventoryScreen::handleEvents(SDL_Event& event) {
+void Inventory::handleEvents(SDL_Event& event) {
 }
 
 const int ITEM_ICON_WIDTH = 32;
 const int ITEM_ICON_HEIGHT = 32;
 
 
-void InventoryScreen::render(SDL_Renderer* renderer) {
+void Inventory::render(SDL_Renderer* renderer) {
     if (!isVisible) return;
 
 

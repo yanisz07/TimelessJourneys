@@ -13,7 +13,7 @@
 #include "game_over.h"
 #include <filesystem>
 #include "sdl_mixer.h"
-#include "inventoryscreen.h"
+#include "inventory.h"
 #include "items.h"
 
 extern std::filesystem::path projectDir;
@@ -53,7 +53,7 @@ public:
     static SDL_Rect camera;
     int screen_width;
     int screen_height;
-    InventoryScreen inventoryScreen;
+    Inventory inventory;
 
     static AssetManager* assets;
 

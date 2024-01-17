@@ -267,7 +267,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Initialize all items as hide
     std::string handPath =  (projectDir / ".." / "TimelessJourneys" / "assets" / "hand.png").string();
 
-    inventoryScreen.addNewItem(items::ItemType::Hand,handPath,renderer);
+    inventory.addNewItem(Items* items,handPath,renderer);
 
 }
 
@@ -296,27 +296,27 @@ void Game::handleEvents()
             toggleFullScreen();
             break;
         case SDLK_e:  // Check for 'E' key
-            inventoryScreen.toggle();  // Toggle the inventory screen
+            inventory.toggle();  // Toggle the inventory screen
             break;
 
         }
 
-        if (inventoryScreen.isCurrentlyVisible()) {
+        if (inventory.isCurrentlyVisible()) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-            inventoryScreen.moveSelection(-inventoryScreen.getGridCols());
+            inventory.moveSelection(-inventory.getGridCols());
             break;
             case SDLK_DOWN:
-            inventoryScreen.moveSelection(inventoryScreen.getGridCols());
+            inventory.moveSelection(inventory.getGridCols());
             break;
             case SDLK_LEFT:
-            inventoryScreen.moveSelection(-1);
+            inventory.moveSelection(-1);
             break;
             case SDLK_RIGHT:
-            inventoryScreen.moveSelection(1);
+            inventory.moveSelection(1);
             break;
             case SDLK_u: // Assuming 'U' key is used to use an item
-            inventoryScreen.useSelectedItem();
+            inventory.useSelectedItem();
             break;
             }
         }
@@ -864,7 +864,7 @@ void Game::render()
         SDL_RenderFillRect(renderer, &dotRect);
     }
 
-    inventoryScreen.render(renderer);
+    inventory.render(renderer);
 
     SDL_RenderPresent(renderer);
     }
