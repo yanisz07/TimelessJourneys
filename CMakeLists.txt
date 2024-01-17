@@ -87,9 +87,9 @@ set(SOURCES
     ECS/EnemyMovement.cpp)
 
 add_executable(TimelessJourneys ${SOURCES}
-    inventoryscreen.cpp
-    inventoryscreen.h
-    items.json
+    inventory.cpp
+    inventory.h
+    assets/items.json
 
 )
 
