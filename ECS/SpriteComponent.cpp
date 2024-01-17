@@ -110,8 +110,14 @@ void SpriteComponent::update()
 
 void SpriteComponent::draw()
 {
-    //SDL_Rect rectangle{0,0,128,128};
-    TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
+    if (angle==0)
+    {
+        TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
+    }
+    else
+    {
+        TextureManager::Draw_rotation(texture, srcRect, destRect, spriteFlip, angle);
+    }
 }
 
 void SpriteComponent::Play(const std::string animName, bool flip, const int repeat, int speed, bool armorchange)
@@ -144,4 +150,10 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
     animations[currentAction].repeat = repeat;
     animations[currentAction].speed = speed;
     animations[currentAction].timer.start();
+}
+
+
+void SpriteComponent::setAngle(double angle)
+{
+    this->angle=angle;
 }

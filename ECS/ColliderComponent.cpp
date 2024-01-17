@@ -82,17 +82,21 @@ void ColliderComponent::update()
         {
             // fix collider for player
             collider.x = static_cast<int>(transform->position.x+18*transform->scale);
-            collider.y = static_cast<int>(transform->position.y+13*transform->scale);
+            collider.y = static_cast<int>(transform->position.y+14*transform->scale);
             collider.w = 13 * transform->scale;
             collider.h = 19 * transform->scale;
+            destR.w = collider.w;
+            destR.h = collider.h;
         }
         else if (tag == "enemy")
         {
             // fix collider for enemy
             collider.x = static_cast<int>(transform->position.x)+35;
-            collider.y = static_cast<int>(transform->position.y)+80;
+            collider.y = static_cast<int>(transform->position.y)+90;
             collider.w = transform->width * transform->scale-78;
-            collider.h = transform->height * transform->scale-80;
+            collider.h = transform->height * transform->scale-90;
+            destR.w = collider.w;
+            destR.h = collider.h;
         }
         else
         {
@@ -100,6 +104,8 @@ void ColliderComponent::update()
             collider.y = static_cast<int>(transform->position.y);
             collider.w = transform->width * transform->scale;
             collider.h = transform->height * transform->scale;
+            destR.w = collider.w;
+            destR.h = collider.h;
         }
     }
 
@@ -117,15 +123,12 @@ void ColliderComponent::update()
 
 void ColliderComponent::draw()
 {
-    if (tag!= "player" && tag!= "enemy")
-    {
-        if (angle == 0)
+    if (angle == 0)
         {
             TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
         }
-        else
+    else
         {
             TextureManager::Draw_rotation(tex,srcR,destR,SDL_FLIP_NONE,angle);
         }
-    }
 }

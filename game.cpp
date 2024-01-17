@@ -652,6 +652,29 @@ void Game::update()
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
+/*
+        for (auto& p : PlayerProjectiles)
+        {
+            if(Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,p->getComponent<ColliderComponent>()))
+            {
+                std::cout << "Arrow hit wall" << std::endl;
+                p->destroy();
+            }
+        }
+
+        for (auto& p : PlayerProjectiles)
+        {
+            for (auto& c : MapColliders)
+            {
+                if(Collision::CheckCollision(c->getComponent<ColliderComponent>() ,p->getComponent<ColliderComponent>()))
+                {
+                    std::cout << "Arrow hit wall" << std::endl;
+                    p->destroy();
+                }
+            }
+        }
+*/
+        //end
 
 
         for (auto& p : EnemyProjectiles)
@@ -936,8 +959,6 @@ void Game::render()
         player_health.draw();
 
         TestCol.draw();
-
-
 
     } else {
 

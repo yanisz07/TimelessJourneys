@@ -16,7 +16,6 @@ void TransformComponent::update()
     {
         if (!entity->getComponent<Range_Weapon>().is_attacking)
         {
-            std::cout << "player" << std::endl;
             position.x += velocity.x * speed;
             position.y += velocity.y * speed;
         }

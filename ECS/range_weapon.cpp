@@ -36,7 +36,7 @@ void Range_Weapon::update()
             case
                 SDL_SCANCODE_W:
                 direction.x = transform->x_direction;
-                direction.y = trransform->y_direction;
+                direction.y = transform->y_direction;
                 rangeAttack();
                 is_attacking=true;
                 break;
@@ -57,50 +57,50 @@ void Range_Weapon::update()
 int Range_Weapon::rangeAttack()
 {
     Vector2D entityPos = transform->position;
-    Vector2D direction = Vector2D(direction.x,direction.y);
+    Vector2D direction = Vector2D(transform->x_direction,transform->y_direction);
     int scale = transform->scale;
     if (direction.x == 0)
     {
         if (direction.y == -1)
         {
-            CreateArrow(Vector2D(entityPos.x+16*scale,entityPos.y+8*scale),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,1,damage);
+            CreateArrow(Vector2D(entityPos.x+(18)*scale+3,entityPos.y+6*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,-90);
         }
         else
         {
-            CreateArrow(Vector2D()*0.D(entityPos.y+(transform->height*transform->scale)+50),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(18)*scale+3,entityPos.y+(13+19-8)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,90);
         }
     }
     if (direction.y == 0)
     {
         if (direction.x == -1)
         {
-            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+(13+6)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,180);
         }
         else
         {
-            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(18+13-4)*scale,entityPos.y+(13+6)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,0);
         }
     }
-    if (direction.y==1)
+    if (direction.x==1)
     {
-        if (direction.x == 1)
+        if (direction.y == -1)
         {
-            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(13+18-7)*scale,entityPos.y+(13-3)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,-45);
         }
-        if (direction.x == -1)
+        if (direction.y == 1)
         {
-            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(13+18-7)*scale,entityPos.y+(13+19-3)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,45);
         }
     }
-    if (direction.y==-1)
+    if (direction.x==-1)
     {
-        if (direction.x == 1)
+        if (direction.y == -1)
         {
-            CreateArrow(Vector2D(),Vector2D(direction.x,direction.y),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+10*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,-135);
         }
-        if (direction.x == -1)
+        if (direction.y == 1)
         {
-            CreateArrow(Vector2D(),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+(13+19-4)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,135);
         }
     }
     return 0;
@@ -205,10 +205,11 @@ void Range_Weapon::update_range_weapon()
 void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam,double angle)
 {
     auto& arrow(manager->addEntity());
-    arrow.addComponent<TransformComponent>(pos.x, pos.y, w, h, sc);
-    arrow.addComponent<SpriteComponent>("arrow");
+    arrow.addComponent<TransformComponent>(pos.x, pos.y, h, w, sc);
+    arrow.addComponent<SpriteComponent>(id);
+    arrow.getComponent<SpriteComponent>().setAngle(angle);
     arrow.addComponent<ProjectileComponent>(range,speed,vel,dam);
-    arrow.addComponent<ColliderComponent>(id);
+    arrow.addComponent<ColliderComponent>(id,pos.x,pos.y,w,h);
     arrow.getComponent<ColliderComponent>().SetAngle(angle);
     arrow.addGroup(Game::groupPlayerProjectiles);
 }
