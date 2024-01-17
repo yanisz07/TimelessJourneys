@@ -18,6 +18,7 @@ class EnemyMovement : public Component
 public:
     TransformComponent* transform;
     TransformComponent* playerTransform;
+    Stats* playerStats;
     Stats* stats;
     int collisionCooldown = 0;
     const int collisionCooldownMax = 10;
@@ -44,7 +45,7 @@ public:
 
     Vector2D initial_position;
 
-    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans);
+    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans, Stats* playerstats);
 
     void init() override;
 

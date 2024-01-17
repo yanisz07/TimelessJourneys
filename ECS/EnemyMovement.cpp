@@ -7,10 +7,11 @@
 #include "Stats.hpp"
 
 
-EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent *playerTrans)
+EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent *playerTrans, Stats *playerstats)
 {
     enemyType = enemy_type;
     playerTransform=playerTrans;
+    playerStats = playerstats;
     radius_of_attack=radius_1;
     radius_of_displacement=radius_2;
     radius_of_pursuit=radius_3;
@@ -100,10 +101,11 @@ void EnemyMovement:: explosion(){
     knock_direction = Vector2D(playerTransform->position.x - transform->position.x, playerTransform->position.y - transform->position.y).Normalize();
     if (dist_from_player <explosion_radius){
         in_range = true;
+        playerStats->SubtractHealth(10);
+
     }
     //stats->set_health(0);
-    // maybe also add damage and knockback to other ennemies
-
+    // maybe also add damage and knockback to other ennemies    
 
 }
 
