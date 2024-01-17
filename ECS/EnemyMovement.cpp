@@ -104,24 +104,24 @@ void EnemyMovement:: explosion(){
         playerStats->SubtractHealth(10);
 
     }
-    //stats->SubtractHealth(10); SubstractHealth from enemy (crashes for some reasons)
+    stats->SubtractHealth(10); //SubstractHealth to enemy (crashes for some reasons)
 
 }
 
 void EnemyMovement::update()
 {
 
-    // Note that we only have to update velocities as they will influence the update of the position in the transform component
     if (collisionCooldown > 0) {
         collisionCooldown--;
         return; // Skip collision checks
     }
 
     if (exploded){
+        //Explosion knockout start
         Uint32 currentTime = SDL_GetTicks(); // Get the current time
         Uint32 delay = currentTime - startExpTime; // Calculate elapsed time since explosion started
         if (in_range){
-            if (delay <= 200)
+            if (delay <= 200)            //The delay and force of the push are to be determined
             {
                 if (delay >= 100)
                 {
@@ -143,6 +143,7 @@ void EnemyMovement::update()
                 }
             }
         }
+        //Explosion knockout end
 
     }
 
