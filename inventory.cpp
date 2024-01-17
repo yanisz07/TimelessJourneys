@@ -1,7 +1,6 @@
 #include "inventory.h"
 #include <iostream>
 #include "SDL_image.h"
-#include "items.h"
 #include "TextureManager.hpp"
 #include <fstream>
 
@@ -78,7 +77,6 @@ void Inventory::pickUpItem(int index) {
         std::cout << "Picked up item: " << items[index].name << std::endl;
         pickedUpItemIndex = index;
     }
-    return nullptr;
 }
 
 void Inventory::clearInventory() {

@@ -25,6 +25,8 @@ class ColliderComponent;
 
 class AssetManager;
 
+class Inventory;
+
 class Game
 {
 public:

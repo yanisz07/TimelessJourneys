@@ -9,6 +9,8 @@
 #include "TextureManager.hpp"
 #include "json.hpp" // Include JSON library header for handling JSON files
 
+class TextureManager;
+
 class Inventory {
 public:
     Inventory();
