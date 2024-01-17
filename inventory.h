@@ -1,27 +1,13 @@
-#ifndef INVENTORYSCREEN_H
-#define INVENTORYSCREEN_H
+#ifndef INVENTORY_H
+#define INVENTORY_H
+
 #include <string>
 #include <vector>
+#include <map>
 #include "SDL.h"
 #include "items.h"
 #include "TextureManager.hpp"
-
-/*
-class InventoryItem {
-public:
-    SDL_Texture* icon;
-    Item* item;
-
-    InventoryItem(SDL_Texture* icon, Item* item) : icon(icon), item(item) {}
-    ~InventoryItem() {
-        delete item;
-        if (icon != nullptr) {
-            SDL_DestroyTexture(icon);  // Free the texture
-            icon = nullptr;
-        }
-    }
-};
-*/
+#include "json.hpp" // Include JSON library header for handling JSON files
 
 class Inventory {
 public:
@@ -32,43 +18,23 @@ public:
     void hide();
     void toggle();
 
-    /*
-    void addItem(const InventoryItem& item);
-    void removeItem(const InventoryItem& item);
-    InventoryItem* getItem(int index);
-    */
-
-    void addItem(const Item* item);
-    void removeItem(const Item* item);
-    Item* getItem(int index);
+    // Update functions to work with the Item class and a map
+    void addItem(const std::string& name, int id, const Item& item);
+    void removeItem(const std::string& name);
+    Item* getItem(const std::string& name) const;
 
     void clearInventory();
-    void addNewItem(const Item* item,const std::string iconPath, SDL_Renderer* renderer);
-    void useSelectedItem();
+    void addNewItem(const std::string& name, int id, const Item& item);
+    void useSelectedItem(const std::string& name);
 
-
-    void handleEvents(SDL_Event& event);
-    void changeSelection(int change);
-    void render(SDL_Renderer* renderer);
-
-    int selectedSlotIndex;
-    void useItem(int index);
-    int pickedUpItemIndex;
-    void pickUpItem(int index);
-
-    bool isCurrentlyVisible() const { return isVisible; }
-    int getGridCols() const { return gridCols; }
-
-    void moveSelection(int offset);
+    // Function to load and save inventory to a JSON file
+    void loadFromJSON(const std::string& filePath);
+    void saveToJSON(const std::string& filePath) const;
 
 private:
     bool isVisible;
-    SDL_Rect windowRect;
-    //std::vector<InventoryItem> items;
-    int gridRows;
-    int gridCols;
-    SDL_Rect itemSlot;
-
+    SDL_Rect windowRect; // UI dimensions for the inventory screen
+    std::map<std::string, std::pair<int, Item>> items; // Map to store items by name and ID
 };
 
-#endif // INVENTORYSCREEN_H
+#endif // INVENTORY_H

@@ -301,7 +301,7 @@ void Game::handleEvents()
 
         }
 
-        if (inventory.isCurrentlyVisible()) {
+        if (inventory.isVisible()) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
             inventory.moveSelection(-inventory.getGridCols());
