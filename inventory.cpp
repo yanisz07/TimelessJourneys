@@ -56,8 +56,8 @@ Item* getItem(int index);
 
 
 //Implement this
-void Inventory::addItem(const InventoryItem& item) {
-    items.push_back(item);
+void Inventory::addItem(const Item& item) {
+    item.push_back(item);
 }
 
 void Inventory::addNewItem(const Item* item,const string iconPath, SDL_Renderer* renderer) {
@@ -71,9 +71,9 @@ void Inventory::addNewItem(const Item* item,const string iconPath, SDL_Renderer*
 }
 
 
-void Inventory::removeItem(const InventoryItem& item) {
+void Inventory::removeItem(const Item& item) {
     auto it = std::find_if(items.begin(), items.end(),
-                           [&item](const InventoryItem& i) { return i.name == item.name; });
+                           [&item](const Item& i) { return i.name == item.name; });
     if (it != items.end()) {
         if (it->icon != nullptr) {
             SDL_DestroyTexture(it->icon);  // Free the texture
@@ -83,7 +83,7 @@ void Inventory::removeItem(const InventoryItem& item) {
     }
 }
 
-InventoryItem* Inventory::getItem(int index) {
+Item* Inventory::getItem(int index) {
     if (index >= 0 && index < items.size()) {
         return &items[index];
     }
