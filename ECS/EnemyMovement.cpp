@@ -92,6 +92,9 @@ void EnemyMovement::returnToInitialPosition()
 
 void EnemyMovement:: explosion(){
     std::cout << "Explosion" << std::endl;
+    dist_from_player = calculateDistanceToPlayer();
+    std::cout << dist_from_player << std::endl;
+
     exploded = true;
     startExpTime  = SDL_GetTicks();
     knock_direction = Vector2D(playerTransform->position.x - transform->position.x, playerTransform->position.y - transform->position.y).Normalize();
