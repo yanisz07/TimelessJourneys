@@ -62,11 +62,14 @@ void ColliderComponent::SetAngle(double angle)
 
 void ColliderComponent::init()
 {
-    if(!(entity->hasComponent<TransformComponent>()))
+    if(entity->hasComponent<TransformComponent>())
     {
-        entity->addComponent<TransformComponent>();
+        transform = &entity->getComponent<TransformComponent>();
+        collider.x = transform->position.x;
+        collider.y = transform->position.y;
+        collider.w = transform->width*transform->scale;
+        collider.h = transform->height*transform->scale;
     }
-    transform = &entity->getComponent<TransformComponent>();
 
     tex = TextureManager::LoadTexture("/assets/ColTex.png");
     srcR = {0, 0, 32, 32 };
@@ -102,10 +105,10 @@ void ColliderComponent::update()
         {
             collider.x = static_cast<int>(transform->position.x);
             collider.y = static_cast<int>(transform->position.y);
-            collider.w = transform->width * transform->scale;
+            /*collider.w = transform->width * transform->scale;
             collider.h = transform->height * transform->scale;
             destR.w = collider.w;
-            destR.h = collider.h;
+            destR.h = collider.h;*/
         }
     }
 

@@ -39,6 +39,14 @@ public:
         position.y = y;
     }
 
+    TransformComponent(double x, double y, int h, int w)
+    {
+        position.x = x;
+        position.y = y;
+        height = h;
+        width = w;
+    }
+
     TransformComponent(double x, double y, int h, int w, int sc)
     {
         position.x = x;

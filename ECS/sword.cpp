@@ -92,7 +92,7 @@ int Sword::frontAttack()
     {
         if (direction.y == -1)
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x+18*scale+6,entityPos.y+13*scale-15,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(0,-1);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale+6,entityPos.y+13*scale-15,27,54,100);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -100,7 +100,7 @@ int Sword::frontAttack()
         }
         else
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x+18*scale+6,entityPos.y+(13+19)*scale,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(0,1);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale+6,entityPos.y+(13+19)*scale,27,54,100);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -111,7 +111,7 @@ int Sword::frontAttack()
     {
         if (direction.x == -1)
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x,entityPos.y+13*scale+15,27,54);
             attackCol.getComponent<TransformComponent>().set_directions(-1,0);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+13*scale+15,54,27,100);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -119,7 +119,7 @@ int Sword::frontAttack()
         }
         else
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x+(18+13)*scale,entityPos.y+13*scale+15,27,54);
             attackCol.getComponent<TransformComponent>().set_directions(1,0);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(18+13)*scale,entityPos.y+13*scale+15,54,27,100);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -130,7 +130,7 @@ int Sword::frontAttack()
     {
         if (direction.y == -1)
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x+(13+18)*scale-10,entityPos.y-10,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(1,-1);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-10,entityPos.y-10,27,54,100,45);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -139,7 +139,7 @@ int Sword::frontAttack()
         }
         if (direction.y == 1)
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x+(13+18)*scale-10,entityPos.y+(13+19)*scale-10,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(1,1);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-10,entityPos.y+(13+19)*scale-10,27,54,100,135);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -150,7 +150,7 @@ int Sword::frontAttack()
     {
         if (direction.y == -1)
         {
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x-10,entityPos.y-10,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(-1,-1);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-10,entityPos.y-10,27,54,100,135);
             attackCol.addGroup(Game::groupPlayerAttack);
@@ -159,7 +159,7 @@ int Sword::frontAttack()
         if (direction.y == 1)
         {
             std::cout << "Melee attack" << std::endl;
-            attackCol.addComponent<TransformComponent>();
+            attackCol.addComponent<TransformComponent>(entityPos.x-10,entityPos.y+(13+19)*scale-10,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(-1,1);
             attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-10,entityPos.y+(13+19)*scale-10,27,54,100,225);
             attackCol.addGroup(Game::groupPlayerAttack);

@@ -50,6 +50,10 @@ auto& enemy_health(manager.addEntity());
 auto& chest(manager.addEntity());
 //End
 
+//Test collision with rotated objects
+auto& TestCol(manager.addEntity());
+//
+
 bool chest_open = false;
 
 std::filesystem::path projectDir = std::filesystem::current_path();
@@ -59,9 +63,7 @@ int t = 0;
 Uint32 playerInvincibleStartTime = 0; // the player invincibility start time
 Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
 
-//Test collision with rotated objects
-auto& TestCol(manager.addEntity());
-//
+
 
 Game::Game()
 {
@@ -215,7 +217,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Armor>();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
-
+    player.getComponent<ColliderComponent>().SetAngle(45);
     player.addComponent<Stats>(true);
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
@@ -280,10 +282,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     lastProjectileTime = SDL_GetTicks();
     }
 
-    //Test collision with rotated objects
 
-    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,200,100);
-    TestCol.getComponent<ColliderComponent>().SetAngle(227);
+    TestCol.addComponent<TransformComponent>(1700,1300,100,100);
+    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,100,100);
+    TestCol.getComponent<ColliderComponent>().SetAngle(0);
 
 }
 
@@ -652,28 +654,14 @@ void Game::update()
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
-/*
-        for (auto& p : PlayerProjectiles)
-        {
-            if(Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,p->getComponent<ColliderComponent>()))
-            {
-                std::cout << "Arrow hit wall" << std::endl;
-                p->destroy();
-            }
-        }
 
         for (auto& p : PlayerProjectiles)
         {
-            for (auto& c : MapColliders)
+            if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),TestCol.getComponent<ColliderComponent>()))
             {
-                if(Collision::CheckCollision(c->getComponent<ColliderComponent>() ,p->getComponent<ColliderComponent>()))
-                {
-                    std::cout << "Arrow hit wall" << std::endl;
-                    p->destroy();
-                }
+                p->destroy();
             }
         }
-*/
         //end
 
 
