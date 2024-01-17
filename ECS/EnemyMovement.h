@@ -36,7 +36,11 @@ public:
     int armingDuration = 4; // Duration for the creeper to arm itself
     bool arming = false;
     bool exploded = false;
+    bool in_range = false;
     float explosion_radius = 200;
+    Uint32 startExpTime;
+    Vector2D knock_direction;
+
 
     Vector2D initial_position;
 

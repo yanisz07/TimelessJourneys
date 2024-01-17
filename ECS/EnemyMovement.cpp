@@ -92,18 +92,49 @@ void EnemyMovement::returnToInitialPosition()
 
 void EnemyMovement:: explosion(){
     std::cout << "Explosion" << std::endl;
+    exploded = true;
+    startExpTime  = SDL_GetTicks();
+    knock_direction = Vector2D(playerTransform->position.x - transform->position.x, playerTransform->position.y - transform->position.y).Normalize();
     if (dist_from_player <explosion_radius){
-        //deal damage to player
-        //add knockback
-        //add animation
+        in_range = true;
     }
     //stats->set_health(0);
     // maybe also add damage and knockback to other ennemies
 
+
 }
 
 void EnemyMovement::update()
-{   // Note that we only have to update velocities as they will influence the update of the position in the transform component
+{
+
+    if (exploded && in_range){
+    Uint32 currentTime = SDL_GetTicks(); // Get the current time
+    Uint32 delay = currentTime - startExpTime; // Calculate elapsed time since explosion started
+    if (delay <= 200)
+    {
+            if (delay >= 100)
+            {
+                if (delay <= 140)
+                {
+                    playerTransform->position.x += knock_direction.x * 20;
+                    playerTransform->position.y += knock_direction.y * 20;
+                }
+                else if (delay <= 180)
+                {
+                    playerTransform->position.x += knock_direction.x * 10;
+                    playerTransform->position.y += knock_direction.y * 10;
+                }
+                else
+                {
+                    playerTransform->position.x += knock_direction.x * 5;
+                    playerTransform->position.y += knock_direction.y * 5;
+                }
+            }
+    }
+
+    }
+
+    // Note that we only have to update velocities as they will influence the update of the position in the transform component
     if (collisionCooldown > 0) {
         collisionCooldown--;
         return; // Skip collision checks
@@ -142,9 +173,7 @@ void EnemyMovement:: creeperBehavior()
             std::cout << "Arming" << std::endl;
             armingTimer++;
             if (armingTimer >= armingDuration) {
-                explosion();
-                exploded = true;
-            }
+                explosion();            }
         }
 
         else if (dist_from_player < dist_to_explode) {
