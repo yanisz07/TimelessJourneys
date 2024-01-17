@@ -267,7 +267,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Initialize all items as hide
     std::string handPath =  (projectDir / ".." / "TimelessJourneys" / "assets" / "hand.png").string();
 
-    inventory.addNewItem(Items* items,handPath,renderer);
+    //inventory.addNewItem(Items* items,handPath,renderer);
 
 }
 

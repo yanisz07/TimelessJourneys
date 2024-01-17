@@ -13,7 +13,6 @@
 #include "game_over.h"
 #include <filesystem>
 #include "sdl_mixer.h"
-#include "inventory.h"
 #include "items.h"
 
 extern std::filesystem::path projectDir;

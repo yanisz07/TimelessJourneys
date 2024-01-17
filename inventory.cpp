@@ -30,7 +30,7 @@ void Inventory::toggle() {
 
 void Inventory::addItem(const std::string& name, int id, const Item& item) {
     items[name] = {id, item};
-
+}
 
 void Inventory::removeItem(const std::string& name) {
     items.erase(name);
