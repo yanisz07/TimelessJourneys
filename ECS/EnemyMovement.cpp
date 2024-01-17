@@ -7,11 +7,12 @@
 #include "Stats.hpp"
 
 
-EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent *playerTrans, Stats *playerstats)
+EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats)
 {
     enemyType = enemy_type;
     playerTransform=playerTrans;
     playerStats = playerstats;
+    stats = e_stats;
     radius_of_attack=radius_1;
     radius_of_displacement=radius_2;
     radius_of_pursuit=radius_3;
@@ -21,7 +22,6 @@ EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, flo
 void EnemyMovement::init()
 {
     transform = &entity->getComponent<TransformComponent>();
-    stats = &entity->getComponent<Stats>();
     initial_position=transform->position;
     srand(time(NULL));
 }
@@ -104,38 +104,39 @@ void EnemyMovement:: explosion(){
         playerStats->SubtractHealth(10);
 
     }
-    //stats->set_health(0);
-    // maybe also add damage and knockback to other ennemies    
+    //stats->SubtractHealth(10); SubstractHealth from enemy (crashes for some reasons)
 
 }
 
 void EnemyMovement::update()
 {
 
-    if (exploded && in_range){
-    Uint32 currentTime = SDL_GetTicks(); // Get the current time
-    Uint32 delay = currentTime - startExpTime; // Calculate elapsed time since explosion started
-    if (delay <= 200)
-    {
-            if (delay >= 100)
+    if (exploded){
+        Uint32 currentTime = SDL_GetTicks(); // Get the current time
+        Uint32 delay = currentTime - startExpTime; // Calculate elapsed time since explosion started
+        if (in_range){
+            if (delay <= 200)
             {
-                if (delay <= 140)
-                {
-                    playerTransform->position.x += knock_direction.x * 20;
-                    playerTransform->position.y += knock_direction.y * 20;
-                }
-                else if (delay <= 180)
-                {
-                    playerTransform->position.x += knock_direction.x * 10;
-                    playerTransform->position.y += knock_direction.y * 10;
-                }
-                else
-                {
-                    playerTransform->position.x += knock_direction.x * 5;
-                    playerTransform->position.y += knock_direction.y * 5;
-                }
+                    if (delay >= 100)
+                    {
+                        if (delay <= 140)
+                        {
+                            playerTransform->position.x += knock_direction.x * 20;
+                            playerTransform->position.y += knock_direction.y * 20;
+                        }
+                        else if (delay <= 180)
+                        {
+                            playerTransform->position.x += knock_direction.x * 10;
+                            playerTransform->position.y += knock_direction.y * 10;
+                        }
+                        else
+                        {
+                            playerTransform->position.x += knock_direction.x * 5;
+                            playerTransform->position.y += knock_direction.y * 5;
+                        }
+                    }
             }
-    }
+        }
 
     }
 

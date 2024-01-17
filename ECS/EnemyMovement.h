@@ -45,7 +45,7 @@ public:
 
     Vector2D initial_position;
 
-    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans, Stats* playerstats);
+    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats);
 
     void init() override;
 
