@@ -7,4 +7,9 @@ Week 2 Summary: Installed SDL2 with the other members of the team and made sure 
 
 Week 3-4 Summary: Watching more tutorials on SDL2 / RPG development in C++. The goal is to be able to manage NPCs / enemy's behavior. Implemented a very basic Enemy Movement component to test enemy movement. 
 
-Week 5 Summary: Implemented collisions with the map for the enemy. Improved the EnemyMovement component, Created two mods, one where the enemy moves randomly around the map (Passive mod), and one when the player gets close, where the enemy starts chasing the player (Chase mod). For now, there is only one enemy, but when the base is finished it will be easy to add many more with different behaviors.
+Week 5 Summary: Implemented first collisions with the map for the enemy. Improved the EnemyMovement component, Created two mods, one where the enemy moves randomly around the map (Passive mod), and one when the player gets close, where the enemy starts chasing the player (Chase mod).
+
+Week 6 Summary: Improved the enemy movement so that it seems more realistic and natural (both passive and chase mods), changed the organization of the Enemy Component so that it is easier to manage each different type of enemy. Started to work with Robbi on improvements of the enemy collisions so that he manages to follow the player even when there are walls in between (using small bounces off the wall so that the enemy can adjust his chasing).
+
+Week 7 Summary: Created a new type of enemy: The creeper (inspired by Minecraft). The first part of the movement is the same as the generic one we implemented before (passive and chase mod with the same principle of boundedness). The difference is that instead of attacking the player when the creeper is close enough, it will start arming its explosion which happens after some seconds (leaving just enough time for the player to escape. I implemented the arming and explosion part, with a knockback (the player gets pushed by the explosion) of the player in the right direction when the explosion happens and the player is in range.
+
