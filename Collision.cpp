@@ -251,8 +251,6 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //compute director vector
     Vector2D u1 = Vector2D(UR_A.x-UL_A.x,UR_A.y-UL_A.y);
-    std::cout << "U1 for AXIS 1" << std::endl;
-    std::cout << u1.x << " " << u1.y << std::endl;
 
     //compute projections
     Vector2D UR_B1 = Projection(UR_B,u1);
@@ -260,16 +258,8 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D LL_B1 = Projection(LL_B,u1);
     Vector2D LR_B1 = Projection(LR_B,u1);
 
-    std::cout << UR_B1.x << " " << UR_B1.y << std::endl;
-    std::cout << UL_B1.x << " " << UL_B1.y << std::endl;
-    std::cout << LL_B1.x << " " << LL_B1.y << std::endl;
-    std::cout << LR_B1.x << " " << LR_B1.y << std::endl;
-
     Vector2D UR_A1 = Projection(UR_A,u1);
     Vector2D UL_A1 = Projection(UL_A,u1);
-
-    std::cout << UR_A1.x << " " << UR_A1.y << std::endl;
-    std::cout << UL_A1.x << " " << UL_A1.y << std::endl;
 
     double Max_A1 = MaxPoint(UR_A1,UL_A1);
     double Min_A1 = MinPoint(UR_A1,UL_A1);
@@ -295,7 +285,6 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //compute director vector
     Vector2D u2 = Vector2D(UR_A.x-LR_A.x,UR_A.y-LR_A.y);
-    normalize(u2);
 
     //compute projections
     Vector2D UR_B2 = Projection(UR_B,u2);
@@ -331,7 +320,6 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //compute director vector
     Vector2D u3 = Vector2D(UR_B.x-LR_B.x,UR_B.y-LR_B.y);
-    normalize(u3);
     //compute projections
     Vector2D UR_A3 = Projection(UR_A,u3);
     Vector2D UL_A3 = Projection(UL_A,u3);
@@ -365,7 +353,6 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //compute director vector
     Vector2D u4 = Vector2D(UR_B.x-UL_B.x,UR_B.y-UL_B.y);
-    normalize(u4);
     //compute projections
     Vector2D UR_A4 = Projection(UR_A,u4);
     Vector2D UL_A4 = Projection(UL_A,u4);
