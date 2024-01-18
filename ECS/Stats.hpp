@@ -65,11 +65,9 @@ public:
     void set_health(int i) {health = i;} // Should not be used on players! Or anyone really, only debug.
 
     void SubtractHealth(int); // Supports negative values for healing.
+    void AddHealth(int i);
     void GainExp(int); // Handles level ups. Supports negative values. Will level down the player down to level 1 if necessary.
     void KillEntity(); // Only for enemies.
-    void GameOver(); // Only for the player.
-
-    static void Damage(Stats& entity1, Stats& entity2); // TODO weapons deal damage and multiply with damage_mult, not characters directly.
 
     bool is_hit()
     {

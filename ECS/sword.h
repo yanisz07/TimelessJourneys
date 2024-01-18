@@ -10,6 +10,7 @@
 #include "../timer.hpp"
 #include <string.h>
 #include <SDL.h>
+#include "Animation.hpp"
 
 //forward decleration
 class TransformComponent;
@@ -25,18 +26,10 @@ public:
     Timer timer;
     std::string attack;
     SDL_Texture* texture;
-    int damage = 0;
     Mix_Chunk* swordSwooshSound;
 
     std::string spritePath;
-    //do an Animation object to store this
-    int frames = 4;
-    int frame = 0;
-    int index = 0;
-    int speed = 100;
-    int width = 276;
-    int height = 539;
-    //
+    Animation animation = Animation(276,539,0,5,100,"BlueSword");
     SDL_Rect srcR, destR;
 
     bool is_attacking = false;
@@ -56,7 +49,7 @@ public:
 
     int frontAttack();
 
-    int DoDamage(Stats& entity1);
+    int DoDamage(Stats &entity1, Stats &entity2);
 
     void update_sword();
 
@@ -68,6 +61,7 @@ private:
     Uint32 reloadTime = 400;
     Manager* manager;
     SpriteComponent* sprite;
+    int damage = 5;
 };
 
 

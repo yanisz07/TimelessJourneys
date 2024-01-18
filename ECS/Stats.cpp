@@ -11,24 +11,19 @@ void Stats::SubtractHealth(int i)
         if (health > max_health) {
             health = max_health;
         } else if (health < 0) {
-            GameOver();
         }
-    } else if (health < 0) {
+    } else if (health <= 0) {
         KillEntity();
     }
 }
 
-void Stats::Damage(Stats& entity1, Stats& entity2)
-{ // TODO To be deleted. Weapons should handle damage and use SubtractHealth and read damage_mult.
-    entity2.SubtractHealth(entity1.get_damage_mult());
-}
-
-void Stats::GameOver() {
-    // TODO
+void Stats::AddHealth(int i)
+{
+    this->health+=i;
 }
 
 void Stats::KillEntity() {
-    // TODO
+    entity->destroy();
 }
 
 void Stats::draw()

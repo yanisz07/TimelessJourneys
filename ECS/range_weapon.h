@@ -27,7 +27,7 @@ public:
     int frames = 4;
     int frame = 0;
     int index = 0;
-    int speed = 100;
+    int animspeed = 100;
     int width = 16;
     int height = 16;
     //
@@ -43,13 +43,21 @@ public:
 
     ~Range_Weapon() override = default;
 
+    int get_damage(){return damage;}
+    int get_range(){return range;}
+    int get_speed(){return speed;}
+    Uint32 get_reload_time(){return reloadTime;}
+
+    void set_damage(int dmg){damage=dmg;}
+    void set_range(int r){range=r;}
+    void set_speed(int s){speed=s;}
+    void set_reload_time(Uint32 t){reloadTime=t;}
+
     void init() override;
 
     void update() override;
 
     int rangeAttack();
-
-    int DoDamage(Stats& entity1);
 
     void update_range_weapon();
 
@@ -58,7 +66,9 @@ public:
     void draw() override;
 
 private:
-    int damage = 5;
+    int damage = 3;
+    int range = 400;
+    int speed = 1;
     TransformComponent* transform;
     SpriteComponent* sprite;
     Manager* manager;
