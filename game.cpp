@@ -238,7 +238,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     Stats& playerStats = player.getComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addComponent<EnemyMovement>(1,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
     enemy.addGroup(Game::groupEnemies);
 
     std::cout << "Enemy created" << std::endl;
