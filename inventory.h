@@ -27,10 +27,12 @@ public:
     // Update functions to work with the Item class and a map
     void addItem(const std::string& name, int id, const Item& item);
     void removeItem(const std::string& name);
-    Item* getItem(const std::string& name) const;
+    const Item* getItem(const std::string& name) const;
+    void pickUpItem(int index);
 
     void clearInventory();
     void addNewItem(const std::string& name, int id, const Item& item);
+    void useItem(int index);
     void useSelectedItem(const std::string& name);
 
     // Function to load and save inventory to a JSON file
