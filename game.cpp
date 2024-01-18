@@ -547,6 +547,7 @@ void Game::handleEvents()
                 Mix_PlayChannel(-1,clickButton, 0);
                 player.getComponent<Stats>().set_health(50);
                 player.getComponent<TransformComponent>().position = Vector2D(1400, 1100);
+                player.getComponent<TransformComponent>().velocity = Vector2D(0,0);
                 timeElapsed.start();
                 isGameOverOpen = false;
             }
@@ -924,8 +925,8 @@ void Game::render()
         // Render all regular game objects when not in map view
         for (auto& t : tiles) { t->draw(); }
         for (auto& c : MapColliders) { c->draw(); }
-        for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
+        for (auto& p : players) { p->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
         for (auto& ch: chests) { ch->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
