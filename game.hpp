@@ -57,7 +57,9 @@ public:
     int screen_height;
 
     static InventoryScreen* inventoryScreen;
-    ChestScreen chestScreen;
+    static ChestScreen* chestScreen1;
+    static ChestScreen* chestScreen2;
+
     static AssetManager* assets;
     Mix_Chunk* clickButton;
 

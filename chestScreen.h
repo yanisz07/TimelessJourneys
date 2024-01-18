@@ -35,7 +35,7 @@ private:
     bool isVisible;
     SDL_Rect windowRect_chest;
     SDL_Rect windowRect_inventory;
-    std::vector<InventoryItem> items;
+    std::vector<InventoryItem> itemsInChest;
     int gridRows;
     int gridCols;
     int totalCols;
