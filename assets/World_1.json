@@ -376,13 +376,13 @@
         "sprites": [
           {
             "name" : "Enemy_Idle_Sprite",
-            "path": "/assets/player_game_idle_down.png",
+            "path": "/assets/Blue_Slime/Idle.png",
             "actions": [
               {
                 "name": "Idle",
                 "values": [
-                  48,
-                  6
+                  128,
+                  8
                 ]
               }
             ]

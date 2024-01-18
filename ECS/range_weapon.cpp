@@ -12,6 +12,8 @@ Range_Weapon::Range_Weapon(Manager* man)
     timer.setTimeOut(reloadTime);
     manager = man;
     spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow.png").string();
+    std::string bow_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow_effect1.mp3").string();
+    bowSound = Mix_LoadWAV(bow_effect_path.c_str());
     texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
     srcR.w = width;
     srcR.h = height;
@@ -56,51 +58,54 @@ void Range_Weapon::update()
 
 int Range_Weapon::rangeAttack()
 {
-
-    if (transform->x_direction == 0)
+    Vector2D entityPos = transform->position;
+    Vector2D direction = Vector2D(transform->x_direction,transform->y_direction);
+    int scale = transform->scale;
+    if (direction.x == 0)
     {
-        if (transform->y_direction == -1)
+        if (direction.y == -1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(18)*scale+3,entityPos.y+6*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,-90);
         }
         else
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)*0.5,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(18)*scale+3,entityPos.y+(13+19-8)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,90);
         }
     }
-    if (transform->y_direction == 0)
+    if (direction.y == 0)
     {
-        if (transform->x_direction == -1)
+        if (direction.x == -1)
         {
-            CreateArrow(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+(13+6)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,180);
         }
         else
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale),transform->position.y+(transform->height*transform->scale)*0.5),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(18+13-4)*scale,entityPos.y+(13+6)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,0);
         }
     }
-    if (transform->y_direction==1)
+    if (direction.x==1)
     {
-        if (transform->x_direction == 1)
+        if (direction.y == -1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(13+18-7)*scale,entityPos.y+(13-3)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,-45);
         }
-        if (transform->x_direction == -1)
+        if (direction.y == 1)
         {
-            CreateArrow(Vector2D(transform->position.x-50,transform->position.y+(transform->height*transform->scale)+50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+(13+18-7)*scale,entityPos.y+(13+19-3)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,45);
         }
     }
-    if (transform->y_direction==-1)
+    if (direction.x==-1)
     {
-        if (transform->x_direction == 1)
+        if (direction.y == -1)
         {
-            CreateArrow(Vector2D(transform->position.x+(transform->width*transform->scale)+50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+10*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,-135);
         }
-        if (transform->x_direction == -1)
+        if (direction.y == 1)
         {
-            CreateArrow(Vector2D(transform->position.x-50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
+            CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+(13+19-4)*scale),Vector2D(direction.x,direction.y),400,5,"arrow",15,7,2,damage,135);
         }
     }
+    Mix_PlayChannel(-1,bowSound, 0);
     return 0;
 }
 
@@ -121,16 +126,16 @@ void Range_Weapon::draw()
             {
                 if (direction.y == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x+18*scale+6 - Game::camera.x;
-                    destR.y = entityPos.y+13*scale-15 - Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x+16*scale - Game::camera.x;
+                    destR.y = entityPos.y+8*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-90,NULL,SDL_FLIP_NONE);
                 }
                 else
                 {
-                    //setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+18*scale+6 - Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale - Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+16*scale - Game::camera.x;
+                    destR.y = entityPos.y+(13+19-8)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,90,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -138,18 +143,16 @@ void Range_Weapon::draw()
             {
                 if (direction.x == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    Vector2D center = Vector2D(entityPos.x+27,entityPos.y+13*scale+29);
-                    destR.x = center.x - 14 - Game::camera.x;
-                    destR.y = center.y - 27 - Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+6*scale - Game::camera.x;
+                    destR.y = entityPos.y+(13+2)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_HORIZONTAL);
                 }
                 else
                 {
-                    //setPriority(sprite->priority - 1);
-                    Vector2D center = Vector2D(entityPos.x+(18+13)*scale+27,entityPos.y+13*scale+29);
-                    destR.x = center.x - 14 - Game::camera.x;
-                    destR.y = center.y - 27 - Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+(18+13-4)*scale - Game::camera.x;
+                    destR.y = entityPos.y+(13+2)*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -157,16 +160,16 @@ void Range_Weapon::draw()
             {
                 if (direction.y == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
-                    destR.y = entityPos.y-10-Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x+(13+18-8)*scale-Game::camera.x;
+                    destR.y = entityPos.y+(13-8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-45,NULL,SDL_FLIP_NONE);
                 }
                 if (direction.y == 1)
                 {
-                    //setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale-10-Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+(13+18-8)*scale-Game::camera.x;
+                    destR.y = entityPos.y+(13+19-8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,45,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -174,16 +177,16 @@ void Range_Weapon::draw()
             {
                 if (direction.y == -1)
                 {
-                    //setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x-10-Game::camera.x;
-                    destR.y = entityPos.y-10-Game::camera.y;
+                    setPriority(sprite->priority - 1);
+                    destR.x = entityPos.x+10*scale-Game::camera.x;
+                    destR.y = entityPos.y+5*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-135,NULL,SDL_FLIP_NONE);
                 }
                 if (direction.y == 1)
                 {
-                    //setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x-10-Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale-10-Game::camera.y;
+                    setPriority(sprite->priority + 1);
+                    destR.x = entityPos.x+10*scale-Game::camera.x;
+                    destR.y = entityPos.y+(13+19-8)*scale-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,135,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -202,14 +205,14 @@ void Range_Weapon::update_range_weapon()
     is_attacking = false;
 }
 
-void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam)
+void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam,double angle)
 {
     auto& arrow(manager->addEntity());
-    arrow.addComponent<TransformComponent>(pos.x, pos.y, w, h, sc);
-    arrow.addComponent<SpriteComponent>(false, id);
+    arrow.addComponent<TransformComponent>(pos.x, pos.y, h, w, sc);
+    arrow.addComponent<SpriteComponent>(id);
+    arrow.getComponent<SpriteComponent>().setAngle(angle);
     arrow.addComponent<ProjectileComponent>(range,speed,vel,dam);
-
-    arrow.addComponent<ColliderComponent>(id);
-    arrow.addComponent<Stats>(0,2);
+    arrow.addComponent<ColliderComponent>(id,pos.x,pos.y,w,h);
+    arrow.getComponent<ColliderComponent>().SetAngle(angle);
     arrow.addGroup(Game::groupPlayerProjectiles);
 }
