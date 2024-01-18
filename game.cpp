@@ -479,6 +479,33 @@ void Game::handleEvents()
                 isRunning = false;
             }
         }
+        else if (isRuleOpen) {
+            // Get the mouse coordinates and screen size
+            int x, y ,screenWidth, screenHeight;
+            SDL_GetMouseState(&x, &y);
+            SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+            // Menu button dimensions
+            int buttonWidth = 150;
+            int buttonHeight = 40;
+            // Calculating location of buttons
+            int centerX = (screenWidth - buttonWidth) / 2;
+            int backButtonCenterY = (screenHeight - 2 * buttonHeight - 20) / 2 + 160;
+            //if click is within back button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > backButtonCenterY && y < backButtonCenterY + buttonHeight) {
+                if (isGameStarted) {
+                Mix_PlayChannel(-1,clickButton, 0);
+                isRuleOpen = false;
+                isInGameMenuOpen = true;
+                }
+                else if (!isGameStarted){
+                Mix_PlayChannel(-1,clickButton, 0);
+                isRuleOpen = false;
+                isMenuOpen = true;
+
+                }
+            }
+        }
         else if (isSettingsOpen) {
             // Get the mouse coordinates and screen size
             int x, y ,screenWidth, screenHeight;
