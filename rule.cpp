@@ -82,7 +82,7 @@ void Rule::renderRule(SDL_Renderer* renderer, bool isRuleOpen, const SDL_Point& 
         SDL_RenderCopy(renderer, titleTexture, NULL, &titleTextRect);
 
         // Render rule Text
-        std::string rulesText = "Your Rules Go Here. This is a long line of text that will wrap to the next line to demonstrate multiline rendering within the rule button.";
+        std::string rulesText = "Controls : \n    -Z: attack\n    -A: switch range/melee\n    -E: open inventory\n    -Escape: opens menu\n    -M: opens map\n    -Arrows: movement";
         renderMultilineText(renderer, font, rulesText, textColor, centerX, centerY, ruleButtonWidth, ruleButtonHeight);
 
         // Render back Text
@@ -106,24 +106,10 @@ void Rule::renderRule(SDL_Renderer* renderer, bool isRuleOpen, const SDL_Point& 
 
 void Rule::renderMultilineText(SDL_Renderer* renderer, TTF_Font* font, const std::string& text, const SDL_Color& color, int x, int y, int maxWidth, int maxHeight) {
     std::istringstream iss(text);
-    std::string word;
     std::string line;
     std::vector<std::string> lines;
 
-    while (iss >> word) {
-        std::string potentialLine = line.empty() ? word : line + " " + word;
-        int textWidth, textHeight;
-        TTF_SizeText(font, potentialLine.c_str(), &textWidth, &textHeight);
-
-        if (textWidth <= maxWidth || line.empty()) {
-            line = potentialLine;
-        } else {
-            lines.push_back(line);
-            line = word;
-        }
-    }
-
-    if (!line.empty()) {
+    while (std::getline(iss, line, '\n')) {
         lines.push_back(line);
     }
 
