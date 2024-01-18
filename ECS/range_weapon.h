@@ -7,6 +7,7 @@
 #include "../Vector2D.hpp"
 #include <string.h>
 #include <SDL.h>
+#include "Animation.hpp"
 
 //forward decleration
 class TransformComponent;
@@ -23,14 +24,7 @@ public:
     std::string spritePath;
     Mix_Chunk* bowSound;
 
-    //do an Animation to store this
-    int frames = 4;
-    int frame = 0;
-    int index = 0;
-    int animspeed = 100;
-    int width = 16;
-    int height = 16;
-    //
+    Animation animation = Animation(16,16,0,4,100,"Bow");
 
     SDL_Rect srcR,destR;
 
@@ -68,7 +62,7 @@ public:
 private:
     int damage = 3;
     int range = 400;
-    int speed = 1;
+    int speed = 5;
     TransformComponent* transform;
     SpriteComponent* sprite;
     Manager* manager;

@@ -15,10 +15,10 @@ Range_Weapon::Range_Weapon(Manager* man)
     std::string bow_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow_effect1.mp3").string();
     bowSound = Mix_LoadWAV(bow_effect_path.c_str());
     texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
-    srcR.w = width;
-    srcR.h = height;
-    destR.w = width*3;
-    destR.h = height*3;
+    srcR.w = animation.width;
+    srcR.h = animation.height;
+    destR.w = animation.width*3;
+    destR.h = animation.height*3;
 }
 
 void Range_Weapon::init()
@@ -117,9 +117,10 @@ void Range_Weapon::draw()
         {
             transform = &(entity->getComponent<TransformComponent>());
             srcR.y = 0;
-            frame = static_cast<int>((timer.getTimeOutStart() / animspeed) % frames);
-            index = width*frame;
-            srcR.x = index;
+            int frame;
+            frame = static_cast<int>((timer.getTimeOutStart() / animation.speed) % animation.frames);
+            animation.index = animation.width*frame;
+            srcR.x = animation.index;
             Vector2D entityPos = transform->position;
             int scale = transform->scale;
             if (direction.x == 0)
@@ -128,7 +129,7 @@ void Range_Weapon::draw()
                 {
                     setPriority(sprite->priority - 1);
                     destR.x = entityPos.x+16*scale - Game::camera.x;
-                    destR.y = entityPos.y+8*scale - Game::camera.y;
+                    destR.y = entityPos.y+3*scale - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-90,NULL,SDL_FLIP_NONE);
                 }
                 else
