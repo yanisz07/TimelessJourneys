@@ -2,6 +2,8 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>
+#include <sstream>
+
 
 //brief
 //FCHGDFB
