@@ -3,7 +3,6 @@
 #include "SDL_image.h"
 #include "TextureManager.hpp"
 #include <fstream>
-#include <map>
 
 // Constructor
 Inventory::Inventory() : isVisible(false), windowRect{100, 100, 400, 300} {
@@ -43,7 +42,6 @@ const Item* Inventory::getItem(const std::string& name) const {
         return &(it->second.second);
 
     }
-    return nullptr;
 }
 
 
@@ -64,7 +62,8 @@ void Inventory::useItem(int index) {
         player.restoreHealth(50); // Assuming 'player' is an instance of the Player class
         removeItem(items[index]); */
 
-void Inventory::useSelectedItem(const std::string& name) {
+void Inventory::useSelectedItem() {
+
     if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
         useItem(selectedSlotIndex);
         // Optionally, after using the item, unselect it or select the next one
@@ -89,6 +88,10 @@ void Inventory::addNewItem(const std::string& name, int id, const Item& item) {
     addItem(name, id, item);
 }
 
+void Inventory::useSelectedItem(const std::string& name) {
+    // Placeholder for actual implementation
+    // This function would interact with the game logic to use an item
+}
 
 void Inventory::loadFromJSON(const std::string& filePath) {
     std::ifstream inFile(filePath);
@@ -103,8 +106,8 @@ void Inventory::loadFromJSON(const std::string& filePath) {
         std::string name = element.key();
         int id = element.value()["id"];
         // You will need to create an Item from the JSON data
-        Item* item; // Placeholder, implement item creation from JSON
-        addItem(name, id, *item);
+        Item item; // Placeholder, implement item creation from JSON
+        addItem(name, id, item);
     }
 }
 

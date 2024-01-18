@@ -32,6 +32,7 @@ public:
     void clearInventory();
     void addNewItem(const std::string& name, int id, const Item& item);
     void useSelectedItem(const std::string& name);
+    void useItem(int index);
 
     // Function to load and save inventory to a JSON file
     void loadFromJSON(const std::string& filePath);
