@@ -797,56 +797,45 @@ void Game::render()
             player_health.draw();
             TestCol.draw();
 
-            // Define mini-map properties
-            const int miniMapScale = 3; // Mini-map scale factor
-            const int miniMapX = screenWidth - 300; // Top-right corner position
-            const int miniMapY = 10;
-            const int miniMapWidth = 290;
-            const int miniMapHeight = 290;
-
-            // Mini-map border rendering
-            const int borderSize = 2; // Thickness of the border
-            SDL_Rect borderRect = {
-                miniMapX - borderSize,
-                miniMapY - borderSize,
-                miniMapWidth + (borderSize * 2),
-                miniMapHeight + (borderSize * 2)
-            };
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for the border
-            SDL_RenderFillRect(renderer, &borderRect);
-
-            // Mini-map rendering inside the border
-            SDL_Rect miniMapRect = {miniMapX, miniMapY, miniMapWidth, miniMapHeight};
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background for the mini-map
-            SDL_RenderFillRect(renderer, &miniMapRect);
-
-            // Get the player's current position
-            Vector2D playerPosition = player.getComponent<TransformComponent>().position;
-
-            // Render the entire map within the mini-map area
-            for (auto& t : tiles) {
-                auto& tileComponent = t->getComponent<TileComponent>();
-
-                // Offset the tile's position so that it's drawn relative to the mini-map's position
-                SDL_Rect destRect = tileComponent.destRect;
-                destRect.x += (miniMapX - Game::camera.x);
-                destRect.y += (miniMapY - Game::camera.y);
-
-                // Check if the tile is within the mini-map's viewport and draw it
-                if (destRect.x + destRect.w > miniMapX && destRect.x < miniMapX + miniMapWidth &&
-                    destRect.y + destRect.h > miniMapY && destRect.y < miniMapY + miniMapHeight) {
-                        TextureManager::Draw(tileComponent.texture, tileComponent.srcRect, destRect, SDL_FLIP_NONE);
-                }
-            }
     }
      else {
-
         for (auto& t : tiles) {
             auto& tileComponent = t->getComponent<TileComponent>();
             tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
             t->draw();
         }
 
+        // Display key in the top right corner for player position when the full map is displayed
+        const int keyBoxSize = 10; // Size of the red square
+        const int padding = 10; // Padding from the top and right edges
+        const int textPadding = 5; // Padding between the square and the text
+
+        // Render the red square
+        SDL_Rect redSquare = {screenWidth - padding - keyBoxSize, padding, keyBoxSize, keyBoxSize};
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red
+        SDL_RenderFillRect(renderer, &redSquare);
+
+        // Create a surface for the player position text
+        SDL_Color textColor = {255, 255, 255}; // White color for the text
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Game::assets->GetFont("arial"), "Player Position", textColor);
+
+        if (surfaceMessage) {
+            // Create a texture from the surface
+            SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+            SDL_Rect messageRect = {
+                screenWidth - padding - keyBoxSize - textPadding - surfaceMessage->w, // To the left of the red square
+                padding, // Same vertical position as the red square
+                surfaceMessage->w,
+                surfaceMessage->h
+            };
+
+            // Render the text
+            SDL_RenderCopy(renderer, messageTexture, NULL, &messageRect);
+
+            // Clean up
+            SDL_FreeSurface(surfaceMessage);
+            SDL_DestroyTexture(messageTexture);
+        }
         // Gets the scaled position of the player from the TransformComponent.
         Vector2D playerPosition = player.getComponent<TransformComponent>().position;
 
