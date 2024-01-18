@@ -31,6 +31,8 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
 InventoryScreen* Game::inventoryScreen = new InventoryScreen();
+ChestScreen* Game::chestScreen = new ChestScreen();
+
 
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
@@ -257,7 +259,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
     chest.addGroup(Game::groupChests);
-    std::cout << "Chest created" << std::endl;
     }
 
 
@@ -309,26 +310,21 @@ void Game::handleEvents()
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
         case SDLK_ESCAPE:
-             if (chest_open == false) {
             InGameMenu::toggleInGameMenuState(isInGameMenuOpen); // Existing menu toggle
-             }
-             else {
-            chest_open = false;
-            std::cout << "Closed chest" << std::endl;
-            chest.getComponent<SpriteComponent>().Play("Idle_Down");
-            chestScreen.toggle();
-             }
             break;
         case SDLK_f:
             toggleFullScreen();
             break;
         case SDLK_e:  // Check for 'E' key
+            if (chest_open == false) {
             inventoryScreen->toggle();  // Toggle the inventory screen
+            }
             break;
         case SDLK_RETURN:
 
             for (auto& ch : chests)
             {
+            if (inventoryScreen->isCurrentlyVisible() == false) {
                 InteractComponent& interact = ch->getComponent<InteractComponent>();
 
                if (chest_open == false) {
@@ -337,7 +333,7 @@ void Game::handleEvents()
                     std::cout << "Opened chest" << std::endl;
                     chest.getComponent<SpriteComponent>().Play("Active");
                     chest_open = true;
-                    chestScreen.toggle();
+                    chestScreen->toggle();
 
                 }
                }
@@ -345,9 +341,9 @@ void Game::handleEvents()
                 chest_open = false;
                 std::cout << "Closed chest" << std::endl;
                 chest.getComponent<SpriteComponent>().Play("Inactive");
-                chestScreen.toggle();
+                chestScreen->toggle();
 
-
+               }
                }
             }
             }
@@ -372,21 +368,21 @@ void Game::handleEvents()
             }
         }
 
-            if (chestScreen.isCurrentlyVisible()) {
+        if (chestScreen->isCurrentlyVisible()) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-                chestScreen.moveSelection(-chestScreen.getTotalCols());
+            chestScreen->moveSelection(-chestScreen->getTotalCols());
                 break;
             case SDLK_DOWN:
-                chestScreen.moveSelection(chestScreen.getTotalCols());
+                chestScreen->moveSelection(chestScreen->getTotalCols());
                 break;
             case SDLK_LEFT:
-                chestScreen.moveSelection(-1);
+                chestScreen->moveSelection(-1);
                 break;
             case SDLK_RIGHT:
-                chestScreen.moveSelection(1);
+                chestScreen->moveSelection(1);
                 break;
-            case SDLK_RETURN:
+            case SDLK_m:
                 //move object
                 break;
             }
@@ -975,7 +971,7 @@ void Game::render()
     }
 
     inventoryScreen->render(renderer);
-    chestScreen.render(renderer);
+    chestScreen->render(renderer);
 
 
     SDL_RenderPresent(renderer);

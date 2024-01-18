@@ -12,7 +12,7 @@ void KeyboardController::init()
 
 void KeyboardController::update()
 {
-    if(!Game::inventoryScreen->isCurrentlyVisible())
+    if(!Game::inventoryScreen->isCurrentlyVisible() and !Game::chestScreen->isCurrentlyVisible())
     {
         if (Game::event.type == SDL_KEYDOWN)
         {

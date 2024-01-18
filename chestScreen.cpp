@@ -1,6 +1,6 @@
 #include "chestScreen.h"
 #include "inventoryscreen.h"
-
+#include <algorithm>
 #include <iostream>
 using namespace std;
 
