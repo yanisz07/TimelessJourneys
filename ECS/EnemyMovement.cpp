@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-//#include <cmath>
+#include <cmath>
 #include "Stats.hpp"
 
 
@@ -232,8 +232,9 @@ void EnemyMovement:: creeperBehavior()
                     yDirection = 0; // Enemy is within tolerance range, do not move vertically
                  }
 
-                transform->velocity.x = xDirection * velocityScale;
-                transform->velocity.y = yDirection * velocityScale;
+                 float magnitude = Vector2D(xDirection,yDirection).magnitude();
+                 transform->velocity.x = xDirection/magnitude * velocityScale;
+                 transform->velocity.y = yDirection/magnitude * velocityScale;
 
 
             }
@@ -248,8 +249,11 @@ void EnemyMovement:: creeperBehavior()
             if (dist_from_initial_position<radius_of_displacement){
                 // Randomly change direction
                 //std::cout << "randomly moves in zone" << std::endl;
-                transform->velocity.x = ((rand() % 3) - 1) * velocityScale; // Random number between -1 and 1
-                transform->velocity.y = ((rand() % 3) - 1) * velocityScale; // Random number between -1 and 1
+                float xDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
+                float yDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
+                float magnitude = Vector2D(xDirection,yDirection).magnitude();
+                transform->velocity.x = xDirection/magnitude * velocityScale;
+                transform->velocity.y = yDirection/magnitude * velocityScale;
             }
             else{ // If enemy too for away from its initial position it comes back to get closer to it
                 //std::cout << "tries to come back to its initial position" << std::endl;
@@ -306,9 +310,9 @@ void EnemyMovement:: swordsmanBehavior(){
                     else {
                             yDirection = 0; // Enemy is within tolerance range, do not move vertically
                     }
-
-                    transform->velocity.x = xDirection * velocityScale;
-                    transform->velocity.y = yDirection * velocityScale;
+                    float magnitude = Vector2D(xDirection,yDirection).magnitude();
+                    transform->velocity.x = xDirection/magnitude * velocityScale;
+                    transform->velocity.y = yDirection/magnitude * velocityScale;
 
 
                 }
@@ -328,8 +332,11 @@ void EnemyMovement:: swordsmanBehavior(){
             if (dist_from_initial_position<radius_of_displacement){
                 // Randomly change direction
                 //std::cout << "randomly moves in zone" << std::endl;
-                transform->velocity.x = ((rand() % 3) - 1) * velocityScale; // Random number between -1 and 1
-                transform->velocity.y = ((rand() % 3) - 1) * velocityScale; // Random number between -1 and 1
+                float xDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
+                float yDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
+                float magnitude = Vector2D(xDirection,yDirection).magnitude();
+                transform->velocity.x = xDirection/magnitude * velocityScale;
+                transform->velocity.y = yDirection/magnitude * velocityScale;
             }
             else{ // If enemy too for away from its initial position it comes back to get closer to it
                 //std::cout << "tries to come back to its initial position" << std::endl;

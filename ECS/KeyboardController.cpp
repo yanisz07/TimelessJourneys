@@ -282,4 +282,7 @@ void KeyboardController::update()
                 }
         }
     }
+
+    transform->velocity.Normalize();
+
 }
