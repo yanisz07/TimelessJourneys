@@ -499,7 +499,7 @@ void Game::handleEvents()
             int buttonHeight = 40;
             // Calculating location of buttons
             int centerX = (screenWidth - buttonWidth) / 2;
-            int backButtonCenterY = (screenHeight - 2 * buttonHeight - 20) / 2 + 160;
+            int backButtonCenterY = (screenHeight - 2 * buttonHeight - 20) / 2 + 260;
             //if click is within back button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > backButtonCenterY && y < backButtonCenterY + buttonHeight) {

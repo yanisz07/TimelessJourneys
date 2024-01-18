@@ -28,7 +28,7 @@ void Rule::renderRule(SDL_Renderer* renderer, bool isRuleOpen, const SDL_Point& 
         int titleCenterX = (screenWidth - titleButtonWidth) / 2;
         int titleCenterY = 50;
         int centerX = (screenWidth - ruleButtonWidth) / 2;
-        int centerY = (screenHeight - 2 * ruleButtonHeight - 20) / 2 + 100;
+        int centerY = (screenHeight - 2 * ruleButtonHeight - 20) / 2 + 200;
 
         // Background
         std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "background_sample1.png").string();
@@ -62,6 +62,11 @@ void Rule::renderRule(SDL_Renderer* renderer, bool isRuleOpen, const SDL_Point& 
         SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Beige color for buttons
         SDL_RenderFillRect(renderer, &titleButton);
 
+        // Set color for rule button background
+        SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Set to desired color for rule button background
+        SDL_RenderFillRect(renderer, &ruleButton); // Fill the rule button background
+
+
         // hover effect for backs button
         if (isHoveringBack) {
             SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
@@ -85,7 +90,7 @@ void Rule::renderRule(SDL_Renderer* renderer, bool isRuleOpen, const SDL_Point& 
         SDL_RenderCopy(renderer, titleTexture, NULL, &titleTextRect);
 
         // Render rule Text
-        std::string rulesText = "Controls : \n    -Z: attack\n    -A: switch range/melee\n    -E: open inventory\n    -Escape: opens menu\n    -M: opens map\n    -Arrows: movement";
+        std::string rulesText = "\n Controls : \n\n\n    -Z: attack\n    -A: switch range/melee\n    -E: open inventory\n    -Escape: opens menu\n    -M: opens map\n    -Arrows: movement";
         renderMultilineText(renderer, font, rulesText, textColor, centerX, centerY, ruleButtonWidth, ruleButtonHeight);
 
         // Render back Text
