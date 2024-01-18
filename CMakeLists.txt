@@ -93,7 +93,9 @@ add_executable(TimelessJourneys ${SOURCES}
     inventoryscreen.h
     ECS/InteractComponent.h
     chestScreen.cpp
-    chestScreen.h)
+    chestScreen.h
+    rule.cpp
+    rule.h)
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )

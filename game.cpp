@@ -72,6 +72,7 @@ Game::Game()
     isInGameMenuOpen = false; //  status for in game menu, starts closed
     isSettingsOpen = false; // Menu status, starts with menu opened
     isGameOverOpen = false;
+    isRuleOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
     isMusic = true; // music state, music on by default
 
@@ -410,7 +411,8 @@ void Game::handleEvents()
             int centerX = (screenWidth - buttonWidth) / 2;
             int Start_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Setting_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int exitCenterY = Setting_centerY + buttonHeight + 20;
+            int Rules_centerY = Setting_centerY + buttonHeight + 20;
+            int exitCenterY = Rules_centerY + buttonHeight + 20;
 
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
@@ -424,6 +426,14 @@ void Game::handleEvents()
                 y > Setting_centerY && y < Setting_centerY + buttonHeight) {
                 Mix_PlayChannel(-1,clickButton, 0);
                 isSettingsOpen = true;
+                isMenuOpen = false;
+
+            }
+            //if click is within Rules button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > Rules_centerY && y < Rules_centerY + buttonHeight) {
+                Mix_PlayChannel(-1,clickButton, 0);
+                isRuleOpen = true;
                 isMenuOpen = false;
 
             }
@@ -915,6 +925,9 @@ void Game::render()
     }
     else if (isMenuOpen) {
     Menu::renderMenu(renderer, isMenuOpen, mousePosition); // Render the menu if it's open
+    }
+    else if (isRuleOpen) {
+    Rule::renderRule(renderer, isRuleOpen, mousePosition); // Render the ruleset if it's open
     }
     else if (isInGameMenuOpen) {
         InGameMenu::renderInGameMenu(renderer, isInGameMenuOpen, mousePosition); // Render the In game menu if it's open
