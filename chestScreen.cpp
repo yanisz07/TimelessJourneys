@@ -1,6 +1,6 @@
 #include "chestScreen.h"
 #include "inventoryscreen.h"
-
+#include <algorithm>
 #include <iostream>
 using namespace std;
 
@@ -115,7 +115,7 @@ void ChestScreen::render(SDL_Renderer* renderer) {
 
             // Render item icon if it exists
             int index = row * gridCols + col;
-            if (index < items.size() && items[index].icon != nullptr) {
+            if (index < itemsInChest.size() && itemsInChest[index].icon != nullptr) {
                 // Calculate the destination rectangle for the item icon inside the slot
                 SDL_Rect iconRect_chest = {
                     slotRect_chest.x + (slotWidth - ITEM_ICON_WIDTH) / 2,
@@ -123,7 +123,7 @@ void ChestScreen::render(SDL_Renderer* renderer) {
                     ITEM_ICON_WIDTH,
                     ITEM_ICON_HEIGHT
                 };
-                SDL_RenderCopy(renderer, items[index].icon, nullptr, &iconRect_chest);
+                SDL_RenderCopy(renderer, itemsInChest[index].icon, nullptr, &iconRect_chest);
             }
         }
     }
