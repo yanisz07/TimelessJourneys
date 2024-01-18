@@ -26,6 +26,8 @@ private:
 
     bool animated = false;
 
+    double angle=0;
+
 public:
     std::string currentAction;
     std::map<std::string , Animation> animations; //stores animations
@@ -43,6 +45,8 @@ public:
 
     ~SpriteComponent()
     {}
+
+    void setAngle(double angle);
 
     void setTex(std::string id);
 

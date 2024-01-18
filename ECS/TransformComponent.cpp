@@ -1,10 +1,10 @@
 #include "TransformComponent.hpp"
-#include "Sword.h"
+#include "sword.h"
 #include "range_weapon.h"
 
 void TransformComponent::update()
 {
-    if (entity->hasComponent<Sword>())
+    if (entity->hasComponent<Sword>() && entity->getComponent<Sword>().is_equiped)
     {
         if (!entity->getComponent<Sword>().is_attacking)
         {
@@ -12,7 +12,7 @@ void TransformComponent::update()
             position.y += velocity.y * speed;
         }
     }
-    else if(entity->hasComponent<Range_Weapon>())
+    else if(entity->hasComponent<Range_Weapon>() && entity->getComponent<Range_Weapon>().is_equiped)
     {
         if (!entity->getComponent<Range_Weapon>().is_attacking)
         {

@@ -34,64 +34,44 @@ double toRadians(double angle) {
     return angle * (M_PI / 180.0);
 }
 
-Vector2D UpperLeft(const SDL_Rect &rec, double theta)
+Vector2D RotationTheta(Vector2D u, double theta)
 {
     double thetaInRadians = toRadians(theta);
     double costheta = std::cos(thetaInRadians);
     double sinetheta = std::sin(thetaInRadians);
-    //find center
+    return Vector2D(u.x*costheta-u.y*sinetheta,u.x*sinetheta+costheta*u.y);
+}
+
+Vector2D UpperLeft(const SDL_Rect &rec, double theta)
+{
     Vector2D center = Vector2D(rec.x+rec.w/2,rec.y+rec.h/2);
-    Vector2D UL = Vector2D(rec.x,rec.y);
-    Vector2D u = Vector2D(UL.x-center.x,UL.y-center.y);
-    //rotate
-    double x = u.x;
-    double y = u.y;
-    return Vector2D(center.x + costheta*x-sinetheta*y,center.y + sinetheta*x+costheta*y);
+    Vector2D UL = Vector2D(-rec.w/2,-rec.h/2);
+    Vector2D UL_Rotated = RotationTheta(UL,theta);
+    return Vector2D(center.x + UL_Rotated.x,center.y + UL_Rotated.y);
 }
 
 Vector2D UpperRight(const SDL_Rect &rec, double theta)
 {
-    double thetaInRadians = toRadians(theta);
-    double costheta = std::cos(thetaInRadians);
-    double sinetheta = std::sin(thetaInRadians);
-    //find center
     Vector2D center = Vector2D(rec.x+rec.w/2,rec.y+rec.h/2);
-    Vector2D UR = Vector2D(rec.x+rec.w,rec.y);
-    Vector2D u = Vector2D(UR.x-center.x,UR.y-center.y);
-    //rotate
-    double x = u.x;
-    double y = u.y;
-    return Vector2D(center.x + costheta*x-sinetheta*y,center.y + sinetheta*x+costheta*y);
+    Vector2D UR = Vector2D(rec.w/2,-rec.h/2);
+    Vector2D UR_Rotated = RotationTheta(UR,theta);
+    return Vector2D(center.x+UR_Rotated.x,center.y+UR_Rotated.y);
 }
 
 Vector2D LowerLeft(const SDL_Rect &rec, double theta)
 {
-    double thetaInRadians = toRadians(theta);
-    double costheta = std::cos(thetaInRadians);
-    double sinetheta = std::sin(thetaInRadians);
-    //find center
     Vector2D center = Vector2D(rec.x+rec.w/2,rec.y+rec.h/2);
-    Vector2D LL = Vector2D(rec.x,rec.y+rec.h);
-    Vector2D u = Vector2D(LL.x-center.x,LL.y-center.y);
-    //rotate
-    double x = u.x;
-    double y = u.y;
-    return Vector2D(center.x + costheta*x-sinetheta*y,center.y + sinetheta*x+costheta*y);
+    Vector2D LL = Vector2D(-rec.w/2,rec.h/2);
+    Vector2D LL_Rotated = RotationTheta(LL,theta);
+    return Vector2D(center.x + LL_Rotated.x,center.y + LL_Rotated.y);
 }
 
 Vector2D LowerRight(const SDL_Rect &rec, double theta)
 {
-    double thetaInRadians = toRadians(theta);
-    double costheta = std::cos(thetaInRadians);
-    double sinetheta = std::sin(thetaInRadians);
-    //find center
     Vector2D center = Vector2D(rec.x+rec.w/2,rec.y+rec.h/2);
-    Vector2D LR = Vector2D(rec.x+rec.w,rec.y+rec.h);
-    Vector2D u = Vector2D(LR.x-center.x,LR.y-center.y);
-    //rotate
-    double x = u.x;
-    double y = u.y;
-    return Vector2D(center.x + costheta*x-sinetheta*y,center.y + sinetheta*x+costheta*y);
+    Vector2D LR = Vector2D(rec.w/2,rec.h/2);
+    Vector2D LR_Rotated = RotationTheta(LR,theta);
+    return Vector2D(center.x + LR_Rotated.x,center.y + LR_Rotated.y);
 }
 
 double dotProduct(Vector2D e1, Vector2D e2)
@@ -104,66 +84,137 @@ double norm(Vector2D v)
     return std::sqrt(std::pow(v.x,2)+std::pow(v.y,2));
 }
 
+void normalize(Vector2D& v)
+{
+    v = Vector2D(v.x/norm(v),v.y/norm(v));
+}
+
 Vector2D Projection(Vector2D v, Vector2D u)
 {
     double value = dotProduct(v,u)/dotProduct(u,u);
     return Vector2D(value*u.x,value*u.y);
 }
 
-Vector2D MinPoint(Vector2D p1, Vector2D p2)
+double MinPoint(Vector2D p1, Vector2D p2)
 {
-    if (p1.x < p2.x)
+    if (p1.x ==0 && p2.x == 0)
     {
-        return p1;
+        if(p1.y < p2.y)
+        {
+            return p1.y;
+        }
+        else
+        {
+            return p2.y;
+        }
     }
-    return p2;
+    else
+    {
+        if (p1.x < p2.x)
+        {
+            return p1.x;
+        }
+        return p2.x;
+    }
 }
 
-Vector2D MinPoint(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
+double MinPoint(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
 {
     Vector2D tmp;
     tmp = p1;
-    if (p2.x < tmp.x)
+    if (p1.x == 0 && p2.x ==0 && p3.x ==0 && p4.x ==0)
     {
-        tmp = p2;
+        if (p2.y < tmp.y)
+        {
+            tmp = p2;
+        }
+        if (p3.y < tmp.y)
+        {
+            tmp = p3;
+        }
+        if (p4.y < tmp.y)
+        {
+            tmp = p4;
+        }
+        return tmp.y;
     }
-    if (p3.x < tmp.x)
+    else
     {
-        tmp = p3;
+        if (p2.x < tmp.x)
+        {
+            tmp = p2;
+        }
+        if (p3.x < tmp.x)
+        {
+            tmp = p3;
+        }
+        if (p4.x < tmp.x)
+        {
+            tmp = p4;
+        }
+        return tmp.x;
     }
-    if (p4.x < tmp.x)
-    {
-        tmp = p4;
-    }
-    return tmp;
 }
 
-Vector2D MaxPoint(Vector2D p1, Vector2D p2)
+double MaxPoint(Vector2D p1, Vector2D p2)
 {
-    if (p1.x < p2.x)
+    if (p1.x ==0 && p2.x == 0)
     {
-        return p2;
+        if(p1.y > p2.y)
+        {
+            return p1.y;
+        }
+        else
+        {
+            return p2.y;
+        }
     }
-    return p1;
+    else
+    {
+        if (p1.x > p2.x)
+        {
+            return p1.x;
+        }
+        return p2.x;
+    }
 }
 
-Vector2D MaxPoint(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
+double MaxPoint(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
 {
     Vector2D tmp;
     tmp = p1;
-    if (p2.x > tmp.x)
+    if (p1.x == 0 && p2.x == 0 && p3.x == 0 && p4.x ==0)
     {
-        tmp = p2;
+        if (p2.y > tmp.y)
+        {
+            tmp = p2;
+        }
+        if (p3.y > tmp.y)
+        {
+            tmp = p3;
+        }
+        if (p4.y > tmp.y)
+        {
+            tmp = p4;
+        }
+        return tmp.y;
     }
-    if (p3.x > tmp.x)
+    else
     {
-        tmp = p3;
+        if (p2.x > tmp.x)
+        {
+            tmp = p2;
+        }
+        if (p3.x > tmp.x)
+        {
+            tmp = p3;
+        }
+        if (p4.x > tmp.x)
+        {
+            tmp = p4;
+        }
+        return tmp.x;
     }
-    if (p4.x > tmp.x)
-    {
-        tmp = p4;
-    }
-    return tmp;
 }
 
 bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, double angleB)
@@ -180,11 +231,27 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D LR_B = LowerRight(recB,angleB);
     Vector2D LL_B = LowerLeft(recB,angleB);
 
+    /*
+    std::cout << "arrow" << std::endl;
+    std::cout << recA.w << " " << recA.h << std::endl;
+    std::cout << UR_A.x << " " << UR_A.y << std::endl;
+    std::cout << UL_A.x << " " << UL_A.y << std::endl;
+    std::cout << LR_A.x << " " << LR_A.y << std::endl;
+    std::cout << LL_A.x << " " << LL_A.y << std::endl;
+
+    std::cout << "bloc" << std::endl;
+    std::cout << UR_B.x << " " << UR_B.y << std::endl;
+    std::cout << UL_B.x << " " << UL_B.y << std::endl;
+    std::cout << LR_B.x << " " << LR_B.y << std::endl;
+    std::cout << LL_B.x << " " << LL_B.y << std::endl;
+    */
+
     //Axis1
     //std::cout<< "Axis1" << std::endl;
 
     //compute director vector
     Vector2D u1 = Vector2D(UR_A.x-UL_A.x,UR_A.y-UL_A.y);
+
     //compute projections
     Vector2D UR_B1 = Projection(UR_B,u1);
     Vector2D UL_B1 = Projection(UL_B,u1);
@@ -194,19 +261,19 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D UR_A1 = Projection(UR_A,u1);
     Vector2D UL_A1 = Projection(UL_A,u1);
 
-    Vector2D Max_A1 = MaxPoint(UR_A1,UL_A1);
-    Vector2D Min_A1 = MinPoint(UR_A1,UL_A1);
+    double Max_A1 = MaxPoint(UR_A1,UL_A1);
+    double Min_A1 = MinPoint(UR_A1,UL_A1);
 
-    Vector2D Max_B1 = MaxPoint(UR_B1,UL_B1,LL_B1,LR_B1);
-    Vector2D Min_B1 = MinPoint(UR_B1,UL_B1,LL_B1,LR_B1);
+    double Max_B1 = MaxPoint(UR_B1,UL_B1,LL_B1,LR_B1);
+    double Min_B1 = MinPoint(UR_B1,UL_B1,LL_B1,LR_B1);
 
-    if (!(Min_B1.x <= Max_A1.x))
+    if (!(Min_B1 <= Max_A1))
     {
         return false;
     }
     else
     {
-        if (!(Max_B1.x >= Min_A1.x))
+        if (!(Max_B1 >= Min_A1))
         {
             return false;
         }
@@ -218,6 +285,7 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
 
     //compute director vector
     Vector2D u2 = Vector2D(UR_A.x-LR_A.x,UR_A.y-LR_A.y);
+
     //compute projections
     Vector2D UR_B2 = Projection(UR_B,u2);
     Vector2D UL_B2 = Projection(UL_B,u2);
@@ -227,52 +295,53 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D UR_A2 = Projection(UR_A,u2);
     Vector2D LR_A2 = Projection(LR_A,u2);
 
-    Vector2D Max_A2 = MaxPoint(UR_A2,LR_A2);
-    Vector2D Min_A2 = MinPoint(UR_A2,LR_A2);
+    double Max_A2 = MaxPoint(UR_A2,LR_A2);
+    double Min_A2 = MinPoint(UR_A2,LR_A2);
 
-    Vector2D Max_B2 = MaxPoint(UR_B2,UL_B2,LL_B2,LR_B2);
-    Vector2D Min_B2 = MinPoint(UR_B2,UL_B2,LL_B2,LR_B2);
+    double Max_B2 = MaxPoint(UR_B2,UL_B2,LL_B2,LR_B2);
+    double Min_B2 = MinPoint(UR_B2,UL_B2,LL_B2,LR_B2);
 
-    if (!(Min_B2.x <= Max_A2.x))
+    if (!(Min_B2 <= Max_A2))
     {
         return false;
     }
     else
     {
-        if (!(Max_B2.x >= Min_A2.x))
+        if (!(Max_B2 >= Min_A2))
         {
             return false;
         }
     }
+
 
     //Axis3
 
     //std::cout<< "Axis3" << std::endl;
 
     //compute director vector
-    Vector2D u3 = Vector2D(UL_B.x-LL_B.x,UL_B.y-LL_B.y);
+    Vector2D u3 = Vector2D(UR_B.x-LR_B.x,UR_B.y-LR_B.y);
     //compute projections
     Vector2D UR_A3 = Projection(UR_A,u3);
     Vector2D UL_A3 = Projection(UL_A,u3);
     Vector2D LL_A3 = Projection(LL_A,u3);
     Vector2D LR_A3 = Projection(LR_A,u3);
 
-    Vector2D UL_B3 = Projection(UL_B,u3);
-    Vector2D LL_B3 = Projection(LL_B,u3);
+    Vector2D UR_B3 = Projection(UR_B,u3);
+    Vector2D LR_B3 = Projection(LR_B,u3);
 
-    Vector2D Max_B3 = MaxPoint(UL_B3,LL_B3);
-    Vector2D Min_B3 = MinPoint(UL_B3,LL_B3);
+    double Max_B3 = MaxPoint(UR_B3,LR_B3);
+    double Min_B3 = MinPoint(UR_B3,LR_B3);
 
-    Vector2D Max_A3 = MaxPoint(UR_A3,UL_A3,LL_A3,LR_A3);
-    Vector2D Min_A3 = MinPoint(UR_A3,UL_A3,LL_A3,LR_A3);
+    double Max_A3 = MaxPoint(UR_A3,UL_A3,LL_A3,LR_A3);
+    double Min_A3 = MinPoint(UR_A3,UL_A3,LL_A3,LR_A3);
 
-    if (!(Min_B3.x <= Max_A3.x))
+    if (!(Min_B3 <= Max_A3))
     {
         return false;
     }
     else
     {
-        if (!(Max_B3.x >= Min_A3.x))
+        if (!(Max_B3 >= Min_A3))
         {
             return false;
         }
@@ -283,7 +352,7 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     //std::cout<< "Axis4" << std::endl;
 
     //compute director vector
-    Vector2D u4 = Vector2D(UL_B.x-UR_B.x,UL_B.y-UR_B.y);
+    Vector2D u4 = Vector2D(UR_B.x-UL_B.x,UR_B.y-UL_B.y);
     //compute projections
     Vector2D UR_A4 = Projection(UR_A,u4);
     Vector2D UL_A4 = Projection(UL_A,u4);
@@ -293,19 +362,19 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     Vector2D UR_B4 = Projection(UR_B,u4);
     Vector2D UL_B4 = Projection(UL_B,u4);
 
-    Vector2D Max_B4 = MaxPoint(UL_B4,UR_B4);
-    Vector2D Min_B4 = MinPoint(UL_B4,UR_B4);
+    double Max_B4 = MaxPoint(UL_B4,UR_B4);
+    double Min_B4 = MinPoint(UL_B4,UR_B4);
 
-    Vector2D Max_A4 = MaxPoint(UR_A4,UL_A4,LL_A4,LR_A4);
-    Vector2D Min_A4 = MinPoint(UR_A4,UL_A4,LL_A4,LR_A4);
+    double Max_A4 = MaxPoint(UR_A4,UL_A4,LL_A4,LR_A4);
+    double Min_A4 = MinPoint(UR_A4,UL_A4,LL_A4,LR_A4);
 
-    if (!(Min_B4.x <= Max_A4.x))
+    if (!(Min_B4 <= Max_A4))
     {
         return false;
     }
     else
     {
-        if (!(Max_B4.x >= Min_A4.x))
+        if (!(Max_B4 >= Min_A4))
         {
             return false;
         }
@@ -330,5 +399,4 @@ bool Collision::CheckCollision(const ColliderComponent& colA, const ColliderComp
         return SAT(colA,colB);
     }
 }
-
 
