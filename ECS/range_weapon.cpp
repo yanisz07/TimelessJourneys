@@ -11,9 +11,11 @@ Range_Weapon::Range_Weapon(Manager* man)
     timer.start();
     timer.setTimeOut(reloadTime);
     manager = man;
+
     spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow.png").string();
     std::string bow_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow_effect1.mp3").string();
     bowSound = Mix_LoadWAV(bow_effect_path.c_str());
+
     texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
     srcR.w = width;
     srcR.h = height;

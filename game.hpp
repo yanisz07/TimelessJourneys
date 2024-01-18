@@ -42,6 +42,7 @@ public:
     void clean();
     void toggleMenu();
     void toggleFullScreen();
+    //static void getWindowSize(int*w, int*h);
 
     bool is_running() {return isRunning;}
 
@@ -86,6 +87,7 @@ private:
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
     Timer timeElapsed;
+    SDL_Texture* timeLabel;
 };
 
 #endif // GAME_H
