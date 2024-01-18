@@ -15,7 +15,7 @@ public:
 
         damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
         exp_worth = 50;
-
+        player = false;
         hit = false;
         hit_type = false;
         hit_time = Uint32(0);
