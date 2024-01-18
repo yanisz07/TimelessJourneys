@@ -20,6 +20,10 @@ public:
     void hide();
     void toggle();
 
+    void handleEvents(SDL_Event& event);
+    void changeSelection(int change);
+    void render(SDL_Renderer* renderer);
+
     // Update functions to work with the Item class and a map
     void addItem(const std::string& name, int id, const Item& item);
     void removeItem(const std::string& name);
@@ -34,11 +38,15 @@ public:
     void saveToJSON(const std::string& filePath) const;
 
     bool get_visibility();
+    int getGridCols() const { return gridCols; }
+    void moveSelection(int offset);
 
 private:
     bool isVisible;
     SDL_Rect windowRect; // UI dimensions for the inventory screen
     std::map<std::string, std::pair<int, Item>> items; // Map to store items by name and ID
+    int gridRows;
+    int gridCols;
 };
 
 #endif // INVENTORY_H
