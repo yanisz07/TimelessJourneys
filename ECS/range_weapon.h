@@ -21,6 +21,7 @@ public:
     Timer timer;
     SDL_Texture* texture;
     std::string spritePath;
+    Mix_Chunk* bowSound;
 
     //do an Animation to store this
     int frames = 4;

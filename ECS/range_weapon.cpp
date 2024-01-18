@@ -12,6 +12,8 @@ Range_Weapon::Range_Weapon(Manager* man)
     timer.setTimeOut(reloadTime);
     manager = man;
     spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow.png").string();
+    std::string bow_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow_effect1.mp3").string();
+    bowSound = Mix_LoadWAV(bow_effect_path.c_str());
     texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
     srcR.w = width;
     srcR.h = height;
@@ -101,6 +103,7 @@ int Range_Weapon::rangeAttack()
             CreateArrow(Vector2D(transform->position.x-50,transform->position.y-50),Vector2D(transform->x_direction,transform->y_direction),200,5,"arrow",32,32,3,damage);
         }
     }
+    Mix_PlayChannel(-1,bowSound, 0);
     return 0;
 }
 
