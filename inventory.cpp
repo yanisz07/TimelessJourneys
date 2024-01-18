@@ -120,3 +120,8 @@ void Inventory::saveToJSON(const std::string& filePath) const {
 
     outFile << j.dump(4); // Write JSON to file with indentation
 }
+
+
+bool Inventory::get_visibility() {
+    return isVisible;
+}

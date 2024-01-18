@@ -33,6 +33,8 @@ public:
     void loadFromJSON(const std::string& filePath);
     void saveToJSON(const std::string& filePath) const;
 
+    bool get_visibility();
+
 private:
     bool isVisible;
     SDL_Rect windowRect; // UI dimensions for the inventory screen

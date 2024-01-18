@@ -54,7 +54,7 @@ public:
     static SDL_Rect camera;
     int screen_width;
     int screen_height;
-    Inventory inventory;
+    Inventory* inventory;
 
     static AssetManager* assets;
 
