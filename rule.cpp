@@ -1,6 +1,7 @@
 #include "rule.h"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <sstream>
 #include <filesystem>
 
 //brief
