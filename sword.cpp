@@ -6,7 +6,7 @@
 #include <filesystem>
 using namespace std;
 
-std::filesystem::path ProjectDir = std::filesystem::current_path();
+//std::filesystem::path ProjectDir = std::filesystem::current_path();
 
 // Function to create a Melee Sword item
 Melee::Melee(SDL_Texture* icon, int damage, int durability)
@@ -14,10 +14,9 @@ Melee::Melee(SDL_Texture* icon, int damage, int durability)
     this->damage = damage;
     this->durability = durability;
 
-    std::string swordIconPath = (ProjectDir / ".." / "TimelessJourneys" / "assets" / "sword.png").string();
+    std::string swordIconPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "sword.png").string();
     SDL_Texture* swordIcon = TextureManager::LoadTexture(swordIconPath.c_str());
 
-    //Game::inventoryScreen.addNewItem(items::Sword, swordIcon, Game::renderer);
 
     /* if (swordIcon) {
         int swordDamage = 20; // Adjust as needed

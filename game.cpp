@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include "game.hpp"
 #include "TextureManager.hpp"
 #include "map.hpp"
@@ -865,6 +866,10 @@ void Game::render()
     }
 
     inventoryScreen.render(renderer);
+
+    std::string swordIconPath = "/assets/sword.png";
+    SDL_Texture* swordIcon = TextureManager::LoadTexture(swordIconPath.c_str());
+    inventoryScreen.addNewItem(items::Sword, swordIconPath, renderer);
 
     SDL_RenderPresent(renderer);
     }

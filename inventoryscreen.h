@@ -5,7 +5,6 @@
 #include "SDL.h"
 #include "items.h"
 
-
 class InventoryItem {
 public:
     SDL_Texture* icon;

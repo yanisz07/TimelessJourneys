@@ -19,6 +19,8 @@ SDL_Texture* loadTexture(const std::string& filePath, SDL_Renderer* renderer) {
     return tex;
 }
 
+std::filesystem::path ProjectDir = std::filesystem::current_path();
+
 // Constructor
 InventoryScreen::InventoryScreen() : pickedUpItemIndex(-1) {
     isVisible = false;
@@ -55,7 +57,7 @@ void InventoryScreen::addItem(const InventoryItem& item) {
     items.push_back(item);
 }
 
-void InventoryScreen::addNewItem(const items::ItemType itemName,const string iconPath, SDL_Renderer* renderer) {
+void InventoryScreen::addNewItem(const items::ItemType itemName, const string iconPath, SDL_Renderer* renderer) {
     SDL_Texture* iconTexture = TextureManager::LoadTexture(iconPath.c_str());
     if (iconTexture != nullptr) {
         InventoryItem newItem(iconTexture, itemName);
