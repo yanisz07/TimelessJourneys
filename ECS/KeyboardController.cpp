@@ -257,6 +257,16 @@ void KeyboardController::update()
                         transform->x_direction =-1;
                         sprite->Play("Idle_Right" + armor->get_type(),true);
                     }
+                    else if (pressed_up)
+                    {
+                        sprite->Play("Run_Up" + armor->get_type());
+                        transform->x_direction=0;
+                    }
+                    else if (pressed_down)
+                    {
+                        sprite->Play("Run_Down" + armor->get_type());
+                        transform->x_direction=0;
+                    }
                     else
                     {
                         transform->x_direction =0;
@@ -270,6 +280,16 @@ void KeyboardController::update()
                     {
                         transform->x_direction =1;
                         sprite->Play("Idle_Right" + armor->get_type());
+                    }
+                    else if (pressed_up)
+                    {
+                        sprite->Play("Run_Up" + armor->get_type());
+                        transform->x_direction=0;
+                    }
+                    else if (pressed_down)
+                    {
+                        sprite->Play("Run_Down" + armor->get_type());
+                        transform->x_direction=0;
                     }
                     else
                     {

@@ -91,7 +91,6 @@ public:
         return hit_direction;
     }
 
-
     void set_hit(bool hit)
     {
         this->hit = hit;

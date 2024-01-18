@@ -1,7 +1,6 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-//#include "Components.hpp"
 #include "../Vector2D.hpp"
 #include "ECS.hpp"
 
@@ -38,6 +37,14 @@ public:
     {
         position.x = x;
         position.y = y;
+    }
+
+    TransformComponent(double x, double y, int h, int w)
+    {
+        position.x = x;
+        position.y = y;
+        height = h;
+        width = w;
     }
 
     TransformComponent(double x, double y, int h, int w, int sc)

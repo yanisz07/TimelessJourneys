@@ -21,14 +21,15 @@ public:
     Timer timer;
     SDL_Texture* texture;
     std::string spritePath;
+    Mix_Chunk* bowSound;
 
     //do an Animation to store this
     int frames = 4;
     int frame = 0;
     int index = 0;
     int speed = 100;
-    int width = 32;
-    int height = 20;
+    int width = 16;
+    int height = 16;
     //
 
     SDL_Rect srcR,destR;
@@ -52,7 +53,7 @@ public:
 
     void update_range_weapon();
 
-    void CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam);
+    void CreateArrow(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
 
     void draw() override;
 
