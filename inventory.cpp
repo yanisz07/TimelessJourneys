@@ -36,7 +36,7 @@ void Inventory::removeItem(const std::string& name) {
 }
 
 
-Item* Inventory::getItem(const std::string& name) const {
+const Item* Inventory::getItem(const std::string& name) const {
     auto it = items.find(name);
     if (it != items.end()) {
         return &(it->second.second);

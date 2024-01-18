@@ -27,7 +27,7 @@ public:
     // Update functions to work with the Item class and a map
     void addItem(const std::string& name, int id, const Item& item);
     void removeItem(const std::string& name);
-    Item* getItem(const std::string& name) const;
+    const Item* getItem(const std::string& name) const;
 
     void clearInventory();
     void addNewItem(const std::string& name, int id, const Item& item);
