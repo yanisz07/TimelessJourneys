@@ -31,11 +31,13 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
 InventoryScreen* Game::inventoryScreen = new InventoryScreen();
-ChestScreen* Game::chestScreen = new ChestScreen();
+ChestScreen* Game::chestScreen1 = new ChestScreen();
+ChestScreen* Game::chestScreen2 = new ChestScreen();
 
 
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
+int i;
 
 //click Button sound
 
@@ -50,6 +52,8 @@ auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
+auto& chest2(manager.addEntity());
+
 //End
 
 bool chest_open = false;
@@ -259,7 +263,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
     chest.addGroup(Game::groupChests);
-    }
+
+    //create second chest
+
+    chest2.addComponent<TransformComponent>(1000,1200,16,16,5);
+    chest2.addComponent<SpriteComponent>(true, "chest");
+    chest2.getComponent<SpriteComponent>().setActions();
+    chest2.addComponent<ColliderComponent>("chest");
+    chest2.addComponent<InteractComponent>();
+    chest2.addGroup(Game::groupChests);
+}
 
 
     //Create labels
@@ -309,6 +322,7 @@ void Game::handleEvents()
         break;
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
+
         case SDLK_ESCAPE:
             InGameMenu::toggleInGameMenuState(isInGameMenuOpen); // Existing menu toggle
             break;
@@ -321,9 +335,12 @@ void Game::handleEvents()
             }
             break;
         case SDLK_RETURN:
-
+            i = 1;
+            ChestScreen *chestScreen;
             for (auto& ch : chests)
             {
+            if (i == 1) {chestScreen = chestScreen1;}
+            else if (i == 2) {chestScreen = chestScreen2;}
             if (inventoryScreen->isCurrentlyVisible() == false) {
                 InteractComponent& interact = ch->getComponent<InteractComponent>();
 
@@ -331,63 +348,77 @@ void Game::handleEvents()
                 if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
                 {
                     std::cout << "Opened chest" << std::endl;
-                    chest.getComponent<SpriteComponent>().Play("Active");
+                    ch->getComponent<SpriteComponent>().Play("Active");
                     chest_open = true;
                     chestScreen->toggle();
-
+                    break;
                 }
                }
                else {
+                if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
+                {
                 chest_open = false;
                 std::cout << "Closed chest" << std::endl;
-                chest.getComponent<SpriteComponent>().Play("Inactive");
+                ch->getComponent<SpriteComponent>().Play("Inactive");
                 chestScreen->toggle();
-
+                break;
                }
                }
+               }
+            i++;
             }
-            }
+            break;
 
-        if (inventoryScreen->isCurrentlyVisible()) {
+        default:
+            if (inventoryScreen->isCurrentlyVisible()) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-            inventoryScreen->moveSelection(-inventoryScreen->getGridCols());
-            break;
+               inventoryScreen->moveSelection(-inventoryScreen->getGridCols());
+               break;
             case SDLK_DOWN:
-            inventoryScreen->moveSelection(inventoryScreen->getGridCols());
-            break;
+               inventoryScreen->moveSelection(inventoryScreen->getGridCols());
+               break;
             case SDLK_LEFT:
-            inventoryScreen->moveSelection(-1);
-            break;
+               inventoryScreen->moveSelection(-1);
+               break;
             case SDLK_RIGHT:
-            inventoryScreen->moveSelection(1);
-            break;
+               inventoryScreen->moveSelection(1);
+               break;
             case SDLK_u: // Assuming 'U' key is used to use an item
-            inventoryScreen->useSelectedItem();
-            break;
+               inventoryScreen->useSelectedItem();
+               break;
             }
-        }
+            }
 
-        if (chestScreen->isCurrentlyVisible()) {
+            i = 0;
+            if (chestScreen1->isCurrentlyVisible()) {i = 1; chestScreen = chestScreen1;}
+            else if (chestScreen2->isCurrentlyVisible()) {i = 2; chestScreen = chestScreen2;}
+
+            if (i == 1 or i == 2) {
+            std::cout << "chest is " << i << std::endl;
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-            chestScreen->moveSelection(-chestScreen->getTotalCols());
-                break;
+               std::cout << "going up" << std::endl;
+               chestScreen->moveSelection(-chestScreen->getTotalCols());
+               break;
             case SDLK_DOWN:
-                chestScreen->moveSelection(chestScreen->getTotalCols());
-                break;
+               chestScreen->moveSelection(chestScreen->getTotalCols());
+               break;
             case SDLK_LEFT:
-                chestScreen->moveSelection(-1);
-                break;
+               chestScreen->moveSelection(-1);
+               break;
             case SDLK_RIGHT:
-                chestScreen->moveSelection(1);
-                break;
+               chestScreen->moveSelection(1);
+               break;
             case SDLK_m:
-                //move object
-                break;
+               //move object
+               break;
             }
+            }
+
+            break;
         }
-        break;
+
 
     case SDL_MOUSEMOTION:
         mousePosition.x = event.motion.x;
@@ -556,14 +587,11 @@ void Game::handleEvents()
         }
 
         break;
-
-
-
     default:
         break;
+
     }
 }
-
 
 // function called when changing screen dimensions
 void Game::toggleFullScreen() {
@@ -971,7 +999,8 @@ void Game::render()
     }
 
     inventoryScreen->render(renderer);
-    chestScreen->render(renderer);
+    chestScreen1->render(renderer);
+    chestScreen2->render(renderer);
 
 
     SDL_RenderPresent(renderer);
