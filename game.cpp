@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include <SDL.h>
 #include "TextureManager.hpp"
 #include "map.hpp"
 #include "ECS/Components.hpp"
@@ -17,6 +18,7 @@
 #include <sstream>
 #include <variant>
 #include <filesystem>
+#include <fstream>
 #include "world.hpp"
 
 Map* map;
@@ -950,7 +952,34 @@ void Game::render()
     inventoryScreen->render(renderer);
     chestScreen.render(renderer);
 
-
+    //Render time remaining
+    //TODO: set to screen size
+    Uint32 timeRemaining = (300000 - timeElapsed.getTimeStart())/1000;
+    int minutes = timeRemaining/60;
+    int seconds = timeRemaining - minutes*60;
+    std::string text;
+    text += std::to_string(minutes);
+    text += ":";
+    if(seconds<10)
+    {
+        text += "0";
+    }
+    text += std::to_string(seconds);
+    SDL_Colour color = {0,0,0,255};
+    if(minutes < 1)
+    {
+       color = {200,0,0,255};
+    }
+    SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
+    timeLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
+    SDL_FreeSurface(surf);
+    int windowHeight;
+    int windowWidth;
+    SDL_Rect destRect = {0,0,100,100};
+    SDL_GetWindowSize(window,&windowWidth,&windowHeight);
+    destRect.x = windowWidth - destRect.w;
+    SDL_RenderCopy(Game::renderer,timeLabel,NULL,&destRect);
+    //end
     SDL_RenderPresent(renderer);
     }
 }

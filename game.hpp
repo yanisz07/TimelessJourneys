@@ -87,6 +87,7 @@ private:
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
     Timer timeElapsed;
+    SDL_Texture* timeLabel;
 };
 
 #endif // GAME_H

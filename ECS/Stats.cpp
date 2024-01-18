@@ -31,7 +31,7 @@ void Stats::init()
     healthLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
     SDL_FreeSurface(surf);
     //Draw expLabel
-    text = "Experience";
+    text = "Exp";
     surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
     expLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
     SDL_FreeSurface(surf);
@@ -62,10 +62,10 @@ void Stats::draw()
     int windowWidth;
     int windowHeight;
     int x,y,h,w;
-    x = 10;
-    y = 10;
-    w = 300;
-    h = 300*(5.0/8.0);
+    w = 400;
+    h = w/2;
+    x = w*10.0/300.0;
+    y = w*10.0/300.0;
     //Game::getWindowSize(&windowWidth,&windowHeight);
     destRect.x = x;
     destRect.y = y;
@@ -75,45 +75,47 @@ void Stats::draw()
     SDL_RenderFillRect(Game::renderer,&destRect);
 
     //Render labels
-    destRect.x = 20;
-    destRect.y = 10;
-    destRect.w = 100;
-    destRect.h = (1.0/3.0)*h;
+    destRect.x += x;
+    destRect.y += x;
+    destRect.h = w*31.0/300.0;
+    destRect.w = destRect.h*18.0/5.0;
     SDL_RenderCopy(Game::renderer,healthLabel,NULL,&destRect);
-    destRect.y += (1.0/2.0)*h;
-    SDL_RenderCopy(Game::renderer,expLabel,NULL,&destRect);
-
 
     //Render health bar
+
+    destRect.y = destRect.y+destRect.h;
+    destRect.h = w/10;
+    destRect.w = (w*162.0/300.0)*(static_cast<float>(health)/static_cast<float>(max_health));
     SDL_SetRenderDrawColor(Game::renderer,34,139,34,200);
-    destRect.h = (1.0/6.0)*h;
-    destRect.w = 150*(static_cast<float>(health)/static_cast<float>(max_health));
-    destRect.x = 20;
-    destRect.y = 10+(1.0/3.0)*h;
     SDL_RenderFillRect(Game::renderer,&destRect);
-    SDL_SetRenderDrawColor(Game::renderer,254,254,254,200);
     destRect.x = destRect.x+destRect.w;
-    destRect.w = 150*(1-(static_cast<float>(health)/static_cast<float>(max_health)));
+    destRect.w = (w*162.0/300.0)*(1-(static_cast<float>(health)/static_cast<float>(max_health)));
+    SDL_SetRenderDrawColor(Game::renderer,254,254,254,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
 
+    destRect.x = x + x;
+    destRect.y = destRect.y + destRect.h + w*8.0/300.0;
+    destRect.h = w*31.0/300;
+    destRect.w = destRect.h*9.0/5.0;
+    SDL_RenderCopy(Game::renderer,expLabel,NULL,&destRect);
+
     //Render exp bar
+
+    destRect.w = (w*162.0/300.0)*(static_cast<float>(experience)/static_cast<float>(1000));
+    destRect.y = destRect.y + destRect.h;
     SDL_SetRenderDrawColor(Game::renderer,100,100,30,200);
-    destRect.h = (1.0/6.0)*h;
-    destRect.w = 150*(static_cast<float>(experience)/static_cast<float>(1000));
-    destRect.x = 20;
-    destRect.y = 10+(5.0/6.0)*h;
     SDL_RenderFillRect(Game::renderer,&destRect);
-    SDL_SetRenderDrawColor(Game::renderer,254,254,153,200);
     destRect.x = destRect.x+destRect.w;
-    destRect.w = 150*(1-(static_cast<float>(experience)/static_cast<float>(1000)));
+    destRect.w = (w*162.0/300.0)*(1-(static_cast<float>(experience)/static_cast<float>(1000)));
+    SDL_SetRenderDrawColor(Game::renderer,254,254,153,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
 
     //Render current weapon
     //TODO: what component keeps track of the current weapon
-    destRect.h = h-20;
+    destRect.h = w*54.0/300.0;
     destRect.w = h;
-    destRect.x = 170;
-    destRect.y = 20;
+    destRect.x = x+x+w*162.0/300.0+x;
+    destRect.y = x+x+w*38.0/300.0;
 
     Sword* weapon1 = &(entity->getComponent<Sword>());
     srcRect.h = weapon1->height;
@@ -121,7 +123,7 @@ void Stats::draw()
     if(weapon1->is_equiped)
     {
         SDL_SetRenderDrawColor(Game::renderer,0,254,100,240);
-            SDL_RenderFillRect(Game::renderer,&destRect);
+        SDL_RenderFillRect(Game::renderer,&destRect);
     }
     SDL_RenderCopy(Game::renderer,weapon1->texture,&srcRect,&destRect);
 

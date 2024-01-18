@@ -11,7 +11,7 @@ Range_Weapon::Range_Weapon(Manager* man)
     timer.start();
     timer.setTimeOut(reloadTime);
     manager = man;
-    spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow.png").string();
+    spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "bow2.0.png").string();
     texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
     srcR.w = width;
     srcR.h = height;
