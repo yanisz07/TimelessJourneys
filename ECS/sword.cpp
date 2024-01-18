@@ -92,9 +92,9 @@ int Sword::frontAttack()
     {
         if (direction.y == -1)
         {
-            attackCol.addComponent<TransformComponent>(entityPos.x+18*scale+6,entityPos.y+13*scale-15,54,27);
+            attackCol.addComponent<TransformComponent>(entityPos.x+18*scale+6,entityPos.y+13*scale-38,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(0,-1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale+6,entityPos.y+13*scale-15,27,54,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+18*scale+6,entityPos.y+13*scale-38,27,54,100);
             attackCol.addGroup(Game::groupPlayerAttack);
 
         }
@@ -111,17 +111,17 @@ int Sword::frontAttack()
     {
         if (direction.x == -1)
         {
-            attackCol.addComponent<TransformComponent>(entityPos.x,entityPos.y+13*scale+15,27,54);
+            attackCol.addComponent<TransformComponent>(entityPos.x+30,entityPos.y+13*scale+6,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(-1,0);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x,entityPos.y+13*scale+15,54,27,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+30,entityPos.y+13*scale+6,27,54,100,-90);
             attackCol.addGroup(Game::groupPlayerAttack);
 
         }
         else
         {
-            attackCol.addComponent<TransformComponent>(entityPos.x+(18+13)*scale,entityPos.y+13*scale+15,27,54);
+            attackCol.addComponent<TransformComponent>(entityPos.x+(18+13)*scale,entityPos.y+13*scale+6,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(1,0);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(18+13)*scale,entityPos.y+13*scale+15,54,27,100);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(18+13)*scale,entityPos.y+13*scale+6,27,54,100,90);
             attackCol.addGroup(Game::groupPlayerAttack);
 
         }
@@ -130,18 +130,18 @@ int Sword::frontAttack()
     {
         if (direction.y == -1)
         {
-            attackCol.addComponent<TransformComponent>(entityPos.x+(13+18)*scale-10,entityPos.y-10,54,27);
+            attackCol.addComponent<TransformComponent>(entityPos.x+(13+18)*scale-13,entityPos.y+16,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(1,-1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-10,entityPos.y-10,27,54,100,45);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-13,entityPos.y+16,27,54,100,45);
             attackCol.addGroup(Game::groupPlayerAttack);
 
 
         }
         if (direction.y == 1)
         {
-            attackCol.addComponent<TransformComponent>(entityPos.x+(13+18)*scale-10,entityPos.y+(13+19)*scale-10,54,27);
+            attackCol.addComponent<TransformComponent>(entityPos.x+(13+18)*scale-13,entityPos.y+(13+19)*scale-16,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(1,1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-10,entityPos.y+(13+19)*scale-10,27,54,100,135);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+(13+18)*scale-13,entityPos.y+(13+19)*scale-16,27,54,100,135);
             attackCol.addGroup(Game::groupPlayerAttack);
 
         }
@@ -150,18 +150,17 @@ int Sword::frontAttack()
     {
         if (direction.y == -1)
         {
-            attackCol.addComponent<TransformComponent>(entityPos.x-10,entityPos.y-10,54,27);
+            attackCol.addComponent<TransformComponent>(entityPos.x+13*scale-3,entityPos.y+6,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(-1,-1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-10,entityPos.y-10,27,54,100,135);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+13*scale-3,entityPos.y+6,27,54,100,135);
             attackCol.addGroup(Game::groupPlayerAttack);
 
         }
         if (direction.y == 1)
         {
-            std::cout << "Melee attack" << std::endl;
-            attackCol.addComponent<TransformComponent>(entityPos.x-10,entityPos.y+(13+19)*scale-10,54,27);
+            attackCol.addComponent<TransformComponent>(entityPos.x+13*scale-6,entityPos.y+(13+19)*scale-20,54,27);
             attackCol.getComponent<TransformComponent>().set_directions(-1,1);
-            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x-10,entityPos.y+(13+19)*scale-10,27,54,100,225);
+            attackCol.addComponent<ColliderComponent>("player_attack",entityPos.x+13*scale-6,entityPos.y+(13+19)*scale-20,27,54,100,225);
             attackCol.addGroup(Game::groupPlayerAttack);
         }
     }
@@ -188,7 +187,7 @@ void Sword::draw()
                 {
                     setPriority(sprite->priority - 1);
                     destR.x = entityPos.x+18*scale+6 - Game::camera.x;
-                    destR.y = entityPos.y+13*scale-15 - Game::camera.y;
+                    destR.y = entityPos.y+13*scale-38 - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,NULL,NULL,SDL_FLIP_NONE);
                 }
                 else
@@ -204,17 +203,15 @@ void Sword::draw()
                 if (direction.x == -1)
                 {
                     setPriority(sprite->priority - 1);
-                    Vector2D center = Vector2D(entityPos.x+27,entityPos.y+13*scale+29);
-                    destR.x = center.x - 14 - Game::camera.x;
-                    destR.y = center.y - 27 - Game::camera.y;
+                    destR.x = entityPos.x+30 - Game::camera.x;
+                    destR.y = entityPos.y+13*scale+6 - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-90,NULL,SDL_FLIP_NONE);
                 }
                 else
                 {
                     setPriority(sprite->priority - 1);
-                    Vector2D center = Vector2D(entityPos.x+(18+13)*scale+27,entityPos.y+13*scale+29);
-                    destR.x = center.x - 14 - Game::camera.x;
-                    destR.y = center.y - 27 - Game::camera.y;
+                    destR.x = entityPos.x+(18+13)*scale - Game::camera.x;
+                    destR.y = entityPos.y+13*scale+6 - Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,90,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -223,15 +220,15 @@ void Sword::draw()
                 if (direction.y == -1)
                 {
                     setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
-                    destR.y = entityPos.y-10-Game::camera.y;
+                    destR.x = entityPos.x+(13+18)*scale-13-Game::camera.x;
+                    destR.y = entityPos.y+16-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,45,NULL,SDL_FLIP_NONE);
                 }
                 if (direction.y == 1)
                 {
                     setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x+(13+18)*scale-10-Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale-10-Game::camera.y;
+                    destR.x = entityPos.x+(13+18)*scale-13-Game::camera.x;
+                    destR.y = entityPos.y+(13+19)*scale-16-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,135,NULL,SDL_FLIP_NONE);
                 }
             }
@@ -240,15 +237,15 @@ void Sword::draw()
                 if (direction.y == -1)
                 {
                     setPriority(sprite->priority - 1);
-                    destR.x = entityPos.x-10-Game::camera.x;
-                    destR.y = entityPos.y-10-Game::camera.y;
+                    destR.x = entityPos.x+13*scale-3-Game::camera.x;
+                    destR.y = entityPos.y+6-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,-45,NULL,SDL_FLIP_NONE);
                 }
                 if (direction.y == 1)
                 {
                     setPriority(sprite->priority + 1);
-                    destR.x = entityPos.x-10-Game::camera.x;
-                    destR.y = entityPos.y+(13+19)*scale-10-Game::camera.y;
+                    destR.x = entityPos.x+13*scale-6-Game::camera.x;
+                    destR.y = entityPos.y+(13+19)*scale-20-Game::camera.y;
                     SDL_RenderCopyEx(Game::renderer,texture,&srcR,&destR,225,NULL,SDL_FLIP_NONE);
                 }
             }

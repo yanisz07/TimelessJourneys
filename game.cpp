@@ -217,7 +217,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Armor>();
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
-    player.getComponent<ColliderComponent>().SetAngle(45);
     player.addComponent<Stats>(true);
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
@@ -525,7 +524,6 @@ void Game::handleEvents()
                 y > ScreenDim_centerY && y < ScreenDim_centerY + buttonHeight) {
                 Mix_PlayChannel(-1,clickButton, 0);
                 toggleFullScreen();
-
             }
         }
 
