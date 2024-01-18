@@ -59,65 +59,67 @@ void Stats::draw()
     //TODO: need to somehow get the current window size
     if(entity->type == "player")
     {
+    int texWidth;
+    int texHeight;
     int windowWidth;
     int windowHeight;
-    int x,y,h,w;
-    w = 400;
-    h = w/2;
-    x = w*10.0/300.0;
-    y = w*10.0/300.0;
+    int sep,h,w;
+    w = 322*Game::windowSize_x/1600.0;
+    h = w*150.0/322.0;
+    sep = w*10.0/322.0;
     //Game::getWindowSize(&windowWidth,&windowHeight);
-    destRect.x = x;
-    destRect.y = y;
+    destRect.x = sep;
+    destRect.y = sep;
     destRect.w = w;
     destRect.h = h;
     SDL_SetRenderDrawColor(Game::renderer,255,255,255,150);
     SDL_RenderFillRect(Game::renderer,&destRect);
 
     //Render labels
-    destRect.x += x;
-    destRect.y += x;
-    destRect.h = w*31.0/300.0;
+    destRect.x += sep;
+    destRect.y += sep;
+    destRect.h = w*31.0/322.0;
     destRect.w = destRect.h*18.0/5.0;
     SDL_RenderCopy(Game::renderer,healthLabel,NULL,&destRect);
 
     //Render health bar
 
     destRect.y = destRect.y+destRect.h;
-    destRect.h = w/10;
-    destRect.w = (w*162.0/300.0)*(static_cast<float>(health)/static_cast<float>(max_health));
+    destRect.h = w*30.0/322.0;
+    destRect.w = (w*162.0/322.0)*(static_cast<float>(health)/static_cast<float>(max_health));
     SDL_SetRenderDrawColor(Game::renderer,34,139,34,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
     destRect.x = destRect.x+destRect.w;
-    destRect.w = (w*162.0/300.0)*(1-(static_cast<float>(health)/static_cast<float>(max_health)));
+    destRect.w = (w*162.0/322.0)*(1-(static_cast<float>(health)/static_cast<float>(max_health)));
     SDL_SetRenderDrawColor(Game::renderer,254,254,254,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
+    //
 
-    destRect.x = x + x;
-    destRect.y = destRect.y + destRect.h + w*8.0/300.0;
-    destRect.h = w*31.0/300;
+    destRect.x = sep+sep;
+    destRect.y = destRect.y + destRect.h + w*8.0/322.0;
+    destRect.h = w*31.0/322.0;
     destRect.w = destRect.h*9.0/5.0;
     SDL_RenderCopy(Game::renderer,expLabel,NULL,&destRect);
 
     //Render exp bar
-
-    destRect.w = (w*162.0/300.0)*(static_cast<float>(experience)/static_cast<float>(1000));
     destRect.y = destRect.y + destRect.h;
+    destRect.w = (w*162.0/322.0)*(static_cast<float>(experience)/static_cast<float>(1000));
     SDL_SetRenderDrawColor(Game::renderer,100,100,30,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
     destRect.x = destRect.x+destRect.w;
-    destRect.w = (w*162.0/300.0)*(1-(static_cast<float>(experience)/static_cast<float>(1000)));
+    destRect.w = (w*162.0/322.0)*(1-(static_cast<float>(experience)/static_cast<float>(1000)));
     SDL_SetRenderDrawColor(Game::renderer,254,254,153,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
 
     //Render current weapon
     //TODO: what component keeps track of the current weapon
-    destRect.h = w*54.0/300.0;
-    destRect.w = h;
-    destRect.x = x+x+w*162.0/300.0+x;
-    destRect.y = x+x+w*38.0/300.0;
+    destRect.w = w*65.0/322.0;
+    destRect.h = destRect.w*2;
+    destRect.x = sep+sep+w*162.0/322.0+sep;
+    destRect.y = sep+sep;
 
     Sword* weapon1 = &(entity->getComponent<Sword>());
+    SDL_QueryTexture(weapon1->texture,NULL,NULL,&texWidth,&texHeight);
     srcRect.h = weapon1->height;
     srcRect.w = weapon1->width;
     if(weapon1->is_equiped)

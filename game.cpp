@@ -36,6 +36,8 @@ InventoryScreen* Game::inventoryScreen = new InventoryScreen();
 
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
+int Game::windowSize_x = 100;
+int Game::windowSize_y = 100;
 
 //click Button sound
 
@@ -172,6 +174,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+    assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
+    assets->AddTexture("Hourglass", "/assets/Hourglass.png");
+    assets->AddTexture("Oval", "/assets/Oval.png");
 
     //assets->AddTexture("chest", "/assets/chest_01.png");
 
@@ -581,6 +586,13 @@ void Game::toggleFullScreen() {
 
 void Game::update()
 {
+    //Update window size
+    int w,h;
+    SDL_GetWindowSize(window,&w,&h);
+    Game::windowSize_x = w;
+    Game::windowSize_y = h;
+    //end
+
     if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen && !isSettingsOpen)
     {
         // Get player/enemy info.
@@ -958,6 +970,7 @@ void Game::render()
     int minutes = timeRemaining/60;
     int seconds = timeRemaining - minutes*60;
     std::string text;
+    text += "0";
     text += std::to_string(minutes);
     text += ":";
     if(seconds<10)
@@ -975,10 +988,20 @@ void Game::render()
     SDL_FreeSurface(surf);
     int windowHeight;
     int windowWidth;
-    SDL_Rect destRect = {0,0,100,100};
     SDL_GetWindowSize(window,&windowWidth,&windowHeight);
-    destRect.x = windowWidth - destRect.w;
+    int shift_x = windowWidth - 320;
+    int shift_y = 20;
+    SDL_Rect destRect;
+    destRect={shift_x,shift_y,310,120};
+    SDL_RenderCopy(Game::renderer,assets->GetTexture("Oval"),NULL,&destRect);
+    destRect={shift_x,shift_y-10,70,140};
+    SDL_RenderCopy(Game::renderer,assets->GetTexture("Hourglass"),NULL,&destRect);
+    destRect={shift_x+220,shift_y+15,90,90};
+    SDL_RenderCopy(Game::renderer,assets->GetTexture("PocketWatch"),NULL,&destRect);
+    destRect = {shift_x+70,shift_y+10,150,100};
+
     SDL_RenderCopy(Game::renderer,timeLabel,NULL,&destRect);
+
     //end
     SDL_RenderPresent(renderer);
     }

@@ -55,6 +55,7 @@ public:
     static SDL_Rect camera;
     int screen_width;
     int screen_height;
+    static int windowSize_x,windowSize_y;
 
     static InventoryScreen* inventoryScreen;
     ChestScreen chestScreen;
