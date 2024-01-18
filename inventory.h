@@ -24,6 +24,11 @@ public:
     void changeSelection(int change);
     void render(SDL_Renderer* renderer);
 
+    int selectedSlotIndex;
+    int pickedUpItemIndex;
+
+    void pickUpItem(int index);
+
     // Update functions to work with the Item class and a map
     void addItem(const std::string& name, int id, const Item& item);
     void removeItem(const std::string& name);
