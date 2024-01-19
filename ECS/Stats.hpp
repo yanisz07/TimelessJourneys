@@ -15,7 +15,9 @@ public:
 
         damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
         exp_worth = 50;
-        player = false;
+        damage_mult = 1.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
+        exp_worth = 500;
+
         hit = false;
         hit_type = false;
         hit_time = Uint32(0);
@@ -58,7 +60,10 @@ public:
     bool is_player() {return player;}
     int get_max_health() {return max_health;}
     int get_experience() {return experience;}
+    int get_experience_worth() {return exp_worth;}
     int get_level() {return level;}
+
+    void update() override;
 
     void draw() override;
     void init() override;
@@ -68,9 +73,7 @@ public:
     void SubtractHealth(int); // Supports negative values for healing.
     void GainExp(int); // Handles level ups. Supports negative values. Will level down the player down to level 1 if necessary.
     void KillEntity(); // Only for enemies.
-    void GameOver(); // Only for the player.
-
-    static void Damage(Stats& entity1, Stats& entity2); // TODO weapons deal damage and multiply with damage_mult, not characters directly.
+    void GameOver();
 
     bool is_hit()
     {

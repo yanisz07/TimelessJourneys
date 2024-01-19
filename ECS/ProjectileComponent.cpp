@@ -1,4 +1,5 @@
 #include "ProjectileComponent.hpp"
+#include "Stats.hpp"
 
 void ProjectileComponent::init()
 {
@@ -12,7 +13,6 @@ void ProjectileComponent::update()
 
     if(distance > range)
     {
-        //std::cout << "out of range" << std::endl;
         entity->destroy();
     }
     else if(transform->position.x > Game::camera.x + Game::camera.w ||
@@ -20,7 +20,18 @@ void ProjectileComponent::update()
              transform->position.y > Game::camera.y + Game::camera.h ||
              transform->position.y < Game::camera.y)
     {
-        //std::cout << "out of bounds" << std::endl;
         entity->destroy();
+    }
+}
+
+void ProjectileComponent::DoDamage(Stats &entity1, Stats &entity2)
+{
+    entity2.SubtractHealth(damage*entity1.get_damage_mult());
+    if(entity1.is_player())
+    {
+        if (entity2.get_health()<=0)
+        {
+            entity1.GainExp(entity2.get_experience_worth());
+        }
     }
 }

@@ -13,10 +13,7 @@ void Stats::SubtractHealth(int i)
         if (health > max_health) {
             health = max_health;
         } else if (health < 0) {
-            GameOver();
         }
-    } else if (health < 0) {
-        KillEntity();
     }
 }
 
@@ -37,18 +34,23 @@ void Stats::init()
     SDL_FreeSurface(surf);
 }
 
-
-void Stats::Damage(Stats& entity1, Stats& entity2)
-{ // TODO To be deleted. Weapons should handle damage and use SubtractHealth and read damage_mult.
-    entity2.SubtractHealth(entity1.get_damage_mult());
-}
-
 void Stats::GameOver() {
     // TODO
 }
 
 void Stats::KillEntity() {
-    // TODO
+    entity->destroy();
+}
+
+void Stats::update()
+{
+    if (health<=0)
+    {
+        if (!player)
+        {
+            KillEntity();
+        }
+    }
 }
 
 void Stats::draw()
@@ -120,8 +122,8 @@ void Stats::draw()
 
     Sword* weapon1 = &(entity->getComponent<Sword>());
     SDL_QueryTexture(weapon1->texture,NULL,NULL,&texWidth,&texHeight);
-    srcRect.h = weapon1->height;
-    srcRect.w = weapon1->width;
+    srcRect.h = weapon1->animation.height;
+    srcRect.w = weapon1->animation.width;
     if(weapon1->is_equiped)
     {
         SDL_SetRenderDrawColor(Game::renderer,0,254,100,240);
@@ -131,8 +133,8 @@ void Stats::draw()
 
     Range_Weapon* weapon2 = &(entity->getComponent<Range_Weapon>());
     destRect.x += destRect.w;
-    srcRect.h = weapon2->height;
-    srcRect.w = weapon2->width;
+    srcRect.h = weapon2->animation.height;
+    srcRect.w = weapon2->animation.width;
     if(weapon2->is_equiped)
     {
             SDL_SetRenderDrawColor(Game::renderer,0,254,100,240);
@@ -189,4 +191,6 @@ void Stats::GainExp(int exp) {
             }
         }
     }
+    std::cout << level << std::endl;
+    std::cout << damage_mult << std::endl;
 }
