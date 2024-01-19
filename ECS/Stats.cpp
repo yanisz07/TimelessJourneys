@@ -12,8 +12,6 @@ void Stats::SubtractHealth(int i)
             health = max_health;
         } else if (health < 0) {
         }
-    } else if (health <= 0) {
-        KillEntity();
     }
 }
 
@@ -24,6 +22,17 @@ void Stats::AddHealth(int i)
 
 void Stats::KillEntity() {
     entity->destroy();
+}
+
+void Stats::update()
+{
+    if (health<=0)
+    {
+        if (!player)
+        {
+            KillEntity();
+        }
+    }
 }
 
 void Stats::draw()
@@ -73,4 +82,6 @@ void Stats::GainExp(int exp) {
             }
         }
     }
+    std::cout << level << std::endl;
+    std::cout << damage_mult << std::endl;
 }

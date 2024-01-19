@@ -13,8 +13,8 @@ public:
     {
         health = 10;
 
-        damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
-        exp_worth = 50;
+        damage_mult = 1.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
+        exp_worth = 500;
 
         hit = false;
         hit_type = false;
@@ -58,7 +58,10 @@ public:
     bool is_player() {return player;}
     int get_max_health() {return max_health;}
     int get_experience() {return experience;}
+    int get_experience_worth() {return exp_worth;}
     int get_level() {return level;}
+
+    void update() override;
 
     void draw() override;
 
