@@ -26,7 +26,7 @@ void ProjectileComponent::update()
 
 void ProjectileComponent::DoDamage(Stats &entity1, Stats &entity2)
 {
-    entity2.SubtractHealth(damage*entity1.get_damage_mult());
+    entity2.SubtractHealth(damage);
     if(entity1.is_player())
     {
         if (entity2.get_health()<=0)
@@ -34,4 +34,9 @@ void ProjectileComponent::DoDamage(Stats &entity1, Stats &entity2)
             entity1.GainExp(entity2.get_experience_worth());
         }
     }
+}
+
+void ProjectileComponent::DoDamage(Stats &entity1)
+{
+    entity1.SubtractHealth(damage);
 }

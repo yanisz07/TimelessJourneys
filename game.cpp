@@ -56,6 +56,8 @@ auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
+//test turret enemy
+auto& enemy3(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
 auto& chest2(manager.addEntity());
@@ -169,7 +171,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Load game assets
     {
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
-    assets->AddTexture("projectile", "/assets/proj.png");
+    assets->AddTexture("projectile", "/assets/enemy_arrow.png");
 
     //Load JSON data
     std::string path = "";
@@ -182,10 +184,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Textures, map and fonts
 
-    assets->AddTexture("enemy_projectile", "/assets/proj.png");
-    assets->AddTexture("player_projectile", "/assets/proj.png");
-
     assets->AddTexture("arrow", "/assets/arrow.png");
+    assets->AddTexture("enemy_arrow", "/assets/enemy_arrow.png");
 
     assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
     assets->AddTexture("Hourglass", "/assets/Hourglass.png");
@@ -273,6 +273,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,500,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
 
     //create first chest
 
@@ -699,6 +709,7 @@ void Game::update()
             if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit player!" << std::endl;
+                p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
                 p->destroy();
             }
         }

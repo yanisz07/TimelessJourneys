@@ -25,7 +25,8 @@ public:
 
     void update() override;
 
-    void DoDamage(Stats &entity1, Stats &entity2);
+    void DoDamage(Stats &entity1,Stats &entity2);
+    void DoDamage(Stats &entity1);
 
 private:
 

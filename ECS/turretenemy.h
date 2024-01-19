@@ -10,30 +10,31 @@
 
 //forward declaration
 class TransformComponent;
-class SpriteComponent;
 class ColliderComponent;
+class ProjectileComponent;
 //end
 
 class TurretEnemy : public Component
 {
 public:
-    TurretEnemy(int r, int s, int d);
+    TurretEnemy(int r, int s, int d,Uint32 rt, Manager* man, TransformComponent* player);
 
     void init() override;
 
     void update() override;
 
-    void CreateProjectile();
+    void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
 
 private:
+    Manager* manager;
     TransformComponent* transform;
     TransformComponent* playertransform;
-    SpriteComponent* sprite;
     int radius;
     int speed;
     int damage;
     Vector2D direction;
     Timer timer;
+    Uint32 reloadTime;
 };
 
 #endif // TURRETENEMY_H
