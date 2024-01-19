@@ -28,7 +28,7 @@ void Inventory::toggle() {
 
 
 void Inventory::addItem(const std::string& name, int id, const Item& item) {
-    items[name] = {id, item};
+    items.insert({name, {id, item}});
 }
 
 void Inventory::removeItem(const std::string& name) {
@@ -45,18 +45,17 @@ const Item* Inventory::getItem(const std::string& name) const {
 }
 
 
-//In the useItem method, you would include the logic specific to each item's effect:
 void Inventory::useItem(int index) {
-    if (index >= 0 && index < items.size()) {
-        // i have not done it yet
+    std::string indexKey = std::to_string(index);
 
-        // This might mean increasing the player's health or else..
-        std::cout << "Used item: " << items[index].name << std::endl;
-
-        // Example: If it's a consumable, remove it after use
-        removeItem(items[index]);
+    auto it = items.find(indexKey);
+    if (it != items.end()) {
+        std::cout << "Used item: " << it->second.second.name << std::endl;
+    } else {
+        std::cout << "Item with index " << index << " not found." << std::endl;
     }
 }
+
 /* Example usage effect: restoring health
     if (items[index].name == "Health Potion") {
         player.restoreHealth(50); // Assuming 'player' is an instance of the Player class
@@ -73,10 +72,14 @@ void Inventory::useSelectedItem(const std::string& name) {
 
 
 void Inventory::pickUpItem(int index) {
-    if (index >= 0 && index < items.size()) {
-        // i didn't implement the logic for picking up an item yet
-        std::cout << "Picked up item: " << items[index].name << std::endl;
+    std::string indexKey = std::to_string(index);
+
+    auto it = items.find(indexKey);
+    if (it != items.end()) {
+        std::cout << "Picked up item: " << it->second.second.name << std::endl;
         pickedUpItemIndex = index;
+    } else {
+        std::cout << "Item with index " << index << " not found." << std::endl;
     }
 }
 

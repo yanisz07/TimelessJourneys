@@ -315,9 +315,13 @@ void Game::handleEvents()
             case SDLK_RIGHT:
             inventory -> moveSelection(1);
             break;
+
+            /*
             case SDLK_u: // Assuming 'U' key is used to use an item
             inventory -> useSelectedItem();
             break;
+            */
+
             }
         }
         break;
