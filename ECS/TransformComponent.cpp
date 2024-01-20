@@ -1,6 +1,7 @@
 #include "TransformComponent.hpp"
 #include "sword.h"
 #include "range_weapon.h"
+#include "math.h"
 
 void TransformComponent::update()
 {
@@ -8,21 +9,45 @@ void TransformComponent::update()
     {
         if (!entity->getComponent<Sword>().is_attacking)
         {
-            position.x += velocity.x * speed;
-            position.y += velocity.y * speed;
+            if (velocity.x != 0 && velocity.y != 0)
+            {
+                position.x += velocity.x * speed/std::sqrt(2);
+                position.y += velocity.y * speed/std::sqrt(2);
+            }
+            else
+            {
+                position.x += velocity.x * speed;
+                position.y += velocity.y * speed;
+            }
         }
     }
     else if(entity->hasComponent<Range_Weapon>() && entity->getComponent<Range_Weapon>().is_equiped)
     {
         if (!entity->getComponent<Range_Weapon>().is_attacking)
         {
-            position.x += velocity.x * speed;
-            position.y += velocity.y * speed;
+            if (velocity.x != 0 && velocity.y != 0)
+            {
+                position.x += velocity.x * speed/std::sqrt(2);
+                position.y += velocity.y * speed/std::sqrt(2);
+            }
+            else
+            {
+                position.x += velocity.x * speed;
+                position.y += velocity.y * speed;
+            }
         }
     }
     else
     {
-        position.x += velocity.x * speed;
-        position.y += velocity.y * speed;
+        if (velocity.x != 0 && velocity.y != 0)
+        {
+            position.x += velocity.x * speed/std::sqrt(2);
+            position.y += velocity.y * speed/std::sqrt(2);
+        }
+        else
+        {
+            position.x += velocity.x * speed;
+            position.y += velocity.y * speed;
+        }
     }
 }
