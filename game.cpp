@@ -152,7 +152,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Load game assets
     {
-    assets->AddTexture("terrain" , "/assets/terrain_ss.png");
+    assets->AddTexture("terrain" , "/assets/map/tileset-terrain.png");
     assets->AddTexture("projectile", "/assets/proj.png");
 
     //Load JSON data

@@ -16,9 +16,10 @@ Map::~Map()
 
 void Map::LoadMap(std::string path, int sizeX, int sizeY)
 {
-    char c;
+    char c1, c2;
     std::fstream mapFile;
     mapFile.open(path);
+    char buffer[3]; // Buffer to hold the two-digit number and a null terminator
 
     int srcX, srcY;
 
@@ -32,13 +33,27 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
     {
         for (int x = 0; x < sizeX; x++)
         {
-            mapFile.get(c); //get y value of tile
+            // Read the two digit of the X value
+            mapFile.get(c1);
+            mapFile.get(c2);
+
+            buffer[0] = c1;
+            buffer[1] = c2;
+            buffer[2] = '\0';
+            srcX = atoi(buffer) * tileSize;
             //std::cout << 'c = ' << c << std::endl;
-            srcY = atoi(&c) * tileSize;
-            //std::cout << 'srcY = ' << srcY << std::endl;
-            mapFile.get(c); //get x value of tile
+            //std::cout << 'srcX = ' << srcX << std::endl;
+            mapFile.ignore(); //"-"
+            // Read the two digit of the X value
+            mapFile.get(c1);
+            mapFile.get(c2);
+
+            buffer[0] = c1;
+            buffer[1] = c2;
+            buffer[2] = '\0';
+
             //std::cout << 'c = ' << c << std::endl;
-            srcX = atoi(&c) * tileSize;
+            srcY = atoi(buffer) * tileSize;
             //std::cout << 'srcX = ' << srcX << std::endl;
             AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
             mapFile.ignore(); //","
@@ -51,8 +66,8 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
     {
         for (int x =0; x < sizeX; x++)
         {
-            mapFile.get(c);
-            if ( c == '1' )
+            mapFile.get(c1);
+            if ( c1 == '1' )
             {
                 auto& tcol(manager->addEntity());
                 tcol.addComponent<ColliderComponent>("terrain", x*scaledSize , y*scaledSize, scaledSize);

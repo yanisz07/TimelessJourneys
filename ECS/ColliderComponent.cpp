@@ -117,7 +117,7 @@ void ColliderComponent::update()
 
 void ColliderComponent::draw()
 {
-    if (tag!= "player" && tag!= "enemy")
+    /*if (tag!= "player" && tag!= "enemy")
     {
         if (angle == 0)
         {
@@ -128,4 +128,5 @@ void ColliderComponent::draw()
             TextureManager::Draw_rotation(tex,srcR,destR,SDL_FLIP_NONE,angle);
         }
     }
+    */
 }
