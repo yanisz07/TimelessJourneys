@@ -94,7 +94,8 @@ add_executable(TimelessJourneys ${SOURCES}
     ECS/InteractComponent.h
     chestScreen.cpp
     chestScreen.h
-    ECS/turretenemy.h ECS/turretenemy.cpp)
+    ECS/turretenemy.h ECS/turretenemy.cpp
+    ECS/collidercomponentcircle.h ECS/collidercomponentcircle.cpp)
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )
