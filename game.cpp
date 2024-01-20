@@ -282,7 +282,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy3.getComponent<SpriteComponent>().setActions();
     enemy3.addComponent<ColliderComponent>("enemy");
     enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(400,5,5,500,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addComponent<TurretEnemy>(800,5,5,500,&manager,&player.getComponent<TransformComponent>());
     enemy3.addGroup(Game::groupEnemies);
 
     //create first chest
@@ -315,9 +315,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     lastProjectileTime = SDL_GetTicks();
     }
 
-    TestCol.addComponent<TransformComponent>(1700,1300,100,100);
-    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,400,100);
-    TestCol.getComponent<ColliderComponent>().SetAngle(276);
+    TestCol.addComponent<TransformComponent>(1700,1300,100,200);
+    TestCol.addComponent<ColliderComponent>("terrain");
+    TestCol.getComponent<ColliderComponent>().SetAngle(229);
 
 }
 

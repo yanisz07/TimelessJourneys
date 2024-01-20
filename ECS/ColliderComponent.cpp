@@ -30,6 +30,8 @@ ColliderComponent::ColliderComponent(std::string t, int xpos, int ypos, int widt
     collider.y = ypos;
     collider.h = height;
     collider.w = width;
+    std::cout << collider.w << std::endl;
+    std::cout << collider.h << std::endl;
     angle = 0;
 }
 

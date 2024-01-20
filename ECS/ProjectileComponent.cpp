@@ -5,11 +5,12 @@ void ProjectileComponent::init()
 {
     transform = &entity->getComponent<TransformComponent>();
     transform->velocity = velocity;
+    transform->speed = speed;
 }
 
 void ProjectileComponent::update()
 {
-    distance += speed;
+    distance += speed*velocity.norm();
 
     if(distance > range)
     {

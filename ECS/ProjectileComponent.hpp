@@ -1,7 +1,6 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
-
 #include "ECS.hpp"
 #include "Components.hpp"
 #include "../Vector2D.hpp"

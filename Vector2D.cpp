@@ -132,3 +132,8 @@ std::ostream& operator<<(std::ostream& stream, const Vector2D& vec)
     stream << "(" << vec.x << "," << vec.y << ")";
     return stream;
 }
+
+double Vector2D::norm()
+{
+    return std::sqrt(std::pow(x,2)+std::pow(y,2));
+}
