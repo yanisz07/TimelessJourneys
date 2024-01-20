@@ -6,7 +6,7 @@
             "sprites": [
                 {
                     "name": "Silver_Sword_Sprite",
-                    "path": "/assets/silver_sword.png",
+                    "path": "/assets/sword.png",
                     "actions": [
                         {
                             "name": "Idle",
@@ -60,7 +60,7 @@
             "sprites": [
                 {
                     "name": "Diamond_Sword_Sprite",
-                    "path": "/assets/diamond_sword.png",
+                    "path": "/assets/sword2 .png",
                     "actions": [
                         {
                             "name": "Idle",
