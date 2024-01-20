@@ -1,5 +1,5 @@
 #include "chestScreen.h"
-#include "inventoryscreen.h"
+#include "inventory.h"
 #include <algorithm>
 #include <iostream>
 using namespace std;
@@ -41,7 +41,7 @@ void ChestScreen::toggle() {
 }
 
 
-void moveItem(const InventoryItem& item) {
+void moveItem(const Item& item) {
 
 }
 

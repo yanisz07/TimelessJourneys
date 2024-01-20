@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
@@ -20,12 +22,12 @@ public:
     virtual void displayInfo() const;
 };
 
-class Armor : public Item {
+class ArmorItem : public Item {
 public:
     float dmg_multiplier;
     int health_increase;
 
-    Armor(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName,
+    ArmorItem(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName,
           float dmgMult, int healthInc);
 
     void displayInfo() const override;

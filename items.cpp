@@ -11,11 +11,11 @@ void Item::displayInfo() const {
     std::cout << "Name: " << name << std::endl;
 }
 
-Armor::Armor(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName,
+ArmorItem::ArmorItem(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName,
              float dmgMult, int healthInc)
     : Item(equipped, loc, path, itemName), dmg_multiplier(dmgMult), health_increase(healthInc) {}
 
-void Armor::displayInfo() const {
+void ArmorItem::displayInfo() const {
     Item::displayInfo();
     std::cout << "Armor Info:" << std::endl;
     std::cout << "Damage Multiplier: " << dmg_multiplier << std::endl;

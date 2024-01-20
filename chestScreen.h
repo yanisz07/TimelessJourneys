@@ -1,10 +1,14 @@
+#pragma once
+
 #ifndef CHESTSCREEN_H
 #define CHESTSCREEN_H
 
 #include <string>
 #include <vector>
+#include <map>
+#include <variant>
 #include "SDL.h"
-#include "inventoryscreen.h"
+#include "inventory.h"
 
 
 \
@@ -17,7 +21,7 @@ public:
     void hide();
     void toggle();
 
-    void moveItem(const InventoryItem& item);
+    void moveItem(const Item& item);
     void moveSelection(int offset);
 
     void render(SDL_Renderer* renderer);
@@ -35,7 +39,7 @@ private:
     bool isVisible;
     SDL_Rect windowRect_chest;
     SDL_Rect windowRect_inventory;
-    std::vector<InventoryItem> itemsInChest;
+    std::vector<Item> itemsInChest;
     int gridRows;
     int gridCols;
     int totalCols;

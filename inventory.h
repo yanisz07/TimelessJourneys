@@ -1,14 +1,17 @@
+#pragma once
+
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
 #include <string>
 #include <vector>
 #include <map>
+#include <variant>
 #include "SDL.h"
-#include "TextureManager.hpp"
+//#include "TextureManager.hpp"
 #include "json.hpp" // Include JSON library header for handling JSON files
 
-class TextureManager;
+//class TextureManager;
 class Item;
 
 class Inventory {
