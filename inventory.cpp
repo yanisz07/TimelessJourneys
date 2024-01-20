@@ -3,6 +3,7 @@
 #include "SDL_image.h"
 #include "TextureManager.hpp"
 #include <fstream>
+#include "items.h"
 
 
 const int ITEM_ICON_WIDTH = 32;
@@ -194,7 +195,7 @@ void Inventory::loadFromJSON(const std::string& filePath) {
         int id = element.value()["id"];
 
         // Create an Item from the JSON data
-        Item item(
+        Item item = Item(
             false,  // Example: Set is_equipped to false, adjust as needed
             element.value()["location"],
             element.value()["spritePath"],

@@ -5,11 +5,11 @@
 #include <vector>
 #include <map>
 #include "SDL.h"
-#include "items.h"
 #include "TextureManager.hpp"
 #include "json.hpp" // Include JSON library header for handling JSON files
 
 class TextureManager;
+class Item;
 
 class Inventory {
 public:

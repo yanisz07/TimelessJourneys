@@ -60,6 +60,7 @@ set(SOURCES
     ECS/ECS.cpp
     ECS/Animation.hpp
     items.h
+    items.cpp
     AssetManager.hpp
     AssetManager.cpp
     ECS/ProjectileComponent.hpp
