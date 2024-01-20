@@ -37,7 +37,7 @@ public:
             health = 50;
             damage_mult = 1.0;
             max_health = 50;
-            experience = 500;
+            experience = 0;
             level = 1;
         } else {
             health = 10;
@@ -121,15 +121,16 @@ private:
     float damage_mult; // The multiplier of the base damage.
     int exp_worth; // Only for enemies.
     int max_health = 10;
-    int experience = 500;
+    int experience = 0;
     bool player = false; // Stats pertaining to the player if true underneath.
-    int level;
+    int level = 1;
     bool hit;
     bool hit_type; //false -> projectile, true -> melee
     Uint32 hit_time;
     Vector2D hit_direction;
     SDL_Texture* healthLabel;
     SDL_Texture* expLabel;
+    SDL_Texture* levelLabel;
 
 };
 

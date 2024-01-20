@@ -668,6 +668,7 @@ void Game::update()
             {
                 std::cout << "Hit wall" << std::endl;
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+
             }
 
             for (auto& e : enemies)
