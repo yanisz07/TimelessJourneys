@@ -183,19 +183,37 @@ void Inventory::addNewItem(const std::string& name, int id, const Item& item) {
 
 void Inventory::loadFromJSON(const std::string& filePath) {
     std::ifstream inFile(filePath);
-    nlohmann::json j;
-    inFile >> j;
+    nlohmann::json j = nlohmann::json::parse(inFile);
 
     // Clear current inventory
     clearInventory();
 
     // Load items from JSON
-    for (auto& element : j.items()) {
-        std::string name = element.key();
-        int id = element.value()["id"];
+    for (int i = 0; i < size(j["items"]); ++i) {
+        nlohmann::json itemData = j["items"][i];
+        std::string name = itemData["name"].get<std::string>();
+        std::string type = itemData["type"].get<std::string>();
+        std::string location = itemData["location"].get<std::string>();
+        std::string spritePath = itemData["spritePath"].get<std::string>();
+
+        if (type=="Melee") {
+            float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
+        }
+        if (type=="RangedWeapon") {
+            float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
+            int range = itemData["range"].get<int>();
+            int speed_arrow = itemData["speed_arrow"].get<int>();
+            int speed_shooting = itemData["speed_shooting"].get<int>();
+        }
+        if (type=="Armor") {
+            float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
+            int health_increase = itemData["health_increase"].get<int>();
+        }
+
+
 
         // Create an Item from the JSON data
-        Item item = Item(
+        Item item(
             false,  // Example: Set is_equipped to false, adjust as needed
             element.value()["location"],
             element.value()["spritePath"],
