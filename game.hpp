@@ -10,6 +10,7 @@
 #include "charconv"
 #include "vector"
 #include "menu.h"
+#include "rule.h"
 #include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
@@ -87,6 +88,7 @@ private:
     bool isInGameMenuOpen;
     bool isSettingsOpen;
     bool isGameOverOpen;
+    bool isRuleOpen;
     SDL_Point mousePosition;
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;

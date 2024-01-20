@@ -67,7 +67,7 @@ set(SOURCES
     ECS/Stats.cpp
     json.hpp
     timer.hpp
-
+    rule.cpp rule.h
     world.hpp world.cpp
     menu.h
     menu.cpp
