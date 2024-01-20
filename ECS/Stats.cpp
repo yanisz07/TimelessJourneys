@@ -32,10 +32,11 @@ void Stats::init()
     surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
     expLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
     SDL_FreeSurface(surf);
-}
-
-void Stats::GameOver() {
-    // TODO
+    text = "Lvl ";
+    text += std::to_string(level);
+    surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
+    levelLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
+    SDL_FreeSurface(surf);
 }
 
 void Stats::KillEntity() {
@@ -105,13 +106,19 @@ void Stats::draw()
 
     //Render exp bar
     destRect.y = destRect.y + destRect.h;
-    destRect.w = (w*162.0/322.0)*(static_cast<float>(experience)/static_cast<float>(1000));
+    destRect.w = (w*162.0/322.0)*(static_cast<float>(experience)/static_cast<float>(level*100));
     SDL_SetRenderDrawColor(Game::renderer,100,100,30,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
     destRect.x = destRect.x+destRect.w;
-    destRect.w = (w*162.0/322.0)*(1-(static_cast<float>(experience)/static_cast<float>(1000)));
+    destRect.w = (w*162.0/322.0)*(1-(static_cast<float>(experience)/static_cast<float>(level*100)));
     SDL_SetRenderDrawColor(Game::renderer,254,254,153,200);
     SDL_RenderFillRect(Game::renderer,&destRect);
+    destRect.x = sep+sep;
+    destRect.w = destRect.h*6.0/5.0;
+    destRect.y += destRect.h/3.0;
+    destRect.h = destRect.h*2/3.0;
+    SDL_RenderCopy(Game::renderer,levelLabel,NULL,&destRect);
+
 
     //Render current weapon
     //TODO: what component keeps track of the current weapon
@@ -189,6 +196,13 @@ void Stats::GainExp(int exp) {
             } else if (prev_max > max_health && health > max_health) {
                 health = max_health;
             }
+            std::string text;
+            SDL_Colour color = {0,0,0,255};
+            text = "Lvl ";
+            text += std::to_string(level);
+            SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
+            levelLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
+            SDL_FreeSurface(surf);
         }
     }
     std::cout << level << std::endl;
