@@ -267,20 +267,14 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //End of Enemy base definition
 
 
-
-    enemy2.addComponent<TransformComponent>(1100,1000,128,128,1);
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
     enemy2.addComponent<SpriteComponent>(true, "enemy");
     enemy2.getComponent<SpriteComponent>().setActions();
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
     Stats& enemy2Stats = enemy2.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(1,500,200,1200,60,&playerTransform, &playerStats, &enemy2Stats); //To be changed later on
-    enemy.addGroup(Game::groupEnemies);
-
-    std::cout << "Enemy created" << std::endl;
-
-
-
+    enemy2.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemy2Stats); //To be changed later on
+    enemy2.addGroup(Game::groupEnemies);
 
     //create first chest
 
