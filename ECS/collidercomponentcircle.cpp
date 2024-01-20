@@ -8,14 +8,14 @@ ColliderComponentCircle::ColliderComponentCircle(std::string t, double r)
 
 void ColliderComponentCircle::init()
 {
-    tex = TextureManager::LoadTexture("/assets/32x32_circle.png");
+    tex = TextureManager::LoadTexture("/assets/Circle.png");
     if (entity->hasComponent<TransformComponent>())
     {
         transform = &entity->getComponent<TransformComponent>();
         center.x = transform->position.x + radius;
         center.y = transform->position.y + radius;
     }
-    srcR = {0,0,32,32};
+    srcR = {0,0,800,800};
     destR = {static_cast<int>(transform->position.x),static_cast<int>(transform->position.y),static_cast<int>(2*radius),static_cast<int>(2*radius)};
 }
 
