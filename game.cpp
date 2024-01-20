@@ -282,7 +282,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy3.getComponent<SpriteComponent>().setActions();
     enemy3.addComponent<ColliderComponent>("enemy");
     enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(800,5,5,500,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
     enemy3.addGroup(Game::groupEnemies);
 
     //create first chest
