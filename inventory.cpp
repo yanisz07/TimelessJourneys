@@ -4,6 +4,10 @@
 #include "TextureManager.hpp"
 #include <fstream>
 
+
+const int ITEM_ICON_WIDTH = 32;
+const int ITEM_ICON_HEIGHT = 32;
+
 // Constructor
 Inventory::Inventory() : isVisible(false), windowRect{100, 100, 400, 300} {
     // Initialize any other members if necessary
@@ -25,6 +29,90 @@ void Inventory::hide() {
 void Inventory::toggle() {
     isVisible = !isVisible;
 }
+
+
+void Inventory::moveSelection(int offset) {
+    int newIndex = selectedSlotIndex + offset;
+
+    // Calculate current row and column
+    int currentRow = selectedSlotIndex / gridCols;
+    int currentCol = selectedSlotIndex % gridCols;
+
+    // Calculate new row and column
+    int newRow = (newIndex / gridCols) % gridRows;
+    int newCol = (newIndex % gridCols + gridCols) % gridCols; // Adding gridCols before modulo for proper wrapping
+
+    // Check if the new index is valid (within the bounds of the grid)
+    if (newRow >= 0 && newRow < gridRows && newCol >= 0 && newCol < gridCols) {
+        selectedSlotIndex = newRow * gridCols + newCol;
+    }
+}
+
+
+void Inventory::render(SDL_Renderer* renderer) {
+    if (!this->isVisible) return;
+
+    SDL_Color pink = {0, 0, 0, 255}; // RGBA for black
+
+    // Set the renderer draw color to pink
+    SDL_SetRenderDrawColor(renderer, pink.r, pink.g, pink.b, pink.a);
+
+    // Draw a rectangle for the inventory window
+    SDL_RenderFillRect(renderer, &this->windowRect);
+
+    // Calculate the size of each slot based on the inventory window size
+    int slotWidth = this->windowRect.w / this->gridCols;
+    int slotHeight = this->windowRect.h / this->gridRows;
+
+    // Render item slots
+    for (int index = 0; index < items.size(); ++index) {
+        int col = index % this->gridCols;
+        int row = index / this->gridCols;
+
+        SDL_Rect slotRect = {
+            this->windowRect.x + col * slotWidth,
+            this->windowRect.y + row * slotHeight,
+            slotWidth,
+            slotHeight
+        };
+
+        // Set color for the item slot (e.g., grey)
+        SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
+        SDL_RenderDrawRect(renderer, &slotRect); // Draw slot border
+
+        // Render item icon if it exists
+        if (index < items.size() && items.find(std::to_string(index)) != items.end() && items.at(std::to_string(index)).second.icon != nullptr) {
+            // Calculate the destination rectangle for the item icon inside the slot
+            SDL_Rect iconRect = {
+                slotRect.x + (slotWidth - ITEM_ICON_WIDTH) / 2,
+                slotRect.y + (slotHeight - ITEM_ICON_HEIGHT) / 2,
+                ITEM_ICON_WIDTH,
+                ITEM_ICON_HEIGHT
+            };
+            SDL_RenderCopy(renderer, items.at(std::to_string(index)).second.icon, nullptr, &iconRect);
+        }
+    }
+
+    // Highlight the selected slot
+    if (this->selectedSlotIndex >= 0 && this->selectedSlotIndex < items.size()) {
+        int col = this->selectedSlotIndex % this->gridCols;
+        int row = this->selectedSlotIndex / this->gridCols;
+
+        SDL_Rect selectedSlotRect = {
+            this->windowRect.x + col * slotWidth,
+            this->windowRect.y + row * slotHeight,
+            slotWidth,
+            slotHeight
+        };
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); // Yellow for highlight
+        SDL_RenderDrawRect(renderer, &selectedSlotRect); // Draw highlight border
+    }
+
+    // Reset the renderer draw color to white after drawing the inventory
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+}
+
+
 
 
 void Inventory::addItem(const std::string& name, int id, const Item& item) {
@@ -104,41 +192,41 @@ void Inventory::loadFromJSON(const std::string& filePath) {
     for (auto& element : j.items()) {
         std::string name = element.key();
         int id = element.value()["id"];
-        // You will need to create an Item from the JSON data
-        Item* item; // Placeholder, implement item creation from JSON
-        addItem(name, id, *item);
+
+        // Create an Item from the JSON data
+        Item item(
+            false,  // Example: Set is_equipped to false, adjust as needed
+            element.value()["location"],
+            element.value()["spritePath"],
+            element.value()["name"]
+            );
+
+        // Load icon from spritePath using TextureManager or other method
+        item.icon = TextureManager::LoadTexture(item.spritePath.c_str()); // Adjust based on your actual loading method
+
+        // Add the item to the inventory
+        addItem(name, id, item);
     }
 }
+
 
 void Inventory::saveToJSON(const std::string& filePath) const {
     std::ofstream outFile(filePath);
     nlohmann::json j;
 
     for (const auto& [name, pair] : items) {
-        j[name] = {{"id", pair.first}}; // Add other Item details as necessary
+        const Item& item = pair.second; // Extract the item from the pair
+
+        // Add all item details to the JSON
+        j[name] = {
+            {"id", item.is_equipped},
+            {"location", item.location},
+            {"spritePath", item.spritePath},
+            {"name", item.name}
+            // Add other Item details as necessary
+        };
     }
 
     outFile << j.dump(4); // Write JSON to file with indentation
 }
 
-
-bool Inventory::get_visibility() {
-    return isVisible;
-}
-
-void Inventory::moveSelection(int offset) {
-    int newIndex = selectedSlotIndex + offset;
-
-    // Calculate current row and column
-    int currentRow = selectedSlotIndex / gridCols;
-    int currentCol = selectedSlotIndex % gridCols;
-
-    // Calculate new row and column
-    int newRow = (newIndex / gridCols) % gridRows;
-    int newCol = (newIndex % gridCols + gridCols) % gridCols; // Adding gridCols before modulo for proper wrapping
-
-    // Check if the new index is valid (within the bounds of the grid)
-    if (newRow >= 0 && newRow < gridRows && newCol >= 0 && newCol < gridCols) {
-        selectedSlotIndex = newRow * gridCols + newCol;
-    }
-}

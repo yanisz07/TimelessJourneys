@@ -13,6 +13,7 @@ public:
     std::string location;
     std::string spritePath;
     std::string name;
+    SDL_Texture* icon;
 
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 

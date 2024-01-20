@@ -20,6 +20,10 @@ public:
     void hide();
     void toggle();
 
+    bool get_visibility(){return isVisible;}
+    int getGridCols() const { return gridCols; }
+    void moveSelection(int offset);
+
     void handleEvents(SDL_Event& event);
     void changeSelection(int change);
     void render(SDL_Renderer* renderer);
@@ -43,9 +47,8 @@ public:
     void loadFromJSON(const std::string& filePath);
     void saveToJSON(const std::string& filePath) const;
 
-    bool get_visibility();
-    int getGridCols() const { return gridCols; }
-    void moveSelection(int offset);
+
+
 
 private:
     bool isVisible;
