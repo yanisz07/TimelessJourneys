@@ -22,6 +22,7 @@ EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, flo
 void EnemyMovement::init()
 {
     transform = &entity->getComponent<TransformComponent>();
+    stats->SubtractHealth(-10);
     initial_position=transform->position;
     srand(time(NULL));
 }
@@ -107,12 +108,61 @@ void EnemyMovement:: explosion(){
 
 }
 
+
+void EnemyMovement:: attack(){
+    std::cout << "Enemy Attack" << std::endl;
+    playerStats->SubtractHealth(3);
+    attackPushbackDirection = Vector2D(
+                                  playerTransform->position.x - transform->position.x,
+                                  playerTransform->position.y - transform->position.y
+                                  ).Normalize();
+
+    attackPushbackStartTime = SDL_GetTicks();
+    attack_bool = true;
+
+
+    //TODO
+
+}
+
 void EnemyMovement::update()
 {
+
 
     if (collisionCooldown > 0) {
         collisionCooldown--;
         return; // Skip collision checks
+    }
+
+    if (attack_bool) {
+        Uint32 currentTime = SDL_GetTicks();
+        Uint32 delay = currentTime - attackPushbackStartTime;
+
+
+        if (delay <= 200)            //The delay and force of the push are to be determined
+        {
+            if (delay >= 100)
+            {
+                if (delay <= 140)
+                {
+                    playerTransform->position.x += attackPushbackDirection.x * 15;
+                    playerTransform->position.y += attackPushbackDirection.y * 15;
+                }
+                else if (delay <= 180)
+                {
+                    playerTransform->position.x += attackPushbackDirection.x * 8;
+                    playerTransform->position.y += attackPushbackDirection.y * 8;
+                }
+                else
+                {
+                    playerTransform->position.x += attackPushbackDirection.x * 3;
+                    playerTransform->position.y += attackPushbackDirection.y * 3;
+                }
+            }
+        }
+        if (delay >= 201){
+            attack_bool = false;}
+
     }
 
     if (exploded){
@@ -145,6 +195,9 @@ void EnemyMovement::update()
         //Explosion knockout end
         if (delay>= 250){
             stats->KillEntity();
+            std::cout << "Entity Killed" << std::endl;
+
+
 
         }
 
@@ -184,7 +237,8 @@ void EnemyMovement:: creeperBehavior()
             std::cout << "Arming" << std::endl;
             armingTimer++;
             if (armingTimer >= armingDuration) {
-                explosion();            }
+                explosion();
+            }
         }
 
         else if (dist_from_player < dist_to_explode) {
@@ -269,11 +323,21 @@ void EnemyMovement:: creeperBehavior()
 }
 
 void EnemyMovement:: swordsmanBehavior(){
+    Uint32 currentTime = SDL_GetTicks();
     moveTimer++;
     if (moveTimer>=moveInterval){ // If long enough for velocity changes
         moveTimer = 0;
         float dist_from_player = calculateDistanceToPlayer(); // Distance enemy-player
         float dist_from_initial_position= calculateDistanceFromInitialPos(); //Distance of enemy's actual position- enemy's initial position
+
+        if (dist_from_player < dist_attack && currentTime - lastAttackTime > attackInterval) {
+        attack();  // Call the attack function
+        std::cout << "attack()" << std::endl;
+
+        lastAttackTime = currentTime;  // Reset the attack timer
+        }
+
+
         if (dist_from_player < radius_of_attack) { // If player close enough from the enemy
             //std::cout << "In radius of attack" << std::endl;
             if (dist_from_initial_position < radius_of_pursuit){ // and If the enemy is close enough form its initial position to chase the enemy
