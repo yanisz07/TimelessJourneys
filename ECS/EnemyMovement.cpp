@@ -104,7 +104,7 @@ void EnemyMovement:: explosion(){
         playerStats->SubtractHealth(10);
 
     }
-    stats->SubtractHealth(10); //SubstractHealth to enemy (crashes for some reasons)
+    stats->KillEntity();
 
 }
 

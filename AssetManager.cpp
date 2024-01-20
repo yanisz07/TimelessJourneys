@@ -45,7 +45,7 @@ void AssetManager::CreateProjectile(Vector2D pos, Vector2D vel, int range, int s
 {
     auto& projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(pos.x, pos.y);
-    projectile.addComponent<SpriteComponent>(false, "player");
+    projectile.addComponent<SpriteComponent>(false, id);
     projectile.getComponent<SpriteComponent>().setActions();
     projectile.addComponent<ProjectileComponent>(range,speed,vel,dam);
 

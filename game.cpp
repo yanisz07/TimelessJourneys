@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include <SDL.h>
 #include "TextureManager.hpp"
 #include "map.hpp"
 #include "ECS/Components.hpp"
@@ -17,6 +18,7 @@
 #include <sstream>
 #include <variant>
 #include <filesystem>
+#include <fstream>
 #include "world.hpp"
 
 Map* map;
@@ -31,9 +33,18 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
 InventoryScreen* Game::inventoryScreen = new InventoryScreen();
+ChestScreen* Game::chestScreen1 = new ChestScreen();
+ChestScreen* Game::chestScreen2 = new ChestScreen();
+
 
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
+
+int i;
+
+int Game::windowSize_x = 100;
+int Game::windowSize_y = 100;
+
 
 //click Button sound
 
@@ -45,9 +56,10 @@ auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
-auto& enemy_health(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
+auto& chest2(manager.addEntity());
+
 //End
 
 //Test collision with rotated objects
@@ -131,6 +143,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         }
 
         renderer = SDL_CreateRenderer(window,-1,0);
+        SDL_SetRenderDrawBlendMode(renderer,
+                                       SDL_BLENDMODE_BLEND);
 
         if(renderer)
         {
@@ -170,7 +184,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
+
     assets->AddTexture("arrow", "/assets/arrow.png");
+
+    assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
+    assets->AddTexture("Hourglass", "/assets/Hourglass.png");
+    assets->AddTexture("Oval", "/assets/Oval.png");
+
 
     //assets->AddTexture("chest", "/assets/chest_01.png");
 
@@ -254,7 +274,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
 
-
     //create first chest
 
     chest.addComponent<TransformComponent>(900,900,16,16,5);
@@ -263,8 +282,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
     chest.addGroup(Game::groupChests);
-    std::cout << "Chest created" << std::endl;
-    }
+
+    //create second chest
+
+    chest2.addComponent<TransformComponent>(1000,1200,16,16,5);
+    chest2.addComponent<SpriteComponent>(true, "chest");
+    chest2.getComponent<SpriteComponent>().setActions();
+    chest2.addComponent<ColliderComponent>("chest");
+    chest2.addComponent<InteractComponent>();
+    chest2.addGroup(Game::groupChests);
+}
 
 
     //Create labels
@@ -274,19 +301,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     SDL_Color red = {255,0,0,255};
     label.addComponent<UILabel>(10,10, "Test String", "arial", white, true);
 
-    //display player's health on top of his head
-    Vector2D playerPos = player.getComponent<TransformComponent>().position;
-    player_health.addComponent<UILabel>(playerPos.x, playerPos.y, "Test String2", "arial", green, false);
-
-    //display enemy's health on top of his head
-    Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
-
-    enemy_health.addComponent<UILabel>(enemyPos.x, enemyPos.y, "Test String3", "arial", red, false);
-
-
     lastProjectileTime = SDL_GetTicks();
     }
-
 
     TestCol.addComponent<TransformComponent>(1700,1300,100,100);
     TestCol.addComponent<ColliderComponent>("terrain",1700,1300,100,100);
@@ -314,90 +330,103 @@ void Game::handleEvents()
         break;
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
+
         case SDLK_ESCAPE:
-             if (chest_open == false) {
             InGameMenu::toggleInGameMenuState(isInGameMenuOpen); // Existing menu toggle
-             }
-             else {
-            chest_open = false;
-            std::cout << "Closed chest" << std::endl;
-            chest.getComponent<SpriteComponent>().Play("Idle_Down");
-            chestScreen.toggle();
-             }
             break;
         case SDLK_f:
             toggleFullScreen();
             break;
         case SDLK_e:  // Check for 'E' key
+            if (chest_open == false) {
             inventoryScreen->toggle();  // Toggle the inventory screen
+            }
             break;
         case SDLK_RETURN:
-
+            i = 1;
+            ChestScreen *chestScreen;
             for (auto& ch : chests)
             {
+            if (i == 1) {chestScreen = chestScreen1;}
+            else if (i == 2) {chestScreen = chestScreen2;}
+            if (inventoryScreen->isCurrentlyVisible() == false) {
                 InteractComponent& interact = ch->getComponent<InteractComponent>();
 
                if (chest_open == false) {
                 if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
                 {
                     std::cout << "Opened chest" << std::endl;
-                    chest.getComponent<SpriteComponent>().Play("Active");
+                    ch->getComponent<SpriteComponent>().Play("Active");
                     chest_open = true;
-                    chestScreen.toggle();
-
+                    chestScreen->toggle();
+                    break;
                 }
                }
                else {
+                if (interact.PlayerCloseTo(player.getComponent<TransformComponent>()))
+                {
                 chest_open = false;
                 std::cout << "Closed chest" << std::endl;
-                chest.getComponent<SpriteComponent>().Play("Inactive");
-                chestScreen.toggle();
-
-
+                ch->getComponent<SpriteComponent>().Play("Inactive");
+                chestScreen->toggle();
+                break;
                }
+               }
+               }
+            i++;
             }
-            }
+            break;
 
-        if (inventoryScreen->isCurrentlyVisible()) {
+        default:
+            if (inventoryScreen->isCurrentlyVisible()) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-            inventoryScreen->moveSelection(-inventoryScreen->getGridCols());
-            break;
+               inventoryScreen->moveSelection(-inventoryScreen->getGridCols());
+               break;
             case SDLK_DOWN:
-            inventoryScreen->moveSelection(inventoryScreen->getGridCols());
-            break;
+               inventoryScreen->moveSelection(inventoryScreen->getGridCols());
+               break;
             case SDLK_LEFT:
-            inventoryScreen->moveSelection(-1);
-            break;
+               inventoryScreen->moveSelection(-1);
+               break;
             case SDLK_RIGHT:
-            inventoryScreen->moveSelection(1);
-            break;
+               inventoryScreen->moveSelection(1);
+               break;
             case SDLK_u: // Assuming 'U' key is used to use an item
-            inventoryScreen->useSelectedItem();
-            break;
+               inventoryScreen->useSelectedItem();
+               break;
             }
-        }
+            }
 
-            if (chestScreen.isCurrentlyVisible()) {
+            i = 0;
+            if (chestScreen1->isCurrentlyVisible()) {i = 1; chestScreen = chestScreen1;}
+            else if (chestScreen2->isCurrentlyVisible()) {i = 2; chestScreen = chestScreen2;}
+
+            if (i == 1 or i == 2) {
+            std::cout << "chest is " << i << std::endl;
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-                chestScreen.moveSelection(-chestScreen.getTotalCols());
-                break;
+               std::cout << "going up" << std::endl;
+               chestScreen->moveSelection(-chestScreen->getTotalCols());
+               break;
             case SDLK_DOWN:
-                chestScreen.moveSelection(chestScreen.getTotalCols());
-                break;
+               chestScreen->moveSelection(chestScreen->getTotalCols());
+               break;
             case SDLK_LEFT:
-                chestScreen.moveSelection(-1);
-                break;
+               chestScreen->moveSelection(-1);
+               break;
             case SDLK_RIGHT:
-                chestScreen.moveSelection(1);
-                break;
-            case SDLK_RETURN:
-                //move object
-                break;
+               chestScreen->moveSelection(1);
+               break;
+            case SDLK_m:
+               //move object
+               break;
             }
+            }
+
+            break;
         }
-        break;
+
 
     case SDL_MOUSEMOTION:
         mousePosition.x = event.motion.x;
@@ -565,14 +594,11 @@ void Game::handleEvents()
         }
 
         break;
-
-
-
     default:
         break;
+
     }
 }
-
 
 // function called when changing screen dimensions
 void Game::toggleFullScreen() {
@@ -611,13 +637,18 @@ void Game::toggleFullScreen() {
 
 void Game::update()
 {
+    //Update window size
+    int w,h;
+    SDL_GetWindowSize(window,&w,&h);
+    Game::windowSize_x = w;
+    Game::windowSize_y = h;
+    //end
+
     if (!isMenuOpen && !isGameOverOpen && !isInGameMenuOpen && !isSettingsOpen)
     {
         // Get player/enemy info.
         SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
         Vector2D playerPos = player.getComponent<TransformComponent>().position;
-
-        SDL_Rect enemyCol = enemy.getComponent<ColliderComponent>().collider;
 
         std::stringstream ssp; //hold variables and turn them into strings
         ssp << "Player position: " << playerPos;
@@ -633,20 +664,23 @@ void Game::update()
         //Check and solve player collisions.
         for (auto& c : MapColliders)
         {
-            SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
             if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit wall" << std::endl;
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
             }
 
-            if (enemy.getComponent<EnemyMovement>().collisionCooldown > 0) continue;
-
-            SDL_Rect e_cCol = c->getComponent<ColliderComponent>().collider;
-            if(Collision::AABB(e_cCol, enemyCol))
+            for (auto& e : enemies)
             {
-                std::cout << "Enemy hit wall" << std::endl;
-                enemy.getComponent<EnemyMovement>().onCollision(e_cCol); // the enemy doesn't move
+                if (e->hasComponent<EnemyMovement>())
+                {
+                    if (e->getComponent<EnemyMovement>().collisionCooldown > 0) continue;
+                    if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), e->getComponent<ColliderComponent>()))
+                    {
+                        std::cout << "Enemy hit wall" << std::endl;
+                        e->getComponent<EnemyMovement>().onCollision(c->getComponent<ColliderComponent>().collider); // the enemy doesn't move
+                    }
+                }
             }
         }
         //End
@@ -658,23 +692,13 @@ void Game::update()
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
-
-        for (auto& p : PlayerProjectiles)
-        {
-            if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),TestCol.getComponent<ColliderComponent>()))
-            {
-                p->destroy();
-            }
-        }
         //end
-
 
         for (auto& p : EnemyProjectiles)
         {
             if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit player!" << std::endl;
-                Stats::Damage(p->getComponent<Stats>(),player.getComponent<Stats>());
                 p->destroy();
             }
         }
@@ -691,10 +715,7 @@ void Game::update()
                 if (!playerInvincible) {
                     std::cout << "Player Hit!" << std::endl;
                     std::cout << "Damage done" << std::endl;
-
                     player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-                    Stats::Damage(e->getComponent<Stats>(),player.getComponent<Stats>());
-
                     playerInvincible = true;
                     playerInvincibleStartTime = currentTime;
                 }
@@ -704,8 +725,7 @@ void Game::update()
                 if(Collision::CheckCollision(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>()))
                 {
                     std::cout << "Projectile hit enemy" << std::endl;
-                    //p->getComponent<ProjectileComponent>().doDamage(e->getComponent<Stats>());
-                    Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
+                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>(),e->getComponent<Stats>());
                     e->getComponent<Stats>().set_hit(true);
                     e->getComponent<Stats>().set_type_hit(false);
                     e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
@@ -720,7 +740,7 @@ void Game::update()
                     if (!e->getComponent<Stats>().is_hit())
                     {
                         std::cout << "Melee hit enemy" << std::endl;
-                        Stats::Damage(player.getComponent<Stats>(),e->getComponent<Stats>());
+                        player.getComponent<Sword>().DoDamage(player.getComponent<Stats>(),e->getComponent<Stats>());
                         e->getComponent<Stats>().set_hit(true);
                         e->getComponent<Stats>().set_type_hit(true);
                         e->getComponent<Stats>().set_hit_time(SDL_GetTicks());
@@ -742,9 +762,6 @@ void Game::update()
                 }
 
             }
-
-
-
             //Enemy knockback
 
             if(e->getComponent<Stats>().is_hit())
@@ -809,35 +826,6 @@ void Game::update()
             }
         }
         //End
-
-        Vector2D enemyPos = enemy.getComponent<TransformComponent>().position;
-
-        //Projectiles shot from the enemy we can generalize this to all ennemies
-        if (currentTime - lastProjectileTime >= 2000)  // 2000 milliseconds = 2 seconds
-        {
-            // Create a projectile every two seconds
-            assets->CreateProjectile(Vector2D(enemyPos.x, enemyPos.y), Vector2D(1, 0), 200, 2, "enemy_projectile",false);
-            lastProjectileTime = currentTime;  // Update the last projectile creation time
-        }
-        //End
-
-        //update place of the player_health string
-        playerPos = player.getComponent<TransformComponent>().position;
-        player_health.getComponent<UILabel>().SetPositionText(playerPos.x, playerPos.y);
-
-        //update text of health
-        std::stringstream ssh;
-        ssh << "Health: " << player.getComponent<Stats>().get_health();
-        player_health.getComponent<UILabel>().SetLabelText(ssh.str(),"arial");
-
-        //update position of the enemy_player string
-        enemyPos = enemy.getComponent<TransformComponent>().position;
-        enemy_health.getComponent<UILabel>().SetPositionText(enemyPos.x, enemyPos.y);
-
-        //update text of health
-        std::stringstream sseh;
-        sseh << "Health: " << enemy.getComponent<Stats>().get_health();
-        enemy_health.getComponent<UILabel>().SetLabelText(sseh.str(),"arial");
 
         camera.x = player.getComponent<TransformComponent>().position.x - x_diff;
         camera.y = player.getComponent<TransformComponent>().position.y - y_diff;
@@ -947,8 +935,6 @@ void Game::render()
 
         // Render the UI elements over the game objects
         label.draw();
-        enemy_health.draw();
-        player_health.draw();
 
         TestCol.draw();
 
@@ -987,9 +973,48 @@ void Game::render()
     }
 
     inventoryScreen->render(renderer);
-    chestScreen.render(renderer);
+    chestScreen1->render(renderer);
+    chestScreen2->render(renderer);
 
+    //Render time remaining
+    //TODO: set to screen size
+    Uint32 timeRemaining = (300000 - timeElapsed.getTimeStart())/1000;
+    int minutes = timeRemaining/60;
+    int seconds = timeRemaining - minutes*60;
+    std::string text;
+    text += "0";
+    text += std::to_string(minutes);
+    text += ":";
+    if(seconds<10)
+    {
+        text += "0";
+    }
+    text += std::to_string(seconds);
+    SDL_Colour color = {0,0,0,255};
+    if(minutes < 1)
+    {
+       color = {200,0,0,255};
+    }
+    SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
+    timeLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
+    SDL_FreeSurface(surf);
+    int windowHeight;
+    int windowWidth;
+    SDL_GetWindowSize(window,&windowWidth,&windowHeight);
+    int shift_x = windowWidth - 320;
+    int shift_y = 20;
+    SDL_Rect destRect;
+    destRect={shift_x,shift_y,310,120};
+    SDL_RenderCopy(Game::renderer,assets->GetTexture("Oval"),NULL,&destRect);
+    destRect={shift_x,shift_y-10,70,140};
+    SDL_RenderCopy(Game::renderer,assets->GetTexture("Hourglass"),NULL,&destRect);
+    destRect={shift_x+220,shift_y+15,90,90};
+    SDL_RenderCopy(Game::renderer,assets->GetTexture("PocketWatch"),NULL,&destRect);
+    destRect = {shift_x+70,shift_y+10,150,100};
 
+    SDL_RenderCopy(Game::renderer,timeLabel,NULL,&destRect);
+
+    //end
     SDL_RenderPresent(renderer);
     }
 }
