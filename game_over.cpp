@@ -1,4 +1,4 @@
-#include "game_over.h"
+#include "game_over.hpp"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>

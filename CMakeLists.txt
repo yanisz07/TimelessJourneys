@@ -69,13 +69,13 @@ set(SOURCES
     ECS/Stats.cpp
     json.hpp
     timer.hpp
-    ECS/WeaponComponent.hpp
+    rule.cpp rule.h
     world.hpp world.cpp
     menu.h
     menu.cpp
     ECS/sword.h
     game_over.cpp
-    game_over.h
+    game_over.hpp
     ingame_menu.cpp
     ingame_menu.h
     ECS/EnemyMovement.h
@@ -84,14 +84,20 @@ set(SOURCES
     ECS/KeyboardController.cpp
     ECS/ProjectileComponent.cpp
     ECS/SpriteComponent.cpp
-    ECS/WeaponComponent.cpp
-    ECS/EnemyMovement.cpp)
+    ECS/EnemyMovement.cpp
+    ECS/armor.h ECS/armor.cpp
+    ECS/sword.cpp
+    ECS/range_weapon.h ECS/range_weapon.cpp
+    ECS/TransformComponent.cpp)
 
 add_executable(TimelessJourneys ${SOURCES}
     inventory.cpp
     inventory.h
     assets/items.json
-
+    ECS/InteractComponent.h
+    chestScreen.cpp
+    chestScreen.h
+    ECS/turretenemy.h ECS/turretenemy.cpp
 )
 
 if (APPLE)

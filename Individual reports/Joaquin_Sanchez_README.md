@@ -12,4 +12,11 @@ Week 2 Summary:
 I) Continue with SDL tutorials 14-32
 II) Watch and partially implement a SDL tutorial series from youtube.
     Source: Lets make games: How to make a game in CPP and SDL2 from scratch. Videos 1-8
-III) 
+III) Write library installation guide for Windows users.
+
+Week 3 Summary: 
+I) Implement JSON parser to import sprites and populate character actions.
+II) Update weapon component with two new attack modes: frontAttack and roundAttack.
+
+Week 4 summary:
+I) 

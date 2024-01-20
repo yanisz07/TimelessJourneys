@@ -6,3 +6,6 @@ This week, I learned how to create a simple game using SDL2. I read some buts of
 
 Week 3 Summary: 
 This week, I continued on learning on how to use SDL2. This was done mainly through Youtube. 
+
+Week 4 Summary:
+This week, I looked into how to implement textures inside the game, as well as other mechanics necessary for coding the player character. I also read and played with some of the existing code that my teammates already wrote so that I understand it more. 

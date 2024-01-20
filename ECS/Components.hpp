@@ -6,7 +6,6 @@
 #include "ECS.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
-#include "WeaponComponent.hpp"
 #include "KeyboardController.hpp"
 #include "ColliderComponent.hpp"
 #include "TileComponent.hpp"
@@ -15,5 +14,9 @@
 #include "UILabel.hpp"
 #include "sword.h"
 #include "EnemyMovement.h"
+#include "armor.h"
+#include "InteractComponent.h"
+#include "range_weapon.h"
+#include "turretenemy.h"
 
 #endif // COMPONENTS_H

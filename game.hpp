@@ -10,10 +10,13 @@
 #include "charconv"
 #include "vector"
 #include "menu.h"
-#include "game_over.h"
+#include "rule.h"
+#include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
 #include "items.h"
+#include "chestScreen.h"
+#include "timer.hpp"
 
 extern std::filesystem::path projectDir;
 
@@ -42,6 +45,7 @@ public:
     void clean();
     void toggleMenu();
     void toggleFullScreen();
+    //static void getWindowSize(int*w, int*h);
 
     bool is_running() {return isRunning;}
 
@@ -54,9 +58,15 @@ public:
     static SDL_Rect camera;
     int screen_width;
     int screen_height;
-    Inventory* inventory;
+    static Inventory* inventory;
+
+    static int windowSize_x,windowSize_y;
+
+    static ChestScreen* chestScreen1;
+    static ChestScreen* chestScreen2;
 
     static AssetManager* assets;
+    Mix_Chunk* clickButton;
 
     enum groupLabels : std::size_t //we can have up to 32 groups
     {
@@ -66,7 +76,9 @@ public:
         groupPlayerProjectiles,
         groupEnemyProjectiles,
         groupEnemies,
-        groupPlayerAttack
+        groupEnemiesAttack,
+        groupPlayerAttack,
+        groupChests
     };
 
 private:
@@ -79,9 +91,12 @@ private:
     bool isInGameMenuOpen;
     bool isSettingsOpen;
     bool isGameOverOpen;
+    bool isRuleOpen;
     SDL_Point mousePosition;
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
+    Timer timeElapsed;
+    SDL_Texture* timeLabel;
 };
 
 #endif // GAME_H

@@ -6,6 +6,12 @@
 //#include "Components.hpp"
 #include "SpriteComponent.hpp"
 #include "TransformComponent.hpp"
+#include "armor.h"
+
+//forward decleration
+class Sword;
+class Range_Weapong;
+//end
 
 class KeyboardController : public Component
 {
@@ -13,6 +19,8 @@ public:
     TransformComponent* transform;
 
     SpriteComponent* sprite;
+
+    Armor* armor;
 
     bool pressed_right = false;
     bool pressed_left = false;

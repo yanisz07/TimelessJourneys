@@ -21,6 +21,6 @@ public:
     inline bool timedOut(){return SDL_GetTicks()-timeOutStart > timeOut;}
     inline Uint32 getTimeStart(){return SDL_GetTicks() - startTime_;}
     inline Uint32 getTimeDelta(){return SDL_GetTicks() - partialTime_;}
-
+    inline Uint32 getTimeOutStart(){return SDL_GetTicks() - timeOutStart;}
 };
 #endif // TIMER_HPP

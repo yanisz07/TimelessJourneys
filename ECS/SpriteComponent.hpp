@@ -11,7 +11,8 @@
 #include "../timer.hpp"
 #include "TransformComponent.hpp"
 
-//class WeaponComponent;
+//forward decleration
+class Armor;
 
 class SpriteComponent : public Component
 {
@@ -25,9 +26,10 @@ private:
 
     bool animated = false;
 
+    double angle=0;
+
 public:
     std::string currentAction;
-    //int animIndex = 0; //update x index in the sprites sheet
     std::map<std::string , Animation> animations; //stores animations
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
     int frame;
@@ -39,10 +41,12 @@ public:
 
     void setActions();
 
-        void addAnimation(std::string animName,Animation animation);
+    void addAnimation(std::string animName,Animation animation);
 
     ~SpriteComponent()
     {}
+
+    void setAngle(double angle);
 
     void setTex(std::string id);
 
@@ -52,7 +56,7 @@ public:
 
     void draw() override;
 
-    void Play(const char* animName, bool flip = false, const int repeat = -1, int speed = 100);
+    void Play(const std::string animName, bool flip = false, const int repeat = -1, int speed = 100, bool armorchange = false);
 
 };
 
