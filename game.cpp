@@ -316,8 +316,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     }
 
     TestCol.addComponent<TransformComponent>(1700,1300,100,100);
-    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,100,100);
-    TestCol.getComponent<ColliderComponent>().SetAngle(0);
+    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,400,100);
+    TestCol.getComponent<ColliderComponent>().SetAngle(276);
 
 }
 
@@ -947,7 +947,7 @@ void Game::render()
 
         // Render the UI elements over the game objects
         label.draw();
-
+        //Test collider
         TestCol.draw();
 
     } else {
