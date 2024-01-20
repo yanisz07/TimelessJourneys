@@ -23,14 +23,10 @@ void ColliderComponentCircle::update()
 {
     center.x = transform->position.x + radius;
     center.y = transform->position.y + radius;
-    destR.x = static_cast<int>(transform->position.x);
-    destR.y = static_cast<int>(transform->position.y);
+    destR.x = static_cast<int>(transform->position.x) - Game::camera.x;
+    destR.y = static_cast<int>(transform->position.y) - Game::camera.y;
     destR.w = static_cast<int>(2*radius);
     destR.h = static_cast<int>(2*radius);
-    std::cout << destR.x << std::endl;
-    std::cout << destR.y << std::endl;
-    std::cout << destR.w << std::endl;
-    std::cout << destR.h << std::endl;
 }
 
 void ColliderComponentCircle::draw()

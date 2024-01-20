@@ -241,7 +241,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
     player.addComponent<Range_Weapon>(&manager);
-    player.addComponent<ColliderComponentCircle>("player",48);
+    player.addComponent<ColliderComponentCircle>("player",72);
 
     player.addGroup(Game::groupPlayers);
     timeElapsed = Timer();
