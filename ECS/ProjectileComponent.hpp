@@ -3,11 +3,10 @@
 
 
 #include "ECS.hpp"
-//#include "Stats.hpp"
 #include "Components.hpp"
 #include "../Vector2D.hpp"
 
-//class Stats;
+class Stats;
 
 class ProjectileComponent : public Component
 {
@@ -20,11 +19,13 @@ public:
 
     void init() override;
 
+    int get_damage(){return damage;}
+    int get_range(){return range;}
+    int get_speed(){return speed;}
+
     void update() override;
-   //void doDamage(Stats& enemyStatsComponent)
-   //{
-   // enemyStatsComponent.SubtractHealth(damage);
-   //}
+
+    void DoDamage(Stats &entity1, Stats &entity2);
 
 private:
 

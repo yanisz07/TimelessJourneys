@@ -101,10 +101,9 @@ void EnemyMovement:: explosion(){
     knock_direction = Vector2D(playerTransform->position.x - transform->position.x, playerTransform->position.y - transform->position.y).Normalize();
     if (dist_from_player <explosion_radius){
         in_range = true;
-        playerStats->SubtractHealth(10);
+        playerStats->SubtractHealth(25);
 
     }
-    stats->SubtractHealth(10); //SubstractHealth to enemy (crashes for some reasons)
 
 }
 
@@ -144,6 +143,10 @@ void EnemyMovement::update()
             }
         }
         //Explosion knockout end
+        if (delay>= 250){
+            stats->KillEntity();
+
+        }
 
     }
 

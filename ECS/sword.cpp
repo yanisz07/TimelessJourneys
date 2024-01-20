@@ -21,8 +21,8 @@ Sword::Sword(Manager *man)
     damage = 5;
     std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "BlueSword.png").string();
     texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
-    srcR.w = width;
-    srcR.h = height;
+    srcR.w = animation.width;
+    srcR.h = animation.height;
     destR.w = 27;
     destR.h = 54;
 }
@@ -176,9 +176,10 @@ void Sword::draw()
         {
             entityTransform = &(entity->getComponent<TransformComponent>());
             srcR.y = 0;
-            frame = static_cast<int>((timer.getTimeOutStart() / speed) % frames);
-            index = width*frame;
-            srcR.x = index;
+            int frame;
+            frame = static_cast<int>((timer.getTimeOutStart() / animation.speed) % animation.frames);
+            animation.index = animation.width*frame;
+            srcR.x = animation.index;
             Vector2D entityPos = entityTransform->position;
             int scale = entityTransform->scale;
             if (direction.x == 0)
@@ -253,12 +254,18 @@ void Sword::draw()
     }
 }
 
-int Sword::DoDamage(Stats &entity1)
+int Sword::DoDamage(Stats &entity1, Stats &entity2)
 {
-    entity1.SubtractHealth(1);
+    entity2.SubtractHealth(damage*entity1.get_damage_mult());
+    if(entity1.is_player())
+    {
+        if (entity2.get_health()<=0)
+        {
+            entity1.GainExp(entity2.get_experience_worth());
+        }
+    }
     return 0;
 }
-
 
 void Sword::update_sword()
 {

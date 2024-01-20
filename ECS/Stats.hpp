@@ -15,7 +15,9 @@ public:
 
         damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
         exp_worth = 50;
-        player = false;
+        damage_mult = 1.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
+        exp_worth = 500;
+
         hit = false;
         hit_type = false;
         hit_time = Uint32(0);
@@ -35,7 +37,7 @@ public:
             health = 50;
             damage_mult = 1.0;
             max_health = 50;
-            experience = 0;
+            experience = 500;
             level = 1;
         } else {
             health = 10;
@@ -58,18 +60,20 @@ public:
     bool is_player() {return player;}
     int get_max_health() {return max_health;}
     int get_experience() {return experience;}
+    int get_experience_worth() {return exp_worth;}
     int get_level() {return level;}
 
+    void update() override;
+
     void draw() override;
+    void init() override;
 
     void set_health(int i) {health = i;} // Should not be used on players! Or anyone really, only debug.
 
     void SubtractHealth(int); // Supports negative values for healing.
     void GainExp(int); // Handles level ups. Supports negative values. Will level down the player down to level 1 if necessary.
     void KillEntity(); // Only for enemies.
-    void GameOver(); // Only for the player.
-
-    static void Damage(Stats& entity1, Stats& entity2); // TODO weapons deal damage and multiply with damage_mult, not characters directly.
+    void GameOver();
 
     bool is_hit()
     {
@@ -117,13 +121,15 @@ private:
     float damage_mult; // The multiplier of the base damage.
     int exp_worth; // Only for enemies.
     int max_health = 10;
+    int experience = 500;
     bool player = false; // Stats pertaining to the player if true underneath.
-    int experience;
     int level;
     bool hit;
     bool hit_type; //false -> projectile, true -> melee
     Uint32 hit_time;
     Vector2D hit_direction;
+    SDL_Texture* healthLabel;
+    SDL_Texture* expLabel;
 
 };
 

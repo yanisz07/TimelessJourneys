@@ -17,5 +17,6 @@
 #include "armor.h"
 #include "InteractComponent.h"
 #include "range_weapon.h"
+#include "turretenemy.h"
 
 #endif // COMPONENTS_H
