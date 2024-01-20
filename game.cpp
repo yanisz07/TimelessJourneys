@@ -241,7 +241,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
     player.addComponent<Range_Weapon>(&manager);
-    player.addComponent<ColliderComponentCircle>("player",72);
+    player.addComponent<ColliderComponentCircle>("player",30);
 
     player.addGroup(Game::groupPlayers);
     timeElapsed = Timer();
@@ -315,9 +315,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     lastProjectileTime = SDL_GetTicks();
     }
 
-    TestCol.addComponent<TransformComponent>(1700,1300,100,200);
+    TestCol.addComponent<TransformComponent>(1700,1500,100,200);
     TestCol.addComponent<ColliderComponent>("terrain");
-    TestCol.getComponent<ColliderComponent>().SetAngle(229);
+    TestCol.getComponent<ColliderComponent>().SetAngle(-135);
 
 }
 
@@ -698,7 +698,13 @@ void Game::update()
 
         //Test collision with rotated objects
 
-        if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+        /*if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+        {
+            std::cout << "Player hit wall" << std::endl;
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        }*/
+
+        if (Collision::CollisionRectCircle(TestCol.getComponent<ColliderComponent>(),player.getComponent<ColliderComponentCircle>()))
         {
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move

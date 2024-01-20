@@ -1,5 +1,6 @@
 #include "Collision.hpp"
 #include "ECS/ColliderComponent.hpp"
+#include "ECS/collidercomponentcircle.h"
 #include <iostream>
 #include <cmath>
 
@@ -33,6 +34,26 @@ bool Collision::AABB(const ColliderComponent& colA, const ColliderComponent& col
 double toRadians(double angle) {
     return angle * (M_PI / 180.0);
 }
+
+Vector2D ClosestVertex(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4,const ColliderComponentCircle& cA)
+{
+    Vector2D tmp = p1;
+    double distance = std::sqrt(std::pow(cA.center.x - p1.x, 2) + std::pow(cA.center.y - p1.y, 2));
+    if (std::sqrt(std::pow(cA.center.x - p2.x, 2) + std::pow(cA.center.y - p2.y, 2)<distance))
+    {
+        tmp = p2;
+    }
+    if (std::sqrt(std::pow(cA.center.x - p3.x, 2) + std::pow(cA.center.y - p3.y, 2)<distance))
+    {
+        tmp = p3;
+    }
+    if (std::sqrt(std::pow(cA.center.x - p4.x, 2) + std::pow(cA.center.y - p4.y, 2)<distance))
+    {
+        tmp = p4;
+    }
+    return tmp;
+}
+
 
 Vector2D RotationTheta(Vector2D u, double theta)
 {
@@ -380,6 +401,138 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
         }
     }
 
+    return true;
+}
+
+/*bool Collision::CollisionCircles(const ColliderComponentCircle& cA, const ColliderComponentCircle& cB)
+{
+    if (distance(cA.center,cB.center)<=cA.radius+cB.radius)
+    {
+        return true;
+    }
+    return false;
+}*/
+
+bool Collision::CollisionRectCircle(const ColliderComponent &colA, const ColliderComponentCircle &cA)
+{
+    SDL_Rect recA = colA.collider;
+    double angleA = colA.angle;
+    //corners of recA
+    Vector2D UR_A = UpperRight(recA,angleA);
+    Vector2D UL_A = UpperLeft(recA,angleA);
+    Vector2D LR_A = LowerRight(recA,angleA);
+    Vector2D LL_A = LowerLeft(recA,angleA);
+
+    double r = cA.radius;
+    Vector2D center = cA.center;
+
+    std::cout << r << std::endl;
+    std::cout << center.x << " " << center.y << std::endl;
+
+    //Axis 1
+    Vector2D u1 = Vector2D(UR_A.x-UL_A.x,UR_A.y-UL_A.y);
+
+    Vector2D center1 = Projection(center,u1);
+
+    Vector2D UR_A1 = Projection(UR_A,u1);
+    Vector2D UL_A1 = Projection(UL_A,u1);
+
+    double Max_A1 = MaxPoint(UR_A1,UL_A1);
+    double Min_A1 = MinPoint(UR_A1,UL_A1);
+
+    double vc1;
+    if (center1.x == 0)
+    {
+        vc1 = center1.y;
+    }
+    else
+    {
+        vc1 = center1.x;
+    }
+
+    std::cout << vc1 << std::endl;
+    std::cout << Max_A1 << std::endl;
+    std::cout << Min_A1 << std::endl;
+
+    if (vc1 > Max_A1 + r)
+    {
+        return false;
+    }
+    if (vc1 < Min_A1 - r)
+    {
+        return false;
+    }
+    //Axis 2
+    Vector2D u2 = Vector2D(UR_A.x-LR_A.x,UR_A.y-LR_A.y);
+
+    Vector2D center2 = Projection(center,u2);
+
+    Vector2D UR_A2 = Projection(UR_A,u2);
+    Vector2D LR_A2 = Projection(LR_A,u2);
+
+    double Max_A2 = MaxPoint(UR_A2,LR_A2);
+    double Min_A2 = MinPoint(UR_A2,LR_A2);
+
+    double vc2;
+    if (center2.x == 0)
+    {
+        vc2 = center2.y;
+    }
+    else
+    {
+        vc2 = center2.x;
+    }
+
+    std::cout << vc2 << std::endl;
+    std::cout << Max_A2 << std::endl;
+    std::cout << Min_A2 << std::endl;
+
+    if (vc2 > Max_A2 + r)
+    {
+        return false;
+    }
+    if (vc2 < Min_A2 - r)
+    {
+        return false;
+    }
+
+    //Axis3
+    Vector2D closestvertex = ClosestVertex(UR_A,UL_A,LR_A,LL_A,cA);
+
+    Vector2D u3 = Vector2D(closestvertex.x-center.x,closestvertex.y-center.y);
+
+    Vector2D UR_A3 = Projection(UR_A,u3);
+    Vector2D UL_A3 = Projection(UL_A,u3);
+    Vector2D LR_A3 = Projection(LR_A,u3);
+    Vector2D LL_A3 = Projection(LL_A,u3);
+
+    Vector2D center3 = Projection(center,u3);
+
+    double Min_A3 = MinPoint(UR_A3,UL_A3,LR_A3,LL_A3);
+    double Max_A3 = MaxPoint(UR_A3,UL_A3,LR_A3,LL_A3);
+
+    double vc3;
+    if (center3.x == 0)
+    {
+        vc3 = center3.y;
+    }
+    else
+    {
+        vc3 = center3.x;
+    }
+
+    std::cout << vc2 << std::endl;
+    std::cout << Max_A2 << std::endl;
+    std::cout << Min_A2 << std::endl;
+
+    if (vc3 > Max_A3 + r)
+    {
+        return false;
+    }
+    if (vc3 < Min_A3 - r)
+    {
+        return false;
+    }
     return true;
 }
 
