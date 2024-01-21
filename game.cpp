@@ -60,6 +60,8 @@ auto& player_health(manager.addEntity());
 auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
+//test turret enemy
+auto& enemy3(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
 auto& chest2(manager.addEntity());
@@ -68,7 +70,8 @@ auto& chest2(manager.addEntity());
 
 //Test collision with rotated objects
 auto& TestCol(manager.addEntity());
-//
+//Test collision with cirecles
+auto& TestCircle(manager.addEntity());
 
 bool chest_open = false;
 
@@ -174,7 +177,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Load game assets
     {
     assets->AddTexture("terrain" , "/assets/terrain_ss.png");
-    assets->AddTexture("projectile", "/assets/proj.png");
+    assets->AddTexture("projectile", "/assets/enemy_arrow.png");
 
     //Load JSON data
     std::string path = "";
@@ -187,10 +190,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Textures, map and fonts
 
-    assets->AddTexture("enemy_projectile", "/assets/proj.png");
-    assets->AddTexture("player_projectile", "/assets/proj.png");
-
     assets->AddTexture("arrow", "/assets/arrow.png");
+    assets->AddTexture("enemy_arrow", "/assets/enemy_arrow.png");
 
     assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
     assets->AddTexture("Hourglass", "/assets/Hourglass.png");
@@ -251,7 +252,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
     player.addComponent<Range_Weapon>(&manager);
-
+    player.addComponent<ColliderComponentCircle>("player",50);
     player.addGroup(Game::groupPlayers);
     timeElapsed = Timer();
     timeElapsed.start();
@@ -284,6 +285,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<Stats>();
     enemy2.addGroup(Game::groupEnemies);
 
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+
     //create first chest
 
     chest.addComponent<TransformComponent>(900,900,16,16,5);
@@ -314,15 +325,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     lastProjectileTime = SDL_GetTicks();
     }
 
-    TestCol.addComponent<TransformComponent>(1700,1300,100,100);
-    TestCol.addComponent<ColliderComponent>("terrain",1700,1300,100,100);
-    TestCol.getComponent<ColliderComponent>().SetAngle(0);
-
+    TestCol.addComponent<TransformComponent>(1700,1500,100,200);
+    TestCol.addComponent<ColliderComponent>("terrain");
+    TestCol.getComponent<ColliderComponent>().SetAngle(135);
 
     //Initialize all items as hide
     std::string handPath =  (projectDir / ".." / "TimelessJourneys" / "assets" / "hand.png").string();
 
     //inventory.addNewItem(Items* items,handPath,renderer);
+
+    TestCircle.addComponent<TransformComponent>(1400,1500,200,200);
+    TestCircle.addComponent<ColliderComponentCircle>("circle",100);
 
 }
 
@@ -753,8 +766,19 @@ void Game::update()
         //End
 
         //Test collision with rotated objects
-
+/*
         if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+        {
+            std::cout << "Player hit wall" << std::endl;
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        }
+*/
+        if (Collision::CollisionRectCircle(player.getComponent<ColliderComponent>(),TestCircle.getComponent<ColliderComponentCircle>()))
+        {
+            std::cout << "Player hit wall" << std::endl;
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        }
+        if (Collision::CollisionRectCircle(TestCol.getComponent<ColliderComponent>(),player.getComponent<ColliderComponentCircle>()))
         {
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
@@ -766,6 +790,7 @@ void Game::update()
             if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
             {
                 std::cout << "Hit player!" << std::endl;
+                p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
                 p->destroy();
             }
         }
@@ -1005,8 +1030,10 @@ void Game::render()
 
         // Render the UI elements over the game objects
         label.draw();
-
+        //Test collider
         TestCol.draw();
+        //Test circle collider
+        TestCircle.draw();
 
     } else {
 

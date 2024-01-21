@@ -18,5 +18,6 @@
 #include "InteractComponent.h"
 #include "range_weapon.h"
 #include "turretenemy.h"
+#include "collidercomponentcircle.h"
 
 #endif // COMPONENTS_H
