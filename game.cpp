@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "TextureManager.hpp"
 #include "map.hpp"
+#include "ECS/ECS.hpp"
 #include "ECS/Components.hpp"
 #include "ECS/Stats.hpp"
 #include "Vector2D.hpp"
@@ -22,7 +23,7 @@
 #include "world.hpp"
 #include "inventory.h"
 
-Map* map;
+Map* map2;
 Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -36,6 +37,7 @@ AssetManager* Game::assets = new AssetManager(&manager);
 Inventory* Game::inventory = new Inventory();
 ChestScreen* Game::chestScreen1 = new ChestScreen();
 ChestScreen* Game::chestScreen2 = new ChestScreen();
+
 
 
 
@@ -199,16 +201,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //assets->AddTexture("chest", "/assets/chest_01.png");
 
-    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map - Copy.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
     std::string jsonPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items - Copy.json").string();
     assets->AddFont("arial", fontPath.c_str(),16);
 
-    map = new Map("terrain", 4, 32, &manager);
+    map2 = new Map("terrain", 4, 32, &manager);
 
     //ecs implementation
 
-    map->LoadMap(mapPath.c_str(), 25, 20);
+    //map->LoadMap(mapPath.c_str(), 25, 20);
+    map2->LoadMap2(mapPath,25,20,map);
 
     Game::inventory->init();
     Game::inventory->loadFromJSON(jsonPath);
@@ -994,7 +997,14 @@ void Game::render()
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
         // Render all regular game objects when not in map view
-        for (auto& t : tiles) { t->draw(); }
+        //for (auto& t : tiles) { t->draw(); }
+            for (int i = 0; i < 25; i++)
+           {
+                for(int j = 0;j<20;j++)
+                {
+                        map[100*i+j]->draw();
+                }
+           }
         for (auto& c : MapColliders) { c->draw(); }
         for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
