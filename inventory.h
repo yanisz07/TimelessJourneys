@@ -16,8 +16,11 @@ class Item;
 
 class Inventory {
 public:
+
+    SDL_Rect windowRect; // UI dimensions for the inventory screen
     Inventory();
     ~Inventory();
+    void init();
 
     void show();
     void hide();
@@ -29,7 +32,7 @@ public:
 
     void handleEvents(SDL_Event& event);
     void changeSelection(int change);
-    void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer,bool forceRender = true);
 
     int selectedSlotIndex;
     int pickedUpItemIndex;
@@ -37,9 +40,9 @@ public:
     void pickUpItem(int index);
 
     // Update functions to work with the Item class and a map
-    void addItem(const std::string& name, int id, const Item& item);
-    void removeItem(const std::string& name);
-    const Item* getItem(const std::string& name) const;
+    int addItem(Item* item);
+    void removeItem(const int key);
+    const Item* getItem(const int key);
 
     void clearInventory();
     void addNewItem(const std::string& name, int id, const Item& item);
@@ -55,10 +58,10 @@ public:
 
 private:
     bool isVisible;
-    SDL_Rect windowRect; // UI dimensions for the inventory screen
-    std::map<std::string, std::pair<int, Item>> items; // Map to store items by name and ID
-    int gridRows;
-    int gridCols;
+
+    std::map<int, Item*> items; // Map to store items by name and ID
+    int gridRows = 5;
+    int gridCols = 5;
 };
 
 #endif // INVENTORY_H

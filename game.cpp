@@ -200,7 +200,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
-
+    std::string jsonPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items - Copy.json").string();
     assets->AddFont("arial", fontPath.c_str(),16);
 
     map = new Map("terrain", 4, 32, &manager);
@@ -208,6 +208,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //ecs implementation
 
     map->LoadMap(mapPath.c_str(), 25, 20);
+
+    Game::inventory->init();
+    Game::inventory->loadFromJSON(jsonPath);
     }
 
     //Handle the music

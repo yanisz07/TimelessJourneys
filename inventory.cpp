@@ -10,13 +10,25 @@ const int ITEM_ICON_WIDTH = 32;
 const int ITEM_ICON_HEIGHT = 32;
 
 // Constructor
-Inventory::Inventory() : isVisible(false), windowRect{100, 100, 400, 300} {
+Inventory::Inventory() : isVisible(false), windowRect{100, 400, 400, 300} {
     // Initialize any other members if necessary
 }
 
 // Destructor
 Inventory::~Inventory() {
     // Perform necessary cleanup
+}
+
+void Inventory::init()
+{
+    for(int i = 0;i<gridRows;i++)
+    {
+        for(int j=0;j<gridCols;j++)
+        {
+            int key = 10*i+j;
+            items[key] = nullptr;
+        }
+    }
 }
 
 void Inventory::show() {
@@ -50,8 +62,8 @@ void Inventory::moveSelection(int offset) {
 }
 
 
-void Inventory::render(SDL_Renderer* renderer) {
-    if (!this->isVisible) return;
+void Inventory::render(SDL_Renderer* renderer, bool forceRender) {
+    if (!this->isVisible && forceRender) return;
 
     SDL_Color pink = {0, 0, 0, 255}; // RGBA for black
 
@@ -82,7 +94,7 @@ void Inventory::render(SDL_Renderer* renderer) {
         SDL_RenderDrawRect(renderer, &slotRect); // Draw slot border
 
         // Render item icon if it exists
-        if (index < items.size() && items.find(std::to_string(index)) != items.end() && items.at(std::to_string(index)).second.icon != nullptr) {
+        if (index <items.size() && items[10*(index/gridCols)+(index%gridCols)] != nullptr) {
             // Calculate the destination rectangle for the item icon inside the slot
             SDL_Rect iconRect = {
                 slotRect.x + (slotWidth - ITEM_ICON_WIDTH) / 2,
@@ -90,7 +102,7 @@ void Inventory::render(SDL_Renderer* renderer) {
                 ITEM_ICON_WIDTH,
                 ITEM_ICON_HEIGHT
             };
-            SDL_RenderCopy(renderer, items.at(std::to_string(index)).second.icon, nullptr, &iconRect);
+            SDL_RenderCopy(renderer, items[10*(index/gridCols)+(index%gridCols)]->icon, nullptr, &iconRect);
         }
     }
 
@@ -116,30 +128,42 @@ void Inventory::render(SDL_Renderer* renderer) {
 
 
 
-void Inventory::addItem(const std::string& name, int id, const Item& item) {
-    items.insert({name, {id, item}});
-}
-
-void Inventory::removeItem(const std::string& name) {
-    items.erase(name);
-}
-
-
-const Item* Inventory::getItem(const std::string& name) const {
-    auto it = items.find(name);
-    if (it != items.end()) {
-        return &(it->second.second);
-
+int Inventory::addItem(Item* item) {
+    for(int i = 0;i<gridRows;i++)
+    {
+        for(int j=0;j<gridCols;j++)
+        {
+            int key = 10*i+j;
+            if(items[key]==nullptr)
+            {
+                items[key] = item;
+                return 0;
+            }
+        }
     }
+    std::cout << "Cannot add item, inventory full" << std::endl;
+    return 0;
+}
+
+void Inventory::removeItem(const int key) {
+    items[key]=nullptr;
+}
+
+
+const Item* Inventory::getItem(const int key) {
+    return items[key];
 }
 
 
 void Inventory::useItem(int index) {
-    std::string indexKey = std::to_string(index);
+    int currentRow = index / gridCols;
+    int currentCol = index % gridCols;
+    int key = 10*currentRow+currentCol;
 
-    auto it = items.find(indexKey);
-    if (it != items.end()) {
-        std::cout << "Used item: " << it->second.second.name << std::endl;
+    Item* it = items[key];
+    if (it != nullptr) {
+        std::cout << "Used item: " << it->name << std::endl;
+
     } else {
         std::cout << "Item with index " << index << " not found." << std::endl;
     }
@@ -163,21 +187,21 @@ void Inventory::useSelectedItem(const std::string& name) {
 void Inventory::pickUpItem(int index) {
     std::string indexKey = std::to_string(index);
 
-    auto it = items.find(indexKey);
-    if (it != items.end()) {
-        std::cout << "Picked up item: " << it->second.second.name << std::endl;
-        pickedUpItemIndex = index;
-    } else {
-        std::cout << "Item with index " << index << " not found." << std::endl;
-    }
+    //auto it = items.find(indexKey);
+    //if (it != items.end()) {
+    //    std::cout << "Picked up item: " << it->second.second.name << std::endl;
+    //    pickedUpItemIndex = index;
+    //} else {
+    //    std::cout << "Item with index " << index << " not found." << std::endl;
+    //}
 }
 
 void Inventory::clearInventory() {
-    items.clear();
+    init();
 }
 
 void Inventory::addNewItem(const std::string& name, int id, const Item& item) {
-    addItem(name, id, item);
+    //addItem(name, id, item);
 }
 
 
@@ -195,57 +219,33 @@ void Inventory::loadFromJSON(const std::string& filePath) {
         std::string type = itemData["type"].get<std::string>();
         std::string location = itemData["location"].get<std::string>();
         std::string spritePath = itemData["spritePath"].get<std::string>();
+        float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
 
         if (type=="Melee") {
-            float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
+
+            Item* item = new Melee(false,location,spritePath,name,dmg_multiplier);
+            addItem(item);
+
         }
-        if (type=="RangedWeapon") {
-            float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
+        if (type=="RangedWeapon") { 
             int range = itemData["range"].get<int>();
             int speed_arrow = itemData["speed_arrow"].get<int>();
             int speed_shooting = itemData["speed_shooting"].get<int>();
+            Item* item = new RangedWeapon(false,location,spritePath,name,dmg_multiplier,range,speed_arrow,speed_shooting);
+            addItem(item);
         }
         if (type=="Armor") {
-            float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
             int health_increase = itemData["health_increase"].get<int>();
+            Item* item = new ArmorItem(false,location,spritePath,name,dmg_multiplier,health_increase);
+            addItem(item);
         }
-
-
-
-        // Create an Item from the JSON data
-        Item item(
-            false,  // Example: Set is_equipped to false, adjust as needed
-            element.value()["location"],
-            element.value()["spritePath"],
-            element.value()["name"]
-            );
-
-        // Load icon from spritePath using TextureManager or other method
-        item.icon = TextureManager::LoadTexture(item.spritePath.c_str()); // Adjust based on your actual loading method
-
-        // Add the item to the inventory
-        addItem(name, id, item);
+        std::cout << "Item " << name << "created and added" << std::endl;
     }
+
 }
 
 
 void Inventory::saveToJSON(const std::string& filePath) const {
-    std::ofstream outFile(filePath);
-    nlohmann::json j;
 
-    for (const auto& [name, pair] : items) {
-        const Item& item = pair.second; // Extract the item from the pair
-
-        // Add all item details to the JSON
-        j[name] = {
-            {"id", item.is_equipped},
-            {"location", item.location},
-            {"spritePath", item.spritePath},
-            {"name", item.name}
-            // Add other Item details as necessary
-        };
-    }
-
-    outFile << j.dump(4); // Write JSON to file with indentation
 }
 

@@ -1,0 +1,33 @@
+{
+    "items": [
+        {
+            "name": "silver_sword",
+            "type": "Melee",
+            "location" : "any",
+            "spritePath":"/assets/sword.png",
+            "sprites": [
+                {
+                    "name": "Silver_Sword_Sprite",
+                    "path": "/assets/sword.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.2
+        }
+    ]
+}

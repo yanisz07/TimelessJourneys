@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include "ECS/Animation.hpp"
+#include "ECS/Animation.hpp"
 #include "SDL_image.h"
 #include <map>
 
@@ -15,7 +16,8 @@ public:
     std::string location;
     std::string spritePath;
     std::string name;
-    SDL_Texture* icon;
+    SDL_Texture* icon = nullptr;
+    Animation animation = {0,0,0,0,0,"Bow"};
 
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 

@@ -93,7 +93,6 @@ set(SOURCES
 add_executable(TimelessJourneys ${SOURCES}
     inventory.cpp
     inventory.h
-    assets/items.json
     ECS/InteractComponent.h
     chestScreen.cpp
     chestScreen.h

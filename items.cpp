@@ -1,7 +1,10 @@
 #include "items.h"
+#include "TextureManager.hpp"
 
 Item::Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName)
-    : is_equipped(equipped), location(loc), spritePath(path), name(itemName) {}
+    : is_equipped(equipped), location(loc), spritePath(path), name(itemName) {
+    icon = TextureManager::LoadTexture(path.c_str());
+}
 
 void Item::displayInfo() const {
     std::cout << "Item Info:" << std::endl;
