@@ -142,7 +142,7 @@ int Inventory::addItem(Item* item) {
         }
     }
     std::cout << "Cannot add item, inventory full" << std::endl;
-    return 0;
+    return 1;
 }
 
 void Inventory::removeItem(const int key) {

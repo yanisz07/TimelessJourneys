@@ -40,6 +40,7 @@ ChestScreen* Game::chestScreen2 = new ChestScreen();
 
 
 
+
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
 
@@ -211,6 +212,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     Game::inventory->init();
     Game::inventory->loadFromJSON(jsonPath);
+    Game::chestScreen1->init();
+    Game::chestScreen2->init();
     }
 
     //Handle the music
@@ -436,6 +439,7 @@ void Game::handleEvents()
                break;
             case SDLK_m:
                //move object
+               chestScreen->moveItem();
                break;
             }
             }

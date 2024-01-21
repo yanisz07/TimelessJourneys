@@ -23,9 +23,11 @@ public:
 
     void init();
 
-    void moveItem(const Item& item);
+    void moveItem();
     void moveSelection(int offset);
-    int getTotalCols(){return gridCols;}
+    int getTotalCols(){return totalCols;}
+
+    int addItem(Item* item);
 
     void render(SDL_Renderer* renderer);
 
@@ -40,10 +42,12 @@ private:
     bool inChest;
     bool isVisible;
     SDL_Rect windowRect_chest;
-    //SDL_Rect windowRect_inventory;
+    SDL_Rect windowRect_inventory;
     std::map<int,Item*> items;
     int gridRows;
     int gridCols;
+    int totalCols;
+
     int currentRow;
     int currentCol;
     SDL_Rect itemSlot;

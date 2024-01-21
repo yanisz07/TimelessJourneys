@@ -16,7 +16,7 @@ class Item;
 
 class Inventory {
 public:
-
+    std::map<int, Item*> items; // Map to store items by name and ID
     SDL_Rect windowRect; // UI dimensions for the inventory screen
     Inventory();
     ~Inventory();
@@ -59,9 +59,10 @@ public:
 private:
     bool isVisible;
 
-    std::map<int, Item*> items; // Map to store items by name and ID
-    int gridRows = 5;
+
+
     int gridCols = 5;
+    int gridRows = gridCols;
 };
 
 #endif // INVENTORY_H
