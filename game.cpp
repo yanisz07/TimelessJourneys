@@ -66,7 +66,8 @@ auto& chest2(manager.addEntity());
 
 //Test collision with rotated objects
 auto& TestCol(manager.addEntity());
-//
+//Test collision with cirecles
+auto& TestCircle(manager.addEntity());
 
 bool chest_open = false;
 
@@ -241,8 +242,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
     player.addComponent<Range_Weapon>(&manager);
-    player.addComponent<ColliderComponentCircle>("player",30);
-
+    player.addComponent<ColliderComponentCircle>("player",50);
     player.addGroup(Game::groupPlayers);
     timeElapsed = Timer();
     timeElapsed.start();
@@ -317,8 +317,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     TestCol.addComponent<TransformComponent>(1700,1500,100,200);
     TestCol.addComponent<ColliderComponent>("terrain");
-    TestCol.getComponent<ColliderComponent>().SetAngle(-135);
+    TestCol.getComponent<ColliderComponent>().SetAngle(135);
 
+    TestCircle.addComponent<TransformComponent>(1400,1500,200,200);
+    TestCircle.addComponent<ColliderComponentCircle>("circle",100);
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -697,13 +699,18 @@ void Game::update()
         //End
 
         //Test collision with rotated objects
-
-        /*if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
+/*
+        if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>() ,player.getComponent<ColliderComponent>()))
         {
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-        }*/
-
+        }
+*/
+        if (Collision::CollisionRectCircle(player.getComponent<ColliderComponent>(),TestCircle.getComponent<ColliderComponentCircle>()))
+        {
+            std::cout << "Player hit wall" << std::endl;
+            player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+        }
         if (Collision::CollisionRectCircle(TestCol.getComponent<ColliderComponent>(),player.getComponent<ColliderComponentCircle>()))
         {
             std::cout << "Player hit wall" << std::endl;
@@ -955,6 +962,8 @@ void Game::render()
         label.draw();
         //Test collider
         TestCol.draw();
+        //Test circle collider
+        TestCircle.draw();
 
     } else {
 

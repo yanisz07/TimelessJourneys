@@ -15,8 +15,7 @@ void ColliderComponentCircle::init()
         center.x = transform->position.x + radius;
         center.y = transform->position.y + radius;
     }
-    srcR = {0,0,800,800};
-    destR = {static_cast<int>(transform->position.x),static_cast<int>(transform->position.y),static_cast<int>(2*radius),static_cast<int>(2*radius)};
+    srcR = {0,0,560,560};
 }
 
 void ColliderComponentCircle::update()

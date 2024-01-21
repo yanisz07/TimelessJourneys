@@ -413,6 +413,108 @@ bool Collision::SAT(const SDL_Rect& recA, double angleA, const SDL_Rect& recB, d
     return false;
 }*/
 
+Vector2D Max(Vector2D p1, Vector2D p2)
+{
+    if (p1.x == 0 && p2.x == 0)
+    {
+        if(p1.y > p2.y)
+        {
+            return p1;
+        }
+        return p2;
+    }
+    if (p1.x > p2.x)
+    {
+        return p1;
+    }
+    return p2;
+}
+
+Vector2D Min(Vector2D p1, Vector2D p2)
+{
+    if (p1.x == 0 && p2.x == 0)
+    {
+        if(p1.y < p2.y)
+        {
+            return p1;
+        }
+        return p2;
+    }
+    if (p1.x < p2.x)
+    {
+        return p1;
+    }
+    return p2;
+}
+
+Vector2D Min(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
+{
+    Vector2D tmp = p1;
+    if (p1.x==0 && p2.x == 0 && p3.x == 0 && p4.x == 0)
+    {
+        if (p2.y < tmp.y)
+        {
+            tmp = p2;
+        }
+        if (p3.y < tmp.y)
+        {
+            tmp = p3;
+        }
+        if (p4.y < tmp.y)
+        {
+            tmp = p4;
+        }
+        return tmp;
+    }
+    if (p2.x < tmp.x)
+    {
+        tmp = p2;
+    }
+    if (p3.x < tmp.x)
+    {
+        tmp = p3;
+    }
+    if (p4.x < tmp.x)
+    {
+        tmp = p4;
+    }
+    return tmp;
+}
+
+Vector2D Max(Vector2D p1, Vector2D p2, Vector2D p3, Vector2D p4)
+{
+    Vector2D tmp = p1;
+    if (p1.x==0 && p2.x == 0 && p3.x == 0 && p4.x == 0)
+    {
+        if (p2.y > tmp.y)
+        {
+            tmp = p2;
+        }
+        if (p3.y > tmp.y)
+        {
+            tmp = p3;
+        }
+        if (p4.y > tmp.y)
+        {
+            tmp = p4;
+        }
+        return tmp;
+    }
+    if (p2.x > tmp.x)
+    {
+        tmp = p2;
+    }
+    if (p3.x > tmp.x)
+    {
+        tmp = p3;
+    }
+    if (p4.x > tmp.x)
+    {
+        tmp = p4;
+    }
+    return tmp;
+}
+
 bool Collision::CollisionRectCircle(const ColliderComponent &colA, const ColliderComponentCircle &cA)
 {
     SDL_Rect recA = colA.collider;
@@ -425,10 +527,18 @@ bool Collision::CollisionRectCircle(const ColliderComponent &colA, const Collide
 
     double r = cA.radius;
     Vector2D center = cA.center;
-
+    ///*
+    std::cout << "this is r" << std::endl;
     std::cout << r << std::endl;
     std::cout << center.x << " " << center.y << std::endl;
 
+    std::cout << "this is rect" << std::endl;
+    std::cout << UR_A.x << " " << UR_A.y << std::endl;
+    std::cout << UL_A.x << " " << UL_A.y << std::endl;
+    std::cout << LR_A.x << " " << LR_A.y << std::endl;
+    std::cout << LL_A.x << " " << LL_A.y << std::endl;
+    //*/
+    //*/
     //Axis 1
     Vector2D u1 = Vector2D(UR_A.x-UL_A.x,UR_A.y-UL_A.y);
 
@@ -437,31 +547,65 @@ bool Collision::CollisionRectCircle(const ColliderComponent &colA, const Collide
     Vector2D UR_A1 = Projection(UR_A,u1);
     Vector2D UL_A1 = Projection(UL_A,u1);
 
-    double Max_A1 = MaxPoint(UR_A1,UL_A1);
-    double Min_A1 = MinPoint(UR_A1,UL_A1);
+    Vector2D Max_A1 = Max(UR_A1,UL_A1);
+    Vector2D Min_A1 = Min(UR_A1,UL_A1);
 
-    double vc1;
-    if (center1.x == 0)
+    double dmin1 = std::sqrt(std::pow(Min_A1.x - center1.x, 2) + std::pow(Min_A1.y - center1.y, 2));
+    double dmax1 = std::sqrt(std::pow(Max_A1.x - center1.x, 2) + std::pow(Max_A1.y - center1.y, 2));
+    double d1;
+
+    if(dmin1 < dmax1)
     {
-        vc1 = center1.y;
+        d1 = dmin1;
     }
     else
     {
-        vc1 = center1.x;
+        d1 = dmax1;
     }
 
-    std::cout << vc1 << std::endl;
-    std::cout << Max_A1 << std::endl;
-    std::cout << Min_A1 << std::endl;
+    std::cout << Max_A1.x << " " << Max_A1.y << std::endl;
+    std::cout << Min_A1.x << " " << Min_A1.y << std::endl;
+    std::cout << center1.x << " " << center1.y << std::endl;
+    std::cout << "YAAAAAAAAA" << std::endl;
+    std::cout << d1 << std::endl;
+    std::cout << r << std::endl;
+    std::cout << "YAAAAAA" << std::endl;
 
-    if (vc1 > Max_A1 + r)
+    if (center1.x==0)
     {
-        return false;
+        if (center1.y < Min_A1.y)
+        {
+            if (d1>=r)
+            {
+                return false;
+            }
+        }
+        else if(center1.y > Max_A1.y)
+        {
+            if(d1>=r)
+            {
+                return false;
+            }
+        }
     }
-    if (vc1 < Min_A1 - r)
+    else
     {
-        return false;
+        if (center1.x < Min_A1.x)
+        {
+            if (d1>=r)
+            {
+                return false;
+            }
+        }
+        else if(center1.x > Max_A1.x)
+        {
+            if(d1>=r)
+            {
+                return false;
+            }
+        }
     }
+
     //Axis 2
     Vector2D u2 = Vector2D(UR_A.x-LR_A.x,UR_A.y-LR_A.y);
 
@@ -470,35 +614,68 @@ bool Collision::CollisionRectCircle(const ColliderComponent &colA, const Collide
     Vector2D UR_A2 = Projection(UR_A,u2);
     Vector2D LR_A2 = Projection(LR_A,u2);
 
-    double Max_A2 = MaxPoint(UR_A2,LR_A2);
-    double Min_A2 = MinPoint(UR_A2,LR_A2);
+    Vector2D Max_A2 = Max(UR_A2,LR_A2);
+    Vector2D Min_A2 = Min(UR_A2,LR_A2);
 
-    double vc2;
-    if (center2.x == 0)
+    double dmin2 = std::sqrt(std::pow(Min_A2.x - center2.x, 2) + std::pow(Min_A2.y - center2.y, 2));
+    double dmax2 = std::sqrt(std::pow(Max_A2.x - center2.x, 2) + std::pow(Max_A2.y - center2.y, 2));
+    double d2;
+
+    if(dmin2 < dmax2)
     {
-        vc2 = center2.y;
+        d2 = dmin2;
     }
     else
     {
-        vc2 = center2.x;
+        d2 = dmax2;
     }
 
-    std::cout << vc2 << std::endl;
-    std::cout << Max_A2 << std::endl;
-    std::cout << Min_A2 << std::endl;
+    std::cout << Max_A2.x << " " << Max_A2.y << std::endl;
+    std::cout << "YAAAAAAAAA" << std::endl;
+    std::cout << Min_A2.x << " " << Min_A2.y << std::endl;
+    std::cout << center2.x << " " << center2.y << std::endl;
+    std::cout << d2 << std::endl;
 
-    if (vc2 > Max_A2 + r)
+    if (center2.x==0)
     {
-        return false;
+        if (center2.y < Min_A2.y)
+        {
+            if (d2>=r)
+            {
+                return false;
+            }
+        }
+        else if(center2.y > Max_A2.y)
+        {
+            if(d2>=r)
+            {
+                return false;
+            }
+        }
     }
-    if (vc2 < Min_A2 - r)
+    else
     {
-        return false;
+        if (center2.x < Min_A2.x)
+        {
+            if (d2>=r)
+            {
+                return false;
+            }
+        }
+        else if(center2.x > Max_A2.x)
+        {
+            if(d2>=r)
+            {
+                return false;
+            }
+        }
     }
 
     //Axis3
     Vector2D closestvertex = ClosestVertex(UR_A,UL_A,LR_A,LL_A,cA);
-
+    ///*
+    std::cout << closestvertex.x << " " << closestvertex.y << std::endl;
+    //*/
     Vector2D u3 = Vector2D(closestvertex.x-center.x,closestvertex.y-center.y);
 
     Vector2D UR_A3 = Projection(UR_A,u3);
@@ -508,31 +685,57 @@ bool Collision::CollisionRectCircle(const ColliderComponent &colA, const Collide
 
     Vector2D center3 = Projection(center,u3);
 
-    double Min_A3 = MinPoint(UR_A3,UL_A3,LR_A3,LL_A3);
-    double Max_A3 = MaxPoint(UR_A3,UL_A3,LR_A3,LL_A3);
+    Vector2D Min_A3 = Min(UR_A3,UL_A3,LR_A3,LL_A3);
+    Vector2D Max_A3 = Max(UR_A3,UL_A3,LR_A3,LL_A3);
 
-    double vc3;
-    if (center3.x == 0)
+    double dmin3 = std::sqrt(std::pow(Min_A3.x - center3.x, 2) + std::pow(Min_A3.y - center3.y, 2));
+    double dmax3 = std::sqrt(std::pow(Max_A3.x - center3.x, 2) + std::pow(Max_A3.y - center3.y, 2));
+    double d3;
+
+    if(dmin3 < dmax3)
     {
-        vc3 = center3.y;
+        d3 = dmin3;
     }
     else
     {
-        vc3 = center3.x;
+        d3 = dmax3;
     }
 
-    std::cout << vc2 << std::endl;
-    std::cout << Max_A2 << std::endl;
-    std::cout << Min_A2 << std::endl;
+    if (center3.x==0)
+    {
+        if (center3.y < Min_A3.y)
+        {
+            if (d3>=r)
+            {
+                return false;
+            }
+        }
+        else if(center3.y > Max_A3.y)
+        {
+            if(d3>=r)
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        if (center3.x < Min_A3.x)
+        {
+            if (d3>=r)
+            {
+                return false;
+            }
+        }
+        else if(center3.x > Max_A3.x)
+        {
+            if(d3>=r)
+            {
+                return false;
+            }
+        }
+    }
 
-    if (vc3 > Max_A3 + r)
-    {
-        return false;
-    }
-    if (vc3 < Min_A3 - r)
-    {
-        return false;
-    }
     return true;
 }
 
