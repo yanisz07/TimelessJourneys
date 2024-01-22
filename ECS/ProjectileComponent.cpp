@@ -14,7 +14,6 @@ void ProjectileComponent::update()
 
     if(distance > range)
     {
-        std::cout << "destroyed out of range" << std::endl;
         entity->destroy();
     }
 }

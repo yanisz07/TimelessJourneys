@@ -28,11 +28,13 @@ void TextureManager::Draw(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_Ren
         // The rendering was successful
         // Add any additional code you want to execute on success
     } else {
+        /*
         // The rendering failed
         // Add error-handling code here
         const char* sdlError = SDL_GetError();
         // Print or handle the SDL error message as needed
         printf("SDL_RenderCopyEx failed: %s\n", sdlError);
+        */
     }
 
 }
