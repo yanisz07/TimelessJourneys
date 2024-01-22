@@ -1,10 +1,8 @@
 #include "chestScreen.hpp"
-#include "inventory.hpp"
-#include "items.hpp"
-#include "game.hpp"
+#include "../items.hpp"
+#include "../game.hpp"
 #include <algorithm>
 #include <iostream>
-using namespace std;
 
 
 
@@ -229,6 +227,11 @@ for(int i = 0;i<gridRows;i++)
 }
 std::cout << "Cannot add item, chest full" << std::endl;
 return 1;
+}
+
+void ChestScreen::draw()
+{
+    render(Game::renderer);
 }
 
 

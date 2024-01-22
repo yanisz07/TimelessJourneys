@@ -12,7 +12,7 @@ void KeyboardController::init()
 
 void KeyboardController::update()
 {
-    if(Game::inventory->get_visibility() or Game::chestScreen1->isCurrentlyVisible() or Game::chestScreen2->isCurrentlyVisible()) {
+    if(Game::inventory->get_visibility() or entity->manager.game->isChestOpen()) {
         transform->velocity.x = 0;
         transform->velocity.y = 0;
 
@@ -35,7 +35,7 @@ void KeyboardController::update()
 
     }
 
-    if(!Game::inventory->get_visibility() and !Game::chestScreen1->isCurrentlyVisible() and !Game::chestScreen2->isCurrentlyVisible())
+    if(!Game::inventory->get_visibility() and !(entity->manager.game->isChestOpen()))
     {
         if (Game::event.type == SDL_KEYDOWN)
         {

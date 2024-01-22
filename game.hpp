@@ -15,7 +15,7 @@
 #include <filesystem>
 #include "sdl_mixer.h"
 #include "items.hpp"
-#include "chestScreen.hpp"
+#include "ECS/chestScreen.hpp"
 #include "timer.hpp"
 
 extern std::filesystem::path projectDir;
@@ -49,6 +49,7 @@ public:
     //static void getWindowSize(int*w, int*h);
 
     bool is_running() {return isRunning;}
+    bool isChestOpen();
 
     static SDL_Renderer *renderer;
     static SDL_Event event;

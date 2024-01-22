@@ -19,5 +19,6 @@
 #include "range_weapon.hpp"
 #include "turretenemy.hpp"
 #include "collidercomponentcircle.hpp"
+#include "chestScreen.hpp"
 
 #endif // COMPONENTS_H

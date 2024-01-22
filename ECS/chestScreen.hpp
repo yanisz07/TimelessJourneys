@@ -8,11 +8,12 @@
 #include <map>
 #include <variant>
 #include "SDL.h"
-#include "inventory.hpp"
+#include "../inventory.hpp"
+#include "ECS.hpp"
 
 
 \
-class ChestScreen {
+class ChestScreen : public Component{
 public:
     ChestScreen();
     ~ChestScreen();
@@ -21,7 +22,8 @@ public:
     void hide();
     void toggle();
 
-    void init();
+    void init() override;
+    void draw() override;
 
     void moveItem();
     void moveSelection(int offset);

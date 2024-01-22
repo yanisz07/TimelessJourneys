@@ -91,6 +91,8 @@ Game::Game()
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
     isMusic = true; // music state, music on by default
 
+    Game::assets->manager->setGame(this);
+
 }
 
 Game::~Game()
@@ -258,6 +260,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest.getComponent<SpriteComponent>().setActions();
     chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
+    chest.addComponent<ChestScreen>();
     chest.addGroup(Game::groupChests);
 
     //create second chest
@@ -267,6 +270,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest2.getComponent<SpriteComponent>().setActions();
     chest2.addComponent<ColliderComponent>("chest");
     chest2.addComponent<InteractComponent>();
+    chest2.addComponent<ChestScreen>();
     chest2.addGroup(Game::groupChests);
 }
 
@@ -335,8 +339,6 @@ void Game::handleEvents()
             ChestScreen *chestScreen;
             for (auto& ch : chests)
             {
-            if (i == 1) {chestScreen = chestScreen1;}
-            else if (i == 2) {chestScreen = chestScreen2;}
             if (inventory->get_visibility() == false) {
                 InteractComponent& interact = ch->getComponent<InteractComponent>();
 
@@ -346,7 +348,7 @@ void Game::handleEvents()
                     std::cout << "Opened chest" << std::endl;
                     ch->getComponent<SpriteComponent>().Play("Active");
                     chest_open = true;
-                    chestScreen->toggle();
+                    ch->getComponent<ChestScreen>().toggle();
                     break;
                 }
                }
@@ -356,7 +358,7 @@ void Game::handleEvents()
                 chest_open = false;
                 std::cout << "Closed chest" << std::endl;
                 ch->getComponent<SpriteComponent>().Play("Inactive");
-                chestScreen->toggle();
+                ch->getComponent<ChestScreen>().toggle();
                 break;
                }
                }
@@ -389,33 +391,31 @@ void Game::handleEvents()
             }
             }
 
-            i = 0;
-            if (chestScreen1->isCurrentlyVisible()) {i = 1; chestScreen = chestScreen1;}
-            else if (chestScreen2->isCurrentlyVisible()) {i = 2; chestScreen = chestScreen2;}
-
-            if (i == 1 or i == 2) {
-            std::cout << "chest is " << i << std::endl;
-            switch (event.key.keysym.sym) {
-            case SDLK_UP:
+            for (auto& ch : chests)
+            {
+            if (ch->getComponent<ChestScreen>().isCurrentlyVisible()) {
+               std::cout << "chest is " << i << std::endl;
+               switch (event.key.keysym.sym) {
+               case SDLK_UP:
                std::cout << "going up" << std::endl;
-               chestScreen->moveSelection(-chestScreen->getTotalCols());
+               ch->getComponent<ChestScreen>().moveSelection(-(ch->getComponent<ChestScreen>().getTotalCols()));
                break;
-            case SDLK_DOWN:
-               chestScreen->moveSelection(chestScreen->getTotalCols());
+               case SDLK_DOWN:
+               ch->getComponent<ChestScreen>().moveSelection(ch->getComponent<ChestScreen>().getTotalCols());
                break;
-            case SDLK_LEFT:
-               chestScreen->moveSelection(-1);
+               case SDLK_LEFT:
+               ch->getComponent<ChestScreen>().moveSelection(-1);
                break;
-            case SDLK_RIGHT:
-               chestScreen->moveSelection(1);
+               case SDLK_RIGHT:
+               ch->getComponent<ChestScreen>().moveSelection(1);
                break;
-            case SDLK_m:
+               case SDLK_m:
                //move object
-               chestScreen->moveItem();
+               ch->getComponent<ChestScreen>().moveItem();
                break;
+               }
             }
             }
-
             break;
         }
 
@@ -980,9 +980,9 @@ void Game::render()
         // Render all regular game objects when not in map view
         for (auto& t : tiles) { t->draw(); }
         for (auto& c : MapColliders) { c->draw(); }
-        for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
         for (auto& ch: chests) { ch->draw(); }
+        for (auto& p : players) { p->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
         for (auto& p : PlayerAttacks) {p->draw();}
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
@@ -1158,6 +1158,8 @@ void Game::loadLvl2()
     delete map;
     for (auto& t : tiles) { t->destroy(); }
     for (auto& c : MapColliders) { c->destroy(); }
+    for (auto& e : enemies) { e->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
 
     manager.refresh();
 
@@ -1166,6 +1168,66 @@ void Game::loadLvl2()
     map = new Map("terrain2",4,32,&manager);
     map->LoadMap2(mapPath.c_str(),25,20);
 
+
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+    auto& enemy4(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy4.addComponent<TransformComponent>(1000,1000,128,128,1);
+    enemy4.addComponent<SpriteComponent>(true, "enemy");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupEnemies);
+
+}
+
+bool Game::isChestOpen()
+{
+    for (auto& ch : chests)
+    {
+        if(ch->getComponent<ChestScreen>().isCurrentlyVisible())
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 
