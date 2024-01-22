@@ -17,3 +17,7 @@ During this week I first fixed what I did in week 3 and made it so that the play
 <br>
 Week 5: <br>
 Created an item file that is meant to display the items in the inventory. Changed a few functions in the inventory files, added an asset, then I got to a point where it displayed the "Hand" text on the first slot, but more will be done next week in order to complete this feature.
+<br>
+<br>
+Week 6: <br>
+During this week I kept my focus on the Items_fix branch, remake of items functionality, and changed a lot of functions and added the class Items, the subclasses Armor, Melee and RangedWeapon. After that, I attempted to adapt it to the currently working inventory, then after a significant step I was able to merge develop (current best branch) into the items_fix branch. We decided to again change some functionalities but overall the structure stayed the same. 
