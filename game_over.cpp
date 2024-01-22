@@ -22,7 +22,7 @@ void Game_Over::renderGameOver(SDL_Renderer* renderer, bool isGameOverOpen, cons
         int centerY = (screenHeight -  5 * buttonHeight - 20) / 2 + 100;
 
         // Background
-        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "game_over_screen.png").string();
+        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets"/ "displayAssets" / "game_over_screen.png").string();
         SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, backgroundPath.c_str());
         SDL_Rect backgroundRect = {0, 0, screenWidth, screenHeight};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect);
