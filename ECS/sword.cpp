@@ -1,4 +1,4 @@
-#include "sword.h""
+#include "sword.hpp""
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"

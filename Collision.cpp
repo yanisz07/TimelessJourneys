@@ -1,6 +1,6 @@
 #include "Collision.hpp"
 #include "ECS/ColliderComponent.hpp"
-#include "ECS/collidercomponentcircle.h"
+#include "ECS/collidercomponentcircle.hpp"
 #include <iostream>
 #include <cmath>
 

@@ -8,7 +8,7 @@
 #include <map>
 #include <variant>
 #include "SDL.h"
-#include "inventory.h"
+#include "inventory.hpp"
 
 
 \

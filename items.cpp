@@ -1,4 +1,4 @@
-#include "items.h"
+#include "items.hpp"
 #include "TextureManager.hpp"
 
 Item::Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName)

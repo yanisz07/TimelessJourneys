@@ -1,4 +1,4 @@
-#include "range_weapon.h"
+#include "range_weapon.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"

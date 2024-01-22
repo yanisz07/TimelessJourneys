@@ -1,4 +1,4 @@
-#include "setting.h"
+#include "setting.hpp"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>

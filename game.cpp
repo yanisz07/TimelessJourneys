@@ -7,8 +7,8 @@
 #include "Vector2D.hpp"
 #include "Collision.hpp"
 #include "AssetManager.hpp"
-#include "setting.h"
-#include "ingame_menu.h"
+#include "setting.hpp"
+#include "ingame_menu.hpp"
 #ifdef __APPLE__
 #include <CoreGraphics/CGDirectDisplay.h>
 #endif
@@ -20,7 +20,7 @@
 #include <filesystem>
 #include <fstream>
 #include "world.hpp"
-#include "inventory.h"
+#include "inventory.hpp"
 
 Map* map;
 Manager manager;

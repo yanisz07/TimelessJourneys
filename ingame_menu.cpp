@@ -1,4 +1,4 @@
-#include "ingame_menu.h"
+#include "ingame_menu.hpp"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>

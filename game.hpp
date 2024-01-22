@@ -9,13 +9,13 @@
 #include "string"
 #include "charconv"
 #include "vector"
-#include "menu.h"
-#include "rule.h"
+#include "menu.hpp"
+#include "rule.hpp"
 #include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
-#include "items.h"
-#include "chestScreen.h"
+#include "items.hpp"
+#include "chestScreen.hpp"
 #include "timer.hpp"
 
 extern std::filesystem::path projectDir;

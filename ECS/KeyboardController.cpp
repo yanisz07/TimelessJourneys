@@ -1,7 +1,7 @@
 #include "KeyboardController.hpp"
 #include "../game.hpp"
-#include "sword.h"
-#include "range_weapon.h"
+#include "sword.hpp"
+#include "range_weapon.hpp"
 
 void KeyboardController::init()
 {

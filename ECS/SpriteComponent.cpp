@@ -1,5 +1,5 @@
 #include "SpriteComponent.hpp"
-#include "armor.h""
+#include "armor.hpp""
 
 SpriteComponent::SpriteComponent(std::string id)
 {

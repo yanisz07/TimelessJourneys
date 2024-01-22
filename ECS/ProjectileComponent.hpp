@@ -2,8 +2,9 @@
 #define PROJECTILE_H
 
 #include "ECS.hpp"
-#include "Components.hpp"
+// #include "Components.hpp"
 #include "../Vector2D.hpp"
+#include "TransformComponent.hpp"
 
 class Stats;
 
