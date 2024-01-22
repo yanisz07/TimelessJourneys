@@ -420,7 +420,7 @@
         "sprites" : [
            {
             "name" : "chest_closed_sprite",
-            "path" : "/assets/chest_01_closed.png",
+            "path" : "/assets/propAssets/chest_01_closed.png",
             "actions": [
                 {
                 "name" : "Inactive",
@@ -433,7 +433,7 @@
           },
             {
             "name": "chest_open_sprite",
-            "path":"/assets/chest_01_open.png",
+            "path":"/assets/propAssets/chest_01_open.png",
             "actions":[
                 {
                 "name":"Active",
