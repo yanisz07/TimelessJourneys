@@ -1,6 +1,6 @@
-#include "chestScreen.h"
-#include "inventory.h"
-#include "items.h"
+#include "chestScreen.hpp"
+#include "inventory.hpp"
+#include "items.hpp"
 #include "game.hpp"
 #include <algorithm>
 #include <iostream>

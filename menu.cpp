@@ -1,4 +1,4 @@
-#include "menu.h"
+#include "menu.hpp"
 #include "AssetManager.hpp"
 #include "game.hpp"
 #include <SDL_ttf.h>

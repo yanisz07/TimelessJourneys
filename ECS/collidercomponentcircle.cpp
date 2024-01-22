@@ -1,4 +1,4 @@
-#include "collidercomponentcircle.h"
+#include "collidercomponentcircle.hpp"
 
 ColliderComponentCircle::ColliderComponentCircle(std::string t, double r)
 {

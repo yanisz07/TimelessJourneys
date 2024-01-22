@@ -1,6 +1,6 @@
 #include "TransformComponent.hpp"
-#include "sword.h"
-#include "range_weapon.h"
+#include "sword.hpp"
+#include "range_weapon.hpp"
 #include "math.h"
 
 void TransformComponent::update()

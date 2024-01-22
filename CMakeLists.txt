@@ -45,7 +45,7 @@ set(SOURCES
     gameobject.hpp gameobject.cpp
     map.hpp
     map.cpp
-    setting.cpp setting.h
+    setting.cpp setting.hpp
     ECS/ECS.hpp
     ECS/Components.hpp
     ECS/SpriteComponent.hpp
@@ -59,7 +59,7 @@ set(SOURCES
     ECS/TileComponent.hpp
     ECS/ECS.cpp
     ECS/Animation.hpp
-    items.h
+    items.hpp
     items.cpp
     AssetManager.hpp
     AssetManager.cpp
@@ -69,35 +69,35 @@ set(SOURCES
     ECS/Stats.cpp
     json.hpp
     timer.hpp
-    rule.cpp rule.h
+    rule.cpp rule.hpp
     world.hpp world.cpp
-    menu.h
+    menu.hpp
     menu.cpp
-    ECS/sword.h
+    ECS/sword.hpp
     game_over.cpp
     game_over.hpp
     ingame_menu.cpp
-    ingame_menu.h
-    ECS/EnemyMovement.h
+    ingame_menu.hpp
+    ECS/EnemyMovement.hpp
     ECS/Animation.cpp
     ECS/ColliderComponent.cpp
     ECS/KeyboardController.cpp
     ECS/ProjectileComponent.cpp
     ECS/SpriteComponent.cpp
     ECS/EnemyMovement.cpp
-    ECS/armor.h ECS/armor.cpp
+    ECS/armor.hpp ECS/armor.cpp
     ECS/sword.cpp
-    ECS/range_weapon.h ECS/range_weapon.cpp
+    ECS/range_weapon.hpp ECS/range_weapon.cpp
     ECS/TransformComponent.cpp)
 
 add_executable(TimelessJourneys ${SOURCES}
     inventory.cpp
-    inventory.h
-    ECS/InteractComponent.h
+    inventory.hpp
+    ECS/InteractComponent.hpp
     chestScreen.cpp
-    chestScreen.h
-    ECS/turretenemy.h ECS/turretenemy.cpp
-    ECS/collidercomponentcircle.h ECS/collidercomponentcircle.cpp)
+    chestScreen.hpp
+    ECS/turretenemy.hpp ECS/turretenemy.cpp
+    ECS/collidercomponentcircle.hpp ECS/collidercomponentcircle.cpp)
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )
