@@ -104,6 +104,7 @@ private:
     std::string worldPath;
     std::string musicPath;
     void spawnEnemiesLvl1();
+    void loadLvl2();
 
 };
 

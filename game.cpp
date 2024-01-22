@@ -191,6 +191,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     loadSetUpJSON(setUpPath);
 
+
     //Create player and enemy
     {
     player.setType("player");
@@ -325,6 +326,9 @@ void Game::handleEvents()
             if (chest_open == false) {
             inventory->toggle();  // Toggle the inventory screen
             }
+            break;
+        case SDLK_c:
+            loadLvl2();
             break;
         case SDLK_RETURN:
             i = 1;
@@ -1147,6 +1151,21 @@ void Game::spawnEnemiesLvl1()
     enemy3.addComponent<Stats>();
     enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
     enemy3.addGroup(Game::groupEnemies);
+}
+
+void Game::loadLvl2()
+{
+    delete map;
+    for (auto& t : tiles) { t->destroy(); }
+    for (auto& c : MapColliders) { c->destroy(); }
+
+    manager.refresh();
+
+    assets->AddTexture("terrain2", "/assets/map/tileset-terrain.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map2.map").string();
+    map = new Map("terrain2",4,32,&manager);
+    map->LoadMap2(mapPath.c_str(),25,20);
+
 }
 
 
