@@ -163,8 +163,6 @@ void Map::LoadMap3(std::string path, int sizeX, int sizeY)
                 {
                     srcY = k3/15 * tileSize;
                     srcX = k3%15 * tileSize;
-                    std::cout << srcY << std::endl;
-                    std::cout << srcX << std::endl;
                     AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
                 }
             }
@@ -173,12 +171,8 @@ void Map::LoadMap3(std::string path, int sizeX, int sizeY)
                 k1 = c1 - '0';
                 k2 = c2 - '0';
                 k3 = k1*10+k2;
-                std::cout << c1 << " " << c2 << std::endl;
-                std::cout << k3 << std::endl;
                 srcY = k3/15 * tileSize;
                 srcX = k3%15 * tileSize;
-                std::cout << srcY << std::endl;
-                std::cout << srcX << std::endl;
                 AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
                 mapFile.ignore(); //","
             }
@@ -201,8 +195,6 @@ void Map::LoadMap3(std::string path, int sizeX, int sizeY)
                 {
                     srcY = k3/15 * tileSize;
                     srcX = k3%15 * tileSize;
-                    std::cout << srcY << std::endl;
-                    std::cout << srcX << std::endl;
                     AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
                 }
             }
@@ -211,12 +203,8 @@ void Map::LoadMap3(std::string path, int sizeX, int sizeY)
                 k1 = c1 - '0';
                 k2 = c2 - '0';
                 k3 = k1*10+k2;
-                std::cout << c1 << " " << c2 << std::endl;
-                std::cout << k3 << std::endl;
                 srcY = k3/15 * tileSize;
                 srcX = k3%15 * tileSize;
-                std::cout << srcY << std::endl;
-                std::cout << srcX << std::endl;
                 AddTile(srcX, srcY, x* scaledSize, y* scaledSize);
                 mapFile.ignore(); //","
             }

@@ -332,7 +332,21 @@ void Game::handleEvents()
             }
             break;
         case SDLK_c:
-            loadLvl3();
+            if (level == "lvl1")
+            {
+                loadLvl3();
+                level = "lvl3";
+            }
+            else if (level == "lvl3")
+            {
+                loadLvl2();
+                level = "lvl2";
+            }
+            else if (level == "lvl2")
+            {
+                loadLvl1();
+                level= "lvl1";
+            }
             break;
         case SDLK_RETURN:
             i = 1;
@@ -1158,7 +1172,7 @@ void Game::spawnEnemiesLvl1()
     enemy3.addGroup(Game::groupEnemies);
 }
 
-void Game::loadLvl2()
+void Game::loadLvl1()
 {
     delete map;
     for (auto& t : tiles) { t->destroy(); }
@@ -1168,9 +1182,9 @@ void Game::loadLvl2()
 
     manager.refresh();
 
-    assets->AddTexture("terrain2", "/assets/map/tileset-terrain.png");
-    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map2.map").string();
-    map = new Map("terrain2",4,32,&manager);
+    assets->AddTexture("terrain1", "/assets/terrainAssets/terrain_ss.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "map.map").string();
+    map = new Map("terrain1",4,32,&manager);
     map->LoadMap2(mapPath.c_str(),25,20);
 
 
@@ -1220,6 +1234,75 @@ void Game::loadLvl2()
     enemy4.addComponent<Stats>();
     enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
     enemy4.addGroup(Game::groupEnemies);
+
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
+}
+
+void Game::loadLvl2()
+{
+    delete map;
+    for (auto& t : tiles) { t->destroy(); }
+    for (auto& c : MapColliders) { c->destroy(); }
+    for (auto& e : enemies) { e->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
+    manager.refresh();
+
+    assets->AddTexture("terrain2", "/assets/map/tileset-terrain.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map2.map").string();
+    map = new Map("terrain2",4,32,&manager);
+    map->LoadMap2(mapPath.c_str(),25,20);
+
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+    auto& enemy4(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy4.addComponent<TransformComponent>(1000,1000,128,128,1);
+    enemy4.addComponent<SpriteComponent>(true, "enemy");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupEnemies);
+
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
 }
 
 void Game::loadLvl3()
@@ -1236,7 +1319,6 @@ void Game::loadLvl3()
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
     map = new Map("terrain3",4,32,&manager);
     map->LoadMap3(mapPath.c_str(),50,40);
-
 
     auto& enemy(manager.addEntity());
     auto& enemy2(manager.addEntity());
