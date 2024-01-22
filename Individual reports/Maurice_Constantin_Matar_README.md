@@ -12,3 +12,6 @@ This week, I looked into how to implement textures inside the game, as well as o
 
 Week 5 Summary: 
 This week, I started working on the developement of items, specifically on how to link them to the already developped inventory. The item I'm developping is a sword, an item in the class of melee items.
+
+Week 6 Summary: 
+This week, I continued working on the developpement of items. Moreover, I was able to make appear an icon in the inventory. 
