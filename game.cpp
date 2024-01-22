@@ -296,8 +296,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //create turret enemy
 
     enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
-    enemy3.addComponent<SpriteComponent>(true, "enemy");
-    enemy3.getComponent<SpriteComponent>().setActions();
     enemy3.addComponent<ColliderComponent>("enemy");
     enemy3.addComponent<Stats>();
     enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());

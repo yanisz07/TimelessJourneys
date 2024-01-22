@@ -7,6 +7,7 @@
 #include "../Vector2D.hpp"
 #include <string.h>
 #include <SDL.h>
+#include "../game.hpp"
 
 //forward declaration
 class TransformComponent;
@@ -23,6 +24,8 @@ public:
 
     void update() override;
 
+    void draw() override;
+
     void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
 
 private:
@@ -34,7 +37,13 @@ private:
     int damage;
     Vector2D direction;
     Timer timer;
+    Timer timer1;
     Uint32 reloadTime;
+
+    SDL_Texture* tex1;
+    Animation animation1 = Animation(70,76,0,4,100,"Turret");
+    SDL_Rect srcR1, destR1;
+    SDL_Texture* tex2;
 };
 
 #endif // TURRETENEMY_H
