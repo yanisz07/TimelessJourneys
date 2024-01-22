@@ -103,6 +103,7 @@ private:
     std::string itemsPath;
     std::string worldPath;
     std::string musicPath;
+    void spawnEnemiesLvl1();
 
 };
 

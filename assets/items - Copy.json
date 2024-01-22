@@ -4,11 +4,11 @@
             "name": "silver_sword",
             "type": "Melee",
             "location" : "any",
-            "spritePath":"/assets/sword.png",
+            "spritePath":"/assets/weaponAssets/sword.png",
             "sprites": [
                 {
                     "name": "Silver_Sword_Sprite",
-                    "path": "/assets/sword.png",
+                    "path": "/assets/weaponAssets/sword.png",
                     "actions": [
                         {
                             "name": "Idle",

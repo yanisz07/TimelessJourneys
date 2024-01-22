@@ -37,10 +37,6 @@ Inventory* Game::inventory = new Inventory();
 ChestScreen* Game::chestScreen1 = new ChestScreen();
 ChestScreen* Game::chestScreen2 = new ChestScreen();
 
-
-
-
-
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
 
@@ -57,11 +53,11 @@ int Game::windowSize_y = 100;
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
-auto& enemy(manager.addEntity());
+//auto& enemy(manager.addEntity());
 //test second enemy
-auto& enemy2(manager.addEntity());
+//auto& enemy2(manager.addEntity());
 //test turret enemy
-auto& enemy3(manager.addEntity());
+//auto& enemy3(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
 auto& chest2(manager.addEntity());
@@ -172,56 +168,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     {
         std::cout << "Error : SDL_TTF" << std::endl;
     }
-    }
-
-    //Load game assets
-    {
-
-
-
-
-    //Load JSON data
-    //std::string path = "";
-    //std::string root2 = ROOT_DIR;
-    //path += root2;
-    //path += "/assets/World_1.json";
-    //assets->loadWorld(path);
-    //std::cout << "Character textures added" << std::endl;
-    //End
-
-    //Textures, map and fonts
-
-    //assets->AddTexture("terrain" , "/assets/terrain_ss.png");
-    //assets->AddTexture("projectile", "/assets/enemy_arrow.png");
-    //assets->AddTexture("arrow", "/assets/arrow.png");
-    //assets->AddTexture("enemy_arrow", "/assets/enemy_arrow.png");
-
-    //assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
-    //assets->AddTexture("Hourglass", "/assets/Hourglass.png");
-    //assets->AddTexture("Oval", "/assets/Oval.png");
-
-
-    //assets->AddTexture("chest", "/assets/chest_01.png");
-
-    //std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
-    //std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
-    //std::string jsonPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items - Copy.json").string();
-
-    //assets->AddFont("arial", fontPath.c_str(),16);
-
-    map = new Map("terrain", 4, 32, &manager);
-
-    //ecs implementation
-
-    //map->LoadMap(mapPath.c_str(), 25, 20);
-
-    Game::inventory->init();
-    //Game::inventory->loadFromJSON(itemsPath);
-    Game::chestScreen1->init();
-    Game::chestScreen2->init();
-    }
-
-    //Handle the music
 
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
@@ -230,18 +176,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     if (!(Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3)) {
         std::cerr << "Mix_Init failed: " << Mix_GetError() << std::endl;
     }
-     Mix_AllocateChannels(2);
-    //std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
-    //std::cout << "Trying to load music from: " << MusicPath << std::endl;
-    //bgMusic = Mix_LoadMUS(MusicPath.c_str());
-    //if (!bgMusic) {
-    //    std::cerr << "Failed to load background music from " << MusicPath << "! SDL_mixer Error: " << Mix_GetError() << std::endl;
-    //    // Handle the error, maybe exit or provide a notification
-    //} else {
-    //    if (Mix_PlayMusic(bgMusic, -1) == -1) {
-     //       std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
-    //    }
-   // }
+    Mix_AllocateChannels(2);
+
+    }
+
+
+    map = new Map("terrain", 4, 32, &manager);
+    Game::inventory->init();
+    Game::chestScreen1->init();
+    Game::chestScreen2->init();
+
+
     std::string setUpPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "World_1_setup.json").string();
 
     loadSetUpJSON(setUpPath);
@@ -266,7 +211,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Player created" << std::endl;
 
-    //Enemy base definition
+    //Create enemies
+    spawnEnemiesLvl1();
+
+    /*//Enemy base definition
 
     enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
@@ -300,7 +248,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy3.addComponent<ColliderComponent>("enemy");
     enemy3.addComponent<Stats>();
     enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
-    enemy3.addGroup(Game::groupEnemies);
+    enemy3.addGroup(Game::groupEnemies);*/
 
     //create first chest
 
@@ -1098,7 +1046,7 @@ void Game::render()
     SDL_Colour color = {0,0,0,255};
     if(minutes < 1)
     {
-       color = {200,0,0,255};
+       color = {0,200,0,255};
     }
     SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
     timeLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
@@ -1146,6 +1094,7 @@ void Game::loadSetUpJSON(std::string path)
     assets->loadWorld(worldPath);
     assets->AddFont("arial",fontPath.c_str(),16);
     map->LoadMap(mapPath.c_str(),25,20);
+    Game::inventory->loadFromJSON(itemsPath);
 
 
     std::cout << "Trying to load music from: " << musicPath << std::endl;
@@ -1160,6 +1109,46 @@ void Game::loadSetUpJSON(std::string path)
     }
 
 }
+
+void Game::spawnEnemiesLvl1()
+{
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+}
+
 
 void Game::clean()
 {
