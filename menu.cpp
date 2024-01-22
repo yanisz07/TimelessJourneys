@@ -1,4 +1,6 @@
 #include "menu.h"
+#include "AssetManager.hpp"
+#include "game.hpp"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>
@@ -26,7 +28,7 @@ void Menu::renderMenu(SDL_Renderer* renderer, bool isMenuOpen, const SDL_Point& 
         int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
 
         // Background
-        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "background_sample1.png").string();
+        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" /"displayAssets"/ "background_sample1.png").string();
         SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, backgroundPath.c_str());
         SDL_Rect backgroundRect = {0, 0, screenWidth, screenHeight};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect);

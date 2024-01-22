@@ -45,6 +45,7 @@ public:
     void clean();
     void toggleMenu();
     void toggleFullScreen();
+    void loadSetUpJSON(std::string path);
     //static void getWindowSize(int*w, int*h);
 
     bool is_running() {return isRunning;}
@@ -97,6 +98,12 @@ private:
     SDL_Rect exitButtonRect;
     Timer timeElapsed;
     SDL_Texture* timeLabel;
+    std::string mapPath;
+    std::string fontPath;
+    std::string itemsPath;
+    std::string worldPath;
+    std::string musicPath;
+
 };
 
 #endif // GAME_H

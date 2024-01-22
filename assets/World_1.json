@@ -5,7 +5,7 @@
         "sprites": [
           {
             "name" : "Player_Sprite_Idle_Down",
-            "path": "/assets/player_game_idle_down.png",
+            "path": "/assets/playerAssets/player_game_idle_down.png",
             "actions": [
               {
                 "name": "Idle_Down",
@@ -18,7 +18,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_Right",
-            "path" : "/assets/player_game_idle_right.png",
+            "path" : "/assets/playerAssets/player_game_idle_right.png",
             "actions": [
               {
                 "name": "Idle_Right",
@@ -32,7 +32,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_Up",
-            "path" : "/assets/player_game_idle_up.png",
+            "path" : "/assets/playerAssets/player_game_idle_up.png",
             "actions": [
               {
                 "name": "Idle_Up",
@@ -46,7 +46,7 @@
           },
           {
             "name" : "Player_Sprite_Run_Down",
-            "path": "/assets/player_game_run_down.png",
+            "path": "/assets/playerAssets/player_game_run_down.png",
             "actions": [
               {
                 "name": "Run_Down",
@@ -59,7 +59,7 @@
           },
           {
             "name" : "Player_Sprite_Run_Right",
-            "path" : "/assets/player_game_run_right.png",
+            "path" : "/assets/playerAssets/player_game_run_right.png",
             "actions": [
               {
                 "name": "Run_Right",
@@ -72,7 +72,7 @@
           },
           {
             "name" : "Player_Sprite_Run_Up",
-            "path": "/assets/player_game_run_up.png",
+            "path": "/assets/playerAssets/player_game_run_up.png",
             "actions": [
               {
                 "name": "Run_Up",
@@ -85,7 +85,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_DownSilver",
-            "path": "/assets/player_game_idle_downSilver.png",
+            "path": "/assets/playerAssets/player_game_idle_downSilver.png",
             "actions": [
               {
                 "name": "Idle_DownSilver",
@@ -98,7 +98,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_RightSilver",
-            "path" : "/assets/player_game_idle_rightSilver.png",
+            "path" : "/assets/playerAssets/player_game_idle_rightSilver.png",
             "actions": [
               {
                 "name": "Idle_RightSilver",
@@ -112,7 +112,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_UpSilver",
-            "path" : "/assets/player_game_idle_upSilver.png",
+            "path" : "/assets/playerAssets/player_game_idle_upSilver.png",
             "actions": [
               {
                 "name": "Idle_UpSilver",
@@ -126,7 +126,7 @@
           },
           {
             "name" : "Player_Sprite_Run_DownSilver",
-            "path": "/assets/player_game_run_downSilver.png",
+            "path": "/assets/playerAssets/player_game_run_downSilver.png",
             "actions": [
               {
                 "name": "Run_DownSilver",
@@ -139,7 +139,7 @@
           },
           {
             "name" : "Player_Sprite_Run_RightSilver",
-            "path" : "/assets/player_game_run_rightSilver.png",
+            "path" : "/assets/playerAssets/player_game_run_rightSilver.png",
             "actions": [
               {
                 "name": "Run_RightSilver",
@@ -152,7 +152,7 @@
           },
           {
             "name" : "Player_Sprite_Run_UpSilver",
-            "path": "/assets/player_game_run_upSilver.png",
+            "path": "/assets/playerAssets/player_game_run_upSilver.png",
             "actions": [
               {
                 "name": "Run_UpSilver",
@@ -165,7 +165,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_DownGold",
-            "path": "/assets/player_game_idle_downGold.png",
+            "path": "/assets/playerAssets/player_game_idle_downGold.png",
             "actions": [
               {
                 "name": "Idle_DownGold",
@@ -178,7 +178,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_RightGold",
-            "path" : "/assets/player_game_idle_rightGold.png",
+            "path" : "/assets/playerAssets/player_game_idle_rightGold.png",
             "actions": [
               {
                 "name": "Idle_RightGold",
@@ -192,7 +192,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_UpGold",
-            "path" : "/assets/player_game_idle_upGold.png",
+            "path" : "/assets/playerAssets/player_game_idle_upGold.png",
             "actions": [
               {
                 "name": "Idle_UpGold",
@@ -206,7 +206,7 @@
           },
           {
             "name" : "Player_Sprite_Run_DownGold",
-            "path": "/assets/player_game_run_downGold.png",
+            "path": "/assets/playerAssets/player_game_run_downGold.png",
             "actions": [
               {
                 "name": "Run_DownGold",
@@ -219,7 +219,7 @@
           },
           {
             "name" : "Player_Sprite_Run_RightGold",
-            "path" : "/assets/player_game_run_rightGold.png",
+            "path" : "/assets/playerAssets/player_game_run_rightGold.png",
             "actions": [
               {
                 "name": "Run_RightGold",
@@ -232,7 +232,7 @@
           },
           {
             "name" : "Player_Sprite_Run_UpGold",
-            "path": "/assets/player_game_run_upGold.png",
+            "path": "/assets/playerAssets/player_game_run_upGold.png",
             "actions": [
               {
                 "name": "Run_UpGold",
@@ -245,7 +245,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_DownDiamond",
-            "path": "/assets/player_game_idle_downDiamond.png",
+            "path": "/assets/playerAssets/player_game_idle_downDiamond.png",
             "actions": [
               {
                 "name": "Idle_DownDiamond",
@@ -258,7 +258,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_RightDiamond",
-            "path" : "/assets/player_game_idle_rightDiamond.png",
+            "path" : "/assets/playerAssets/player_game_idle_rightDiamond.png",
             "actions": [
               {
                 "name": "Idle_RightDiamond",
@@ -272,7 +272,7 @@
           },
           {
             "name" : "Player_Sprite_Idle_UpDiamond",
-            "path" : "/assets/player_game_idle_upDiamond.png",
+            "path" : "/assets/playerAssets/player_game_idle_upDiamond.png",
             "actions": [
               {
                 "name": "Idle_UpDiamond",
@@ -286,7 +286,7 @@
           },
           {
             "name" : "Player_Sprite_Run_DownDiamond",
-            "path": "/assets/player_game_run_downDiamond.png",
+            "path": "/assets/playerAssets/player_game_run_downDiamond.png",
             "actions": [
               {
                 "name": "Run_DownDiamond",
@@ -299,7 +299,7 @@
           },
           {
             "name" : "Player_Sprite_Run_RightDiamond",
-            "path" : "/assets/player_game_run_rightDiamond.png",
+            "path" : "/assets/playerAssets/player_game_run_rightDiamond.png",
             "actions": [
               {
                 "name": "Run_RightDiamond",
@@ -312,7 +312,7 @@
           },
           {
             "name" : "Player_Sprite_Run_UpDiamond",
-            "path": "/assets/player_game_run_upDiamond.png",
+            "path": "/assets/playerAssets/player_game_run_upDiamond.png",
             "actions": [
               {
                 "name": "Run_UpDiamond",
@@ -330,7 +330,7 @@
             "sprites" : [
           {
             "name" : "Player_Sprite_Attack_Down",
-            "path": "/assets/player_game_attack_down.png",
+            "path": "/assets/playerAssets/player_game_attack_down.png",
             "actions": [
               {
                 "name": "Attack_Down",
@@ -343,7 +343,7 @@
           },
           {
             "name" : "Player_Sprite_Attack_Right",
-            "path": "/assets/player_game_attack_right.png",
+            "path": "/assets/playerAssets/player_game_attack_right.png",
             "actions": [
               {
                 "name": "Attack_Right",
@@ -356,7 +356,7 @@
           },
           {
             "name" : "Player_Sprite_Attack_Up",
-            "path": "/assets/player_game_attack_up.png",
+            "path": "/assets/playerAssets/player_game_attack_up.png",
             "actions": [
               {
                 "name": "Attack_Up",

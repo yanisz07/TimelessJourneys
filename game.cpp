@@ -176,43 +176,47 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Load game assets
     {
-    assets->AddTexture("terrain" , "/assets/terrain_ss.png");
-    assets->AddTexture("projectile", "/assets/enemy_arrow.png");
+
+
+
 
     //Load JSON data
-    std::string path = "";
-    std::string root2 = ROOT_DIR;
-    path += root2;
-    path += "/assets/World_1.json";
-    assets->loadWorld(path);
-    std::cout << "Character textures added" << std::endl;
+    //std::string path = "";
+    //std::string root2 = ROOT_DIR;
+    //path += root2;
+    //path += "/assets/World_1.json";
+    //assets->loadWorld(path);
+    //std::cout << "Character textures added" << std::endl;
     //End
 
     //Textures, map and fonts
 
-    assets->AddTexture("arrow", "/assets/arrow.png");
-    assets->AddTexture("enemy_arrow", "/assets/enemy_arrow.png");
+    //assets->AddTexture("terrain" , "/assets/terrain_ss.png");
+    //assets->AddTexture("projectile", "/assets/enemy_arrow.png");
+    //assets->AddTexture("arrow", "/assets/arrow.png");
+    //assets->AddTexture("enemy_arrow", "/assets/enemy_arrow.png");
 
-    assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
-    assets->AddTexture("Hourglass", "/assets/Hourglass.png");
-    assets->AddTexture("Oval", "/assets/Oval.png");
+    //assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
+    //assets->AddTexture("Hourglass", "/assets/Hourglass.png");
+    //assets->AddTexture("Oval", "/assets/Oval.png");
 
 
     //assets->AddTexture("chest", "/assets/chest_01.png");
 
-    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
-    std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
-    std::string jsonPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items - Copy.json").string();
-    assets->AddFont("arial", fontPath.c_str(),16);
+    //std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
+    //std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
+    //std::string jsonPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items - Copy.json").string();
+
+    //assets->AddFont("arial", fontPath.c_str(),16);
 
     map = new Map("terrain", 4, 32, &manager);
 
     //ecs implementation
 
-    map->LoadMap(mapPath.c_str(), 25, 20);
+    //map->LoadMap(mapPath.c_str(), 25, 20);
 
     Game::inventory->init();
-    Game::inventory->loadFromJSON(jsonPath);
+    //Game::inventory->loadFromJSON(itemsPath);
     Game::chestScreen1->init();
     Game::chestScreen2->init();
     }
@@ -227,17 +231,20 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         std::cerr << "Mix_Init failed: " << Mix_GetError() << std::endl;
     }
      Mix_AllocateChannels(2);
-    std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
-    std::cout << "Trying to load music from: " << MusicPath << std::endl;
-    bgMusic = Mix_LoadMUS(MusicPath.c_str());
-    if (!bgMusic) {
-        std::cerr << "Failed to load background music from " << MusicPath << "! SDL_mixer Error: " << Mix_GetError() << std::endl;
-        // Handle the error, maybe exit or provide a notification
-    } else {
-        if (Mix_PlayMusic(bgMusic, -1) == -1) {
-            std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
-        }
-    }
+    //std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
+    //std::cout << "Trying to load music from: " << MusicPath << std::endl;
+    //bgMusic = Mix_LoadMUS(MusicPath.c_str());
+    //if (!bgMusic) {
+    //    std::cerr << "Failed to load background music from " << MusicPath << "! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    //    // Handle the error, maybe exit or provide a notification
+    //} else {
+    //    if (Mix_PlayMusic(bgMusic, -1) == -1) {
+     //       std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    //    }
+   // }
+    std::string setUpPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "World_1_setup.json").string();
+
+    loadSetUpJSON(setUpPath);
 
     //Create player and enemy
     {
@@ -1115,6 +1122,43 @@ void Game::render()
     //end
     SDL_RenderPresent(renderer);
     }
+}
+
+void Game::loadSetUpJSON(std::string path)
+{
+    std::ifstream jsonFileStream(path);
+    nlohmann::json jsonData = nlohmann::json::parse(jsonFileStream);
+
+    mapPath = projectDir.string() + jsonData["mapPath"].get<std::string>();
+    fontPath = projectDir.string() + jsonData["fontPath"].get<std::string>();
+    itemsPath = projectDir.string() + jsonData["itemsPath"].get<std::string>();
+    musicPath = projectDir.string() + jsonData["musicPath"].get<std::string>();
+    worldPath = projectDir.string() + jsonData["worldPath"].get<std::string>();
+
+    for (int i = 0; i < size(jsonData["setUpSprites"]); ++i)
+    {
+    nlohmann::json spriteData = jsonData["setUpSprites"][i];
+    std::string name = spriteData["name"].get<std::string>();
+    std::string path = spriteData["path"].get<std::string>();
+    assets->AddTexture(name,path.c_str());
+    }
+
+    assets->loadWorld(worldPath);
+    assets->AddFont("arial",fontPath.c_str(),16);
+    map->LoadMap(mapPath.c_str(),25,20);
+
+
+    std::cout << "Trying to load music from: " << musicPath << std::endl;
+    bgMusic = Mix_LoadMUS(musicPath.c_str());
+    if (!bgMusic) {
+    std::cerr << "Failed to load background music from " << musicPath << "! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    // Handle the error, maybe exit or provide a notification
+    } else {
+    if (Mix_PlayMusic(bgMusic, -1) == -1) {
+       std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+    }
+
 }
 
 void Game::clean()
