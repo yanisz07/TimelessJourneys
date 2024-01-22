@@ -1,19 +1,39 @@
-Week 1: The team members brainstormed about how the game would look like, the resources we would use and how we would organise ourselves as a team. 
-We concluded that the game would be a role-playing computer game in 2D. The player would incarnate the hero, placed in the centre of the screen, with different weapons at their disposal. The goal of the game is to wander around the map, and to kill enemies without getting killed yourself.
+Week 1: The team members brainstormed about how the game would look like, the resources we would use and how we 
+would organise ourselves as a team. We concluded that the game would be a role-playing computer game in 2D. The player would 
+incarnate the hero, placed in the centre of the screen, with different weapons at their disposal. The goal of the game is to wander 
+around the map, and to kill enemies without getting killed yourself.
 
-Week 2: Our project requires several teams to work on different aspects of the game, such as the mechanics of the game, the attacks, the interaction between the different characters and the boarders of the map, the graphics, etc. Thus, we decided to split ourselves in 5 main branches: Core Mechanics, Graphics, character programming, game programming, game design. The core mechanics, which I worked on, refers to the set of actions that players will repeat over and over as they move through the designed system of the game. This includes the menu, the inventory and basically the basic functions that will enable the user to run the game.
+Week 2: Our project requires several teams to work on different aspects of the game, such as the mechanics of the game, the attacks, 
+the interaction between the different characters and the boarders of the map, the graphics, etc. Thus, we decided to split 
+ourselves in 5 main branches: Core Mechanics, Graphics, character programming, game programming, game design. 
+The core mechanics, which I worked on, refers to the set of actions that players will repeat over and over as they move 
+through the designed system of the game. This includes the menu, the inventory and basically the basic functions that will enable 
+the user to run the game.
 
-Week 3: A specific library needed to be used in order to code the game efficiently: SDL2. It is a is a library designed to provide access to audio, keyboard, mouse, joystick, and graphics hardware. The goal now is to install SDL2 on all the computers and start the game programming as soon as possible. 
+Week 3: A specific library needed to be used in order to code the game efficiently: SDL2. It is a is a library designed to provide 
+access to audio, keyboard, mouse, joystick, and graphics hardware. The goal now is to install SDL2 on all the computers and start 
+the game programming as soon as possible. 
 
-Week 4: We had a hard time making the library function on all computers as it requires different steps and components depending on the type of computer each one of us is working on. Personally, I managed to get it to work using the terminal on mac, importing the necessary components to run the game properly.
-A prototype of the game had already been coded and I managed to test it on my computer and understand the basic lines of code that was written to get to that point. This was an essential step to move on to the actual C++ coding that I had to do to keep the existing program coherent.
+Week 4: We had a hard time making the library function on all computers as it requires different steps and components depending on 
+the type of computer each one of us is working on. Personally, I managed to get it to work using the terminal on mac, importing 
+the necessary components to run the game properly.
+A prototype of the game had already been coded and I managed to test it on my computer and understand the basic lines of 
+code that was written to get to that point. This was an essential step to move on to the actual C++ coding that I had to do to keep 
+the existing program coherent.
 
-Week 5: My goal is to implement talking NPCs into the game. I am working collaboratively with another team member to created text bubbles that appear and disappear depending on the distance between the player and the NPC. The idea is to create a function that calculates the distance between the player and the NPC and check how this distance compare to a threshold distance under which the bubble pops up next to the NPC’s head. Similarly, as soon as the player gets sufficiently far away from the NPC, the bubble disappears.
+Week 5: My goal is to implement talking NPCs into the game. I am working collaboratively with another team member to created 
+text bubbles that appear and disappear depending on the distance between the player and the NPC. The idea is to create a function 
+that calculates the distance between the player and the NPC and check how this distance compare to a threshold distance under which 
+the bubble pops up next to the NPC’s head. Similarly, as soon as the player gets sufficiently far away from the NPC, the bubble disappears.
 
-Week 6: The implementation is more complicated than expected. Indeed, we managed to implement our first NPC as well as the prototype of a text bubble, but it does not yet disappear and reappear as desired. Plus, there will be more than 1 NPC in the game, which means that we should implement a sort of get_distance() function that is valid for all NPCs at the same time. Otherwise, we could make sure that none of the NPCs are too close together to avoid “conflicts”.
+Week 6: The implementation is more complicated than expected. Indeed, we managed to implement our first NPC as well as the 
+prototype of a text bubble, but it does not yet disappear and reappear as desired. Plus, there will be more than 1 NPC in the game, 
+which means that we should implement a sort of get_distance() function that is valid for all NPCs at the same time. Otherwise, 
+we could make sure that none of the NPCs are too close together to avoid “conflicts”.
 
-Week 7: I created and added several bubble texts in the “assets” document, where all the “sprites” for the characters weapons and NPC’s are. This is easier than generating different texts every time the player approaches the NPC. What the goal is now is to reorganize ourselves, possibly start a new branch to make the text bubbles work as desired.
-
+Week 7: I created and added several bubble texts in the “assets” document, where all the “sprites” for the characters weapons and 
+NPC’s are. This is easier than generating different texts every time the player approaches the NPC. What the goal is now is to reorganize 
+ourselves, possibly start a new branch to make the text bubbles work as desired.
 
 Week 8:
 
