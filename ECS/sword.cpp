@@ -4,8 +4,9 @@
 #include "ColliderComponent.hpp"
 #include "Stats.hpp"
 #include <math.h>
+#include "../inventory.h"
 
-Sword::Sword(Manager *man)
+Sword::Sword(Manager *man) : dmg_multiplier(1.0f)
 {
     timer.start();
     timer.setTimeOut(reloadTime);
@@ -46,6 +47,9 @@ int Sword::equip()
 
 void Sword::init()
 {
+    //texture = TextureManager::LoadTexture(spritePath.c_str()); need to link texture with equipped sword texture
+    //dmg_multiplier = 1.0f;
+
     entityTransform = &entity->getComponent<TransformComponent>();
     sprite = &entity->getComponent<SpriteComponent>();
 }
@@ -256,7 +260,10 @@ void Sword::draw()
 
 int Sword::DoDamage(Stats &entity1, Stats &entity2)
 {
-    entity2.SubtractHealth(damage*entity1.get_damage_mult());
+    int calculatedDamage = static_cast<int>(damage * dmg_multiplier);
+    entity2.SubtractHealth(calculatedDamage);
+
+    //entity2.SubtractHealth(damage*entity1.get_damage_mult());
     if(entity1.is_player())
     {
         if (entity2.get_health()<=0)
@@ -264,10 +271,29 @@ int Sword::DoDamage(Stats &entity1, Stats &entity2)
             entity1.GainExp(entity2.get_experience_worth());
         }
     }
-    return 0;
+    //return 0;
+    return calculatedDamage;
 }
 
 void Sword::update_sword()
 {
     is_attacking = false;
+}
+
+
+void Sword::sword_equip(Inventory& inventory)
+{
+    if (!inventory.items.empty()) {
+        for (const auto& item : inventory.items) {
+            if (dynamic_cast<Melee*>(item.second) != nullptr) {
+
+
+
+                dynamic_cast<Melee*>(item.second)->is_equipped=true;
+
+
+                break;
+            }
+        }
+    }
 }

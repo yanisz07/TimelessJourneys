@@ -163,7 +163,7 @@ void Inventory::useItem(int index) {
     Item* it = items[key];
     if (it != nullptr) {
         std::cout << "Used item: " << it->name << std::endl;
-        it->is_equipped = true;
+        //it->is_equipped = true;
 
     } else {
         std::cout << "Item with index " << index << " not found." << std::endl;
@@ -175,14 +175,17 @@ void Inventory::useItem(int index) {
         player.restoreHealth(50); // Assuming 'player' is an instance of the Player class
         removeItem(items[index]); */
 
-void Inventory::useSelectedItem(const std::string& name) {
+void Inventory::useSelectedItem() {
+    // check if item is equipped
+    if (items[selectedSlotIndex] != nullptr && items[selectedSlotIndex]->is_equipped) {
+        if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
+            useItem(selectedSlotIndex);
 
-    if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
-        useItem(selectedSlotIndex);
-        // Optionally, after using the item, unselect it or select the next one
-        selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
+            selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
+        }
     }
 }
+
 
 
 void Inventory::pickUpItem(int index) {

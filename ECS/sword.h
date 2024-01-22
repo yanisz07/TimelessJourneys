@@ -42,6 +42,8 @@ public:
     ~Sword() override = default;
 
     int equip();
+    \
+    float dmg_multiplier;
 
     void init() override;
 
@@ -54,6 +56,8 @@ public:
     void update_sword();
 
     void draw() override;
+
+    void sword_equip(Inventory& inventory);
 
 private:
     TransformComponent* entityTransform;
