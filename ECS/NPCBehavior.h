@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include "../Vector2D.hpp"
+#include "../TextureManager.hpp"
+#include "../game.hpp"
+#include "TransformComponent.hpp"
+#include "../AssetManager.hpp"
+
 
 
 //forward decleration
@@ -17,10 +22,14 @@ class NPCBehavior : public Component
 public:
     TransformComponent* transform;
     TransformComponent* playerTransform;
+    SDL_Rect srcRect, destRect;
+    SDL_Texture *texture;
+    std::string bubble;
+
     float trigger_distance;
     bool bubble_displayed;
 
-    NPCBehavior(float distance_1, TransformComponent* playerTrans);
+    NPCBehavior(float distance_1, TransformComponent* playerTrans, std::string b);
 
     void init() override;
 
@@ -28,8 +37,7 @@ public:
 
     float calculateDistanceToPlayer() const;
 
-    void DisplayBubble();
-    void UndisplayBubble();
+    void draw() override;
 
 };
 
