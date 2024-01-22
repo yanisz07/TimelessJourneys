@@ -19,5 +19,6 @@
 #include "range_weapon.h"
 #include "turretenemy.h"
 #include "collidercomponentcircle.h"
+#include "canon.h"
 
 #endif // COMPONENTS_H
