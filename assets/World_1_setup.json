@@ -1,0 +1,36 @@
+{
+    "setUpSprites": [
+      {
+        "name": "terrain",
+        "path": "/assets/terrain_ss.png"
+      },
+      {
+        "name": "projectile",
+        "path": "/assets/proj.png"
+      },
+      {
+        "name": "enemy_projectile",
+        "path": "/assets/proj.png"
+      },
+      {
+        "name": "player_projectile",
+        "path": "/assets/proj.png"
+      },
+      {
+        "name": "arrow",
+        "path": "/assets/arrow.png"
+      },
+      {
+        "name": "PocketWatch",
+        "path": "/assets/PocketWatch.png"
+      },
+      {
+        "name": "Hourglass",
+        "path": "/assets/Hourglass.png"
+      },
+      {
+        "name": "Oval",
+        "path": "/assets/Oval.png"
+      }
+    ]
+ }
