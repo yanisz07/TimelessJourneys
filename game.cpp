@@ -169,6 +169,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     assets->AddTexture("enemy_projectile", "/assets/proj.png");
     assets->AddTexture("player_projectile", "/assets/proj.png");
     assets->AddTexture("we count on you adventurer", "/assets/we_count_on_you_adventurer.png");
+    assets->AddTexture("we believe in you", "/assets/we_believe_in_you.png");
 
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
     std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
@@ -256,7 +257,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     npc2.addComponent<TransformComponent>(1500,800,128,128,1);
     npc2.addComponent<SpriteComponent>(true,"player");
     npc2.getComponent<SpriteComponent>().setActions();
-    npc2.addComponent<NPCBehavior>(300,&playerTransform,"we count on you adventurer");
+    npc2.addComponent<NPCBehavior>(300,&playerTransform,"we believe in you");
     npc2.addComponent<ColliderComponent>("terrain",1500+32,800+32,64,64);
     npc2.addGroup(Game::groupNPC);
 
