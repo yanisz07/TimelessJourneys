@@ -231,7 +231,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         std::cerr << "Mix_Init failed: " << Mix_GetError() << std::endl;
     }
      Mix_AllocateChannels(2);
-    //std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
+    //std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "epic_music.mp3").string();
     //std::cout << "Trying to load music from: " << MusicPath << std::endl;
     //bgMusic = Mix_LoadMUS(MusicPath.c_str());
     //if (!bgMusic) {
