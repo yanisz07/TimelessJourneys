@@ -45,7 +45,10 @@ auto& enemy(manager.addEntity());
 //test second enemy
 auto& enemy2(manager.addEntity());
 auto& enemy_health(manager.addEntity());
-auto& npc(manager.addEntity());
+auto& npc1(manager.addEntity());
+auto& npc2(manager.addEntity());
+auto& npc3(manager.addEntity());
+
 //End
 
 
@@ -239,14 +242,35 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     std::cout << "Second Enemy created" << std::endl;
     */
     //creates npc
-    npc.addComponent<TransformComponent>(1200,800,128,128,1);
-    npc.addComponent<SpriteComponent>(true,"player");
-    npc.getComponent<SpriteComponent>().setActions();
-    npc.addComponent<NPCBehavior>(300,&playerTransform,"we count on you adventurer");
-    npc.addComponent<ColliderComponent>("terrain",1200+32,800+32,64,64);
-    npc.addGroup(Game::groupNPC);
+    npc1.addComponent<TransformComponent>(1200,800,128,128,1);
+    npc1.addComponent<SpriteComponent>(true,"player");
+    npc1.getComponent<SpriteComponent>().setActions();
+    npc1.addComponent<NPCBehavior>(300,&playerTransform,"we count on you adventurer");
+    npc1.addComponent<ColliderComponent>("terrain",1200+32,800+32,64,64);
+    npc1.addGroup(Game::groupNPC);
 
-    std::cout << "npc created" << std::endl;
+    std::cout << "npc1 created" << std::endl;
+
+
+
+    npc2.addComponent<TransformComponent>(1500,800,128,128,1);
+    npc2.addComponent<SpriteComponent>(true,"player");
+    npc2.getComponent<SpriteComponent>().setActions();
+    npc2.addComponent<NPCBehavior>(300,&playerTransform,"we count on you adventurer");
+    npc2.addComponent<ColliderComponent>("terrain",1500+32,800+32,64,64);
+    npc2.addGroup(Game::groupNPC);
+
+    std::cout << "npc2 created" << std::endl;
+
+
+    npc3.addComponent<TransformComponent>(1370,570,128,128,1);
+    npc3.addComponent<SpriteComponent>(true,"player");
+    npc3.getComponent<SpriteComponent>().setActions();
+    npc3.addComponent<NPCBehavior>(300,&playerTransform,"we count on you adventurer");
+    npc3.addComponent<ColliderComponent>("terrain",1370+32,570+32,64,64);
+    npc3.addGroup(Game::groupNPC);
+
+    std::cout << "npc3 created" << std::endl;
 
 
     }
