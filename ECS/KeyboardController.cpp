@@ -12,6 +12,29 @@ void KeyboardController::init()
 
 void KeyboardController::update()
 {
+    if(Game::inventory->get_visibility() or Game::chestScreen1->isCurrentlyVisible() or Game::chestScreen2->isCurrentlyVisible()) {
+        transform->velocity.x = 0;
+        transform->velocity.y = 0;
+
+        if (transform->x_direction == -1)
+        {
+             sprite->Play("Idle_Right" + armor->get_type(),true);
+        }
+        else if (transform->x_direction == 1)
+        {
+            sprite->Play("Idle_Right" + armor->get_type());
+        }
+        else if (transform->y_direction == -1)
+        {
+            sprite->Play("Idle_Up" + armor->get_type());
+        }
+        else if (transform->y_direction == 1)
+        {
+            sprite->Play("Idle_Down" + armor->get_type());
+        }
+
+    }
+
     if(!Game::inventory->get_visibility() and !Game::chestScreen1->isCurrentlyVisible() and !Game::chestScreen2->isCurrentlyVisible())
     {
         if (Game::event.type == SDL_KEYDOWN)
