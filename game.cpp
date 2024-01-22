@@ -53,9 +53,9 @@ int Game::windowSize_y = 100;
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
-auto& enemy(manager.addEntity());
+//auto& enemy(manager.addEntity());
 //test second enemy
-auto& enemy2(manager.addEntity());
+//auto& enemy2(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
 auto& chest2(manager.addEntity());
@@ -253,7 +253,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     Stats& playerStats = player.getComponent<Stats>();
 
-    enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
+    /*enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
@@ -274,7 +274,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<Stats>();
     Stats& enemy2Stats = enemy2.getComponent<Stats>();
     enemy2.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemy2Stats); //To be changed later on
-    enemy2.addGroup(Game::groupEnemies);
+     enemy2.addGroup(Game::groupEnemies); */
+
+    std::vector<Vector2D> spawnPoints = {{1200, 1000}, {1300, 1000}, /* other points */};
+    auto& spawner(manager.addEntity());
+    spawner.addComponent<SpawnerComponent>(manager, 5000, 10, spawnPoints, &playerTransform, &playerStats);
+
 
     //create first chest
 
