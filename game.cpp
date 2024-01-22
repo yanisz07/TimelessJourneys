@@ -722,6 +722,11 @@ void Game::update()
                 }
             }
         }
+
+        if(enemies.empty())
+        {
+            loadLvl2();
+        }
         //End
 
         //Test collision with rotated objects
