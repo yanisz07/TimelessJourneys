@@ -189,10 +189,12 @@ void Inventory::useSelectedItem() {
     if (items[selectedSlotIndex] != nullptr && items[selectedSlotIndex]->is_equipped) {
         if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
             useItem(selectedSlotIndex);
+            selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
+        }
         }
 
     }
-}
+
 
 void Inventory::pickUpItem(int index) {
     std::string indexKey = std::to_string(index);
