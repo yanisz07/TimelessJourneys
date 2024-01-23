@@ -62,6 +62,7 @@ void Inventory::moveSelection(int offset) {
 }
 
 
+
 void Inventory::render(SDL_Renderer* renderer, bool forceRender) {
     if (!this->isVisible && forceRender) return;
 
@@ -155,6 +156,7 @@ const Item* Inventory::getItem(const int key) {
 }
 
 
+
 void Inventory::useItem(int index) {
     int currentRow = index / gridCols;
     int currentCol = index % gridCols;
@@ -181,18 +183,16 @@ void Inventory::useItem(int index) {
     }
 }
 
+
 void Inventory::useSelectedItem() {
     // check if item is equipped
     if (items[selectedSlotIndex] != nullptr && items[selectedSlotIndex]->is_equipped) {
         if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
             useItem(selectedSlotIndex);
-
-            selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
         }
+
     }
 }
-
-
 
 void Inventory::pickUpItem(int index) {
     std::string indexKey = std::to_string(index);
