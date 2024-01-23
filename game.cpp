@@ -59,6 +59,12 @@ Uint32 playerInvincibleDuration = 3000; // 3000 milliseconds
 auto& TestCol(manager.addEntity());
 //
 
+struct MapPing {
+    Vector2D position;
+    Uint32 creationTime;
+    Uint32 duration;
+};
+
 Game::Game()
 {
     isGameStarted = false ; // tracks if player has started the game yet
