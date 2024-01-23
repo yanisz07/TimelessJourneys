@@ -31,6 +31,10 @@ void SpriteComponent::setActions()
     {
         Play("Inactive");
     }
+    else if(type == "archer")
+    {
+        Play("Idle_Down");
+    }
     else
     {
         Play("Idle");
@@ -141,6 +145,12 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
     }
 
     currentAction = animName;
+
+    if(type=="archer")
+    {
+        std::cout << currentAction << std::endl;
+        std::cout << animations[currentAction].spriteName << std::endl;
+    }
 
     setTex(animations[currentAction].spriteName);
     srcRect.y = 0;

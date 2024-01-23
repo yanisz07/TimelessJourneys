@@ -73,6 +73,15 @@ void ColliderComponent::init()
         collider.h = transform->height*transform->scale;
     }
 
+    if (tag=="turret")
+    {
+        transform = &entity->getComponent<TransformComponent>();
+        collider.x = transform->position.x+14*transform->scale;
+        collider.y = transform->position.y+5*transform->scale;
+        collider.w = 20*transform->scale;
+        collider.h = 28*transform->scale;
+    }
+
     tex = TextureManager::LoadTexture("/assets/ColTex.png");
     srcR = {0, 0, 32, 32 };
 
@@ -81,7 +90,7 @@ void ColliderComponent::init()
 
 void ColliderComponent::update()
 {
-    if(tag != "terrain" && tag != "player_attack")
+    if(tag != "terrain" && tag != "player_attack" && tag != "turret" && tag != "canon")
     {
         if (tag=="player")
         {

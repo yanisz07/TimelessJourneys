@@ -11,6 +11,7 @@
 
 //forward declaration
 class TransformComponent;
+class SpriteComponent;
 class ColliderComponent;
 class ProjectileComponent;
 //end
@@ -32,6 +33,7 @@ private:
     Manager* manager;
     TransformComponent* transform;
     TransformComponent* playertransform;
+    SpriteComponent* sprite;
     int radius;
     int speed;
     int damage;
@@ -39,6 +41,7 @@ private:
     Timer timer;
     Timer timer1;
     Uint32 reloadTime;
+    bool is_attacking;
 
     SDL_Texture* tex1;
     Animation animation1 = Animation(70,76,0,4,150,"Turret");

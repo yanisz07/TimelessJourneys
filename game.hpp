@@ -79,7 +79,8 @@ public:
         groupEnemies,
         groupEnemiesAttack,
         groupPlayerAttack,
-        groupChests
+        groupChests,
+        groupTurrets
     };
 
 private:

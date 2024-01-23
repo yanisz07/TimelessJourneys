@@ -416,6 +416,89 @@
         ]
       },
       {
+        "name": "archer",
+        "sprites": [
+          {
+            "name" : "Archer_Idle_D_Sprite",
+            "path": "/assets/Archer/D_Idle.png",
+            "actions": [
+              {
+                "name": "Idle_Down",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Archer_Idle_U_Sprite",
+            "path": "/assets/Archer/U_Idle.png",
+            "actions": [
+              {
+                "name": "Idle_Up",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Archer_Idle_S_Sprite",
+            "path": "/assets/Archer/S_Idle.png",
+            "actions": [
+              {
+                "name": "Idle_Left",
+                "values": [
+                  48,
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Archer_Attack_D_Sprite",
+            "path": "/assets/Archer/D_Attack.png",
+            "actions": [
+              {
+                "name": "Attack_Down",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Archer_Attack_U_Sprite",
+            "path": "/assets/Archer/U_Attack.png",
+            "actions": [
+              {
+                "name": "Attack_Up",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Archer_Attack_S_Sprite",
+            "path": "/assets/Archer/S_Attack.png",
+            "actions": [
+              {
+                "name": "Attack_Side",
+                "values": [
+                  48,
+                  6
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "chest",
         "sprites" : [
            {

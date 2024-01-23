@@ -295,17 +295,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //create turret enemy
 
-    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
-    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<TransformComponent>(2000,1000,48,48,2);
+    enemy3.addComponent<SpriteComponent>(true, "archer");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("turret");
     enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
-    enemy3.addGroup(Game::groupEnemies);
+    enemy3.addComponent<TurretEnemy>(400,5,5,600,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupTurrets);
 
     //create Canon
     enemy4.addComponent<TransformComponent>(1500,500,128,128,1);
-    enemy4.addComponent<SpriteComponent>(true, "enemy");
-    enemy4.getComponent<SpriteComponent>().setActions();
-    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<ColliderComponent>("canon");
     enemy4.addComponent<Stats>();
     enemy4.addComponent<Canon>(700,5,10,800,&manager,&player.getComponent<TransformComponent>());
     enemy4.addGroup(Game::groupEnemies);
@@ -362,6 +362,7 @@ auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 auto& chests(manager.getGroup(Game::groupChests));
+auto& Turrets(manager.getGroup(Game::groupTurrets));
 
 void Game::handleEvents()
 {
@@ -762,7 +763,6 @@ void Game::update()
             {
                 std::cout << "Hit wall" << std::endl;
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
-
             }
 
             for (auto& e : enemies)
@@ -776,6 +776,15 @@ void Game::update()
                         e->getComponent<EnemyMovement>().onCollision(c->getComponent<ColliderComponent>().collider); // the enemy doesn't move
                     }
                 }
+            }
+        }
+
+        for (auto& t : Turrets)
+        {
+            if(Collision::CheckCollision(t->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
+            {
+                std::cout << "Hit turret" << std::endl;
+                player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
             }
         }
         //End
@@ -945,6 +954,21 @@ void Game::update()
                 }
             }
         }
+
+        //damage to archers on turrets
+
+        for (auto& t : Turrets)
+        {
+            for (auto& pp : PlayerProjectiles)
+            {
+                if(Collision::CheckCollision(pp->getComponent<ColliderComponent>(),t->getComponent<ColliderComponent>()))
+                {
+                    std::cout << "Projectile hit enemy" << std::endl;
+                    pp->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>(),t->getComponent<Stats>());
+                    pp->destroy();
+                }
+            }
+        }
         //End
 
         camera.x = player.getComponent<TransformComponent>().position.x - x_diff;
@@ -1052,8 +1076,9 @@ void Game::render()
         for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
         for (auto& ch: chests) { ch->draw(); }
-        for (auto& ep : EnemyProjectiles) { ep->draw(); }
         for (auto& p : PlayerAttacks) {p->draw();}
+        for (auto& t : Turrets) {t->draw();}
+        for (auto& ep : EnemyProjectiles) { ep->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
 
         // Render the UI elements over the game objects

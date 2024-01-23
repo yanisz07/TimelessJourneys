@@ -4,6 +4,7 @@
 #include "ColliderComponent.hpp"
 #include "math.h"
 #include "ProjectileComponent.hpp"
+#include "SpriteComponent.hpp"
 
 TurretEnemy::TurretEnemy(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* player)
 {
@@ -28,6 +29,8 @@ void TurretEnemy::init()
     timer.setTimeOut(reloadTime);
     timer1.start();
     transform = &entity->getComponent<TransformComponent>();
+    sprite = &entity->getComponent<SpriteComponent>();
+    setPriority(sprite->priority - 1);
 }
 
 double distance(Vector2D e1, Vector2D e2)
@@ -39,8 +42,8 @@ void TurretEnemy::update()
 {
     if(distance(transform->position,playertransform->position)<=radius && timer.timedOut())
     {
-        direction.x = playertransform->position.x-transform->position.x;
-        direction.y = playertransform->position.y-transform->position.y;
+        direction.x = playertransform->position.x+13*playertransform->scale+(13/2)*playertransform->scale-(transform->position.x+transform->width*transform->scale/2);
+        direction.y = playertransform->position.y+18*playertransform->scale+(19/2)*playertransform->scale-(transform->position.y+transform->height*transform->scale/2);
         direction.Normalize();
         //find angle between turret and player
         Vector2D e1 = Vector2D(1,0);
@@ -52,7 +55,36 @@ void TurretEnemy::update()
             theta=-theta;
         }
         CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2,transform->position.y+transform->height*transform->scale/2),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
+        is_attacking=true;
+        if (theta<0)
+        {
+            theta+=360;
+        }
+        if (((0 <= theta) && (theta <= 45)) || ((315 <= theta) && (theta <= 360)))
+        {
+            sprite->Play("Attack_Side",true);
+        }
+        else if ((45 <= theta) && (theta <= 135))
+        {
+            sprite->Play("Attack_Down");
+        }
+        else if ((135 <= theta) && (theta <= 225))
+        {
+            sprite->Play("Attack_Side");
+        }
+        else
+        {
+            sprite->Play("Attack_Up");
+        }
         timer.setTimeOut(reloadTime);
+    }
+    else if (is_attacking)
+    {
+        if(timer.timedOut())
+        {
+            is_attacking=false;
+            sprite->Play("Idle_Down");
+        }
     }
 }
 
@@ -70,8 +102,8 @@ void TurretEnemy::CreateProjectile(Vector2D pos, Vector2D vel, int range, int sp
 
 void TurretEnemy::draw()
 {
-    destR1.x = transform->position.x-Game::camera.x;
-    destR1.y = transform->position.y-Game::camera.y;
+    destR1.x = transform->position.x-57-Game::camera.x;
+    destR1.y = transform->position.y-10-Game::camera.y;
     srcR1.y=0;
     int frame;
     frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
@@ -81,6 +113,5 @@ void TurretEnemy::draw()
     }
     animation1.index = frame;
     srcR1.x = animation1.width*animation1.index;
-    std::cout << tex1 << std::endl;
     SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE);
 }
