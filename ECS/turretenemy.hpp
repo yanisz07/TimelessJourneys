@@ -41,7 +41,7 @@ private:
     Uint32 reloadTime;
 
     SDL_Texture* tex1;
-    Animation animation1 = Animation(70,76,0,4,100,"Turret");
+    Animation animation1 = Animation(70,76,0,4,150,"Turret");
     SDL_Rect srcR1, destR1;
     SDL_Texture* tex2;
 };
