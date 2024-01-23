@@ -112,7 +112,6 @@ void TurretEnemy::update()
             }
         }
     }
-
 }
 
 void TurretEnemy::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle)
