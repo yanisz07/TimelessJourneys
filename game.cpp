@@ -786,6 +786,7 @@ void Game::render()
 
     int screenWidth, screenHeight;
     SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+    SDL_Color textColor = {255, 255, 255}; // White color for the text
 
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
@@ -811,25 +812,46 @@ void Game::render()
             t->draw();
         }
 
-        // Display key in the top right corner for player position when the full map is displayed
+        // Render the game name at the top of the map
+        const int topPadding = 10; // Padding from the top edge
+        SDL_Color textColor = {255, 255, 255}; // White color for the text
+        SDL_Surface* surfaceGameName = TTF_RenderText_Solid(Game::assets->GetFont("arial"), "Timeless Journeys", textColor);
+
+        if (surfaceGameName) {
+            SDL_Texture* textureGameName = SDL_CreateTextureFromSurface(renderer, surfaceGameName);
+            SDL_Rect gameNameRect = {
+                (screenWidth - surfaceGameName->w) / 2, // Centered horizontally
+                topPadding,
+                surfaceGameName->w,
+                surfaceGameName->h
+            };
+
+            SDL_RenderCopy(renderer, textureGameName, NULL, &gameNameRect);
+
+            SDL_FreeSurface(surfaceGameName);
+            SDL_DestroyTexture(textureGameName);
+        }
+
+
+        // Adjust the placement of the player position key to the left
         const int keyBoxSize = 10; // Size of the red square
-        const int padding = 10; // Padding from the top and right edges
+        const int padding = 10; // Padding from the top and left edges
         const int textPadding = 5; // Padding between the square and the text
 
         // Render the red square
-        SDL_Rect redSquare = {screenWidth - padding - keyBoxSize, padding, keyBoxSize, keyBoxSize};
+        SDL_Rect redSquare = {padding, padding, keyBoxSize, keyBoxSize};
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red
         SDL_RenderFillRect(renderer, &redSquare);
 
         // Create a surface for the player position text
-        SDL_Color textColor = {255, 255, 255}; // White color for the text
+
         SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Game::assets->GetFont("arial"), "Player Position", textColor);
 
         if (surfaceMessage) {
             // Create a texture from the surface
             SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
             SDL_Rect messageRect = {
-                screenWidth - padding - keyBoxSize - textPadding - surfaceMessage->w, // To the left of the red square
+                padding + keyBoxSize + textPadding, // To the right of the red square
                 padding, // Same vertical position as the red square
                 surfaceMessage->w,
                 surfaceMessage->h
