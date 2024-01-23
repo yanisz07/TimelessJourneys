@@ -24,7 +24,7 @@ public:
     double angle(const Vector2D& vec);
     double norm();
 
-    friend Vector2D operator+(Vector2D& v1, const Vector2D& v2);
+    friend Vector2D operator+(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D operator-(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator*(Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator/(Vector2D& v1, const Vector2D& v2);
