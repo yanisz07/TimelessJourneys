@@ -158,22 +158,28 @@ const Item* Inventory::getItem(const int key) {
 void Inventory::useItem(int index) {
     int currentRow = index / gridCols;
     int currentCol = index % gridCols;
-    int key = 10*currentRow+currentCol;
+    int key = 10 * currentRow + currentCol;
 
     Item* it = items[key];
     if (it != nullptr) {
-        std::cout << "Used item: " << it->name << std::endl;
-        //it->is_equipped = true;
+        // Use the item
+        it->use();
 
+        // Instead of removing the item, you might want to handle other states, like 'equipped'
+        if (!it->is_equipped) {
+            it->is_equipped = true;
+            std::cout << "Equipped: " << it->name << std::endl;
+        } else {
+            // If the item is already equipped, you might want to unequip or perform another action
+            it->is_equipped = false;
+            std::cout << "Unequipped: " << it->name << std::endl;
+        }
+
+        // Note: The actual behavior of 'use' should be defined in each item's class (e.g., ArmorItem, Melee, RangedWeapon)
     } else {
         std::cout << "Item with index " << index << " not found." << std::endl;
     }
 }
-
-/* Example usage effect: restoring health
-    if (items[index].name == "Health Potion") {
-        player.restoreHealth(50); // Assuming 'player' is an instance of the Player class
-        removeItem(items[index]); */
 
 void Inventory::useSelectedItem() {
     // check if item is equipped
