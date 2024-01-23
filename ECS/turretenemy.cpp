@@ -13,11 +13,20 @@ TurretEnemy::TurretEnemy(int r, int s, int d, Uint32 rt, Manager* man, Transform
     manager = man;
     reloadTime = rt;
     playertransform = player;
+
+    std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "propAssets" / "turret.png").string();
+    tex1 = IMG_LoadTexture(Game::renderer,spritePath.c_str());
+
+    srcR1.w = animation1.width;
+    srcR1.h = animation1.height;
+    destR1.w = 210;
+    destR1.h = 228;
 }
 
 void TurretEnemy::init()
 {
     timer.setTimeOut(reloadTime);
+    timer1.start();
     transform = &entity->getComponent<TransformComponent>();
 }
 
@@ -57,4 +66,21 @@ void TurretEnemy::CreateProjectile(Vector2D pos, Vector2D vel, int range, int sp
     arrow.addComponent<ColliderComponent>(id,pos.x,pos.y,w,h);
     arrow.getComponent<ColliderComponent>().SetAngle(angle);
     arrow.addGroup(Game::groupEnemyProjectiles);
+}
+
+void TurretEnemy::draw()
+{
+    destR1.x = transform->position.x-Game::camera.x;
+    destR1.y = transform->position.y-Game::camera.y;
+    srcR1.y=0;
+    int frame;
+    frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
+    if (timer1.getTimeStart() > animation1.frames*animation1.speed)
+    {
+        timer1.start();
+    }
+    animation1.index = frame;
+    srcR1.x = animation1.width*animation1.index;
+    std::cout << tex1 << std::endl;
+    SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE);
 }

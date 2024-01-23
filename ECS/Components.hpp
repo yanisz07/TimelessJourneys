@@ -19,5 +19,7 @@
 #include "range_weapon.hpp"
 #include "turretenemy.hpp"
 #include "collidercomponentcircle.hpp"
+#include "canon.h"
+
 
 #endif // COMPONENTS_H

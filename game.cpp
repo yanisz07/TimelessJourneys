@@ -62,6 +62,8 @@ auto& enemy(manager.addEntity());
 auto& enemy2(manager.addEntity());
 //test turret enemy
 auto& enemy3(manager.addEntity());
+//test canon
+auto& enemy4(manager.addEntity());
 // Add chests
 auto& chest(manager.addEntity());
 auto& chest2(manager.addEntity());
@@ -259,7 +261,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Sword>(&manager);
     player.getComponent<Sword>().equip();
     player.addComponent<Range_Weapon>(&manager);
-    player.addComponent<ColliderComponentCircle>("player",50);
     player.addGroup(Game::groupPlayers);
     timeElapsed = Timer();
     timeElapsed.start();
@@ -295,12 +296,19 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //create turret enemy
 
     enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
-    enemy3.addComponent<SpriteComponent>(true, "enemy");
-    enemy3.getComponent<SpriteComponent>().setActions();
     enemy3.addComponent<ColliderComponent>("enemy");
     enemy3.addComponent<Stats>();
     enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
     enemy3.addGroup(Game::groupEnemies);
+
+    //create Canon
+    enemy4.addComponent<TransformComponent>(1500,500,128,128,1);
+    enemy4.addComponent<SpriteComponent>(true, "enemy");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<Canon>(700,5,10,800,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupEnemies);
 
     //create first chest
 
@@ -779,7 +787,7 @@ void Game::update()
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
-*/
+
         if (Collision::CollisionRectCircle(player.getComponent<ColliderComponent>(),TestCircle.getComponent<ColliderComponentCircle>()))
         {
             std::cout << "Player hit wall" << std::endl;
@@ -790,15 +798,28 @@ void Game::update()
             std::cout << "Player hit wall" << std::endl;
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
+*/
         //end
 
         for (auto& p : EnemyProjectiles)
         {
-            if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
+            if (p->hasComponent<ColliderComponent>())
             {
-                std::cout << "Hit player!" << std::endl;
-                p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
-                p->destroy();
+                if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
+                {
+                    std::cout << "Hit player!" << std::endl;
+                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
+                    p->destroy();
+                }
+            }
+            if (p->hasComponent<ColliderComponentCircle>())
+            {
+                if(Collision::CollisionRectCircle(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponentCircle>()))
+                {
+                    std::cout << "Hit player!" << std::endl;
+                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
+                    p->destroy();
+                }
             }
         }
         //End
