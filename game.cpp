@@ -300,14 +300,14 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy3.getComponent<SpriteComponent>().setActions();
     enemy3.addComponent<ColliderComponent>("turret");
     enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(400,5,5,600,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addComponent<TurretEnemy>(800,5,5,1000,&manager,&player.getComponent<TransformComponent>());
     enemy3.addGroup(Game::groupTurrets);
 
     //create Canon
     enemy4.addComponent<TransformComponent>(1500,500,128,128,1);
     enemy4.addComponent<ColliderComponent>("canon");
     enemy4.addComponent<Stats>();
-    enemy4.addComponent<Canon>(700,5,10,800,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addComponent<Canon>(400,5,10,2000,&manager,&player.getComponent<TransformComponent>());
     enemy4.addGroup(Game::groupEnemies);
 
     //create first chest

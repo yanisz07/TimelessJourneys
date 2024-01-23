@@ -54,7 +54,6 @@ void TurretEnemy::update()
         {
             theta=-theta;
         }
-        CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2,transform->position.y+transform->height*transform->scale/2),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
         is_attacking=true;
         if (theta<0)
         {
@@ -63,18 +62,22 @@ void TurretEnemy::update()
         if (((0 <= theta) && (theta <= 45)) || ((315 <= theta) && (theta <= 360)))
         {
             sprite->Play("Attack_Side",true);
+            CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2+10,transform->position.y+transform->height*transform->scale/2-10),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
         }
         else if ((45 <= theta) && (theta <= 135))
         {
             sprite->Play("Attack_Down");
+            CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2-10,transform->position.y+transform->height*transform->scale/2+10),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
         }
         else if ((135 <= theta) && (theta <= 225))
         {
             sprite->Play("Attack_Side");
+            CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2-20,transform->position.y+transform->height*transform->scale/2-10),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
         }
         else
         {
             sprite->Play("Attack_Up");
+            CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2-10,transform->position.y+transform->height*transform->scale/2-10),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
         }
         timer.setTimeOut(reloadTime);
     }
