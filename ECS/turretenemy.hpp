@@ -41,7 +41,10 @@ private:
     Timer timer;
     Timer timer1;
     Uint32 reloadTime;
-    bool is_attacking;
+    bool is_attacking = false;
+    double theta;
+
+    bool check_anim = false;
 
     SDL_Texture* tex1;
     Animation animation1 = Animation(70,76,0,4,150,"Turret");

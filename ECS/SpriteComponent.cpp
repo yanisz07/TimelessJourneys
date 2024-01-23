@@ -98,6 +98,10 @@ void SpriteComponent::update()
                 {
                     Play("Inactive");
                 }
+                else if (type == "archer")
+                {
+                    Play("Idle_Down");
+                }
                 else
                 {
                     Play("Idle");
