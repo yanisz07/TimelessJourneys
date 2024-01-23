@@ -1,0 +1,238 @@
+{
+    "items": [
+        {
+            "name": "silver_sword",
+            "type": "Melee",
+            "sprites": [
+                {
+                    "name": "Silver_Sword_Sprite",
+                    "path": "/assets/sword.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.2
+        },
+        {
+            "name": "gold_sword",
+            "type": "Melee",
+            "sprites": [
+                {
+                    "name": "Gold_Sword_Sprite",
+                    "path": "/assets/gold_sword.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.5
+        },
+        {
+            "name": "diamond_sword",
+            "type": "Melee",
+            "sprites": [
+                {
+                    "name": "Diamond_Sword_Sprite",
+                    "path": "/assets/sword2 .png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 2.0
+        },
+        {
+            "name": "silver_armor",
+            "type": "Armor",
+            "sprites": [
+                {
+                    "name": "Silver_Armor_Sprite",
+                    "path": "/assets/silver_armor.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 0.8,
+            "health_increase": 20
+        },
+        {
+            "name": "gold_armor",
+            "type": "Armor",
+            "sprites": [
+                {
+                    "name": "Gold_Armor_Sprite",
+                    "path": "/assets/gold_armor.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.0,
+            "health_increase": 30
+        },
+        {
+            "name": "diamond_armor",
+            "type": "Armor",
+            "sprites": [
+                {
+                    "name": "Diamond_Armor_Sprite",
+                    "path": "/assets/diamond_armor.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.2,
+            "health_increase": 40
+        },
+        {
+            "name": "wooden_bow",
+            "type": "RangedWeapon",
+            "sprites": [
+                {
+                    "name": "Wooden_Bow_Sprite",
+                    "path": "/assets/wooden_bow.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.0,
+            "range": 100,
+            "speed_arrow": 5,
+            "speed_shooting": 1
+        },
+        {
+            "name": "silver_bow",
+            "type": "RangedWeapon",
+            "sprites": [
+                {
+                    "name": "Silver_Bow_Sprite",
+                    "path": "/assets/silver_bow.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.5,
+            "range": 120,
+            "speed_arrow": 7,
+            "speed_shooting": 2
+        },
+        {
+            "name": "diamond_bow",
+            "type": "RangedWeapon",
+            "sprites": [
+                {
+                    "name": "Diamond_Bow_Sprite",
+                    "path": "/assets/diamond_bow.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 2.0,
+            "range": 150,
+            "speed_arrow": 10,
+            "speed_shooting": 3
+        }
+    ]
+}

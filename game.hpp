@@ -9,10 +9,14 @@
 #include "string"
 #include "charconv"
 #include "vector"
-#include "menu.h"
-#include "game_over.h"
+#include "menu.hpp"
+#include "rule.hpp"
+#include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
+#include "items.hpp"
+#include "chestScreen.hpp"
+#include "timer.hpp"
 
 extern std::filesystem::path projectDir;
 
@@ -23,6 +27,8 @@ extern std::filesystem::path projectDir;
 class ColliderComponent;
 
 class AssetManager;
+
+class Inventory;
 
 class Game
 {
@@ -39,6 +45,8 @@ public:
     void clean();
     void toggleMenu();
     void toggleFullScreen();
+    void loadSetUpJSON(std::string path);
+    //static void getWindowSize(int*w, int*h);
 
     bool is_running() {return isRunning;}
 
@@ -51,8 +59,15 @@ public:
     static SDL_Rect camera;
     int screen_width;
     int screen_height;
+    static Inventory* inventory;
+
+    static int windowSize_x,windowSize_y;
+
+    static ChestScreen* chestScreen1;
+    static ChestScreen* chestScreen2;
 
     static AssetManager* assets;
+    Mix_Chunk* clickButton;
 
     enum groupLabels : std::size_t //we can have up to 32 groups
     {
@@ -62,7 +77,9 @@ public:
         groupPlayerProjectiles,
         groupEnemyProjectiles,
         groupEnemies,
-        groupPlayerAttack
+        groupEnemiesAttack,
+        groupPlayerAttack,
+        groupChests
     };
 
 private:
@@ -75,9 +92,18 @@ private:
     bool isInGameMenuOpen;
     bool isSettingsOpen;
     bool isGameOverOpen;
+    bool isRuleOpen;
     SDL_Point mousePosition;
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
+    Timer timeElapsed;
+    SDL_Texture* timeLabel;
+    std::string mapPath;
+    std::string fontPath;
+    std::string itemsPath;
+    std::string worldPath;
+    std::string musicPath;
+
 };
 
 #endif // GAME_H

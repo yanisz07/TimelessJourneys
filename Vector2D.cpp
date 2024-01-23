@@ -51,6 +51,24 @@ Vector2D& Vector2D::Divide(const Vector2D &vec)
 
 float Vector2D::distance(const Vector2D &vec){
     return sqrt(pow(x-vec.x,2)+pow(y-vec.y,2));
+
+}
+
+Vector2D& Vector2D::Normalize() {
+    double length = magnitude();
+
+    if (length > 0) { // To avoid division by zero
+        x /= length;
+        y /= length;
+    }
+
+    return *this;
+}
+
+
+
+double Vector2D::angle(const Vector2D &vec){
+    return acos((x*vec.x + y*vec.y)/((sqrt(x*x+y*y))*(sqrt(vec.x*vec.x+vec.y*vec.y))));
 }
 
 Vector2D& operator+(Vector2D& v1, const Vector2D& v2)
@@ -58,9 +76,9 @@ Vector2D& operator+(Vector2D& v1, const Vector2D& v2)
     return v1.Add(v2);
 }
 
-Vector2D& operator-(Vector2D& v1, const Vector2D& v2)
+Vector2D operator-(const Vector2D& v1, const Vector2D& v2)
 {
-    return v1.Subtract(v2);
+    return Vector2D(v1.x-v2.x,v1.y-v2.y);
 }
 
 Vector2D& operator*(Vector2D& v1, const Vector2D& v2)
@@ -113,4 +131,9 @@ std::ostream& operator<<(std::ostream& stream, const Vector2D& vec)
 {
     stream << "(" << vec.x << "," << vec.y << ")";
     return stream;
+}
+
+double Vector2D::norm()
+{
+    return std::sqrt(std::pow(x,2)+std::pow(y,2));
 }

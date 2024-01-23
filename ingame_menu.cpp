@@ -1,4 +1,4 @@
-#include "ingame_menu.h"
+#include "ingame_menu.hpp"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <filesystem>
@@ -24,7 +24,7 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
         int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
 
         // Background
-        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "background_sample1.png").string();
+        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "displayAssets"/ "background_sample1.png").string();
         SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, backgroundPath.c_str());
         SDL_Rect backgroundRect = {0, 0, screenWidth, screenHeight};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect);
@@ -35,12 +35,14 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
         SDL_Rect titleButtonBorder = {titleCenterX - borderThickness, titleCenterY - borderThickness, titleButtonWidth + borderThickness * 2, titleButtonHeight + borderThickness * 2};
         SDL_Rect playButtonBorder = {centerX - borderThickness, centerY - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
         SDL_Rect settingsButtonBorder = {centerX - borderThickness, centerY + buttonHeight + 20 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect exitButtonBorder = {centerX - borderThickness, centerY + 2*buttonHeight + 40 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect ruleButtonBorder = {centerX - borderThickness, centerY + 2*buttonHeight + 40 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect exitButtonBorder = {centerX - borderThickness, centerY + 3*buttonHeight + 60 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
 
 
         SDL_RenderDrawRect(renderer, &titleButtonBorder);
         SDL_RenderDrawRect(renderer, &playButtonBorder);
         SDL_RenderDrawRect(renderer, &settingsButtonBorder);
+        SDL_RenderDrawRect(renderer, &ruleButtonBorder);
         SDL_RenderDrawRect(renderer, &exitButtonBorder);
 
 
@@ -50,17 +52,20 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
         SDL_Rect titleButton = {titleCenterX, titleCenterY, titleButtonWidth, titleButtonHeight};
         SDL_Rect playButton = {centerX, centerY, buttonWidth, buttonHeight};
         SDL_Rect settingsButton = {centerX, centerY + buttonHeight + 20, buttonWidth, buttonHeight};
-        SDL_Rect exitButton = {centerX, centerY + 2*buttonHeight + 40, buttonWidth, buttonHeight};
+        SDL_Rect ruleButton = {centerX, centerY + 2*buttonHeight + 40, buttonWidth, buttonHeight};
+        SDL_Rect exitButton = {centerX, centerY + 3*buttonHeight + 60, buttonWidth, buttonHeight};
 
         //hover effect
         bool isHoveringPlay = SDL_PointInRect(&mousePosition, &playButton);
         bool isHoveringSettings = SDL_PointInRect(&mousePosition, &settingsButton);
+        bool isHoveringRule = SDL_PointInRect(&mousePosition, &ruleButton);
         bool isHoveringExit = SDL_PointInRect(&mousePosition, &exitButton);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for borders
         SDL_RenderDrawRect(renderer, &titleButton);
         SDL_RenderDrawRect(renderer, &playButton);
         SDL_RenderDrawRect(renderer, &settingsButton);
+        SDL_RenderDrawRect(renderer, &ruleButton);
         SDL_RenderDrawRect(renderer, &exitButton);
 
         SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Beige color for buttons
@@ -82,6 +87,14 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
             SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
         }
         SDL_RenderFillRect(renderer, &settingsButton);
+
+        // hover effect for Rule button
+        if (isHoveringRule) {
+            SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
+        } else {
+            SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
+        }
+        SDL_RenderFillRect(renderer, &ruleButton);
 
         // Hover effect for Exit button
         if (isHoveringExit) {
@@ -120,11 +133,19 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
         SDL_Rect settingsTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + buttonHeight + 20 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
         SDL_RenderCopy(renderer, settingsTexture, NULL, &settingsTextRect);
 
+        // Render Rules Text
+        SDL_Surface* ruleSurface = TTF_RenderText_Solid(font, "Rules", textColor);
+        SDL_Texture* ruleTexture = SDL_CreateTextureFromSurface(renderer, ruleSurface);
+        TTF_SizeText(font, "Rules", &textWidth, &textHeight);
+        SDL_Rect ruleTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 2*buttonHeight + 40 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_RenderCopy(renderer, ruleTexture, NULL, &ruleTextRect);
+
+
         // Render Exit Text
         SDL_Surface* exitSurface = TTF_RenderText_Solid(font, "Exit Game", textColor);
         SDL_Texture* exitTexture = SDL_CreateTextureFromSurface(renderer, exitSurface);
         TTF_SizeText(font, "Exit Game", &textWidth, &textHeight);
-        SDL_Rect exitTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 2*buttonHeight + 40 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_Rect exitTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 3*buttonHeight + 60 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
         SDL_RenderCopy(renderer, exitTexture, NULL, &exitTextRect);
 
 
@@ -137,6 +158,8 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
         SDL_FreeSurface(startSurface);
         SDL_DestroyTexture(settingsTexture);
         SDL_FreeSurface(settingsSurface);
+        SDL_DestroyTexture(ruleTexture);
+        SDL_FreeSurface(ruleSurface);
         SDL_DestroyTexture(exitTexture);
         SDL_FreeSurface(exitSurface);
         TTF_CloseFont(font);

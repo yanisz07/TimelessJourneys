@@ -1,0 +1,41 @@
+{
+  "mapPath": "/../TimelessJourneys/assets/map.map",
+  "fontPath": "/../TimelessJourneys/assets/Arial.ttf",
+  "itemsPath": "/../TimelessJourneys/assets/items - Copy.json",
+  "musicPath": "/../TimelessJourneys/assets/soundAssets/medieval.mp3",
+  "worldPath": "/../TimelessJourneys/assets/World_1.json",
+    "setUpSprites": [
+      {
+        "name": "terrain",
+        "path": "/assets/terrainAssets/terrain_ss.png"
+      },
+      {
+        "name": "background",
+        "path": "/assets/displayAssets/background_sample1.png"
+      },
+      {
+        "name": "enemy_arrow",
+        "path": "/assets/weaponAssets/enemy_arrow.png"
+      },
+      {
+        "name": "projectile",
+        "path": "/assets/weaponAssets/enemy_arrow.png"
+      },
+      {
+        "name": "arrow",
+        "path": "/assets/weaponAssets/arrow.png"
+      },
+      {
+        "name": "PocketWatch",
+        "path": "/assets/displayAssets/PocketWatch.png"
+      },
+      {
+        "name": "Hourglass",
+        "path": "/assets/displayAssets/Hourglass.png"
+      },
+      {
+        "name": "Oval",
+        "path": "/assets/displayAssets/Oval.png"
+      }
+    ]
+ }

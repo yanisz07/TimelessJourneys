@@ -6,7 +6,12 @@
 //#include "Components.hpp"
 #include "SpriteComponent.hpp"
 #include "TransformComponent.hpp"
-#include "armor.h"
+#include "armor.hpp"
+
+//forward decleration
+class Sword;
+class Range_Weapong;
+//end
 
 class KeyboardController : public Component
 {
