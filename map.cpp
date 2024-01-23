@@ -20,6 +20,9 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
     std::fstream mapFile;
     mapFile.open(path);
 
+    size_x = sizeX;
+    size_y = sizeY;
+
     int srcX, srcY;
 
     if (!mapFile.is_open())
