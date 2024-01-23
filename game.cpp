@@ -19,6 +19,7 @@
 #include <variant>
 #include <filesystem>
 #include <fstream>
+#include <cmath>
 #include "world.hpp"
 #include "inventory.h"
 
@@ -36,9 +37,6 @@ AssetManager* Game::assets = new AssetManager(&manager);
 Inventory* Game::inventory = new Inventory();
 ChestScreen* Game::chestScreen1 = new ChestScreen();
 ChestScreen* Game::chestScreen2 = new ChestScreen();
-
-
-
 
 
 bool Game::isRunning = false;
@@ -334,7 +332,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     TestCol.addComponent<TransformComponent>(1700,1500,100,200);
     TestCol.addComponent<ColliderComponent>("terrain");
-    TestCol.getComponent<ColliderComponent>().SetAngle(135);
+    TestCol.getComponent<ColliderComponent>().SetAngle(30); // SET UP ALWAYS IN DEGREES NOT RAD
 
     //Initialize all items as hide
     std::string handPath =  (projectDir / ".." / "TimelessJourneys" / "assets" / "hand.png").string();
@@ -765,7 +763,7 @@ void Game::update()
                     if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), e->getComponent<ColliderComponent>()))
                     {
                         std::cout << "Enemy hit wall" << std::endl;
-                        e->getComponent<EnemyMovement>().onCollision(c->getComponent<ColliderComponent>().collider); // the enemy doesn't move
+                        e->getComponent<EnemyMovement>().onCollision(c->getComponent<ColliderComponent>());
                     }
                 }
             }
@@ -791,6 +789,24 @@ void Game::update()
             player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
         }
         //end
+
+        for (auto& e : enemies)
+        {
+            if (e->hasComponent<EnemyMovement>())
+            {
+                if (e->getComponent<EnemyMovement>().collisionCooldown > 0) continue;
+                if (Collision::CollisionRectCircle(e->getComponent<ColliderComponent>(),TestCircle.getComponent<ColliderComponentCircle>()))
+                {
+                    std::cout << "Enemy hit circle" << std::endl;
+                    e->getComponent<EnemyMovement>().onCollisionCircle(TestCircle.getComponent<ColliderComponentCircle>().transform,TestCircle.getComponent<ColliderComponentCircle>().center);
+                }
+                if (Collision::CheckCollision(TestCol.getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>())){
+
+                    std::cout << "Enemy hit inclined " << std::endl;
+                    e->getComponent<EnemyMovement>().onCollision(TestCol.getComponent<ColliderComponent>());
+                }
+            }
+        }
 
         for (auto& p : EnemyProjectiles)
         {

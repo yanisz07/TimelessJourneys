@@ -5,6 +5,8 @@
 #include <SDL.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cmath>
+#include "ColliderComponent.hpp"
 #include "../Vector2D.hpp"
 #include "Stats.hpp"
 
@@ -49,7 +51,9 @@ public:
 
     void init() override;
 
-    void onCollision(SDL_Rect collider_rect);
+    void onCollision(ColliderComponent Collider);
+
+    void onCollisionCircle(TransformComponent* transform, Vector2D center);
 
     void returnToInitialPosition();
 

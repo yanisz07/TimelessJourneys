@@ -6,6 +6,7 @@
 #include <cmath>
 #include "Stats.hpp"
 
+const double pi = M_PI;
 
 EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats)
 {
@@ -26,49 +27,98 @@ void EnemyMovement::init()
     srand(time(NULL));
 }
 
-void EnemyMovement::onCollision(SDL_Rect collider_rect) {
+void EnemyMovement::onCollision(ColliderComponent Collider) {
+
+    SDL_Rect collider_rect = Collider.collider;
+    Vector2D collider_pos(collider_rect.x,collider_rect.y);
+    double rotation = abs(Collider.angle)*(pi/180); //PAY ATTENTION TO ANGLE
 
     Vector2D enemyCenter(transform->position.x + transform->width / 2, transform->position.y + transform->height / 2);
-    Vector2D collidertopleft(collider_rect.x, collider_rect.y + collider_rect.h);
-    Vector2D collidertopright(collider_rect.x + collider_rect.w, collider_rect.y + collider_rect.h);
-    Vector2D colliderbottomleft(collider_rect.x, collider_rect.y);
-    Vector2D colliderbottomright(collider_rect.x + collider_rect.w, collider_rect.y);
+    Vector2D collidertopleft(0,collider_rect.h);
+    Vector2D collidertopright(collider_rect.w,collider_rect.h);
+    Vector2D colliderbottomleft(0,0);
+    Vector2D colliderbottomright(collider_rect.w,0);
 
     Vector2D rightanticlock = collidertopright - colliderbottomright;
     Vector2D topanticlock = collidertopleft -  collidertopright;
     Vector2D leftanticlock = colliderbottomleft - collidertopleft;
     Vector2D bottomanticlock = colliderbottomright - colliderbottomleft;
 
-    std::vector<std::tuple<Vector2D,Vector2D,Vector2D>> list_of_tuples;
+    std::vector<std::tuple<Vector2D,Vector2D,Vector2D>> list_of_tuples_1;
+    std::vector<std::tuple<Vector2D,Vector2D,Vector2D>> list_of_tuples_2;
 
-    list_of_tuples.push_back(std::make_tuple(rightanticlock,colliderbottomright,collidertopright));
-    list_of_tuples.push_back(std::make_tuple(topanticlock,collidertopright,collidertopleft));
-    list_of_tuples.push_back(std::make_tuple(leftanticlock,collidertopleft,colliderbottomleft));
-    list_of_tuples.push_back(std::make_tuple(bottomanticlock,colliderbottomleft,colliderbottomright));
+    list_of_tuples_1.push_back(std::make_tuple(rightanticlock,colliderbottomright,collidertopright));
+    list_of_tuples_1.push_back(std::make_tuple(topanticlock,collidertopright,collidertopleft));
+    list_of_tuples_1.push_back(std::make_tuple(leftanticlock,collidertopleft,colliderbottomleft));
+    list_of_tuples_1.push_back(std::make_tuple(bottomanticlock,colliderbottomleft,colliderbottomright));
+
+    for (size_t i = 0; i < list_of_tuples_1.size(); i++){
+        Vector2D vec_1=std::get<0>(list_of_tuples_1[i]).Rotation(rotation,true);
+        Vector2D vec_2=std::get<1>(list_of_tuples_1[i]).Rotation(rotation,true);
+        Vector2D vec_3=std::get<2>(list_of_tuples_1[i]).Rotation(rotation,true);
+        list_of_tuples_2.push_back(std::make_tuple(vec_1,vec_2,vec_3));
+    }
+
+    Vector2D position_1 = collider_pos + std::get<1>(list_of_tuples_2[0]);
+    Vector2D position_2 = collider_pos + std::get<2>(list_of_tuples_2[0]);
+    Vector2D vector_1 = position_1 - transform->position;
+    Vector2D vector_2 = position_2 - transform->position;
+
+    double alpha = abs(vector_1.angle(vector_2));
+
+    double a = position_1.norm();
+    double c = position_2.norm();
+    double b = std::get<0>(list_of_tuples_2[0]).norm();
 
     int mini_idx = 0;
-    double mini_dist_wall = enemyCenter.distance(std::get<1>(list_of_tuples[0]))+enemyCenter.distance(std::get<2>(list_of_tuples[0]));
+    double mini_dist_wall = ((a*c)/b)*sin(alpha);
 
-    for (size_t i = 1; i < list_of_tuples.size(); i++) {
-        double candidate = enemyCenter.distance(std::get<1>(list_of_tuples[i]))+enemyCenter.distance(std::get<2>(list_of_tuples[i]));
+    for (size_t j = 1; j < list_of_tuples_2.size(); j++){
+
+        Vector2D position_1 = collider_pos + std::get<1>(list_of_tuples_2[j]);
+        Vector2D position_2 = collider_pos + std::get<2>(list_of_tuples_2[j]);
+        Vector2D vector_1 = position_1 - transform->position;
+        Vector2D vector_2 = position_2 - transform->position;
+
+        double alpha = abs(vector_1.angle(vector_2));
+
+        double a = position_1.norm();
+        double c = position_2.norm();
+        double b = std::get<0>(list_of_tuples_2[0]).norm();
+
+        double candidate = ((a*c)/b)*sin(alpha);
+
         if (candidate<mini_dist_wall){
             mini_dist_wall = candidate;
-            mini_idx = i;
+            mini_idx = j;
         }
     }
 
-    Vector2D wall_vector = std::get<0>(list_of_tuples[mini_idx]);
-    //double Angle = transform->velocity.angle(wall_vector);
-    //const double pi = M_PI;
-    //angle may not be needed
+    Vector2D wall_vector = std::get<0>(list_of_tuples_2[mini_idx]);
 
-    if (wall_vector.x == 0){
-        transform->velocity.x *= -1;
-    }else if (wall_vector.y == 0){
-        transform->velocity.y *= -1;
-    }
+    double Angle = abs(transform->velocity.angle(wall_vector));
+
+    transform->velocity = transform->velocity.Rotation(2*Angle,true);
+
     collisionCooldown = collisionCooldownMax;
 }
+
+void EnemyMovement::onCollisionCircle(TransformComponent* transform, Vector2D center){
+
+    Vector2D enemyCenter(transform->position.x + transform->width / 2, transform->position.y + transform->height / 2);
+
+    Vector2D outwards = enemyCenter - center;
+
+    Vector2D tangent_clock(outwards.y,-outwards.x);
+
+    double Angle = abs(transform->velocity.angle(tangent_clock));
+
+    transform->velocity = transform->velocity.Rotation(2*Angle,false);
+
+    collisionCooldown = collisionCooldownMax;
+}
+
+
 
 
 void EnemyMovement::returnToInitialPosition()
