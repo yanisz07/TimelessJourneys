@@ -807,30 +807,42 @@ void Game::render()
     }
      else {
             if (isFullscreen) {
-                int x_corner = (screenWidth - 1000)/2;
-                int y_corner = (screenHeight - 1000)/2;
-                int width = 1000/map->size_x;
-                int height = 1000/map->size_y;
-                SDL_Rect destRect = {x_corner,y_corner,width,height};
-                SDL_Rect srcRect;
-                int num = 0;
+                const int BorderSize = 10; // Size of the border around the map
+                const int MapDisplayWidth = 1200; // Desired width of the map display area
+                const int MapDisplayHeight = 800; // Desired height of the map display area
 
-                for (auto& t : tiles) {
-                        auto& sprite = t->getComponent<TileComponent>().texture;
-                        srcRect = t->getComponent<TileComponent>().srcRect;
-                        SDL_RenderCopy(renderer,sprite,&srcRect,&destRect);
-                        if(num == map->size_x - 1)
-                        {
-                        destRect.y += height;
-                        destRect.x = x_corner;
-                        num = 0;
+                // Calculate the starting positions and tile sizes with respect to the border
+                int tileWidth = (MapDisplayWidth - 2 * BorderSize) / map->size_x;
+                int tileHeight = (MapDisplayHeight - 2 * BorderSize) / map->size_y;
+                int xStart = (screenWidth - MapDisplayWidth) / 2 + BorderSize;
+                int yStart = (screenHeight - MapDisplayHeight) / 2 + BorderSize;
+
+                // Draw the border
+                SDL_Rect borderRect = {xStart - BorderSize, yStart - BorderSize, MapDisplayWidth, MapDisplayHeight};
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for the border
+                SDL_RenderFillRect(renderer, &borderRect);
+
+                // Set the map's background color
+                SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255); // Gray background color
+
+                // Initialize the destination rectangle for the map tiles
+                SDL_Rect destRect = {xStart, yStart, tileWidth, tileHeight};
+
+                // Render each tile of the map
+                for (int y = 0; y < map->size_y; ++y) {
+                        for (int x = 0; x < map->size_x; ++x) {
+                            auto& tile = tiles[y * map->size_x + x];
+                            auto& sprite = tile->getComponent<TileComponent>().texture;
+                            auto& srcRect = tile->getComponent<TileComponent>().srcRect;
+
+                            SDL_RenderCopy(renderer, sprite, &srcRect, &destRect);
+                            destRect.x += tileWidth; // Move to the next tile position horizontally
                         }
-                        else
-                        {
-                        destRect.x += width;
-                        num++;
-                        }
+                        destRect.x = xStart; // Reset to the start of the next row
+                        destRect.y += tileHeight; // Move to the next tile position vertically
                 }
+
+
             }
 
         else {
@@ -902,20 +914,24 @@ void Game::render()
         scaledPlayerPosition.y = playerPosition.y / 3;
 
         // Set the drawing color to red for the dot.
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red.
+
 
         // Define the size of the dot, considering the scale.
         const int dotSize = 10; // You might want to scale this size as well.
 
         // Calculate the rectangle where the dot will be drawn, centering it around the scaled player's position.
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red.
+
         SDL_Rect dotRect = {
             static_cast<int>(scaledPlayerPosition.x) - dotSize / 2,
             static_cast<int>(scaledPlayerPosition.y) - dotSize / 2,
             dotSize,
             dotSize
         };
-
         SDL_RenderFillRect(renderer, &dotRect);
+
+        // Reset the draw color to gray after drawing the player position dot
+        SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255); // Gray background color
     }
 
     SDL_RenderPresent(renderer);
