@@ -806,30 +806,40 @@ void Game::render()
 
     }
      else {
-            int x_corner = (screenWidth - 1000)/2;
-            int y_corner = (screenHeight - 1000)/2;
-            int width = 1000/map->size_x;
-            int height = 1000/map->size_y;
-            SDL_Rect destRect = {x_corner,y_corner,width,height};
-            SDL_Rect srcRect;
-            int num = 0;
+            if (isFullscreen) {
+                int x_corner = (screenWidth - 1000)/2;
+                int y_corner = (screenHeight - 1000)/2;
+                int width = 1000/map->size_x;
+                int height = 1000/map->size_y;
+                SDL_Rect destRect = {x_corner,y_corner,width,height};
+                SDL_Rect srcRect;
+                int num = 0;
 
-            for (auto& t : tiles) {
-                auto& sprite = t->getComponent<TileComponent>().texture;
-                srcRect = t->getComponent<TileComponent>().srcRect;
-                SDL_RenderCopy(renderer,sprite,&srcRect,&destRect);
-                if(num == map->size_x - 1)
-                {
+                for (auto& t : tiles) {
+                        auto& sprite = t->getComponent<TileComponent>().texture;
+                        srcRect = t->getComponent<TileComponent>().srcRect;
+                        SDL_RenderCopy(renderer,sprite,&srcRect,&destRect);
+                        if(num == map->size_x - 1)
+                        {
                         destRect.y += height;
                         destRect.x = x_corner;
                         num = 0;
-                }
-                else
-                {
+                        }
+                        else
+                        {
                         destRect.x += width;
                         num++;
+                        }
                 }
             }
+
+        else {
+            for (auto& t : tiles) {
+                auto& tileComponent = t->getComponent<TileComponent>();
+                tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
+                t->draw();
+            }
+           }
 
         // Render the game name at the top of the map
         const int topPadding = 10; // Padding from the top edge
