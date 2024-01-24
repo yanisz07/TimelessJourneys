@@ -21,6 +21,8 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
     mapFile.open(path);
 
     int srcX, srcY;
+    size_x = sizeX;
+    size_y = sizeY;
 
     if (!mapFile.is_open())
     {

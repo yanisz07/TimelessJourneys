@@ -9,6 +9,8 @@ public:
 
     Map(std::string tID, int ms, int ts, Manager *man); //mfp=map file path, ms = map scale, ts = tile size
     ~Map();
+    int size_x;
+    int size_y;
 
     void LoadMap(std::string path, int sizeX, int sizeY);
     void AddTile(int srcX, int srcY, int xpos, int ypos);
