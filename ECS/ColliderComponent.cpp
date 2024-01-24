@@ -128,6 +128,7 @@ void ColliderComponent::update()
 
 void ColliderComponent::draw()
 {
+    /*
     if (angle == 0)
         {
             TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
@@ -136,4 +137,5 @@ void ColliderComponent::draw()
         {
             TextureManager::Draw_rotation(tex,srcR,destR,SDL_FLIP_NONE,angle);
         }
+    */
 }

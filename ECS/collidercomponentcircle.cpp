@@ -30,5 +30,7 @@ void ColliderComponentCircle::update()
 
 void ColliderComponentCircle::draw()
 {
+    /*
     TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
+    */
 }

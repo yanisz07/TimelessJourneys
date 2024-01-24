@@ -1254,6 +1254,9 @@ void Game::loadLvl2()
     map = new Map("terrain2",4,32,&manager);
     map->LoadMap2(mapPath.c_str(),25,20);
 
+    player.getComponent<TransformComponent>().position.x = 2044;
+    player.getComponent<TransformComponent>().position.y = 480;
+
     auto& enemy(manager.addEntity());
     auto& enemy2(manager.addEntity());
     auto& enemy3(manager.addEntity());
@@ -1319,6 +1322,9 @@ void Game::loadLvl3()
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
     map = new Map("terrain3",4,32,&manager);
     map->LoadMap3(mapPath.c_str(),50,40);
+
+    player.getComponent<TransformComponent>().position.x = 700;
+    player.getComponent<TransformComponent>().position.y = 532;
 
     auto& enemy(manager.addEntity());
     auto& enemy2(manager.addEntity());
