@@ -788,8 +788,12 @@ void Game::render()
     SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
     SDL_Color textColor = {255, 255, 255}; // White color for the text
 
+
+
+
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
+
             // Render all regular game objects when not in map view
             for (auto& t : tiles) { t->draw(); }
             for (auto& c : MapColliders) { c->draw(); }
@@ -804,8 +808,10 @@ void Game::render()
             player_health.draw();
             TestCol.draw();
 
+
     }
      else {
+
             if (isFullscreen) {
                 const int BorderSize = 10; // Size of the border around the map
                 const int MapDisplayWidth = 1200; // Desired width of the map display area
@@ -843,7 +849,34 @@ void Game::render()
                 }
 
 
+                // Render a legend for the map directly here
+                int legendX = 10; // Starting X position for the legend
+                int legendY = screenHeight - 100; // Starting Y position for the legend
+                int legendWidth = 200; // Width of the legend box
+                int legendHeight = 90; // Height of the legend box
+
+                // Draw the legend background
+                SDL_Rect legendBg = {legendX, legendY, legendWidth, legendHeight};
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128); // Semi-transparent black
+                SDL_RenderFillRect(renderer, &legendBg);
+
+                // Set the text color
+                SDL_Color textColor = {255, 255, 255, 255}; // White text
+
+                // Render the legend text
+                std::string legendText = "Legend:\n- Red Dot: Player\n- Blue Square: Water\n- Green Square: Forest";
+                SDL_Surface* surfaceText = TTF_RenderText_Blended_Wrapped(Game::assets->GetFont("arial"), legendText.c_str(), textColor, 190);
+                if (surfaceText) {
+                        SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
+                        SDL_Rect textRect = {legendX + 5, legendY + 5, surfaceText->w, surfaceText->h};
+                        SDL_RenderCopy(renderer, textureText, nullptr, &textRect);
+                        SDL_FreeSurface(surfaceText);
+                        SDL_DestroyTexture(textureText);
+                }
+
             }
+
+
 
         else {
             for (auto& t : tiles) {
@@ -851,7 +884,17 @@ void Game::render()
                 tileComponent.setTileScale2(1); // Assuming scale2 is the desired scale for map display
                 t->draw();
             }
+
            }
+
+
+
+
+
+
+
+
+
 
         // Render the game name at the top of the map
         const int topPadding = 10; // Padding from the top edge
@@ -932,10 +975,12 @@ void Game::render()
 
         // Reset the draw color to gray after drawing the player position dot
         SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255); // Gray background color
+
     }
 
     SDL_RenderPresent(renderer);
     }
+
 }
 
 void Game::clean()
