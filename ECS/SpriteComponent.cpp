@@ -34,8 +34,7 @@ void SpriteComponent::setActions()
     }
     else if(type == "archer")
     {
-        std::cout << "YAAAAAAAAAAAA" << std::endl;
-        Play("Idle_Down");
+        Play("Idle_Down",false,-1,150);
     }
     else
     {
@@ -102,8 +101,7 @@ void SpriteComponent::update()
                 }
                 else if (type == "archer")
                 {
-                    std::cout << "YAAAAAAA" << std::endl;
-                    Play("Idle_Down");
+                    Play("Idle_Down",false,-1,150);
                 }
                 else
                 {
@@ -157,14 +155,6 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
     currentAction = animName;
 
     setTex(animations[currentAction].spriteName);
-
-    if(type=="archer")
-    {
-        std::cout << currentAction << std::endl;
-        std::cout << animations[currentAction].spriteName << std::endl;
-        std::cout << texture << std::endl;
-    }
-
     srcRect.y = 0;
     srcRect.x = animations[currentAction].index;
     srcRect.h = animations[currentAction].wh;

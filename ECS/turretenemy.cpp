@@ -83,7 +83,6 @@ void TurretEnemy::update()
         if(timer.timedOut())
         {
             is_attacking=false;
-            sprite->Play("Idle_Down");
         }
         else
         {
