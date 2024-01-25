@@ -42,18 +42,18 @@ void Canon::update()
         {
             theta=-theta;
         }
-        CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2,transform->position.y+transform->height*transform->scale/2),direction,radius,speed,"enemy_arrow",15,7,2,damage,theta);
+        CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale/2,transform->position.y+transform->height*transform->scale/2),direction,radius,speed,"canon_bullet",400,400,1,damage);
         timer.setTimeOut(reloadTime);
     }
 }
 
-void Canon::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle)
+void Canon::CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam)
 {
     auto& arrow(manager->addEntity());
     arrow.addComponent<TransformComponent>(pos.x, pos.y, h, w, sc);
     arrow.addComponent<SpriteComponent>(id);
-    arrow.getComponent<SpriteComponent>().setAngle(angle);
+    arrow.getComponent<SpriteComponent>().Set_Dest_Rect(40,40);
     arrow.addComponent<ProjectileComponent>(range,speed,vel,dam);
-    arrow.addComponent<ColliderComponentCircle>("canon_ball",16);
+    arrow.addComponent<ColliderComponentCircle>(id,20);
     arrow.addGroup(Game::groupEnemyProjectiles);
 }

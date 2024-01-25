@@ -58,6 +58,8 @@ public:
 
     void Play(const std::string animName, bool flip = false, const int repeat = -1, int speed = 100, bool armorchange = false);
 
+    void Set_Dest_Rect(int w, int h);
+
 };
 
 #endif // SPRITECOMPONENT_H

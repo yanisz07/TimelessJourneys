@@ -23,7 +23,7 @@ public:
 
     void update() override;
 
-    void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
+    void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam);
 
 private:
     Manager* manager;

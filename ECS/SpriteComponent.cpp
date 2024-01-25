@@ -4,6 +4,7 @@
 SpriteComponent::SpriteComponent(std::string id)
 {
     setTex(id);
+    this->type = id;
 }
 
 SpriteComponent::SpriteComponent(bool isAnimated, std::string type)
@@ -33,6 +34,7 @@ void SpriteComponent::setActions()
     }
     else if(type == "archer")
     {
+        std::cout << "YAAAAAAAAAAAA" << std::endl;
         Play("Idle_Down");
     }
     else
@@ -100,6 +102,7 @@ void SpriteComponent::update()
                 }
                 else if (type == "archer")
                 {
+                    std::cout << "YAAAAAAA" << std::endl;
                     Play("Idle_Down");
                 }
                 else
@@ -110,10 +113,13 @@ void SpriteComponent::update()
         }
     }
 
+    if (type != "canon_bullet")
+    {
+        destRect.w = transform->width * transform->scale;
+        destRect.h = transform->height * transform->scale;
+    }
     destRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
     destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
-    destRect.w = transform->width * transform->scale;
-    destRect.h = transform->height * transform->scale;
 }
 
 void SpriteComponent::draw()
@@ -150,13 +156,15 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
 
     currentAction = animName;
 
+    setTex(animations[currentAction].spriteName);
+
     if(type=="archer")
     {
         std::cout << currentAction << std::endl;
         std::cout << animations[currentAction].spriteName << std::endl;
+        std::cout << texture << std::endl;
     }
 
-    setTex(animations[currentAction].spriteName);
     srcRect.y = 0;
     srcRect.x = animations[currentAction].index;
     srcRect.h = animations[currentAction].wh;
@@ -170,4 +178,10 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
 void SpriteComponent::setAngle(double angle)
 {
     this->angle=angle;
+}
+
+void SpriteComponent::Set_Dest_Rect(int w, int h)
+{
+    destRect.h = h;
+    destRect.w = w;
 }

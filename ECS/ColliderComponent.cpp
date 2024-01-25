@@ -30,8 +30,6 @@ ColliderComponent::ColliderComponent(std::string t, int xpos, int ypos, int widt
     collider.y = ypos;
     collider.h = height;
     collider.w = width;
-    std::cout << collider.w << std::endl;
-    std::cout << collider.h << std::endl;
     angle = 0;
 }
 
@@ -137,6 +135,7 @@ void ColliderComponent::update()
 
 void ColliderComponent::draw()
 {
+    /*
     if (angle == 0)
         {
             TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
@@ -145,4 +144,5 @@ void ColliderComponent::draw()
         {
             TextureManager::Draw_rotation(tex,srcR,destR,SDL_FLIP_NONE,angle);
         }
+    */
 }

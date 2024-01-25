@@ -37,10 +37,6 @@ Inventory* Game::inventory = new Inventory();
 ChestScreen* Game::chestScreen1 = new ChestScreen();
 ChestScreen* Game::chestScreen2 = new ChestScreen();
 
-
-
-
-
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
 

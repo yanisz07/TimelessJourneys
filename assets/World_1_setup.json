@@ -18,6 +18,10 @@
         "path": "/assets/weaponAssets/enemy_arrow.png"
       },
       {
+          "name": "canon_bullet",
+          "path": "/assets/weaponAssets/bullet.png"
+      },
+      {
         "name": "projectile",
         "path": "/assets/weaponAssets/enemy_arrow.png"
       },
