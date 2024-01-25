@@ -24,8 +24,7 @@ SDL_Texture* TextureManager::LoadTexture(const char* texture)
 
 void TextureManager::Draw(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip)
 {
-    SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, NULL, NULL, flip);
-    /*if (SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, NULL, NULL, flip) == 0) {
+    if (SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, NULL, NULL, flip) == 0) {
         // The rendering was successful
         // Add any additional code you want to execute on success
     } else {
@@ -34,7 +33,7 @@ void TextureManager::Draw(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_Ren
         const char* sdlError = SDL_GetError();
         // Print or handle the SDL error message as needed
         printf("SDL_RenderCopyEx failed: %s\n", sdlError);
-    }*/
+    }
 
 }
 

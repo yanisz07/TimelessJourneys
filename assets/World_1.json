@@ -499,6 +499,63 @@
         ]
       },
       {
+        "name": "Canon",
+        "sprites": [
+          {
+            "name" : "Canon_Right",
+            "path": "/assets/Canon/Right/Canon_1.png",
+            "actions": [
+              {
+                "name": "Right",
+                "values": [
+                  32,
+                  1
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Canon_left",
+            "path": "/assets/Canon/Left/Canon_1.png",
+            "actions": [
+              {
+                "name": "Left",
+                "values": [
+                  24,
+                  1
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Canon_Attack_Right",
+            "path": "/assets/Canon/Right/Canon_right.png",
+            "actions": [
+              {
+                "name": "Attack_right",
+                "values": [
+                  24,
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Canon_Attack_Left",
+            "path": "/assets/Canon/Left/Canon_left.png",
+            "actions": [
+              {
+                "name": "Attack_left",
+                "values": [
+                  24,
+                  5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "chest",
         "sprites" : [
            {

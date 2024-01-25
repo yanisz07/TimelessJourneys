@@ -36,6 +36,10 @@ void SpriteComponent::setActions()
     {
         Play("Idle_Down",false,-1,150);
     }
+    else if(type == "Canon")
+    {
+        Play("Right");
+    }
     else
     {
         Play("Idle");
@@ -102,6 +106,10 @@ void SpriteComponent::update()
                 else if (type == "archer")
                 {
                     Play("Idle_Down",false,-1,150);
+                }
+                else if(type == "Canon")
+                {
+                    Play("Right");
                 }
                 else
                 {

@@ -300,11 +300,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy3.addGroup(Game::groupTurrets);
 
     //create Canon
-    enemy4.addComponent<TransformComponent>(1500,500,128,128,1);
+    enemy4.addComponent<TransformComponent>(1500,500,24,24,4);
+    enemy4.addComponent<SpriteComponent>(true, "Canon");
+    enemy4.getComponent<SpriteComponent>().setActions();
     enemy4.addComponent<ColliderComponent>("canon");
-    enemy4.addComponent<Stats>();
     enemy4.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
-    enemy4.addGroup(Game::groupEnemies);
+    enemy4.addGroup(Game::groupCanons);
 
     //create first chest
 
@@ -359,6 +360,7 @@ auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 auto& chests(manager.getGroup(Game::groupChests));
 auto& Turrets(manager.getGroup(Game::groupTurrets));
+auto& Canons(manager.getGroup(Game::groupCanons));
 
 void Game::handleEvents()
 {
@@ -1074,6 +1076,7 @@ void Game::render()
         for (auto& ch: chests) { ch->draw(); }
         for (auto& p : PlayerAttacks) {p->draw();}
         for (auto& t : Turrets) {t->draw();}
+        for (auto& c : Canons) {c->draw();}
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
 

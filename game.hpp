@@ -80,7 +80,8 @@ public:
         groupEnemiesAttack,
         groupPlayerAttack,
         groupChests,
-        groupTurrets
+        groupTurrets,
+        groupCanons
     };
 
 private:
