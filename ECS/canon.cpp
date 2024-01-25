@@ -76,7 +76,7 @@ void Canon::update()
                     timer1.start();
                 }
             }
-            if (timer.getTimeOutStart() >= 900)
+            if (timer.getTimeOutStart() >= 700)
             {
                 if (!check_anim2)
                 {
