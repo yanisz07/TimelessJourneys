@@ -30,7 +30,7 @@ void Rule::renderRule(SDL_Renderer* renderer, bool isRuleOpen, const SDL_Point& 
         int centerY = (screenHeight - 2 * ruleButtonHeight - 20) / 2 + 200;
 
         // Background
-        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "background_sample1.png").string();
+        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" /"displayAssets"/  "background_sample1.png").string();
         SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, backgroundPath.c_str());
         SDL_Rect backgroundRect = {0, 0, screenWidth, screenHeight};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect);
