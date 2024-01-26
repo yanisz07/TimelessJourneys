@@ -15,3 +15,6 @@ This week, I started working on the developement of items, specifically on how t
 
 Week 6 Summary: 
 This week, I continued working on the developpement of items. Moreover, I was able to make appear an icon in the inventory. 
+
+Week 7 Summary: 
+This week, I continued the devloppment of new items with some of my teammates and introced them to the game (I worked for example on the health potion). Using the fact that items can now be in the inventory and in chests, I also worked on making some items usable once selected in the inventory. I also worked on some other minor adustments to other elements of the game. 
