@@ -171,6 +171,7 @@ void Inventory::useItem(int index) {
         if (!it->is_equipped) {
             it->is_equipped = true;
             std::cout << "Equipped: " << it->name << std::endl;
+
         } else {
             // If the item is already equipped, you might want to unequip or perform another action
             it->is_equipped = false;
@@ -186,7 +187,7 @@ void Inventory::useItem(int index) {
 
 void Inventory::useSelectedItem() {
     // check if item is equipped
-    if (items[selectedSlotIndex] != nullptr && items[selectedSlotIndex]->is_equipped) {
+    if (items[selectedSlotIndex] != nullptr) {
         if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
             useItem(selectedSlotIndex);
             selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
@@ -267,4 +268,12 @@ void Inventory::loadFromJSON(const std::string& filePath) {
 void Inventory::saveToJSON(const std::string& filePath) const {
 
 }
+
+
+
+void Inventory::setGame(Game* game)
+{
+    this->game = game;
+}
+
 

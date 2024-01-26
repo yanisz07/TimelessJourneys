@@ -10,6 +10,11 @@
 #include "SDL_image.h"
 #include <map>
 
+
+class Sword;
+
+class RangeWeapon;
+
 class Item {
 public:
     bool is_equipped;
@@ -48,9 +53,13 @@ public:
     Melee(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, float dmgMult);
 
     void displayInfo() const override;
-    void use() override {
+    void use() override;
+
+    /*
+    {
     std::cout << "Attacking with melee weapon: " << name << std::endl;
     }
+    */
 };
 
 class RangedWeapon : public Item {
@@ -64,9 +73,7 @@ public:
                  float dmgMult, int rng, int arrowSpeed, int shootingSpeed);
 
     void displayInfo() const override;
-    void use() override {
-        std::cout << "Shooting with ranged weapon: " << name << std::endl;
-}
+    void use() override;
 };
 
 class HealingPotion : public Item {

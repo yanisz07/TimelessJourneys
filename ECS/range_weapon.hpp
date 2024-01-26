@@ -46,6 +46,8 @@ public:
     void set_range(int r){range=r;}
     void set_speed(int s){speed=s;}
     void set_reload_time(Uint32 t){reloadTime=t;}
+    void set_sprite(std::string sprite){spritePath=sprite;}
+    void set_icon(SDL_Texture* txture){texture=txture;}
 
     void init() override;
 

@@ -11,6 +11,8 @@
 //#include "TextureManager.hpp"
 #include "json.hpp" // Include JSON library header for handling JSON files
 
+class Game;
+
 //class TextureManager;
 class Item;
 
@@ -53,9 +55,9 @@ public:
     void loadFromJSON(const std::string& filePath);
     void saveToJSON(const std::string& filePath) const;
 
+    Game* game;
 
-
-
+    void setGame(Game* game );
 
 
 
