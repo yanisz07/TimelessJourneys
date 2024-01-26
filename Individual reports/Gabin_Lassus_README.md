@@ -8,4 +8,6 @@ week 4/5/6/7 (including vacation): Did most of my work then. Over the course of 
 
 week 6: added a button in the settings to ajust the music volume with a slider which is connected with the music on/off button so that it ajusts to changes in the music on/off state.  
 
+week 7: At this point, the menu was finished so i did not do much. I quickly helped to add the rules page to the menu in week 7 by explaining the existing code to Dan and making sure it had no bug. 
 
+week 8: Same as last week, did not have much to do at that point. In week 8, i changed the music to a copyright free one and fixed a fixed a bug related to the background picture file path. Helped conceptualise the loading screen but did not code anything for that. 

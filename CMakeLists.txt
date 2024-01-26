@@ -59,7 +59,7 @@ set(SOURCES
     ECS/TileComponent.hpp
     ECS/ECS.cpp
     ECS/Animation.hpp
-    items.hpp
+    items.h
     items.cpp
     AssetManager.hpp
     AssetManager.cpp
@@ -69,7 +69,7 @@ set(SOURCES
     ECS/Stats.cpp
     json.hpp
     timer.hpp
-    rule.cpp rule.hpp
+    rule.cpp rule.h
     world.hpp world.cpp
     menu.hpp
     menu.cpp
@@ -95,10 +95,10 @@ add_executable(TimelessJourneys ${SOURCES}
     inventory.hpp
     ECS/InteractComponent.hpp
     chestScreen.cpp
-    chestScreen.hpp
-    ECS/turretenemy.hpp ECS/turretenemy.cpp
-    ECS/collidercomponentcircle.hpp ECS/collidercomponentcircle.cpp
-    ECS/canon.h ECS/canon.cpp)
+    chestScreen.h
+    ECS/turretenemy.cpp ECS/turretenemy.hpp
+    ECS/canon.cpp ECS/canon.h
+    ECS/collidercomponentcircle.hpp ECS/collidercomponentcircle.cpp)
 
 if (APPLE)
     target_link_libraries(TimelessJourneys PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer SDL2_ttf::SDL2_ttf ${COREGRAPHICS_FRAMEWORK} )

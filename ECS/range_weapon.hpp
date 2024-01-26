@@ -59,8 +59,6 @@ public:
 
     void draw() override;
 
-    void Range_Weapon_equip(Inventory &inventory);
-
 private:
     int damage = 3;
     int range = 400;

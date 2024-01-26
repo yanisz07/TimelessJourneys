@@ -13,6 +13,8 @@ public:
     {
         health = 10;
 
+        damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
+        exp_worth = 50;
         damage_mult = 1.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
         exp_worth = 500;
 

@@ -1,4 +1,4 @@
-#include "rule.hpp"
+#include "rule.h"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <sstream>

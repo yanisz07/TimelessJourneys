@@ -213,10 +213,3 @@ void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed,
     arrow.getComponent<ColliderComponent>().SetAngle(angle);
     arrow.addGroup(Game::groupPlayerProjectiles);
 }
-
-void Range_Weapon::Range_Weapon_equip(Inventory &inventory){
-    if (inventory.items.empty()){
-        damage = 1;
-    }
-
-}

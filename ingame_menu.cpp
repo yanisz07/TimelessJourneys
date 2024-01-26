@@ -24,7 +24,7 @@ void InGameMenu::renderInGameMenu(SDL_Renderer* renderer, bool isInGameMenuOpen,
         int centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
 
         // Background
-        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "displayAssets"/ "background_sample1.png").string();
+        std::string backgroundPath = (projectDir / ".." / "TimelessJourneys" / "assets" /"displayAssets"/ "background_sample1.png").string();
         SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, backgroundPath.c_str());
         SDL_Rect backgroundRect = {0, 0, screenWidth, screenHeight};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect);

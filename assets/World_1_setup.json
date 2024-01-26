@@ -23,7 +23,7 @@
       },
       {
         "name": "projectile",
-        "path": "/assets/weaponAssets/enemy_arrow.png"
+        "path": "/assets/weaponAssets/enemyArrow.png"
       },
       {
         "name": "arrow",

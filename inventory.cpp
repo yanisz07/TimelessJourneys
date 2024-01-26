@@ -3,7 +3,7 @@
 #include "SDL_image.h"
 #include "TextureManager.hpp"
 #include <fstream>
-#include "items.hpp"
+#include "items.h"
 
 
 const int ITEM_ICON_WIDTH = 32;
@@ -163,7 +163,6 @@ void Inventory::useItem(int index) {
     Item* it = items[key];
     if (it != nullptr) {
         std::cout << "Used item: " << it->name << std::endl;
-        it->is_equipped = true;
 
     } else {
         std::cout << "Item with index " << index << " not found." << std::endl;

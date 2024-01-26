@@ -10,12 +10,12 @@
 #include "charconv"
 #include "vector"
 #include "menu.hpp"
-#include "rule.hpp"
+#include "rule.h"
 #include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
-#include "items.hpp"
-#include "chestScreen.hpp"
+#include "items.h"
+#include "chestScreen.h"
 #include "timer.hpp"
 
 extern std::filesystem::path projectDir;
