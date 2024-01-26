@@ -90,6 +90,66 @@
             ],
             "dmg_multiplier": 0,
             "health_increase": 50
+        },
+        {
+            "name": "healing_potion",
+            "type": "HealingPotion",
+            "location" : "any",
+            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "sprites": [
+                {
+                    "name": "Diamond_Bow_Sprite",
+                    "path": "/assets/weaponAssets/bow3.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 0,
+            "health_increase": 50
+        },
+        {
+            "name": "healing_potion",
+            "type": "HealingPotion",
+            "location" : "any",
+            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "sprites": [
+                {
+                    "name": "Diamond_Bow_Sprite",
+                    "path": "/assets/weaponAssets/bow3.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 0,
+            "health_increase": 50
         }
     ]
 }
