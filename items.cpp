@@ -25,6 +25,15 @@ void ArmorItem::displayInfo() const {
     std::cout << "Health Increase: " << health_increase << std::endl;
 }
 
+
+Hand::Hand(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName)
+    : Item(equipped, loc, path, itemName) {}
+
+void Hand::displayInfo() const {
+    Item::displayInfo();
+    std::cout << "Hand Info:" << std::endl;
+}
+
 Melee::Melee(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, float dmgMult)
     : Item(equipped, loc, path, itemName), dmg_multiplier(dmgMult) {}
 

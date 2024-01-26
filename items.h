@@ -27,6 +27,16 @@ public:
     }
 };
 
+class Hand : public Item {
+public:
+    Hand(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
+
+    void displayInfo() const override;
+    void use() override {
+                std::cout << "Attacking with hand: " << name << std::endl;
+    }
+};
+
 class ArmorItem : public Item {
 public:
     float dmg_multiplier;
@@ -68,5 +78,9 @@ public:
         std::cout << "Shooting with ranged weapon: " << name << std::endl;
 }
 };
+
+
+
+
 
 #endif // ITEM_HPP
