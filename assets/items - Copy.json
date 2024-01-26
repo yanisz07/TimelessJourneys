@@ -28,6 +28,38 @@
                 }
             ],
             "dmg_multiplier": 1.2
+        },
+        {
+            "name": "wooden_bow",
+            "type": "RangedWeapon",
+            "location" : "any",
+            "spritePath" : "/assets/arrow.png",
+            "sprites": [
+                {
+                    "name": "Wooden_Bow_Sprite",
+                    "path": "/assets/wooden_bow.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.0,
+            "range": 100,
+            "speed_arrow": 5,
+            "speed_shooting": 1
         }
     ]
 }

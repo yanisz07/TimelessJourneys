@@ -22,6 +22,9 @@ public:
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 
     virtual void displayInfo() const;
+    virtual void use() {
+                std::cout << "Using item: " << name << std::endl;
+    }
 };
 
 class ArmorItem : public Item {
@@ -33,7 +36,10 @@ public:
           float dmgMult, int healthInc);
 
     void displayInfo() const override;
-};
+    void use() override {
+        std::cout << "Equipping armor: " << name << std::endl;
+    }
+    };
 
 class Melee : public Item {
 public:
@@ -42,6 +48,9 @@ public:
     Melee(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, float dmgMult);
 
     void displayInfo() const override;
+    void use() override {
+    std::cout << "Attacking with melee weapon: " << name << std::endl;
+    }
 };
 
 class RangedWeapon : public Item {
@@ -55,6 +64,9 @@ public:
                  float dmgMult, int rng, int arrowSpeed, int shootingSpeed);
 
     void displayInfo() const override;
+    void use() override {
+        std::cout << "Shooting with ranged weapon: " << name << std::endl;
+}
 };
 
 #endif // ITEM_HPP
