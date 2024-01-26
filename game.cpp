@@ -789,9 +789,6 @@ void Game::render()
     SDL_Color textColor = {255, 255, 255}; // White color for the text
 
 
-
-
-    // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
 
             // Render all regular game objects when not in map view
@@ -813,11 +810,12 @@ void Game::render()
      else {
 
             if (isFullscreen) {
-                const int BorderSize = 10; // Size of the border around the map
-                const int MapDisplayWidth = 1200; // Desired width of the map display area
-                const int MapDisplayHeight = 800; // Desired height of the map display area
 
-                // Calculate the starting positions and tile sizes with respect to the border
+
+                const int BorderSize = 10; // Size of the border around the map
+                const int MapDisplayWidth = 1200;
+                const int MapDisplayHeight = 800;
+
                 int tileWidth = (MapDisplayWidth - 2 * BorderSize) / map->size_x;
                 int tileHeight = (MapDisplayHeight - 2 * BorderSize) / map->size_y;
                 int xStart = (screenWidth - MapDisplayWidth) / 2 + BorderSize;
@@ -837,45 +835,66 @@ void Game::render()
                 // Render each tile of the map
                 for (int y = 0; y < map->size_y; ++y) {
                         for (int x = 0; x < map->size_x; ++x) {
-                            auto& tile = tiles[y * map->size_x + x];
-                            auto& sprite = tile->getComponent<TileComponent>().texture;
-                            auto& srcRect = tile->getComponent<TileComponent>().srcRect;
+                        auto& tile = tiles[y * map->size_x + x];
+                        auto& sprite = tile->getComponent<TileComponent>().texture;
+                        auto& srcRect = tile->getComponent<TileComponent>().srcRect;
 
-                            SDL_RenderCopy(renderer, sprite, &srcRect, &destRect);
-                            destRect.x += tileWidth; // Move to the next tile position horizontally
+                        SDL_RenderCopy(renderer, sprite, &srcRect, &destRect);
+                        destRect.x += tileWidth; // Move to the next tile position horizontally
                         }
                         destRect.x = xStart; // Reset to the start of the next row
                         destRect.y += tileHeight; // Move to the next tile position vertically
                 }
 
-
-                // Render a legend for the map directly here
-                int legendX = 10; // Starting X position for the legend
-                int legendY = screenHeight - 100; // Starting Y position for the legend
-                int legendWidth = 200; // Width of the legend box
-                int legendHeight = 90; // Height of the legend box
+                // Define the legend area
+                const int legendX = 10;
+                const int legendY = 10;
+                const int legendWidth = 200;
+                const int legendHeight = 90;
 
                 // Draw the legend background
                 SDL_Rect legendBg = {legendX, legendY, legendWidth, legendHeight};
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128); // Semi-transparent black
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128); // Semi-transparent black for the legend background
                 SDL_RenderFillRect(renderer, &legendBg);
 
-                // Set the text color
-                SDL_Color textColor = {255, 255, 255, 255}; // White text
+                // Set the text color for the legend
+                SDL_Color textColor = {255, 255, 255, 255}; // White text for the legend
 
-                // Render the legend text
-                std::string legendText = "Legend:\n- Red Dot: Player\n- Blue Square: Water\n- Green Square: Forest";
-                SDL_Surface* surfaceText = TTF_RenderText_Blended_Wrapped(Game::assets->GetFont("arial"), legendText.c_str(), textColor, 190);
-                if (surfaceText) {
-                        SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
-                        SDL_Rect textRect = {legendX + 5, legendY + 5, surfaceText->w, surfaceText->h};
-                        SDL_RenderCopy(renderer, textureText, nullptr, &textRect);
-                        SDL_FreeSurface(surfaceText);
-                        SDL_DestroyTexture(textureText);
+                // Define icon sizes and padding
+                const int iconSize = 20;
+                const int padding = 5;
+
+                // Render the legend text and icons
+                SDL_Surface* textSurface;
+                SDL_Texture* textTexture;
+                SDL_Rect textRect;
+
+                std::string texts[3] = {"Player", "Water", "Forest"};
+                SDL_Color colors[3] = {{255, 0, 0, 255}, {0, 0, 255, 255}, {0, 128, 0, 255}};
+                int offsetY = legendY + padding;
+
+                for (int i = 0; i < 3; ++i) {
+                        // Draw the colored box for the item
+                        SDL_Rect colorBox = {legendX + padding, offsetY, iconSize, iconSize};
+                        SDL_SetRenderDrawColor(renderer, colors[i].r, colors[i].g, colors[i].b, colors[i].a);
+                        SDL_RenderFillRect(renderer, &colorBox);
+
+                        // Render the associated text
+                        textSurface = TTF_RenderText_Blended(Game::assets->GetFont("arial"), texts[i].c_str(), textColor);
+                        if (textSurface) {
+                        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                        textRect = {legendX + iconSize + 2 * padding, offsetY, textSurface->w, textSurface->h};
+                        SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+                        SDL_FreeSurface(textSurface);
+                        SDL_DestroyTexture(textTexture);
+                        }
+
+                        offsetY += iconSize + padding; // Move down for the next item
                 }
 
+                // Reset render color to default
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             }
-
 
 
         else {
@@ -886,14 +905,6 @@ void Game::render()
             }
 
            }
-
-
-
-
-
-
-
-
 
 
         // Render the game name at the top of the map
@@ -916,53 +927,18 @@ void Game::render()
             SDL_DestroyTexture(textureGameName);
         }
 
-
-        // Adjust the placement of the player position key to the left
-        const int keyBoxSize = 10; // Size of the red square
-        const int padding = 10; // Padding from the top and left edges
-        const int textPadding = 5; // Padding between the square and the text
-
-        // Render the red square
-        SDL_Rect redSquare = {padding, padding, keyBoxSize, keyBoxSize};
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red
-        SDL_RenderFillRect(renderer, &redSquare);
-
-        // Create a surface for the player position text
-
-        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Game::assets->GetFont("arial"), "Player Position", textColor);
-
-        if (surfaceMessage) {
-            // Create a texture from the surface
-            SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-            SDL_Rect messageRect = {
-                padding + keyBoxSize + textPadding, // To the right of the red square
-                padding, // Same vertical position as the red square
-                surfaceMessage->w,
-                surfaceMessage->h
-            };
-
-            // Render the text
-            SDL_RenderCopy(renderer, messageTexture, NULL, &messageRect);
-
-            // Clean up
-            SDL_FreeSurface(surfaceMessage);
-            SDL_DestroyTexture(messageTexture);
-        }
         // Gets the scaled position of the player from the TransformComponent.
         Vector2D playerPosition = player.getComponent<TransformComponent>().position;
 
-        // Adjust player's position for the scaling factor.
+
         Vector2D scaledPlayerPosition;
         scaledPlayerPosition.x = playerPosition.x / 3; // Assuming 'scale' is your scaling factor (3 in this case).
         scaledPlayerPosition.y = playerPosition.y / 3;
 
-        // Set the drawing color to red for the dot.
 
 
-        // Define the size of the dot, considering the scale.
-        const int dotSize = 10; // You might want to scale this size as well.
+        const int dotSize = 10;
 
-        // Calculate the rectangle where the dot will be drawn, centering it around the scaled player's position.
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red.
 
         SDL_Rect dotRect = {
