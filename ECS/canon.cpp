@@ -41,8 +41,8 @@ void Canon::update()
 {
     if(distance_to_player(transform->position,playertransform->position)<=radius && timer.timedOut())
     {
-        direction.x = playertransform->position.x+13*playertransform->scale+(13/2)*playertransform->scale-(transform->position.x+transform->width*transform->scale/2);
-        direction.y = playertransform->position.y+18*playertransform->scale+(19/2)*playertransform->scale-(transform->position.y+transform->height*transform->scale/2);
+        direction.x = playertransform->position.x+13*playertransform->scale+(13/2)*playertransform->scale-(transform->position.x+transform->width*transform->scale+10);
+        direction.y = playertransform->position.y+18*playertransform->scale+(19/2)*playertransform->scale-(transform->position.y+12);
         direction.Normalize();
         //find angle between turret and player
         Vector2D e1 = Vector2D(1,0);
