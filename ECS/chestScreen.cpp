@@ -54,40 +54,36 @@ void ChestScreen::toggle() {
 }
 
 void ChestScreen::moveItem() {
-    int index = currentRow*10+currentCol;
+    int index = currentRow * 10 + currentCol;
     if (selectedSlot_inventory == true) {
-        if (index < (Game::inventory->items).size() && (Game::inventory->items)[index] != nullptr)
-        {
-            if(!addItem((Game::inventory->items)[index]))
-            {
-                std::cout << "Item " << (Game::inventory->items)[index]->name <<
-                    "moved from inventory to chest" <<std::endl;
-                (Game::inventory->items)[index] = nullptr;
-            }
-            else
-            {
-                 std::cout << "Cannot move item" << std::endl;
+        if (index < (Game::inventory->items).size() && (Game::inventory->items)[index] != nullptr) {
+            if (!(Game::inventory->items)[index]->is_equipped) {
+                if (!addItem((Game::inventory->items)[index])) {
+                    std::cout << "Item " << (Game::inventory->items)[index]->name <<
+                        " moved from inventory to chest" << std::endl;
+                    (Game::inventory->items)[index] = nullptr;
+                } else {
+                    std::cout << "Cannot move item" << std::endl;
+                }
+            } else {
+                std::cout << "Cannot move equipped item" << std::endl;
             }
         }
-
-    }
-
-    else if (selectedSlot_inventory == false) {
-        if (index < items.size() && items[index] != nullptr)
-        {
-            if(!(Game::inventory->addItem(items[index])))
-            {
-                 std::cout << "Item " << items[index]->name <<
-                     "moved from chest to inventory" <<std::endl;
-                 items[index] = nullptr;
-            }
-            else
-            {
-                 std::cout << "Cannot move item" << std::endl;
+    } else if (selectedSlot_inventory == false) {
+        if (index < items.size() && items[index] != nullptr) {
+            if (!items[index]->is_equipped) {
+                if (!(Game::inventory->addItem(items[index]))) {
+                    std::cout << "Item " << items[index]->name <<
+                        " moved from chest to inventory" << std::endl;
+                    items[index] = nullptr;
+                } else {
+                    std::cout << "Cannot move item" << std::endl;
+                }
+            } else {
+                std::cout << "Cannot move equipped item" << std::endl;
             }
         }
     }
-
 }
 
 

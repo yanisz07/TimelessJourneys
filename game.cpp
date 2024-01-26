@@ -185,6 +185,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     map = new Map("terrain", 4, 32, &manager);
     Game::inventory->init();
+    Game::inventory->setGame(this);
     Game::chestScreen1->init();
     Game::chestScreen2->init();
 
@@ -396,6 +397,7 @@ void Game::handleEvents()
             case SDLK_RIGHT:
                inventory -> moveSelection(1);
                break;
+
 
             case SDLK_u: // Assuming 'U' key is used to use an item
                inventory -> useSelectedItem();

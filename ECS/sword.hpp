@@ -59,6 +59,15 @@ public:
 
     void sword_equip(Inventory& inventory);
 
+    void setSprite(std::string spritePath);
+
+    void setDamage(int damage);
+
+    void setName(std::string name);
+
+    void setIcon(SDL_Texture* texture);
+
+
 private:
     TransformComponent* entityTransform;
     std::string name = "Standard weapon ";

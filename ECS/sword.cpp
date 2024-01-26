@@ -4,7 +4,7 @@
 #include "ColliderComponent.hpp"
 #include "Stats.hpp"
 #include <math.h>
-#include "../inventory.h"
+#include "../inventory.hpp"
 
 Sword::Sword(Manager *man) : dmg_multiplier(1.0f)
 {
@@ -297,3 +297,24 @@ void Sword::sword_equip(Inventory& inventory)
         }
     }
 }
+
+
+void Sword::setSprite(std::string spritePath){
+    this -> sprite = sprite;
+}
+
+
+void Sword::setDamage(int damage){
+    this -> damage = damage;
+}
+
+
+void Sword::setName(std::string name){
+    this -> name = name;
+}
+
+
+void Sword::setIcon(SDL_Texture* texture){
+    this -> texture = texture;
+}
+

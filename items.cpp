@@ -1,5 +1,8 @@
 #include "items.hpp"
 #include "TextureManager.hpp"
+#include "game.hpp"
+#include "ECS/sword.hpp"
+#include "ECS/range_weapon.hpp"
 
 Item::Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName)
     : is_equipped(equipped), location(loc), spritePath(path), name(itemName) {
@@ -34,6 +37,16 @@ void Melee::displayInfo() const {
     std::cout << "Damage Multiplier: " << dmg_multiplier << std::endl;
 }
 
+void Melee::use() {
+    Inventory* inventory = Game::inventory;
+    Sword& sword = inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Sword>();
+    sword.setDamage(dmg_multiplier);
+    sword.setSprite(spritePath);
+    sword.setName(name);
+    sword.setIcon(icon);
+
+}
+
 RangedWeapon::RangedWeapon(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName,
                            float dmgMult, int rng, int arrowSpeed, int shootingSpeed)
     : Item(equipped, loc, path, itemName), dmg_multiplier(dmgMult), range(rng), speed_arrow(arrowSpeed), speed_shooting(shootingSpeed) {}
@@ -45,4 +58,16 @@ void RangedWeapon::displayInfo() const {
     std::cout << "Range: " << range << std::endl;
     std::cout << "Arrow Speed: " << speed_arrow << std::endl;
     std::cout << "Shooting Speed: " << speed_shooting << std::endl;
+}
+
+
+void RangedWeapon::use() {
+    Inventory* inventory = Game::inventory;
+    Range_Weapon& range_weapon = inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Range_Weapon>();
+    range_weapon.set_damage(dmg_multiplier);
+    range_weapon.set_sprite(spritePath);
+    range_weapon.set_icon(icon);
+    range_weapon.set_range(range);
+    range_weapon.set_speed(speed_shooting);
+
 }

@@ -30,14 +30,14 @@
             "dmg_multiplier": 1.2
         },
         {
-            "name": "wooden_bow",
+            "name": "diamond_bow",
             "type": "RangedWeapon",
             "location" : "any",
-            "spritePath" : "/assets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/bow3.png",
             "sprites": [
                 {
-                    "name": "Wooden_Bow_Sprite",
-                    "path": "/assets/wooden_bow.png",
+                    "name": "Diamond_Bow_Sprite",
+                    "path": "/assets/weaponAssets/bow3.png",
                     "actions": [
                         {
                             "name": "Idle",
@@ -56,10 +56,10 @@
                     ]
                 }
             ],
-            "dmg_multiplier": 1.0,
-            "range": 100,
-            "speed_arrow": 5,
-            "speed_shooting": 1
+            "dmg_multiplier": 3.0,
+            "range": 310,
+            "speed_arrow": 100,
+            "speed_shooting": 8
         }
     ]
 }
