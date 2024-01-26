@@ -1109,13 +1109,13 @@ void Game::render()
     int shift_x = windowWidth - 320;
     int shift_y = 20;
     SDL_Rect destRect;
-    destRect={shift_x,shift_y,310,120};
+    destRect={shift_x,shift_y,screenWidth/7,screenHeight/8}; //310,120
     SDL_RenderCopy(Game::renderer,assets->GetTexture("Oval"),NULL,&destRect);
-    destRect={shift_x,shift_y-10,70,140};
+    destRect={shift_x-40,shift_y+30,screenWidth/18,screenHeight/18};
     SDL_RenderCopy(Game::renderer,assets->GetTexture("Hourglass"),NULL,&destRect);
-    destRect={shift_x+220,shift_y+15,90,90};
+    destRect={shift_x+200,shift_y+15,screenWidth/15,screenHeight/15};
     SDL_RenderCopy(Game::renderer,assets->GetTexture("PocketWatch"),NULL,&destRect);
-    destRect = {shift_x+70,shift_y+10,150,100};
+    destRect = {shift_x+70,shift_y+30,screenWidth/15,screenHeight/15};
 
     SDL_RenderCopy(Game::renderer,timeLabel,NULL,&destRect);
 
