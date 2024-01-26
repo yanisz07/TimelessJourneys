@@ -788,12 +788,8 @@ void Game::render()
     SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
     SDL_Color textColor = {255, 255, 255}; // White color for the text
 
-
-
-
     // If the DisplayMap flag is true, render only the tiles with the correct scaling
     if (!DisplayMap) {
-
             // Render all regular game objects when not in map view
             for (auto& t : tiles) { t->draw(); }
             for (auto& c : MapColliders) { c->draw(); }
@@ -808,6 +804,7 @@ void Game::render()
             player_health.draw();
             TestCol.draw();
 
+            renderMinimap();
 
     }
      else {
@@ -874,9 +871,8 @@ void Game::render()
                         SDL_DestroyTexture(textureText);
                 }
 
+
             }
-
-
 
         else {
             for (auto& t : tiles) {
@@ -886,14 +882,6 @@ void Game::render()
             }
 
            }
-
-
-
-
-
-
-
-
 
 
         // Render the game name at the top of the map
@@ -982,6 +970,57 @@ void Game::render()
     }
 
 }
+
+void Game::renderMinimap() {
+    const int minimapSize = 150; // The size of the minimap
+    const float minimapScale = 0.1f; // Scaling factor for the minimap tiles, adjust as needed
+
+    // Get the screen dimensions from the renderer
+    int screen_width, screen_height;
+    SDL_GetRendererOutputSize(renderer, &screen_width, &screen_height);
+
+    // Calculate minimap position on the bottom right of the screen
+    int minimapX = screen_width - minimapSize - 10; // 10 pixels padding from the right
+    int minimapY = screen_height - minimapSize - 10; // 10 pixels padding from the bottom
+
+    // Draw the minimap background
+    SDL_Rect minimapBackground = {minimapX, minimapY, minimapSize, minimapSize};
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Dark background for the minimap
+    SDL_RenderFillRect(renderer, &minimapBackground);
+
+    // Draw the tiles on the minimap
+    for (auto& tile : tiles) {
+    auto& tc = tile->getComponent<TileComponent>();
+
+    // Scale and translate tile positions to minimap positions
+    SDL_Rect srcRect = tc.srcRect;
+    SDL_Rect destRect = {
+        minimapX + static_cast<int>((tc.position.x - camera.x) * minimapScale),
+        minimapY + static_cast<int>((tc.position.y - camera.y) * minimapScale),
+        static_cast<int>(tc.tsize * minimapScale),
+        static_cast<int>(tc.tsize * minimapScale)
+    };
+
+    TextureManager::Draw(tc.texture, srcRect, destRect, SDL_FLIP_NONE);
+    }
+
+    // Draw the player on the minimap
+    auto& playerTransform = player.getComponent<TransformComponent>();
+    Vector2D playerPos = playerTransform.position;
+    SDL_Rect playerRect = {
+        minimapX + static_cast<int>((playerPos.x - camera.x) * minimapScale) - 2, // Center the player dot
+        minimapY + static_cast<int>((playerPos.y - camera.y) * minimapScale) - 2, // Center the player dot
+        4, // Player dot size, adjust as needed
+        4
+    };
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color for the player dot
+    SDL_RenderFillRect(renderer, &playerRect);
+
+    // Reset render color to default
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Reset to white color
+}
+
+
 
 void Game::clean()
 {

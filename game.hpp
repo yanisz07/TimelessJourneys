@@ -36,6 +36,7 @@ public:
     int  loadWorld();
     void update();
     void render();
+    void renderMinimap();
     void clean();
     void toggleMenu();
     void toggleFullScreen();
