@@ -1,0 +1,95 @@
+{
+    "items": [
+        {
+            "name": "silver_sword",
+            "type": "Melee",
+            "location" : "any",
+            "spritePath":"/assets/weaponAssets/sword.png",
+            "sprites": [
+                {
+                    "name": "Silver_Sword_Sprite",
+                    "path": "/assets/weaponAssets/sword.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.2
+        },
+        {
+            "name": "wooden_bow",
+            "type": "RangedWeapon",
+            "location" : "any",
+            "spritePath" : "/assets/arrow.png",
+            "sprites": [
+                {
+                    "name": "Wooden_Bow_Sprite",
+                    "path": "/assets/wooden_bow.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 1.0,
+            "range": 100,
+            "speed_arrow": 5,
+            "speed_shooting": 1
+        },
+        {
+            "name": "health",
+            "type": "HealingPotion",
+            "location" : "any",
+            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "sprites": [
+                {
+                    "name": "Wooden_Bow_Sprite",
+                    "path": "/assets/wooden_bow.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 0,
+            "health_increase": 50
+        }
+    ]
+}

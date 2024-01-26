@@ -251,6 +251,13 @@ void Inventory::loadFromJSON(const std::string& filePath) {
             Item* item = new ArmorItem(false,location,spritePath,name,dmg_multiplier,health_increase);
             addItem(item);
         }
+        if (type=="HealingPotion") {
+            int health_increase = itemData["health_increase"].get<int>();
+            Item* item = new HealingPotion(false,location,spritePath,name);
+            addItem(item);
+        }
+
+
         std::cout << "Item " << name << "created and added" << std::endl;
     }
 

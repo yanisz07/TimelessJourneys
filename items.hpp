@@ -69,4 +69,16 @@ public:
 }
 };
 
+class HealingPotion : public Item {
+public:
+float effect;
+
+HealingPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
+
+void displayInfo() const override;
+void use() override {
+        std::cout << "Healing with Potion: " << name << std::endl;
+}
+};
+
 #endif // ITEM_HPP

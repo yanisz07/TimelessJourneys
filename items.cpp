@@ -46,3 +46,12 @@ void RangedWeapon::displayInfo() const {
     std::cout << "Arrow Speed: " << speed_arrow << std::endl;
     std::cout << "Shooting Speed: " << speed_shooting << std::endl;
 }
+
+HealingPotion::HealingPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, int effect)
+    : Item(equipped, loc, path, itemName) {this->effect = effect;}
+
+void HealingPotion::displayInfo() const {
+    Item::displayInfo();
+    std::cout << "Melee Info:" << std::endl;
+    std::cout << "Healing Effect: " << effect << std::endl;
+}
