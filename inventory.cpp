@@ -164,7 +164,7 @@ void Inventory::useItem(int index) {
 
     Item* it = items[key];
     if (it != nullptr) {
-        it->use();
+
 
 
         // Instead of removing the item, you might want to handle other states, like 'equipped'
@@ -176,6 +176,10 @@ void Inventory::useItem(int index) {
             // If the item is already equipped, you might want to unequip or perform another action
             it->is_equipped = false;
             std::cout << "Unequipped: " << it->name << std::endl;
+        }
+        if(it->use() == 1)
+        {
+            removeItem(key);
         }
 
         // Note: The actual behavior of 'use' should be defined in each item's class (e.g., ArmorItem, Melee, RangedWeapon)
@@ -254,7 +258,7 @@ void Inventory::loadFromJSON(const std::string& filePath) {
         }
         if (type=="HealingPotion") {
             int health_increase = itemData["health_increase"].get<int>();
-            Item* item = new HealingPotion(false,location,spritePath,name);
+            Item* item = new HealingPotion(false,location,spritePath,name,health_increase);
             addItem(item);
         }
 

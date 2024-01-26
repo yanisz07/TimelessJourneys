@@ -27,8 +27,9 @@ public:
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 
     virtual void displayInfo() const;
-    virtual void use() {
+    virtual int use() {
                 std::cout << "Using item: " << name << std::endl;
+        return 0;
     }
 };
 
@@ -41,8 +42,9 @@ public:
           float dmgMult, int healthInc);
 
     void displayInfo() const override;
-    void use() override {
+    int use() override {
         std::cout << "Equipping armor: " << name << std::endl;
+        return 0;
     }
     };
 
@@ -53,7 +55,7 @@ public:
     Melee(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, float dmgMult);
 
     void displayInfo() const override;
-    void use() override;
+    int use() override;
 
     /*
     {
@@ -73,19 +75,17 @@ public:
                  float dmgMult, int rng, int arrowSpeed, int shootingSpeed);
 
     void displayInfo() const override;
-    void use() override;
+    int use() override;
 };
 
 class HealingPotion : public Item {
 public:
 float effect;
 
-HealingPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
+HealingPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, int effect);
 
 void displayInfo() const override;
-void use() override {
-        std::cout << "Healing with Potion: " << name << std::endl;
-}
+int use() override;
 };
 
 #endif // ITEM_HPP

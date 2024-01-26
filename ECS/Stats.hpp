@@ -72,6 +72,7 @@ public:
     void GainExp(int); // Handles level ups. Supports negative values. Will level down the player down to level 1 if necessary.
     void KillEntity(); // Only for enemies.
     void GameOver();
+    void addHealth(int health);
 
     bool is_hit()
     {

@@ -39,6 +39,14 @@ void Stats::init()
     SDL_FreeSurface(surf);
 }
 
+void Stats::addHealth(int health){
+    this->health += health;
+    if(get_health() > get_max_health())
+    {
+        set_health(get_max_health());
+    }
+}
+
 void Stats::KillEntity() {
     entity->destroy();
 }

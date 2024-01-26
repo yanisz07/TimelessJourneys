@@ -3,6 +3,7 @@
 #include "game.hpp"
 #include "ECS/sword.hpp"
 #include "ECS/range_weapon.hpp"
+#include "ECS/Stats.hpp"
 
 Item::Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName)
     : is_equipped(equipped), location(loc), spritePath(path), name(itemName) {
@@ -37,13 +38,14 @@ void Melee::displayInfo() const {
     std::cout << "Damage Multiplier: " << dmg_multiplier << std::endl;
 }
 
-void Melee::use() {
+int Melee::use() {
     Inventory* inventory = Game::inventory;
     Sword& sword = inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Sword>();
     sword.setDamage(dmg_multiplier);
     sword.setSprite(spritePath);
     sword.setName(name);
     sword.setIcon(icon);
+    return 0;
 
 }
 
@@ -63,13 +65,20 @@ void RangedWeapon::displayInfo() const {
 HealingPotion::HealingPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, int effect)
     : Item(equipped, loc, path, itemName) {this->effect = effect;}
 
+int HealingPotion::use(){
+    Stats& stats = Game::inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Stats>();
+    stats.addHealth(effect);
+    return 1;
+
+}
+
 void HealingPotion::displayInfo() const {
     Item::displayInfo();
     std::cout << "Potion Info:" << std::endl;
     std::cout << "Healing Effect: " << effect << std::endl;
 }
 
-void RangedWeapon::use() {
+int RangedWeapon::use() {
     Inventory* inventory = Game::inventory;
     Range_Weapon& range_weapon = inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Range_Weapon>();
     range_weapon.set_damage(dmg_multiplier);
@@ -77,5 +86,6 @@ void RangedWeapon::use() {
     range_weapon.set_icon(icon);
     range_weapon.set_range(range);
     range_weapon.set_speed(speed_shooting);
+    return 0;
 
 }
