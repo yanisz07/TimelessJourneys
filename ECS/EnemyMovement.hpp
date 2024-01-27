@@ -40,7 +40,7 @@ public:
     bool arming = false;
     bool exploded = false;
     bool in_range = false;
-    float explosion_radius = 200;
+    float explosion_radius = 250;
     Uint32 startExpTime;
     Vector2D knock_direction;
     Uint32 lastAttackTime;
