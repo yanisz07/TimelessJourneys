@@ -5,43 +5,62 @@
 #include "EnemyMovement.hpp"
 
 
-SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max, std::vector<Vector2D> points, TransformComponent* playerTrans, Stats* playerstats)
-    : manager(m), spawnInterval(interval), maxEnemies(max), spawnPoints(points) {
-    lastSpawnTime = SDL_GetTicks(), playerTransform=playerTrans, playerStats = playerstats; // Initialize with current time
+SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats)
+    : manager(m), spawnInterval(interval), max_spawn(max_enemies), playerTransform(playerTrans), playerStats(playerstats), hasSpawned(false) {
+    lastSpawnTime = SDL_GetTicks();
+}
+
+void SpawnerComponent::init() {
+    spawnerTransform = &entity->getComponent<TransformComponent>();
 }
 
 void SpawnerComponent::update() {
-    Uint32 currentTime = SDL_GetTicks();
+    // Remove any references to destroyed enemies
+    spawnedEnemies.erase(std::remove_if(spawnedEnemies.begin(), spawnedEnemies.end(),
+                                        [](Entity* enemy) { return !enemy->isActive(); }),
+                         spawnedEnemies.end());
 
-    // If an enemy has been spawned, check if it's time to spawn again after 10 seconds
-    if (hasSpawned && currentTime - lastSpawnTime > 10000) {
+    Uint32 currentTime = SDL_GetTicks();
+    Vector2D spawnerPosition = spawnerTransform->position;
+    Vector2D playerPosition = playerTransform->position;
+    float distanceToPlayer = (spawnerPosition - playerPosition).magnitude();
+
+    // Check if it's time to spawn again
+    if (hasSpawned && currentTime - lastSpawnTime > spawnInterval) {
         hasSpawned = false; // Reset the flag to allow another spawn
     }
 
-    // If we haven't spawned an enemy yet or it's time to spawn again
-    if (!hasSpawned) {
+    // If there are fewer than 4 spawned enemies alive and the player is within X units
+    if (!hasSpawned && spawnedEnemies.size() < max_spawn && distanceToPlayer < 600) {
         spawnEnemy();
-        lastSpawnTime = currentTime; // Update the last spawn time
-        hasSpawned = true; // Set the flag so no more enemies will be spawned until the interval passes
+        lastSpawnTime = currentTime;
+        hasSpawned = true;
     }
 }
 
-
 void SpawnerComponent::spawnEnemy() {
-    // Choose a random spawn point
-    int index = rand() % spawnPoints.size();
-    Vector2D spawnLocation = spawnPoints[index];
 
-    // Spawn an enemy at the chosen location
+    int enemy_type = (rand() % 3) + 1;
+
+    if (enemy_type == 3) {
+        enemy_type = 2; // Change a 3 to a 2 to make the chances of getting a 2 two-thirds.
+    } // 1/3 creeper and 2/3 swordsman
+
+
+
+    Vector2D spawnLocation = spawnerTransform->position;
+
+    // Spawn an enemy at the spawner's location
     Entity& enemy = manager.addEntity();
-    enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
+    enemy.addComponent<TransformComponent>(spawnLocation.x, spawnLocation.y, 128, 128, 1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(1,500,200,1200,60,playerTransform, playerStats, &enemyStats); //To be changed later on
+    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,playerTransform, playerStats, &enemyStats);
     enemy.addGroup(Game::groupEnemies);
+
+    spawnedEnemies.push_back(&enemy);
+
 }
-
-
