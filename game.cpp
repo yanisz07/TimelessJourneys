@@ -265,28 +265,30 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Enemy base definition
 
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+
     enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
-    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
-    Stats& playerStats = player.getComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addComponent<EnemyMovement>(1,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
     enemy.addGroup(Game::groupEnemies);
 
     std::cout << "Enemy created" << std::endl;
 
     //End of Enemy base definition
 
-    //create second enemy
 
     enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
     enemy2.addComponent<SpriteComponent>(true, "enemy");
     enemy2.getComponent<SpriteComponent>().setActions();
     enemy2.addComponent<ColliderComponent>("enemy");
     enemy2.addComponent<Stats>();
+    Stats& enemy2Stats = enemy2.getComponent<Stats>();
+    enemy2.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemy2Stats); //To be changed later on
     enemy2.addGroup(Game::groupEnemies);
 
     //create turret enemy

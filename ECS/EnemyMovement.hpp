@@ -41,6 +41,13 @@ public:
     float explosion_radius = 200;
     Uint32 startExpTime;
     Vector2D knock_direction;
+    Uint32 lastAttackTime;
+    const Uint32 attackInterval = 2000; // 2000 milliseconds = 2 seconds
+    const float dist_attack = 100; // Example attack distance
+    bool attack_bool = false;
+    Uint32 attackPushbackStartTime;
+    Vector2D attackPushbackDirection;
+
 
 
     Vector2D initial_position;
@@ -64,6 +71,8 @@ public:
     void swordsmanBehavior();
 
     void explosion();
+
+    void attack();
 
 };
 
