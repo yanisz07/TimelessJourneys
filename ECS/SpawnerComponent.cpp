@@ -40,6 +40,14 @@ void SpawnerComponent::update() {
 
 void SpawnerComponent::spawnEnemy() {
 
+    int enemy_type = (rand() % 3) + 1;
+
+    if (enemy_type == 3) {
+        enemy_type = 2; // Change a 3 to a 2 to make the chances of getting a 2 two-thirds.
+    } // 1/3 creeper and 2/3 swordsman
+
+
+
     Vector2D spawnLocation = spawnerTransform->position;
 
     // Spawn an enemy at the spawner's location
@@ -50,7 +58,7 @@ void SpawnerComponent::spawnEnemy() {
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(1,500,200,1200,60,playerTransform, playerStats, &enemyStats); //To be changed later on
+    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,playerTransform, playerStats, &enemyStats);
     enemy.addGroup(Game::groupEnemies);
 
     spawnedEnemies.push_back(&enemy);
