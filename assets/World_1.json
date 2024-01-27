@@ -389,13 +389,13 @@
           },
           {
             "name" : "Enemy_Attack_1_Sprite",
-            "path": "/assets/Blue_Slime/Attack_1.png",
+            "path": "/assets/Blue_Slime/Attack_3.png",
             "actions": [
               {
-                "name": "Attack_1",
+                "name": "Attack_3",
                 "values": [
                   128,
-                  4
+                  5
                 ]
               }
             ]
@@ -409,6 +409,19 @@
                 "values": [
                   128,
                   6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Explosion_Sprite",
+            "path": "/assets/Blue_Slime/Explosion.png",
+            "actions": [
+              {
+                "name": "Explosion",
+                "values": [
+                  800,
+                  10
                 ]
               }
             ]

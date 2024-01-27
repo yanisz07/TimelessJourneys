@@ -11,6 +11,7 @@
 
 //forward decleration
 class TransformComponent;
+class SpriteComponent;
 //end;
 
 class EnemyMovement : public Component
@@ -18,6 +19,7 @@ class EnemyMovement : public Component
 public:
     TransformComponent* transform;
     TransformComponent* playerTransform;
+    SpriteComponent* sprite;
     Stats* playerStats;
     Stats* stats;
     int collisionCooldown = 0;

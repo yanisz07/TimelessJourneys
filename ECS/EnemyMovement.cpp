@@ -1,5 +1,6 @@
 #include "EnemyMovement.hpp"
 #include "TransformComponent.hpp"
+#include "SpriteComponent.hpp"
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -22,6 +23,7 @@ EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, flo
 void EnemyMovement::init()
 {
     transform = &entity->getComponent<TransformComponent>();
+    sprite = &entity->getComponent<SpriteComponent>();
     initial_position=transform->position;
     srand(time(NULL));
 }
@@ -111,6 +113,7 @@ void EnemyMovement:: explosion(){
 void EnemyMovement:: attack(){
     std::cout << "Enemy Attack" << std::endl;
     playerStats->SubtractHealth(3);
+    sprite->Play("Attack_3",false,1);
     attackPushbackDirection = Vector2D(
                                   playerTransform->position.x - transform->position.x,
                                   playerTransform->position.y - transform->position.y
@@ -230,6 +233,10 @@ void EnemyMovement:: creeperBehavior()
             // Creeper is in the countdown phase for explosion (add animation)
             std::cout << "Arming" << std::endl;
             armingTimer++;
+            if (armingTimer == armingDuration-1)
+            {
+                sprite->Play("Explosion",false,1);
+            }
             if (armingTimer >= armingDuration) {
                 explosion();
             }
