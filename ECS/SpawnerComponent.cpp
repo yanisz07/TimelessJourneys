@@ -5,8 +5,8 @@
 #include "EnemyMovement.hpp"
 
 
-SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, TransformComponent* playerTrans, Stats* playerstats)
-    : manager(m), spawnInterval(interval), playerTransform(playerTrans), playerStats(playerstats), hasSpawned(false) {
+SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats)
+    : manager(m), spawnInterval(interval), max_spawn(max_enemies), playerTransform(playerTrans), playerStats(playerstats), hasSpawned(false) {
     lastSpawnTime = SDL_GetTicks();
 }
 
@@ -30,8 +30,8 @@ void SpawnerComponent::update() {
         hasSpawned = false; // Reset the flag to allow another spawn
     }
 
-    // If there are fewer than 4 spawned enemies alive and the player is within 500 units
-    if (!hasSpawned && spawnedEnemies.size() < 4 && distanceToPlayer < 500) {
+    // If there are fewer than 4 spawned enemies alive and the player is within X units
+    if (!hasSpawned && spawnedEnemies.size() < max_spawn && distanceToPlayer < 600) {
         spawnEnemy();
         lastSpawnTime = currentTime;
         hasSpawned = true;

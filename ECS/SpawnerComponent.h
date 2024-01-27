@@ -10,7 +10,7 @@
 
 class SpawnerComponent : public Component {
 public:
-    SpawnerComponent(Manager& m, Uint32 interval, TransformComponent* playerTrans, Stats* playerstats);
+    SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats);
 
     void init() override;
     void update() override;
@@ -19,6 +19,7 @@ public:
 
 private:
     Uint32 spawnInterval;
+    int max_spawn;
     Uint32 lastSpawnTime;
     bool hasSpawned;
     TransformComponent* spawnerTransform;

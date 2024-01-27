@@ -293,7 +293,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     spawner.addComponent<SpriteComponent>(true,"spawner");
     spawner.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
     spawner.getComponent<SpriteComponent>().setActions();
-    spawner.addComponent<SpawnerComponent>(manager, 8000, &playerTransform, &playerStats);
+    spawner.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats);
     spawner.addGroup(Game::groupSpawners);
 
     //End of Enemy base definition
