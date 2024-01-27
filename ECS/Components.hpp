@@ -20,6 +20,6 @@
 #include "turretenemy.hpp"
 #include "collidercomponentcircle.hpp"
 #include "canon.h"
-
+#include "SpawnerComponent.h"
 
 #endif // COMPONENTS_H

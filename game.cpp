@@ -61,6 +61,7 @@ auto& enemy3(manager.addEntity());
 //test canon
 auto& enemy4(manager.addEntity());
 // Add chests
+auto& spawner(manager.addEntity());
 auto& chest(manager.addEntity());
 auto& chest2(manager.addEntity());
 
@@ -279,9 +280,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Enemy created" << std::endl;
 
-    //End of Enemy base definition
-
-
     enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
     enemy2.addComponent<SpriteComponent>(true, "enemy");
     enemy2.getComponent<SpriteComponent>().setActions();
@@ -290,6 +288,11 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     Stats& enemy2Stats = enemy2.getComponent<Stats>();
     enemy2.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemy2Stats); //To be changed later on
     enemy2.addGroup(Game::groupEnemies);
+
+    std::vector<Vector2D> spawnPoints = {{1200, 1000}, {1300, 1000}, /* other points */};
+    spawner.addComponent<SpawnerComponent>(manager, 5000, 10, spawnPoints, &playerTransform, &playerStats);
+
+    //End of Enemy base definition
 
     //create turret enemy
 

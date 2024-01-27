@@ -3,7 +3,7 @@
 
 #include "../game.hpp"
 #include "ECS.hpp"
-//#include "Components.hpp"
+#include "Components.hpp"
 #include "SpriteComponent.hpp"
 #include "TransformComponent.hpp"
 #include "armor.hpp"
