@@ -70,8 +70,6 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Beige color for buttons
         SDL_RenderFillRect(renderer, &titleButton);
 
-
-
         // hover effect for Screen Dimension button
         if (isHoveringScreenDim) {
             SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover

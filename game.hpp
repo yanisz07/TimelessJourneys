@@ -13,6 +13,8 @@
 #include "game_over.h"
 #include <filesystem>
 #include "sdl_mixer.h"
+#include "Map.hpp" // Assuming you have a header file for the Map type
+
 
 extern std::filesystem::path projectDir;
 
@@ -39,6 +41,10 @@ public:
     void clean();
     void toggleMenu();
     void toggleFullScreen();
+    void RenderFullscreenMap(SDL_Renderer* renderer, int screenWidth, int screenHeight, Map* map);
+    void RenderLegend(SDL_Renderer* renderer);
+
+
 
     bool is_running() {return isRunning;}
 
