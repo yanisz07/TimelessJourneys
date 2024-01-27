@@ -22,7 +22,6 @@ EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, flo
 void EnemyMovement::init()
 {
     transform = &entity->getComponent<TransformComponent>();
-    stats->SubtractHealth(-10);
     initial_position=transform->position;
     srand(time(NULL));
 }
@@ -119,9 +118,7 @@ void EnemyMovement:: attack(){
 
     attackPushbackStartTime = SDL_GetTicks();
     attack_bool = true;
-
-
-    //TODO
+   //TODO
 
 }
 
@@ -195,18 +192,17 @@ void EnemyMovement::update()
         //Explosion knockout end
         if (delay>= 250){
             stats->KillEntity();
-            std::cout << "Entity Killed" << std::endl;
-
-
-
+            std::cout << "Creeper Exploded" << std::endl;
         }
 
     }
 
     if (enemyType == 1){
+        std::cout << stats->get_health() << std::endl;
         swordsmanBehavior();
     }
     else if (enemyType == 2){
+        std::cout << "creeper" << std::endl;
         creeperBehavior();
     }
 }
@@ -290,9 +286,16 @@ void EnemyMovement:: creeperBehavior()
                  }
 
                  float magnitude = Vector2D(xDirection,yDirection).magnitude();
-                 transform->velocity.x = xDirection/magnitude * velocityScale;
-                 transform->velocity.y = yDirection/magnitude * velocityScale;
-
+                 if (magnitude!=0)
+                 {
+                     transform->velocity.x = xDirection/magnitude * velocityScale;
+                     transform->velocity.y = yDirection/magnitude * velocityScale;
+                 }
+                 else
+                 {
+                     transform->velocity.x = 0;
+                     transform->velocity.y = 0;
+                 }
 
             }
             else{ //It has to come back to its initial_position (Will see how to do that)
@@ -309,8 +312,16 @@ void EnemyMovement:: creeperBehavior()
                 float xDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
                 float yDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
                 float magnitude = Vector2D(xDirection,yDirection).magnitude();
-                transform->velocity.x = xDirection/magnitude * velocityScale;
-                transform->velocity.y = yDirection/magnitude * velocityScale;
+                if (magnitude!=0)
+                {
+                    transform->velocity.x = xDirection/magnitude * velocityScale;
+                    transform->velocity.y = yDirection/magnitude * velocityScale;
+                }
+                else
+                {
+                    transform->velocity.x = 0;
+                    transform->velocity.y = 0;
+                }
             }
             else{ // If enemy too for away from its initial position it comes back to get closer to it
                 //std::cout << "tries to come back to its initial position" << std::endl;
@@ -319,7 +330,6 @@ void EnemyMovement:: creeperBehavior()
         }
     }
     }
-
 }
 
 void EnemyMovement:: swordsmanBehavior(){
@@ -378,8 +388,16 @@ void EnemyMovement:: swordsmanBehavior(){
                             yDirection = 0; // Enemy is within tolerance range, do not move vertically
                     }
                     float magnitude = Vector2D(xDirection,yDirection).magnitude();
-                    transform->velocity.x = xDirection/magnitude * velocityScale;
-                    transform->velocity.y = yDirection/magnitude * velocityScale;
+                    if (magnitude!=0)
+                    {
+                        transform->velocity.x = xDirection/magnitude * velocityScale;
+                        transform->velocity.y = yDirection/magnitude * velocityScale;
+                    }
+                    else
+                    {
+                        transform->velocity.x = 0;
+                        transform->velocity.y = 0;
+                    }
 
 
                 }
@@ -402,8 +420,16 @@ void EnemyMovement:: swordsmanBehavior(){
                 float xDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
                 float yDirection = ((rand() % 3) - 1);    // Random number between -1, 0 and 1
                 float magnitude = Vector2D(xDirection,yDirection).magnitude();
-                transform->velocity.x = xDirection/magnitude * velocityScale;
-                transform->velocity.y = yDirection/magnitude * velocityScale;
+                if (magnitude!=0)
+                {
+                    transform->velocity.x = xDirection/magnitude * velocityScale;
+                    transform->velocity.y = yDirection/magnitude * velocityScale;
+                }
+                else
+                {
+                    transform->velocity.x = 0;
+                    transform->velocity.y = 0;
+                }
             }
             else{ // If enemy too for away from its initial position it comes back to get closer to it
                 //std::cout << "tries to come back to its initial position" << std::endl;
