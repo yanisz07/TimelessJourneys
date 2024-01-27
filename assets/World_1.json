@@ -585,6 +585,24 @@
             ]
           }
         ]
+      },
+      {
+        "name": "spawner",
+        "sprites" : [
+           {
+            "name" : "Portal_Sprite",
+            "path" : "/assets/propAssets/portal.png",
+            "actions": [
+                {
+                "name" : "Idle",
+                "values": [
+                    250,
+                    4
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
  }

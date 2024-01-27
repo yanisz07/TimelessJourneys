@@ -81,7 +81,8 @@ public:
         groupPlayerAttack,
         groupChests,
         groupTurrets,
-        groupCanons
+        groupCanons,
+        groupSpawners
     };
 
 private:

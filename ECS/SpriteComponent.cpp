@@ -40,6 +40,10 @@ void SpriteComponent::setActions()
     {
         Play("Right");
     }
+    else if(type == "spawner")
+    {
+        Play("Idle");
+    }
     else
     {
         Play("Idle");
@@ -119,7 +123,7 @@ void SpriteComponent::update()
         }
     }
 
-    if (type != "canon_bullet")
+    if (type != "canon_bullet" && type != "spawner")
     {
         destRect.w = transform->width * transform->scale;
         destRect.h = transform->height * transform->scale;
@@ -162,14 +166,30 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
 
     currentAction = animName;
 
-    setTex(animations[currentAction].spriteName);
-    srcRect.y = 0;
-    srcRect.x = animations[currentAction].index;
-    srcRect.h = animations[currentAction].wh;
-    srcRect.w = animations[currentAction].wh;
-    animations[currentAction].repeat = repeat;
-    animations[currentAction].speed = speed;
-    animations[currentAction].timer.start();
+    if (type!="spawner")
+    {
+        setTex(animations[currentAction].spriteName);
+        srcRect.y = 0;
+        srcRect.x = animations[currentAction].index;
+        srcRect.h = animations[currentAction].wh;
+        srcRect.w = animations[currentAction].wh;
+        animations[currentAction].repeat = repeat;
+        animations[currentAction].speed = speed;
+        animations[currentAction].timer.start();
+    }
+
+    if (type=="spawner")
+    {
+        setTex(animations[currentAction].spriteName);
+        srcRect.y = 0;
+        srcRect.x = animations[currentAction].index;
+        srcRect.h = 500;
+        srcRect.w = animations[currentAction].wh;
+        animations[currentAction].repeat = repeat;
+        animations[currentAction].speed = speed;
+        animations[currentAction].timer.start();
+    }
+
 }
 
 

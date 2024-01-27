@@ -290,7 +290,12 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addGroup(Game::groupEnemies);
 
     std::vector<Vector2D> spawnPoints = {{1200, 1000}, {1300, 1000}, /* other points */};
+    spawner.addComponent<TransformComponent>(1200,1000,500,250,1);
+    spawner.addComponent<SpriteComponent>(true,"spawner");
+    spawner.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
+    spawner.getComponent<SpriteComponent>().setActions();
     spawner.addComponent<SpawnerComponent>(manager, 5000, 10, spawnPoints, &playerTransform, &playerStats);
+    spawner.addGroup(Game::groupSpawners);
 
     //End of Enemy base definition
 
@@ -366,6 +371,7 @@ auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 auto& chests(manager.getGroup(Game::groupChests));
 auto& Turrets(manager.getGroup(Game::groupTurrets));
 auto& Canons(manager.getGroup(Game::groupCanons));
+auto& Spawners(manager.getGroup(Game::groupSpawners));
 
 void Game::handleEvents()
 {
@@ -1076,6 +1082,7 @@ void Game::render()
         // Render all regular game objects when not in map view
         for (auto& t : tiles) { t->draw(); }
         for (auto& c : MapColliders) { c->draw(); }
+        for (auto& s : Spawners) {s->draw();}
         for (auto& p : players) { p->draw(); }
         for (auto& e : enemies) { e->draw(); }
         for (auto& ch: chests) { ch->draw(); }

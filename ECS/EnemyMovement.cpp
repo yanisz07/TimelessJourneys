@@ -198,11 +198,9 @@ void EnemyMovement::update()
     }
 
     if (enemyType == 1){
-        std::cout << stats->get_health() << std::endl;
         swordsmanBehavior();
     }
     else if (enemyType == 2){
-        std::cout << "creeper" << std::endl;
         creeperBehavior();
     }
 }
