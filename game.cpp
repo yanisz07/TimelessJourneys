@@ -289,12 +289,11 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy2.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemy2Stats); //To be changed later on
     enemy2.addGroup(Game::groupEnemies);
 
-    std::vector<Vector2D> spawnPoints = {{1200, 1000}, {1300, 1000}, /* other points */};
     spawner.addComponent<TransformComponent>(1200,1000,500,250,1);
     spawner.addComponent<SpriteComponent>(true,"spawner");
     spawner.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
     spawner.getComponent<SpriteComponent>().setActions();
-    spawner.addComponent<SpawnerComponent>(manager, 5000, 10, spawnPoints, &playerTransform, &playerStats);
+    spawner.addComponent<SpawnerComponent>(manager, 3000, &playerTransform, &playerStats);
     spawner.addGroup(Game::groupSpawners);
 
     //End of Enemy base definition

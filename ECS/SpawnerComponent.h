@@ -3,31 +3,27 @@
 
 #include "ECS.hpp"
 #include "TransformComponent.hpp"
+#include "SpriteComponent.hpp"
+#include "ColliderComponent.hpp"
+#include "EnemyMovement.hpp"
 #include <vector>
-#include <SDL.h>
-#include <stdlib.h>
-#include <math.h>
-#include "../Vector2D.hpp"
-#include "Stats.hpp"
-#include "../game.hpp"
-
 
 class SpawnerComponent : public Component {
 public:
-    SpawnerComponent(Manager& m, Uint32 interval, int max, std::vector<Vector2D> points, TransformComponent* playerTrans, Stats* playerstats);
+    SpawnerComponent(Manager& m, Uint32 interval, TransformComponent* playerTrans, Stats* playerstats);
 
-    TransformComponent* playerTransform;
-    Stats* playerStats;
+    void init() override;
     void update() override;
     void spawnEnemy();
-    bool hasSpawned = false ;
-
+    std::vector<Entity*> spawnedEnemies;
 
 private:
     Uint32 spawnInterval;
     Uint32 lastSpawnTime;
-    int maxEnemies;
-    std::vector<Vector2D> spawnPoints;
+    bool hasSpawned;
+    TransformComponent* spawnerTransform;
+    TransformComponent* playerTransform;
+    Stats* playerStats;
     Manager& manager;
 };
 

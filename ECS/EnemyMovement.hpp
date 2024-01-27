@@ -34,7 +34,7 @@ public:
     float dist_from_initial_position; //Distance of enemy's actual position- enemy's initial position
     bool pursuit;
     int armingTimer = 0;
-    int armingDuration = 4; // Duration for the creeper to arm itself
+    int armingDuration = 3; // Duration for the creeper to arm itself
     bool arming = false;
     bool exploded = false;
     bool in_range = false;
