@@ -84,7 +84,8 @@ public:
         groupChests,
         groupTurrets,
         groupCanons,
-        groupSpawners
+        groupSpawners,
+        groupNPC
     };
 
 private:

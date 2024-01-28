@@ -34,6 +34,14 @@
       {
         "name": "Oval",
         "path": "/assets/displayAssets/Oval.png"
+      },
+      {
+        "name": "we believe in you",
+        "path": "/assets/we_believe_in_you.png"
+      },
+      {
+        "name": "we count on you adventurer",
+        "path": "/assets/we_count_on_you_adventurer.png"
       }
     ]
  }
