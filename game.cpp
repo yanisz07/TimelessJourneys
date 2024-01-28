@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include <SDL.h>
+#include <SDL_image.h>
 #include "TextureManager.hpp"
 #include "map.hpp"
 #include "ECS/Components.hpp"
@@ -164,6 +165,11 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     else
     {
+        isRunning = false;
+    }
+    // Initialize SDL_image
+    if (!(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) & (IMG_INIT_PNG | IMG_INIT_JPG))) {
+        std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
         isRunning = false;
     }
 

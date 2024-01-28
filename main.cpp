@@ -1,6 +1,6 @@
 #include <iostream>
 #include "game.hpp"
-#include "SDL_image.h"
+
 
 Game *game = nullptr;
 
@@ -15,11 +15,7 @@ int main(int argc, char* args[]) {
 
     game->init("GameWindow",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600,1280,true);
 
-    // Initialize SDL_image
-    if (!(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) & (IMG_INIT_PNG | IMG_INIT_JPG))) {
-        std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
-        return -1;
-    }
+
 
 
     while(game->is_running())
@@ -39,9 +35,6 @@ int main(int argc, char* args[]) {
     }
 
     game->clean();
-
-    // Shut down SDL_image
-    IMG_Quit();
 
     return 0;
 
