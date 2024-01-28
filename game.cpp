@@ -914,33 +914,41 @@ void Game::RenderFullscreenMap(SDL_Renderer* renderer, int screenWidth, int scre
 void Game::RenderLegend(SDL_Renderer* renderer) {
     const int legendX = 10;
     const int legendY = 10;
-    const int legendWidth = 200;
-    const int legendHeight = 90;
+    const int legendWidth = 220; // Slightly wider to accommodate larger text
+    const int legendHeight = 130; // Adjusted height to fit additional item
 
-    // Draw the legend background
-    SDL_Rect legendBg = {legendX, legendY, legendWidth, legendHeight};
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128); // Semi-transparent black for the legend background
-    SDL_RenderFillRect(renderer, &legendBg);
+    // Outer border color (dark gray/brownish tone)
+    SDL_Color borderColor = {50, 40, 30, 255};
+    SDL_SetRenderDrawColor(renderer, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
+    SDL_Rect borderRect = {legendX, legendY, legendWidth, legendHeight};
+    SDL_RenderFillRect(renderer, &borderRect);
+
+    // Inner background color (lighter tone for contrast)
+    SDL_Color backgroundColor = {120, 110, 100, 255};
+    const int padding = 4; // Padding for the inner background
+    SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    SDL_Rect backgroundRect = {legendX + padding, legendY + padding, legendWidth - 2 * padding, legendHeight - 2 * padding};
+    SDL_RenderFillRect(renderer, &backgroundRect);
 
     // Set the text color for the legend
     SDL_Color textColor = {255, 255, 255, 255}; // White text for the legend
 
-    // Define icon sizes and padding
+    // Define icon sizes
     const int iconSize = 20;
-    const int padding = 5;
+    const int innerPadding = 10; // Padding inside the legend
 
     // Render the legend text and icons
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Rect textRect;
 
-    std::string texts[3] = {"Player", "Water", "Forest"};
-    SDL_Color colors[3] = {{255, 0, 0, 255}, {0, 0, 255, 255}, {0, 128, 0, 255}};
-    int offsetY = legendY + padding;
+    std::string texts[4] = {"Player", "Water", "Forest", "Ping"};
+    SDL_Color colors[4] = {{255, 0, 0, 255}, {0, 0, 255, 255}, {0, 128, 0, 255}, {0, 0, 255, 255}};
+    int offsetY = legendY + innerPadding;
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
     // Draw the colored box for the item
-    SDL_Rect colorBox = {legendX + padding, offsetY, iconSize, iconSize};
+    SDL_Rect colorBox = {legendX + innerPadding, offsetY, iconSize, iconSize};
     SDL_SetRenderDrawColor(renderer, colors[i].r, colors[i].g, colors[i].b, colors[i].a);
     SDL_RenderFillRect(renderer, &colorBox);
 
@@ -948,15 +956,19 @@ void Game::RenderLegend(SDL_Renderer* renderer) {
     textSurface = TTF_RenderText_Blended(Game::assets->GetFont("arial"), texts[i].c_str(), textColor);
     if (textSurface) {
         textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-        textRect = {legendX + iconSize + 2 * padding, offsetY, textSurface->w, textSurface->h};
+        textRect = {legendX + iconSize + 2 * innerPadding, offsetY, textSurface->w, textSurface->h};
         SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
         SDL_FreeSurface(textSurface);
         SDL_DestroyTexture(textTexture);
     }
 
-    offsetY += iconSize + padding; // Move down for the next item
+    offsetY += iconSize + innerPadding; // Move down for the next item
     }
+
+    // Reset the renderer color to white for default rendering
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
+
 
 void Game::renderWindowedMap() {
     for (auto& t : tiles) {
