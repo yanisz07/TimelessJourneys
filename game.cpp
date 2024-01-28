@@ -190,7 +190,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player
     player.setType("player");
-    player.addComponent<TransformComponent>(1400,1100,48,48,3,20);
+    player.addComponent<TransformComponent>(1900,1100,48,48,3,20);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<Armor>();
@@ -230,7 +230,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     lastProjectileTime = SDL_GetTicks();
 
 
-    TestCol.addComponent<TransformComponent>(1700,1500,100,200);
+    TestCol.addComponent<TransformComponent>(1900,1500,100,200);
     TestCol.addComponent<ColliderComponent>("terrain");
     TestCol.getComponent<ColliderComponent>().SetAngle(135);
 
@@ -239,7 +239,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //inventory.addNewItem(Items* items,handPath,renderer);
 
-    TestCircle.addComponent<TransformComponent>(1400,1500,200,200);
+    TestCircle.addComponent<TransformComponent>(1900,1500,200,200);
     TestCircle.addComponent<ColliderComponentCircle>("circle",100);
 
     std::cout << "Game initialized" << std::endl;
@@ -583,7 +583,7 @@ void Game::handleEvents()
                 // Reset game state to start again
                 Mix_PlayChannel(-1,clickButton, 0);
                 player.getComponent<Stats>().set_health(50);
-                player.getComponent<TransformComponent>().position = Vector2D(1400, 1100);
+                player.getComponent<TransformComponent>().position = Vector2D(1900, 1100);
                 timeElapsed.start();
                 isGameOverOpen = false;
             }
@@ -1420,7 +1420,7 @@ void Game::loadLvl1()
     canon.addComponent<SpriteComponent>(true, "Canon_Right");
     canon.getComponent<SpriteComponent>().setActions();
     canon.addComponent<ColliderComponent>("canon");
-    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
+    canon.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon.addGroup(Game::groupCanons);
 
 
@@ -1429,7 +1429,7 @@ void Game::loadLvl1()
     canon1.addComponent<SpriteComponent>(true, "Canon_Left");
     canon1.getComponent<SpriteComponent>().setActions();
     canon1.addComponent<ColliderComponent>("canon");
-    canon1.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
+    canon1.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
     canon1.addGroup(Game::groupCanons);
 
     //creates npc
@@ -1583,7 +1583,7 @@ void Game::loadLvl2()
     enemy4.getComponent<SpriteComponent>().setActions();
     enemy4.addComponent<ColliderComponent>("enemy");
     enemy4.addComponent<Stats>();
-    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addComponent<TurretEnemy>(900,5,5,900,&manager,&player.getComponent<TransformComponent>());
     enemy4.addGroup(Game::groupEnemies);
 
     //create Canon
@@ -1591,7 +1591,7 @@ void Game::loadLvl2()
     canon.addComponent<SpriteComponent>(true, "Canon");
     canon.getComponent<SpriteComponent>().setActions();
     canon.addComponent<ColliderComponent>("canon");
-    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>());
     canon.addGroup(Game::groupCanons);*/
 
     camera.w = 3200 - screen_width;
@@ -1740,7 +1740,7 @@ void Game::loadLvl3()
     enemy1.addComponent<ColliderComponent>("enemy");
     enemy1.addComponent<Stats>();
     Stats& enemyStats = enemy1.getComponent<Stats>();
-    enemy1.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy1.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
     enemy1.addGroup(Game::groupEnemies);
 
 
@@ -1774,7 +1774,7 @@ void Game::loadLvl3()
     enemy01.addComponent<SpriteComponent>(true,"spawner");
     enemy01.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
     enemy01.getComponent<SpriteComponent>().setActions();
-    enemy01.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats);
+    enemy01.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats,&playerCol);
     enemy01.addGroup(Game::groupSpawners);
 
     enemy02.addComponent<TransformComponent>(2898,3320,128,128,1);
@@ -1783,7 +1783,7 @@ void Game::loadLvl3()
     enemy02.addComponent<ColliderComponent>("enemy");
     enemy02.addComponent<Stats>();
     enemyStats = enemy02.getComponent<Stats>();
-    enemy02.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy02.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
     enemy02.addGroup(Game::groupEnemies);
 
     enemy03.addComponent<TransformComponent>(2325,2619,128,128,1);
@@ -1792,7 +1792,7 @@ void Game::loadLvl3()
     enemy03.addComponent<ColliderComponent>("enemy");
     enemy03.addComponent<Stats>();
     enemyStats = enemy03.getComponent<Stats>();
-    enemy03.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy03.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
     enemy03.addGroup(Game::groupEnemies);
 
     enemy04.addComponent<TransformComponent>(1544,3383,128,128,1);
@@ -1801,7 +1801,7 @@ void Game::loadLvl3()
     enemy04.addComponent<ColliderComponent>("enemy");
     enemy04.addComponent<Stats>();
     enemyStats = enemy04.getComponent<Stats>();
-    enemy04.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy04.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
     enemy04.addGroup(Game::groupEnemies);
 
     enemy05.addComponent<TransformComponent>(359,3383,128,128,1);
@@ -1810,85 +1810,109 @@ void Game::loadLvl3()
     enemy05.addComponent<ColliderComponent>("enemy");
     enemy05.addComponent<Stats>();
     enemyStats = enemy05.getComponent<Stats>();
-    enemy05.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy05.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
     enemy05.addGroup(Game::groupEnemies);
 
     enemy06.addComponent<TransformComponent>(1144,2253,500,250,1);
     enemy06.addComponent<SpriteComponent>(true,"spawner");
     enemy06.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
     enemy06.getComponent<SpriteComponent>().setActions();
-    enemy06.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats);
+    enemy06.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats,&playerCol);
     enemy06.addGroup(Game::groupSpawners);
 
     canon1.addComponent<TransformComponent>(394,2253,24,24,4);
-    canon1.addComponent<SpriteComponent>(true, "Canon");
+    canon1.addComponent<SpriteComponent>(true, "Canon_Right");
     canon1.getComponent<SpriteComponent>().setActions();
     canon1.addComponent<ColliderComponent>("canon");
-    canon1.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon1.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon1.addGroup(Game::groupCanons);
 
     canon2.addComponent<TransformComponent>(394,2053,24,24,4);
-    canon2.addComponent<SpriteComponent>(true, "Canon");
+    canon2.addComponent<SpriteComponent>(true, "Canon_Right");
     canon2.getComponent<SpriteComponent>().setActions();
     canon2.addComponent<ColliderComponent>("canon");
-    canon2.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon2.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon2.addGroup(Game::groupCanons);
 
     canon3.addComponent<TransformComponent>(394,1853,24,24,4);
-    canon3.addComponent<SpriteComponent>(true, "Canon");
+    canon3.addComponent<SpriteComponent>(true, "Canon_Right");
     canon3.getComponent<SpriteComponent>().setActions();
     canon3.addComponent<ColliderComponent>("canon");
-    canon3.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon3.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon3.addGroup(Game::groupCanons);
 
     canon4.addComponent<TransformComponent>(394,1653,24,24,4);
-    canon4.addComponent<SpriteComponent>(true, "Canon");
+    canon4.addComponent<SpriteComponent>(true, "Canon_Right");
     canon4.getComponent<SpriteComponent>().setActions();
     canon4.addComponent<ColliderComponent>("canon");
-    canon4.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon4.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon4.addGroup(Game::groupCanons);
 
     canon5.addComponent<TransformComponent>(394,1453,24,24,4);
-    canon5.addComponent<SpriteComponent>(true, "Canon");
+    canon5.addComponent<SpriteComponent>(true, "Canon_Right");
     canon5.getComponent<SpriteComponent>().setActions();
     canon5.addComponent<ColliderComponent>("canon");
-    canon5.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon5.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon5.addGroup(Game::groupCanons);
 
     canon6.addComponent<TransformComponent>(1144,2053,24,24,4);
-    canon6.addComponent<SpriteComponent>(true, "Canon");
+    canon6.addComponent<SpriteComponent>(true, "Canon_Left");
     canon6.getComponent<SpriteComponent>().setActions();
     canon6.addComponent<ColliderComponent>("canon");
-    canon6.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon6.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
     canon6.addGroup(Game::groupCanons);
 
     canon7.addComponent<TransformComponent>(1144,1853,24,24,4);
-    canon7.addComponent<SpriteComponent>(true, "Canon");
+    canon7.addComponent<SpriteComponent>(true,"Canon_Left");
     canon7.getComponent<SpriteComponent>().setActions();
     canon7.addComponent<ColliderComponent>("canon");
-    canon7.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon7.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
     canon7.addGroup(Game::groupCanons);
 
     canon8.addComponent<TransformComponent>(1144,1653,24,24,4);
-    canon8.addComponent<SpriteComponent>(true, "Canon");
+    canon8.addComponent<SpriteComponent>(true, "Canon_Left");
     canon8.getComponent<SpriteComponent>().setActions();
     canon8.addComponent<ColliderComponent>("canon");
-    canon8.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon8.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
     canon8.addGroup(Game::groupCanons);
 
     canon9.addComponent<TransformComponent>(1144,1453,24,24,4);
-    canon9.addComponent<SpriteComponent>(true, "Canon");
+    canon9.addComponent<SpriteComponent>(true, "Canon_Left");
     canon9.getComponent<SpriteComponent>().setActions();
     canon9.addComponent<ColliderComponent>("canon");
-    canon9.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon9.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
     canon9.addGroup(Game::groupCanons);
 
     canon10.addComponent<TransformComponent>(1144,1253,24,24,4);
-    canon10.addComponent<SpriteComponent>(true, "Canon");
+    canon10.addComponent<SpriteComponent>(true, "Canon_Left");
     canon10.getComponent<SpriteComponent>().setActions();
     canon10.addComponent<ColliderComponent>("canon");
-    canon10.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon10.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
     canon10.addGroup(Game::groupCanons);
+
+    enemy07.addComponent<TransformComponent>(328,1000,500,250,1);
+    enemy07.addComponent<SpriteComponent>(true,"spawner");
+    enemy07.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
+    enemy07.getComponent<SpriteComponent>().setActions();
+    enemy07.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats,&playerCol);
+    enemy07.addGroup(Game::groupSpawners);
+
+    enemy08.addComponent<TransformComponent>(1720,680,128,128,1);
+    enemy08.addComponent<SpriteComponent>(true, "enemy");
+    enemy08.getComponent<SpriteComponent>().setActions();
+    enemy08.addComponent<ColliderComponent>("enemy");
+    enemy08.addComponent<Stats>();
+    enemyStats = enemy08.getComponent<Stats>();
+    enemy08.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
+    enemy08.addGroup(Game::groupEnemies);
+
+    enemy09.addComponent<TransformComponent>(1128,504,48,48,2);
+    enemy09.addComponent<SpriteComponent>(true, "archer");
+    enemy09.getComponent<SpriteComponent>().setActions();
+    enemy09.addComponent<ColliderComponent>("turret");
+    enemy09.addComponent<Stats>();
+    enemy09.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
+    enemy09.addGroup(Game::groupTurrets);
 
     enemy10.addComponent<TransformComponent>(328,504,48,48,2);
     enemy10.addComponent<SpriteComponent>(true, "archer");
@@ -1912,12 +1936,12 @@ void Game::loadLvl3()
     boss.addComponent<ColliderComponent>("enemy");
     boss.addComponent<Stats>(2000,1,0);
     enemyStats = boss.getComponent<Stats>();
-    boss.addComponent<EnemyMovement>(1,500,200,1200,60,50,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    boss.addComponent<EnemyMovement>(1,500,200,1200,60,50,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
     boss.addGroup(Game::groupEnemies);
 
     //Enemy base definition
 
-    /*enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    /*enemy.addComponent<TransformComponent>(500,900,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
@@ -2002,7 +2026,7 @@ void Game::loadLvl3()
 
     //Enemy base definition
 
-    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<TransformComponent>(500,900,128,128,1);
     enemy.addComponent<SpriteComponent>(true, "enemy");
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
@@ -2027,7 +2051,7 @@ void Game::loadLvl3()
     enemy3.getComponent<SpriteComponent>().setActions();
     enemy3.addComponent<ColliderComponent>("enemy");
     enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addComponent<TurretEnemy>(900,5,5,900,&manager,&player.getComponent<TransformComponent>());
     enemy3.addGroup(Game::groupTurrets);
 
     //create spawner
@@ -2045,14 +2069,14 @@ void Game::loadLvl3()
     enemy4.getComponent<SpriteComponent>().setActions();
     enemy4.addComponent<ColliderComponent>("enemy");
     enemy4.addComponent<Stats>();
-    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addComponent<TurretEnemy>(900,5,5,900,&manager,&player.getComponent<TransformComponent>());
     enemy4.addGroup(Game::groupTurrets);
     //create Canon
     canon.addComponent<TransformComponent>(1500,500,24,24,4);
     canon.addComponent<SpriteComponent>(true, "Canon");
     canon.getComponent<SpriteComponent>().setActions();
     canon.addComponent<ColliderComponent>("canon");
-    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>());
     canon.addGroup(Game::groupCanons);
 
     camera.w = 6400 - screen_width;
