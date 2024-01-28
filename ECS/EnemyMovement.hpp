@@ -12,6 +12,7 @@
 //forward decleration
 class TransformComponent;
 class SpriteComponent;
+class ColliderComponent;
 //end;
 
 class EnemyMovement : public Component
@@ -20,6 +21,8 @@ public:
     TransformComponent* transform;
     TransformComponent* playerTransform;
     SpriteComponent* sprite;
+    ColliderComponent* collider;
+    ColliderComponent* playerCollider;
     Stats* playerStats;
     Stats* stats;
     int collisionCooldown = 0;
@@ -54,7 +57,7 @@ public:
 
     Vector2D initial_position;
 
-    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats);
+    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats, ColliderComponent* playerCol);
 
     void init() override;
 

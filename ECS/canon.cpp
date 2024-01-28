@@ -41,18 +41,11 @@ void Canon::update()
 {
     if(distance_to_player(transform->position,playertransform->position)<=radius && timer.timedOut())
     {
-        direction.x = playertransform->position.x+13*playertransform->scale+(13/2)*playertransform->scale-(transform->position.x+transform->width*transform->scale+10);
-        direction.y = playertransform->position.y+18*playertransform->scale+(19/2)*playertransform->scale-(transform->position.y+12);
+        direction.x = 1;
+        direction.y = 0;
         direction.Normalize();
         //find angle between turret and player
         Vector2D e1 = Vector2D(1,0);
-        double dot = direction.x*e1.x;
-        theta = std::acos(dot);
-        theta = theta * (180.0 / M_PI);
-        if (direction.y < 0)
-        {
-            theta=-theta;
-        }
         is_attacking=true;
         check_anim=false;
         sprite->Play("Attack_right",false,1);
