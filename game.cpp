@@ -297,9 +297,14 @@ void Game::handleEvents()
             break;
 
         }
-        break;
+        break;        
 
-    if (event.type == SDL_MOUSEBUTTONDOWN && DisplayMap) {
+    case SDL_MOUSEMOTION:
+        mousePosition.x = event.motion.x;
+        mousePosition.y = event.motion.y;
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+        if (DisplayMap && isFullscreen) { // Only allow ping creation when DisplayMap is true and isFullscreen
             int mouseX, mouseY;
             SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -319,12 +324,6 @@ void Game::handleEvents()
             mapPing.isActive = true; // Set the ping to active
         }
 
-
-    case SDL_MOUSEMOTION:
-        mousePosition.x = event.motion.x;
-        mousePosition.y = event.motion.y;
-        break;
-    case SDL_MOUSEBUTTONDOWN:
         if (isMenuOpen) {
             // Get the mouse coordinates and screen size
             int x, y ,screenWidth, screenHeight;
@@ -870,7 +869,6 @@ void Game::render()
     }
 
 }
-
 
 void Game::RenderFullscreenMap(SDL_Renderer* renderer, int screenWidth, int screenHeight, Map* map) {
 
