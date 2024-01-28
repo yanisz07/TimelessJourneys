@@ -43,7 +43,9 @@ public:
     void toggleFullScreen();
     void RenderFullscreenMap(SDL_Renderer* renderer, int screenWidth, int screenHeight, Map* map);
     void RenderLegend(SDL_Renderer* renderer);
-
+    void displayGameName(SDL_Renderer* renderer, const char* gameName, int screenWidth, int topPadding);
+    void renderWindowedMap();
+    void renderPlayerPosition(SDL_Renderer* renderer);
 
 
     bool is_running() {return isRunning;}
