@@ -618,11 +618,20 @@ void Game::toggleFullScreen() {
         #endif
     }
     //fix camera
-    camera.w = 3200-screen_width;
-    camera.h = 2560-screen_height;
+    if (level=="lvl1" || level=="lvl2")
+    {
+        camera.w = 3200-screen_width;
+        camera.h = 2560-screen_height;
+    }
+    if (level =="lvl3")
+    {
+        camera.w = 6400-screen_width;
+        camera.h = 5120-screen_height;
+    }
     x_diff = (screen_width - 128)/2;
     y_diff = (screen_height - 128)/2;
-
+    std::cout << player.getComponent<TransformComponent>().position.x << std::endl;
+    std::cout << player.getComponent<TransformComponent>().position.y << std::endl;
 }
 
 
@@ -1398,8 +1407,8 @@ void Game::loadLvl2()
     canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
     canon.addGroup(Game::groupCanons);*/
 
-    camera.w = 6400 - screen_width;
-    camera.h = 5120 - screen_height;
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
 }
 
 void Game::loadLvl3()
