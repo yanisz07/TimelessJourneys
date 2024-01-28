@@ -133,7 +133,7 @@ void SpriteComponent::update()
         destRect.w = 500;
         destRect.h = 500;
         destRect.x = static_cast<int>(transform->position.x-150) - Game::camera.x;
-        destRect.y = static_cast<int>(transform->position.y-200) - Game::camera.y;
+        destRect.y = static_cast<int>(transform->position.y-150) - Game::camera.y;
     }
     else
     {
