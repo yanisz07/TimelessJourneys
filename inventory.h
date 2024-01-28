@@ -64,7 +64,7 @@ private:
 
 
 
-    int gridCols = 5;
+    int gridCols = 3;
     int gridRows = gridCols;
 };
 
