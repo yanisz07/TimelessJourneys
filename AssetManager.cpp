@@ -33,7 +33,13 @@ void AssetManager::loadWorld(std::string path)
 
 void AssetManager::AddTexture(std::string id, const char *path)
 {
+    if(textures.count("id"))
+    {
+        textures[id] = TextureManager::LoadTexture(path);
+    }
+    else{
     textures.emplace(id, TextureManager::LoadTexture(path));
+    }
 }
 
 SDL_Texture* AssetManager::GetTexture(std::string id)

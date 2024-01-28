@@ -78,10 +78,12 @@ private:
 public:
     Manager& manager;
     std::string type = "any";
+    std::string tag = "None";
 
     Entity(Manager& mManager) : manager(mManager){}
 
     void setType(std::string type){this->type = type;}
+    void setTag(std::string tag){this->tag = tag;}
     void update()
     {
         for (auto& c : components) c->update();

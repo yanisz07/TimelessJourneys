@@ -1,14 +1,8 @@
 {
-  "mapPath": "/../TimelessJourneys/assets/map.map",
   "fontPath": "/../TimelessJourneys/assets/Arial.ttf",
-  "itemsPath": "/../TimelessJourneys/assets/items - Copy.json",
   "musicPath": "/../TimelessJourneys/assets/soundAssets/medieval.mp3",
   "worldPath": "/../TimelessJourneys/assets/World_1.json",
     "setUpSprites": [
-      {
-        "name": "terrain",
-        "path": "/assets/terrainAssets/terrain_ss.png"
-      },
       {
         "name": "background",
         "path": "/assets/displayAssets/background_sample1.png"

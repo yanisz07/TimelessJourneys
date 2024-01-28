@@ -12,6 +12,7 @@ const int ITEM_ICON_HEIGHT = 32;
 // Constructor
 Inventory::Inventory() : isVisible(false), windowRect{100, 400, 400, 400} {
     // Initialize any other members if necessary
+    selectedSlotIndex = 0;
 }
 
 // Destructor

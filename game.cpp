@@ -208,7 +208,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     std::cout << "Player created" << std::endl;
 
     //Create enemies
-    loadLvl3();
+    loadLvl1();
 
 
 
@@ -1073,9 +1073,7 @@ void Game::loadSetUpJSON(std::string path)
     std::ifstream jsonFileStream(path);
     nlohmann::json jsonData = nlohmann::json::parse(jsonFileStream);
 
-    mapPath = projectDir.string() + jsonData["mapPath"].get<std::string>();
     fontPath = projectDir.string() + jsonData["fontPath"].get<std::string>();
-    itemsPath = projectDir.string() + jsonData["itemsPath"].get<std::string>();
     musicPath = projectDir.string() + jsonData["musicPath"].get<std::string>();
     worldPath = projectDir.string() + jsonData["worldPath"].get<std::string>();
 
@@ -1091,7 +1089,6 @@ void Game::loadSetUpJSON(std::string path)
     std::cout << "World loaded" << std::endl;
     assets->AddFont("arial",fontPath.c_str(),16);
     std::cout << "Font added" << std::endl;
-    Game::inventory->loadFromJSON(itemsPath);
 
 
     std::cout << "Trying to load music from: " << musicPath << std::endl;
@@ -1103,6 +1100,108 @@ void Game::loadSetUpJSON(std::string path)
     if (Mix_PlayMusic(bgMusic, -1) == -1) {
        std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
     }
+    }
+
+}
+
+void Game::loadItems(const std::string& filePath)
+{
+    std::ifstream inFile(filePath);
+    nlohmann::json j = nlohmann::json::parse(inFile);
+
+    // Clear current inventory
+    Game::inventory->clearInventory();
+
+    // Load items from JSON
+    for (int i = 0; i < size(j["items"]); ++i) {
+    nlohmann::json itemData = j["items"][i];
+    std::string name = itemData["name"].get<std::string>();
+    std::string type = itemData["type"].get<std::string>();
+    std::string location = itemData["location"].get<std::string>();
+    std::string spritePath = itemData["spritePath"].get<std::string>();
+    float dmg_multiplier = itemData["dmg_multiplier"].get<float>();
+
+    if (type=="Melee") {
+
+       Item* item = new Melee(false,location,spritePath,name,dmg_multiplier);
+       if(location == "inventory")
+       {
+            Game::inventory->addItem(item);
+
+       }
+       else
+       {
+            for (auto& ch : chests)
+            {
+                if(ch->tag == location)
+                {
+                    ch->getComponent<ChestScreen>().addItem(item);
+                }
+            }
+       }
+    }
+    if (type=="RangedWeapon") {
+       int range = itemData["range"].get<int>();
+       int speed_arrow = itemData["speed_arrow"].get<int>();
+       int speed_shooting = itemData["speed_shooting"].get<int>();
+       Item* item = new RangedWeapon(false,location,spritePath,name,dmg_multiplier,range,speed_arrow,speed_shooting);
+       if(location == "inventory")
+       {
+            Game::inventory->addItem(item);
+
+       }
+       else
+       {
+            for (auto& ch : chests)
+            {
+                if(ch->tag == location)
+                {
+                    ch->getComponent<ChestScreen>().addItem(item);
+                }
+            }
+       }
+    }
+    if (type=="Armor") {
+       int health_increase = itemData["health_increase"].get<int>();
+       Item* item = new ArmorItem(false,location,spritePath,name,dmg_multiplier,health_increase);
+       if(location == "inventory")
+       {
+            Game::inventory->addItem(item);
+
+       }
+       else
+       {
+            for (auto& ch : chests)
+            {
+                if(ch->tag == location)
+                {
+                    ch->getComponent<ChestScreen>().addItem(item);
+                }
+            }
+       }
+    }
+    if (type=="HealingPotion") {
+       int health_increase = itemData["health_increase"].get<int>();
+       Item* item = new HealingPotion(false,location,spritePath,name,health_increase);
+       if(location == "inventory")
+       {
+            Game::inventory->addItem(item);
+
+       }
+       else
+       {
+            for (auto& ch : chests)
+            {
+                if(ch->tag == location)
+                {
+                    ch->getComponent<ChestScreen>().addItem(item);
+                }
+            }
+       }
+    }
+
+
+    std::cout << "Item " << name << "created and added" << std::endl;
     }
 
 }
@@ -1126,6 +1225,8 @@ void Game::loadLvl1()
     map = new Map("terrain1",4,32,&manager);
     map->LoadMap(mapPath.c_str(),25,20);
 
+    player.getComponent<TransformComponent>().position.x = 1400;
+    player.getComponent<TransformComponent>().position.y = 1100;
 
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     Stats& playerStats = player.getComponent<Stats>();
@@ -1137,6 +1238,7 @@ void Game::loadLvl1()
     auto& canon(manager.addEntity());
     auto& chest1(manager.addEntity());
 
+    chest1.setTag("chest1");
     chest1.addComponent<TransformComponent>(900,900,16,16,5);
     chest1.addComponent<SpriteComponent>(true, "chest");
     chest1.getComponent<SpriteComponent>().setActions();
@@ -1192,6 +1294,9 @@ void Game::loadLvl1()
     canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
     canon.addGroup(Game::groupCanons);
 
+    itemsPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items_Lvl1.json").string();
+    loadItems(itemsPath);
+
     camera.w = 3200 - screen_width;
     camera.h = 2560 - screen_height;
 }
@@ -1216,7 +1321,7 @@ void Game::loadLvl2()
     player.getComponent<TransformComponent>().position.x = 2044;
     player.getComponent<TransformComponent>().position.y = 480;
 
-    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    /*TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     Stats& playerStats = player.getComponent<Stats>();
 
     auto& enemy(manager.addEntity());
@@ -1291,13 +1396,88 @@ void Game::loadLvl2()
     canon.getComponent<SpriteComponent>().setActions();
     canon.addComponent<ColliderComponent>("canon");
     canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
-    canon.addGroup(Game::groupCanons);
+    canon.addGroup(Game::groupCanons);*/
 
     camera.w = 6400 - screen_width;
     camera.h = 5120 - screen_height;
 }
 
 void Game::loadLvl3()
+{
+    delete map;
+    for (auto& t : tiles) { t->destroy(); }
+    for (auto& c : MapColliders) { c->destroy(); }
+    for (auto& e : enemies) { e->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+    for (auto& ch : Turrets) { ch->destroy(); }
+    for (auto& ch : Canons) { ch->destroy(); }
+    for (auto& ch : Spawners) { ch->destroy(); }
+
+    manager.refresh();
+
+    assets->AddTexture("terrain3", "/assets/terrainAssets/Map3tile_set.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
+    map = new Map("terrain3",4,32,&manager);
+    map->LoadMap3(mapPath.c_str(),50,40);
+    manager.update();
+    manager.refresh();
+
+    player.getComponent<TransformComponent>().position.x = 700;
+    player.getComponent<TransformComponent>().position.y = 532;
+
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+    auto& enemy4(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,48,48,2);
+    enemy3.addComponent<SpriteComponent>(true, "archer");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("turret");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupTurrets);
+
+    //create turret enemy
+
+    enemy4.addComponent<TransformComponent>(1000,1000,48,48,2);
+    enemy4.addComponent<SpriteComponent>(true, "archer");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("turret");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupTurrets);
+
+    camera.w = 6400 - screen_width;
+    camera.h = 5120 - screen_height;
+}
+
+/*void Game::loadLvl3()
 {
     delete map;
     for (auto& t : tiles) { t->destroy(); }
@@ -1395,7 +1575,7 @@ void Game::loadLvl3()
 
     camera.w = 6400 - screen_width;
     camera.h = 5120 - screen_height;
-}
+}  */
 
 bool Game::isChestOpen()
 {

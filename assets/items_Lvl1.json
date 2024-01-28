@@ -3,7 +3,7 @@
         {
             "name": "silver_sword",
             "type": "Melee",
-            "location" : "any",
+            "location" : "inventory",
             "spritePath":"/assets/weaponAssets/sword.png",
             "sprites": [
                 {
@@ -32,7 +32,7 @@
         {
             "name": "diamond_bow",
             "type": "RangedWeapon",
-            "location" : "any",
+            "location" : "inventory",
             "spritePath" : "/assets/weaponAssets/bow3.png",
             "sprites": [
                 {
@@ -64,7 +64,7 @@
         {
             "name": "healing_potion",
             "type": "HealingPotion",
-            "location" : "any",
+            "location" : "chest1",
             "spritePath" : "/assets/weaponAssets/arrow.png",
             "sprites": [
                 {
@@ -94,7 +94,7 @@
         {
             "name": "healing_potion",
             "type": "HealingPotion",
-            "location" : "any",
+            "location" : "inventory",
             "spritePath" : "/assets/weaponAssets/arrow.png",
             "sprites": [
                 {
@@ -124,7 +124,7 @@
         {
             "name": "healing_potion",
             "type": "HealingPotion",
-            "location" : "any",
+            "location" : "chest1",
             "spritePath" : "/assets/weaponAssets/arrow.png",
             "sprites": [
                 {

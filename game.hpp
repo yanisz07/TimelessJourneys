@@ -60,6 +60,7 @@ public:
     static SDL_Rect camera;
     int screen_width;
     int screen_height;
+    void loadItems(const std::string& filePath);
     static Inventory* inventory;
 
     static int windowSize_x,windowSize_y;
