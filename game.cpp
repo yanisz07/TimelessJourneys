@@ -841,7 +841,6 @@ void Game::render()
 
         else {
                 renderWindowedMap();
-
            }
 
             // Render the game name at the top of the map
@@ -979,19 +978,49 @@ void Game::renderWindowedMap() {
 }
 
 void Game::renderPlayerPosition(SDL_Renderer* renderer) {
-    // Player's position in the game world
     Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
-    // Render Player Position as Text
     std::stringstream ss;
     ss << "Player Position: X=" << playerPos.x << ", Y=" << playerPos.y;
-    SDL_Color textColor = {255, 255, 255, 255}; // White color for the text
-    SDL_Surface* textSurface = TTF_RenderText_Solid(Game::assets->GetFont("arial"), ss.str().c_str(), textColor);
+
+    SDL_Surface* textSurface = TTF_RenderText_Blended(Game::assets->GetFont("arial"), ss.str().c_str(), {255, 255, 255, 255});
 
     if (textSurface) {
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_Rect textRect = {10, screen_height - 30, textSurface->w, textSurface->h}; // Position the text at the bottom left corner
+
+    const int padding = 5;
+    SDL_Rect textBackgroundRect = {
+        10 - padding,
+        screen_height - textSurface->h - 30 - padding,
+        textSurface->w + 2 * padding,
+        textSurface->h + 2 * padding
+    };
+
+    SDL_Color borderColor = {50, 40, 30, 255}; // Dark gray/brownish tone
+    SDL_SetRenderDrawColor(renderer, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
+    SDL_RenderFillRect(renderer, &textBackgroundRect);
+
+    // Draw inner background (same style as legend)
+    SDL_Color backgroundColor = {120, 110, 100, 255}; // Lighter tone for contrast
+    SDL_Rect innerBackgroundRect = {
+        textBackgroundRect.x + padding,
+        textBackgroundRect.y + padding,
+        textBackgroundRect.w - 2 * padding,
+        textBackgroundRect.h - 2 * padding
+    };
+    SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    SDL_RenderFillRect(renderer, &innerBackgroundRect);
+
+    // Render the text over the background
+    SDL_Rect textRect = {
+        10,
+        screen_height - 30 - textSurface->h,
+        textSurface->w,
+        textSurface->h
+    };
     SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+
+    // Clean up resources
     SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(textTexture);
     }
