@@ -105,8 +105,8 @@ void ColliderComponent::update()
             // fix collider for enemy
             collider.x = static_cast<int>(transform->position.x)+35;
             collider.y = static_cast<int>(transform->position.y)+90;
-            collider.w = transform->width * transform->scale-78;
-            collider.h = transform->height * transform->scale-90;
+            collider.w = transform->width * transform->scale-78*transform->scale;
+            collider.h = transform->height * transform->scale-90*transform->scale;
             destR.w = collider.w;
             destR.h = collider.h;
         }

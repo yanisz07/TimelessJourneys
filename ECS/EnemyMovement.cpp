@@ -8,8 +8,9 @@
 #include "Stats.hpp"
 
 
-EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats)
+EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats)
 {
+    attackDamage = damage;
     enemyType = enemy_type;
     playerTransform=playerTrans;
     playerStats = playerstats;
@@ -112,7 +113,7 @@ void EnemyMovement:: explosion(){
 
 void EnemyMovement:: attack(){
     std::cout << "Enemy Attack" << std::endl;
-    playerStats->SubtractHealth(3);
+    playerStats->SubtractHealth(attackDamage);
     sprite->Play("Attack_3",false,1);
     attackPushbackDirection = Vector2D(
                                   playerTransform->position.x - transform->position.x,

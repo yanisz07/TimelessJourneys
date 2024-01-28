@@ -27,6 +27,7 @@ public:
     Stats(int h, float d = 1.0, int exp = 50)
     {
         health = h;
+        max_health = h;
         damage_mult = d;
         exp_worth = exp;
     }

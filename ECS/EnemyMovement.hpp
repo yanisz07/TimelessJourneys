@@ -49,12 +49,13 @@ public:
     bool attack_bool = false;
     Uint32 attackPushbackStartTime;
     Vector2D attackPushbackDirection;
+    int attackDamage = 3;
 
 
 
     Vector2D initial_position;
 
-    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats);
+    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats);
 
     void init() override;
 

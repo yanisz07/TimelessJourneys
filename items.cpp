@@ -40,7 +40,7 @@ void Melee::displayInfo() const {
 
 int Melee::use() {
     Inventory* inventory = Game::inventory;
-    Sword& sword = inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Sword>();
+    Sword& sword = Game::assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Sword>();
     sword.setDamage(dmg_multiplier);
     sword.setSprite(spritePath);
     sword.setName(name);
@@ -80,7 +80,7 @@ void HealingPotion::displayInfo() const {
 
 int RangedWeapon::use() {
     Inventory* inventory = Game::inventory;
-    Range_Weapon& range_weapon = inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Range_Weapon>();
+    Range_Weapon& range_weapon = Game::assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Range_Weapon>();
     range_weapon.set_damage(dmg_multiplier);
     range_weapon.set_sprite(spritePath);
     range_weapon.set_icon(icon);

@@ -58,7 +58,7 @@ void SpawnerComponent::spawnEnemy() {
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,playerTransform, playerStats, &enemyStats);
+    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,3,playerTransform, playerStats, &enemyStats);
     enemy.addGroup(Game::groupEnemies);
 
     spawnedEnemies.push_back(&enemy);

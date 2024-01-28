@@ -164,14 +164,14 @@ void Stats::draw()
     TransformComponent* entityTransform = &(entity->getComponent<TransformComponent>());
     SDL_SetRenderDrawColor(Game::renderer,34,139,34,200);
     destRect.w = entityTransform->width*entityTransform->scale*(static_cast<float>(health)/static_cast<float>(max_health));
-    destRect.h = destRect.w*(1.0/8.0);
+    destRect.h = entityTransform->width*entityTransform->scale*(1.0/8.0);
     destRect.x = entityTransform->position.x-Game::camera.x;
     destRect.y = entityTransform->position.y-Game::camera.y-destRect.h;
     SDL_RenderFillRect(Game::renderer,&destRect);
     SDL_SetRenderDrawColor(Game::renderer,254,254,254,200);
     destRect.x = entityTransform->position.x-Game::camera.x+destRect.w;
     destRect.w = entityTransform->width*entityTransform->scale*(1-(static_cast<float>(health)/static_cast<float>(max_health)));
-    destRect.h = destRect.w*(1.0/8.0);
+    destRect.h = entityTransform->width*entityTransform->scale*(1.0/8.0);
     destRect.y = entityTransform->position.y-Game::camera.y-destRect.h;
     SDL_RenderFillRect(Game::renderer,&destRect);
     }
