@@ -36,9 +36,13 @@ void SpriteComponent::setActions()
     {
         Play("Idle_Down",false,-1,150);
     }
-    else if(type == "Canon")
+    else if(type == "Canon_Right")
     {
         Play("Right");
+    }
+    else if(type == "Canon_Left")
+    {
+        Play("Left");
     }
     else if(type == "spawner")
     {
@@ -111,9 +115,13 @@ void SpriteComponent::update()
                 {
                     Play("Idle_Down",false,-1,150);
                 }
-                else if(type == "Canon")
+                else if(type == "Canon_Right")
                 {
                     Play("Right");
+                }
+                else if(type == "Canon_Left")
+                {
+                    Play("Left");
                 }
                 else
                 {

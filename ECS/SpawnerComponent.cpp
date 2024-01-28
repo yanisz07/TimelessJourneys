@@ -5,9 +5,10 @@
 #include "EnemyMovement.hpp"
 
 
-SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats)
+SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats, ColliderComponent* playerCol)
     : manager(m), spawnInterval(interval), max_spawn(max_enemies), playerTransform(playerTrans), playerStats(playerstats), hasSpawned(false) {
     lastSpawnTime = SDL_GetTicks();
+    playerCollider = playerCol;
 }
 
 void SpawnerComponent::init() {
@@ -58,7 +59,8 @@ void SpawnerComponent::spawnEnemy() {
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,3,playerTransform, playerStats, &enemyStats);
+    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,3,playerTransform, playerStats, &enemyStats, playerCollider);
+
     enemy.addGroup(Game::groupEnemies);
 
     spawnedEnemies.push_back(&enemy);

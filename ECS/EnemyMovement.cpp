@@ -1,14 +1,16 @@
 #include "EnemyMovement.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
+#include "ColliderComponent.hpp"
 #include <iostream>
 #include <vector>
 #include <tuple>
 #include <cmath>
 #include "Stats.hpp"
+#include "../Collision.hpp"
 
+EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats, ColliderComponent* playerCol)
 
-EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats)
 {
     attackDamage = damage;
     enemyType = enemy_type;
@@ -19,12 +21,14 @@ EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, flo
     radius_of_displacement=radius_2;
     radius_of_pursuit=radius_3;
     mindist_enemy_player= distance_1;
+    playerCollider = playerCol;
 }
 
 void EnemyMovement::init()
 {
     transform = &entity->getComponent<TransformComponent>();
     sprite = &entity->getComponent<SpriteComponent>();
+    collider = &entity->getComponent<ColliderComponent>();
     initial_position=transform->position;
     srand(time(NULL));
 }
@@ -50,6 +54,7 @@ void EnemyMovement::onCollision(SDL_Rect collider_rect) {
     list_of_tuples.push_back(std::make_tuple(bottomanticlock,colliderbottomleft,colliderbottomright));
 
     int mini_idx = 0;
+
     double mini_dist_wall = enemyCenter.distance(std::get<1>(list_of_tuples[0]))+enemyCenter.distance(std::get<2>(list_of_tuples[0]));
 
     for (size_t i = 1; i < list_of_tuples.size(); i++) {
@@ -135,10 +140,21 @@ void EnemyMovement::update()
         return; // Skip collision checks
     }
 
+    auto& mapColliders = entity->manager.getGroup(Game::groupMapColliders);
+
     if (attack_bool) {
         Uint32 currentTime = SDL_GetTicks();
         Uint32 delay = currentTime - attackPushbackStartTime;
 
+        Vector2D playerPos = playerTransform->position;
+
+        SDL_Rect playerCol = playerCollider->collider;
+
+        SDL_Rect test_col;
+        test_col.w = playerCol.w;
+        test_col.h = playerCol.h;
+
+        bool player_hit_wall = false;
 
         if (delay <= 200)            //The delay and force of the push are to be determined
         {
@@ -146,18 +162,57 @@ void EnemyMovement::update()
             {
                 if (delay <= 140)
                 {
-                    playerTransform->position.x += attackPushbackDirection.x * 15;
-                    playerTransform->position.y += attackPushbackDirection.y * 15;
+                    test_col.x = playerCol.x + attackPushbackDirection.x * 15;
+                    test_col.y = playerCol.y + attackPushbackDirection.y * 15;
+
+                    for (auto& c : mapColliders)
+                    {
+                        if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                        {
+                            player_hit_wall = true; // the player doesn't move
+                        }
+                    }
+                    if (!player_hit_wall)
+                    {
+                        playerTransform->position.x += attackPushbackDirection.x * 15;
+                        playerTransform->position.y += attackPushbackDirection.y * 15;
+                    }
                 }
                 else if (delay <= 180)
                 {
-                    playerTransform->position.x += attackPushbackDirection.x * 8;
-                    playerTransform->position.y += attackPushbackDirection.y * 8;
+                    test_col.x = playerCol.x + attackPushbackDirection.x * 8;
+                    test_col.y = playerCol.y + attackPushbackDirection.y * 8;
+
+                    for (auto& c : mapColliders)
+                    {
+                        if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                        {
+                            player_hit_wall = true; // the player doesn't move
+                        }
+                    }
+                    if (!player_hit_wall)
+                    {
+                        playerTransform->position.x += attackPushbackDirection.x * 8;
+                        playerTransform->position.y += attackPushbackDirection.y * 8;
+                    }
                 }
                 else
                 {
-                    playerTransform->position.x += attackPushbackDirection.x * 3;
-                    playerTransform->position.y += attackPushbackDirection.y * 3;
+                    test_col.x = playerCol.x + attackPushbackDirection.x * 3;
+                    test_col.y = playerCol.y + attackPushbackDirection.y * 3;
+
+                    for (auto& c : mapColliders)
+                    {
+                        if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                        {
+                            player_hit_wall = true; // the player doesn't move
+                        }
+                    }
+                    if (!player_hit_wall)
+                    {
+                        playerTransform->position.x += attackPushbackDirection.x * 3;
+                        playerTransform->position.y += attackPushbackDirection.y * 3;
+                    }
                 }
             }
         }

@@ -833,6 +833,12 @@ void Game::update()
                 Vector2D direction = e->getComponent<Stats>().direction_hit();
                 Uint32 delay = currentTime - e->getComponent<Stats>().time_hit();
                 bool type = e->getComponent<Stats>().type_hit();
+                bool enemy_hit_wall;
+
+                SDL_Rect e_Col = e->getComponent<ColliderComponent>().collider;
+                SDL_Rect test_col;
+                test_col.w = e_Col.w;
+                test_col.h = e_Col.h;
                 if (delay <= 200)
                 {
                     if(delay == 0)
@@ -845,39 +851,117 @@ void Game::update()
                         {
                             if(!type)
                             {
-                                e->getComponent<TransformComponent>().position.x += direction.x*10;
-                                e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                test_col.x = e_Col.x + direction.x*10;
+                                test_col.y = e_Col.y + direction.y*10;
+
+                                for(auto& c : MapColliders)
+                                {
+                                    if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                                    {
+                                        enemy_hit_wall = true; // the player doesn't move
+                                    }
+                                }
+                                if(!enemy_hit_wall)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                }
                             }
                             else
                             {
-                                e->getComponent<TransformComponent>().position.x += direction.x*20;
-                                e->getComponent<TransformComponent>().position.y += direction.y*20;
+                                test_col.x = e_Col.x + direction.x*20;
+                                test_col.y = e_Col.y + direction.y*20;
+
+                                for(auto& c : MapColliders)
+                                {
+                                    if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                                    {
+                                        enemy_hit_wall = true; // the player doesn't move
+                                    }
+                                }
+                                if(!enemy_hit_wall)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*20;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*20;
+                                }
                             }
                         }
                         else if (delay <= 180)
                         {
                             if(!type)
                             {
-                                e->getComponent<TransformComponent>().position.x += direction.x*5;
-                                e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                test_col.x = e_Col.x + direction.x*5;
+                                test_col.y = e_Col.y + direction.y*5;
+
+                                for(auto& c : MapColliders)
+                                {
+                                    if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                                    {
+                                        enemy_hit_wall = true; // the player doesn't move
+                                    }
+                                }
+                                if(!enemy_hit_wall)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                }
                             }
                             else
                             {
-                                e->getComponent<TransformComponent>().position.x += direction.x*10;
-                                e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                test_col.x = e_Col.x + direction.x*10;
+                                test_col.y = e_Col.y + direction.y*10;
+
+                                for(auto& c : MapColliders)
+                                {
+                                    if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                                    {
+                                        enemy_hit_wall = true; // the player doesn't move
+                                    }
+                                }
+                                if(!enemy_hit_wall)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*10;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*10;
+                                }
                             }
                         }
                         else
                         {
                             if(!type)
                             {
-                                e->getComponent<TransformComponent>().position.x += direction.x*2;
-                                e->getComponent<TransformComponent>().position.y += direction.y*2;
+                                test_col.x = e_Col.x + direction.x*2;
+                                test_col.y = e_Col.y + direction.y*2;
+
+                                for(auto& c : MapColliders)
+                                {
+                                    if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                                    {
+                                        enemy_hit_wall = true; // the player doesn't move
+                                    }
+                                }
+                                if(!enemy_hit_wall)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*2;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*2;
+                                }
                             }
                             else
                             {
-                                e->getComponent<TransformComponent>().position.x += direction.x*5;
-                                e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                test_col.x = e_Col.x + direction.x*5;
+                                test_col.y = e_Col.y + direction.y*5;
+
+                                for(auto& c : MapColliders)
+                                {
+                                    if (Collision::AABB(c->getComponent<ColliderComponent>().collider,test_col))
+                                    {
+                                        enemy_hit_wall = true; // the player doesn't move
+                                    }
+                                }
+                                if(!enemy_hit_wall)
+                                {
+                                    e->getComponent<TransformComponent>().position.x += direction.x*5;
+                                    e->getComponent<TransformComponent>().position.y += direction.y*5;
+                                }
                             }
                         }
                     }
@@ -1268,6 +1352,7 @@ void Game::loadLvl1()
     player.getComponent<TransformComponent>().position.y = 1100;
 
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    ColliderComponent& playerCol = player.getComponent<ColliderComponent>();
     Stats& playerStats = player.getComponent<Stats>();
 
     auto& enemy(manager.addEntity());
@@ -1275,6 +1360,7 @@ void Game::loadLvl1()
     auto& enemy3(manager.addEntity());
     auto& spawner(manager.addEntity());
     auto& canon(manager.addEntity());
+    auto& canon1(manager.addEntity());
     auto& chest1(manager.addEntity());
     auto& npc1(manager.addEntity());
     auto& npc2(manager.addEntity());
@@ -1297,7 +1383,8 @@ void Game::loadLvl1()
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats, &playerCol); //To be changed later on
     enemy.addGroup(Game::groupEnemies);
 
     //create second enemy
@@ -1324,17 +1411,26 @@ void Game::loadLvl1()
     spawner.addComponent<SpriteComponent>(true,"spawner");
     spawner.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
     spawner.getComponent<SpriteComponent>().setActions();
-    spawner.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats);
+    spawner.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats, &playerCol);
     spawner.addGroup(Game::groupSpawners);
 
 
-    //create Canon
+    //create RightCanon
     canon.addComponent<TransformComponent>(1500,500,24,24,4);
-    canon.addComponent<SpriteComponent>(true, "Canon");
+    canon.addComponent<SpriteComponent>(true, "Canon_Right");
     canon.getComponent<SpriteComponent>().setActions();
     canon.addComponent<ColliderComponent>("canon");
-    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon.addGroup(Game::groupCanons);
+
+
+    //create LeftCanon
+    canon1.addComponent<TransformComponent>(1900,300,24,24,4);
+    canon1.addComponent<SpriteComponent>(true, "Canon_Left");
+    canon1.getComponent<SpriteComponent>().setActions();
+    canon1.addComponent<ColliderComponent>("canon");
+    canon1.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
+    canon1.addGroup(Game::groupCanons);
 
     //creates npc
     npc1.addComponent<TransformComponent>(1200,800,128,128,1);
@@ -1393,6 +1489,7 @@ void Game::loadLvl2()
     player.getComponent<TransformComponent>().position.y = 4527;
 
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    ColliderComponent& playerCol = player.getComponent<ColliderComponent>();
     Stats& playerStats = player.getComponent<Stats>();
 
     auto& enemy1(manager.addEntity());
@@ -1442,7 +1539,8 @@ void Game::loadLvl2()
     enemy1.addComponent<ColliderComponent>("enemy");
     enemy1.addComponent<Stats>();
     Stats& enemyStats = enemy1.getComponent<Stats>();
-    enemy1.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+
+    enemy1.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats, &playerCol); //To be changed later on
     enemy1.addGroup(Game::groupEnemies);
 
     enemy2.addComponent<TransformComponent>(635,4292,128,128,1);
@@ -1527,6 +1625,7 @@ void Game::loadLvl3()
     player.getComponent<TransformComponent>().position.y = 4527;
 
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    ColliderComponent& playerCol = player.getComponent<ColliderComponent>();
     Stats& playerStats = player.getComponent<Stats>();
 
     auto& enemy1(manager.addEntity());
@@ -1627,7 +1726,7 @@ void Game::loadLvl3()
     chest2.addGroup(Game::groupChests);
 
     //Enemy base definition
-    enemy2.addComponent<TransformComponent>(600,4292,128,128,1);
+    enemy2.addComponent<TransformComponent>(635,4292,128,128,1);
     enemy2.addComponent<SpriteComponent>(true, "enemy");
     enemy2.getComponent<SpriteComponent>().setActions();
     enemy2.addComponent<ColliderComponent>("enemy");

@@ -6,7 +6,7 @@
 #include "ProjectileComponent.hpp"
 #include "SpriteComponent.hpp"
 
-Canon::Canon(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* player)
+Canon::Canon(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* player, int type)
 {
     radius = r;
     speed = s;
@@ -14,6 +14,7 @@ Canon::Canon(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* p
     manager = man;
     reloadTime = rt;
     playertransform = player;
+    this->type = type;
 
     std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Canon" / "Explosion_anim.png").string();
     tex1 = IMG_LoadTexture(Game::renderer,spritePath.c_str());
@@ -41,21 +42,26 @@ void Canon::update()
 {
     if(distance_to_player(transform->position,playertransform->position)<=radius && timer.timedOut())
     {
-        direction.x = playertransform->position.x+13*playertransform->scale+(13/2)*playertransform->scale-(transform->position.x+transform->width*transform->scale+10);
-        direction.y = playertransform->position.y+18*playertransform->scale+(19/2)*playertransform->scale-(transform->position.y+12);
-        direction.Normalize();
-        //find angle between turret and player
-        Vector2D e1 = Vector2D(1,0);
-        double dot = direction.x*e1.x;
-        theta = std::acos(dot);
-        theta = theta * (180.0 / M_PI);
-        if (direction.y < 0)
+        if(type == 0)
         {
-            theta=-theta;
+            direction.x = 1;
+            direction.y = 0;
+        }
+        if(type==1)
+        {
+            direction.x = -1;
+            direction.y = 0;
         }
         is_attacking=true;
         check_anim=false;
-        sprite->Play("Attack_right",false,1);
+        if(type==0)
+        {
+            sprite->Play("Attack_right",false,1);
+        }
+        if(type==1)
+        {
+            sprite->Play("Attack_left",false,1);
+        }
         timer.setTimeOut(reloadTime);
     }
     else if (is_attacking)
@@ -81,7 +87,14 @@ void Canon::update()
                 if (!check_anim2)
                 {
                     check_anim2 = true;
-                    CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale+10,transform->position.y+12),direction,radius,speed,"canon_bullet",400,400,1,damage);
+                    if (type==0)
+                    {
+                        CreateProjectile(Vector2D(transform->position.x+transform->width*transform->scale+10,transform->position.y+12),direction,radius,speed,"canon_bullet",400,400,1,damage);
+                    }
+                    if(type==1)
+                    {
+                        CreateProjectile(Vector2D(transform->position.x-52,transform->position.y+12),direction,radius,speed,"canon_bullet",400,400,1,damage);
+                    }
                 }
             }
         }
@@ -107,22 +120,45 @@ void Canon::draw()
     }
     else if (draw_anim2)
     {
-        destR1.x = transform->position.x+transform->width*transform->scale+10-Game::camera.x;
-        destR1.y = transform->position.y+12-Game::camera.y;
-        srcR1.y=0;
-        int frame;
-        frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
-        animation1.index = frame;
-        srcR1.x = animation1.width*animation1.index;
-        if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE) == 0) {
-            // The rendering was successful
-            // Add any additional code you want to execute on success
-        } else {
-            // The rendering failed
-            // Add error-handling code here
-            const char* sdlError = SDL_GetError();
-            // Print or handle the SDL error message as needed
-            printf("SDL_RenderCopyEx failed: %s\n", sdlError);
+        if(type==0)
+        {
+            destR1.x = transform->position.x+transform->width*transform->scale+10-Game::camera.x;
+            destR1.y = transform->position.y+12-Game::camera.y;
+            srcR1.y=0;
+            int frame;
+            frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
+            animation1.index = frame;
+            srcR1.x = animation1.width*animation1.index;
+            if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE) == 0) {
+                // The rendering was successful
+                // Add any additional code you want to execute on success
+            } else {
+                // The rendering failed
+                // Add error-handling code here
+                const char* sdlError = SDL_GetError();
+                // Print or handle the SDL error message as needed
+                printf("SDL_RenderCopyEx failed: %s\n", sdlError);
+            }
+        }
+        if(type==1)
+        {
+            destR1.x = transform->position.x-52-Game::camera.x;
+            destR1.y = transform->position.y+12-Game::camera.y;
+            srcR1.y=0;
+            int frame;
+            frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
+            animation1.index = frame;
+            srcR1.x = animation1.width*animation1.index;
+            if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE) == 0) {
+                // The rendering was successful
+                // Add any additional code you want to execute on success
+            } else {
+                // The rendering failed
+                // Add error-handling code here
+                const char* sdlError = SDL_GetError();
+                // Print or handle the SDL error message as needed
+                printf("SDL_RenderCopyEx failed: %s\n", sdlError);
+            }
         }
     }
 }
