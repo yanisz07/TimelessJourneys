@@ -128,8 +128,18 @@ void SpriteComponent::update()
         destRect.w = transform->width * transform->scale;
         destRect.h = transform->height * transform->scale;
     }
-    destRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
-    destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
+    if (currentAction == "Explosion")
+    {
+        destRect.w = 500;
+        destRect.h = 500;
+        destRect.x = static_cast<int>(transform->position.x-150) - Game::camera.x;
+        destRect.y = static_cast<int>(transform->position.y-200) - Game::camera.y;
+    }
+    else
+    {
+        destRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
+        destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
+    }
 }
 
 void SpriteComponent::draw()
