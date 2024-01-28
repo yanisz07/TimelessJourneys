@@ -209,7 +209,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     //Create enemies
     loadLvl1();
 
+    //create second enemy
+    /*
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
 
+    std::cout << "Second Enemy created" << std::endl;
+    */
 
     //Create labels
     SDL_Color white = {0,0,0,255};
@@ -232,6 +242,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     TestCircle.addComponent<TransformComponent>(1400,1500,200,200);
     TestCircle.addComponent<ColliderComponentCircle>("circle",100);
 
+    std::cout << "Game initialized" << std::endl;
+
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -240,6 +252,7 @@ auto& MapColliders(manager.getGroup(Game::groupMapColliders));
 auto& PlayerProjectiles(manager.getGroup(Game::groupPlayerProjectiles));
 auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
+auto& npcs(manager.getGroup(Game::groupNPC));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 auto& chests(manager.getGroup(Game::groupChests));
 auto& Turrets(manager.getGroup(Game::groupTurrets));
@@ -617,11 +630,20 @@ void Game::toggleFullScreen() {
         #endif
     }
     //fix camera
-    camera.w = 3200-screen_width;
-    camera.h = 2560-screen_height;
+    if (level=="lvl1" || level=="lvl2")
+    {
+        camera.w = 3200-screen_width;
+        camera.h = 2560-screen_height;
+    }
+    if (level =="lvl3")
+    {
+        camera.w = 6400-screen_width;
+        camera.h = 5120-screen_height;
+    }
     x_diff = (screen_width - 128)/2;
     y_diff = (screen_height - 128)/2;
-
+    std::cout << player.getComponent<TransformComponent>().position.x << std::endl;
+    std::cout << player.getComponent<TransformComponent>().position.y << std::endl;
 }
 
 
@@ -682,6 +704,23 @@ void Game::update()
                 player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
             }
         }
+        //with npcs:
+        /*for (auto& c : npcs)
+        {
+            SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+            for (auto& e : enemies)
+            {
+                if (e->getComponent<EnemyMovement>().collisionCooldown > 0) continue;
+
+                SDL_Rect e_cCol = e->getComponent<ColliderComponent>().collider;
+                if(Collision::AABB(e_cCol, cCol))
+                {
+                    std::cout << "Enemy hit wall" << std::endl;
+                    e->getComponent<EnemyMovement>().onCollision(c->getComponent<ColliderComponent>().collider); // the enemy doesn't move
+                }
+            }
+        }*/
+        //End
         //End
 
         //Test collision with rotated objects
@@ -969,12 +1008,12 @@ void Game::render()
         for (auto& t : tiles) { t->draw(); }
         for (auto& c : MapColliders) { c->draw(); }
         for (auto& s : Spawners) {s->draw();}
-        for (auto& p : players) { p->draw(); }
-        for (auto& e : enemies) { e->draw(); }
         for (auto& ch: chests) { ch->draw(); }
-        for (auto& p : PlayerAttacks) {p->draw();}
         for (auto& t : Turrets) {t->draw();}
         for (auto& c : Canons) {c->draw();}
+        for (auto& n : npcs) {n->draw(); }
+        for (auto& e : enemies) { e->draw(); }
+        for (auto& p : players) { p->draw(); }
         for (auto& ep : EnemyProjectiles) { ep->draw(); }
         for (auto& pp : PlayerProjectiles) { pp->draw(); }
 
@@ -1216,6 +1255,7 @@ void Game::loadLvl1()
     for (auto& ch : Turrets) { ch->destroy(); }
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
+    for (auto& n : npcs) {n->destroy();}
 
     manager.refresh();
 
@@ -1236,6 +1276,9 @@ void Game::loadLvl1()
     auto& spawner(manager.addEntity());
     auto& canon(manager.addEntity());
     auto& chest1(manager.addEntity());
+    auto& npc1(manager.addEntity());
+    auto& npc2(manager.addEntity());
+    auto& npc3(manager.addEntity());
 
     chest1.setTag("chest1");
     chest1.addComponent<TransformComponent>(900,900,16,16,5);
@@ -1293,6 +1336,34 @@ void Game::loadLvl1()
     canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
     canon.addGroup(Game::groupCanons);
 
+    //creates npc
+    npc1.addComponent<TransformComponent>(1200,800,128,128,1);
+    npc1.addComponent<SpriteComponent>(true,"player");
+    npc1.getComponent<SpriteComponent>().setActions();
+    npc1.addComponent<NPCBehavior>(150,&playerTransform,"we count on you adventurer");
+    npc1.addComponent<ColliderComponent>("terrain",1200+32,800+32,64,64);
+    npc1.addGroup(Game::groupNPC);
+
+    std::cout << "npc1 created" << std::endl;
+
+    npc2.addComponent<TransformComponent>(1500,800,128,128,1);
+    npc2.addComponent<SpriteComponent>(true,"player");
+    npc2.getComponent<SpriteComponent>().setActions();
+    npc2.addComponent<NPCBehavior>(150,&playerTransform,"we believe in you");
+    npc2.addComponent<ColliderComponent>("terrain",1500+32,800+32,64,64);
+    npc2.addGroup(Game::groupNPC);
+
+    std::cout << "npc2 created" << std::endl;
+
+    npc3.addComponent<TransformComponent>(1370,570,128,128,1);
+    npc3.addComponent<SpriteComponent>(true,"player");
+    npc3.getComponent<SpriteComponent>().setActions();
+    npc3.addComponent<NPCBehavior>(150,&playerTransform,"we count on you adventurer");
+    npc3.addComponent<ColliderComponent>("terrain",1370+32,570+32,64,64);
+    npc3.addGroup(Game::groupNPC);
+
+    std::cout << "npc3 created" << std::endl;
+
     itemsPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items_Lvl1.json").string();
     loadItems(itemsPath);
 
@@ -1309,6 +1380,7 @@ void Game::loadLvl2()
     for (auto& ch : Turrets) { ch->destroy(); }
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
+    for (auto& n : npcs) {n->destroy();}
 
     manager.refresh();
 
@@ -1424,8 +1496,8 @@ void Game::loadLvl2()
     canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
     canon.addGroup(Game::groupCanons);*/
 
-    camera.w = 6400 - screen_width;
-    camera.h = 5120 - screen_height;
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
 }
 
 void Game::loadLvl3()
@@ -1438,6 +1510,8 @@ void Game::loadLvl3()
     for (auto& ch : Turrets) { ch->destroy(); }
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
+    for (auto& n : npcs) {n->destroy();}
+    //for (auto& n : npcs) {n->destroy();}
 
     manager.refresh();
 

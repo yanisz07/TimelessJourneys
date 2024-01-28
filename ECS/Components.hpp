@@ -22,5 +22,5 @@
 #include "canon.h"
 #include "SpawnerComponent.h"
 #include "chestScreen.hpp"
-
+#include "NPCBehavior.h"
 #endif // COMPONENTS_H
