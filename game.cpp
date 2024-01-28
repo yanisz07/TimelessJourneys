@@ -1360,6 +1360,7 @@ void Game::loadLvl1()
     auto& enemy3(manager.addEntity());
     auto& spawner(manager.addEntity());
     auto& canon(manager.addEntity());
+    auto& canon1(manager.addEntity());
     auto& chest1(manager.addEntity());
     auto& npc1(manager.addEntity());
     auto& npc2(manager.addEntity());
@@ -1413,13 +1414,22 @@ void Game::loadLvl1()
     spawner.addGroup(Game::groupSpawners);
 
 
-    //create Canon
+    //create RightCanon
     canon.addComponent<TransformComponent>(1500,500,24,24,4);
-    canon.addComponent<SpriteComponent>(true, "Canon");
+    canon.addComponent<SpriteComponent>(true, "Canon_Right");
     canon.getComponent<SpriteComponent>().setActions();
     canon.addComponent<ColliderComponent>("canon");
-    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>());
+    canon.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
     canon.addGroup(Game::groupCanons);
+
+
+    //create LeftCanon
+    canon1.addComponent<TransformComponent>(1900,300,24,24,4);
+    canon1.addComponent<SpriteComponent>(true, "Canon_Left");
+    canon1.getComponent<SpriteComponent>().setActions();
+    canon1.addComponent<ColliderComponent>("canon");
+    canon1.addComponent<Canon>(400,5,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
+    canon1.addGroup(Game::groupCanons);
 
     //creates npc
     npc1.addComponent<TransformComponent>(1200,800,128,128,1);

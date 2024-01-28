@@ -18,7 +18,7 @@ class SpriteComponent;
 class Canon : public Component
 {
 public:
-    Canon(int r, int s, int d,Uint32 rt, Manager* man, TransformComponent* player);
+    Canon(int r, int s, int d,Uint32 rt, Manager* man, TransformComponent* player, int type);
 
     void init() override;
 
@@ -44,6 +44,8 @@ private:
     bool check_anim=false;
     bool check_anim2=false;
     bool draw_anim2=false;
+
+    int type;
 
     SDL_Texture* tex1;
     Animation animation1 = Animation(14,13,0,5,100,"Canon_Bullet");
