@@ -54,9 +54,9 @@ int Game::windowSize_y = 100;
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& player_health(manager.addEntity());
-auto& enemy(manager.addEntity());
+//auto& enemy(manager.addEntity());
 //test second enemy
-auto& enemy2(manager.addEntity());
+//auto& enemy2(manager.addEntity());
 //test turret enemy
 auto& enemy3(manager.addEntity());
 //test canon
@@ -94,6 +94,8 @@ Game::Game()
     isRuleOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
     isMusic = true; // music state, music on by default
+
+    Game::assets->manager->setGame(this);
 
 }
 
@@ -177,56 +179,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     {
         std::cout << "Error : SDL_TTF" << std::endl;
     }
-    }
-
-    //Load game assets
-    {
-
-
-
-
-    //Load JSON data
-    //std::string path = "";
-    //std::string root2 = ROOT_DIR;
-    //path += root2;
-    //path += "/assets/World_1.json";
-    //assets->loadWorld(path);
-    //std::cout << "Character textures added" << std::endl;
-    //End
-
-    //Textures, map and fonts
-
-    //assets->AddTexture("terrain" , "/assets/terrain_ss.png");
-    //assets->AddTexture("projectile", "/assets/enemy_arrow.png");
-    //assets->AddTexture("arrow", "/assets/arrow.png");
-    //assets->AddTexture("enemy_arrow", "/assets/enemy_arrow.png");
-
-    //assets->AddTexture("PocketWatch", "/assets/PocketWatch.png");
-    //assets->AddTexture("Hourglass", "/assets/Hourglass.png");
-    //assets->AddTexture("Oval", "/assets/Oval.png");
-
-
-    //assets->AddTexture("chest", "/assets/chest_01.png");
-
-    //std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map.map").string();
-    //std::string fontPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Arial.ttf").string();
-    //std::string jsonPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items - Copy.json").string();
-
-    //assets->AddFont("arial", fontPath.c_str(),16);
-
-    map = new Map("terrain", 4, 32, &manager);
-
-    //ecs implementation
-
-    //map->LoadMap(mapPath.c_str(), 25, 20);
-
-    Game::inventory->init();
-    //Game::inventory->loadFromJSON(itemsPath);
-    Game::chestScreen1->init();
-    Game::chestScreen2->init();
-    }
-
-    //Handle the music
 
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
@@ -235,21 +187,22 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     if (!(Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3)) {
         std::cerr << "Mix_Init failed: " << Mix_GetError() << std::endl;
     }
-     Mix_AllocateChannels(2);
-    //std::string MusicPath = (projectDir / ".." / "TimelessJourneys" / "medieval.mp3").string();
-    //std::cout << "Trying to load music from: " << MusicPath << std::endl;
-    //bgMusic = Mix_LoadMUS(MusicPath.c_str());
-    //if (!bgMusic) {
-    //    std::cerr << "Failed to load background music from " << MusicPath << "! SDL_mixer Error: " << Mix_GetError() << std::endl;
-    //    // Handle the error, maybe exit or provide a notification
-    //} else {
-    //    if (Mix_PlayMusic(bgMusic, -1) == -1) {
-     //       std::cerr << "Failed to play music! SDL_mixer Error: " << Mix_GetError() << std::endl;
-    //    }
-   // }
+    Mix_AllocateChannels(2);
+
+    }
+
+
+    map = new Map("terrain", 4, 32, &manager);
+    Game::inventory->init();
+    Game::inventory->setGame(this);
+    Game::chestScreen1->init();
+    Game::chestScreen2->init();
+
+
     std::string setUpPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "World_1_setup.json").string();
 
     loadSetUpJSON(setUpPath);
+
 
     //Create player and enemy
     {
@@ -270,23 +223,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Player created" << std::endl;
 
+    //Create enemies
+    spawnEnemiesLvl1();
+
     //Enemy base definition
 
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     Stats& playerStats = player.getComponent<Stats>();
-
-    enemy.addComponent<TransformComponent>(1300,1000,128,128,1);
-    enemy.addComponent<SpriteComponent>(true, "enemy");
-    enemy.getComponent<SpriteComponent>().setActions();
-    enemy.addComponent<ColliderComponent>("enemy");
-    enemy.addComponent<Stats>();
-    Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(1,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
-    enemy.addGroup(Game::groupEnemies);
-
-    std::cout << "Enemy created" << std::endl;
-
-
 
     spawner.addComponent<TransformComponent>(1200,1000,500,250,1);
     spawner.addComponent<SpriteComponent>(true,"spawner");
@@ -322,6 +265,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest.getComponent<SpriteComponent>().setActions();
     chest.addComponent<ColliderComponent>("chest");
     chest.addComponent<InteractComponent>();
+    chest.addComponent<ChestScreen>();
     chest.addGroup(Game::groupChests);
 
     //create second chest
@@ -331,6 +275,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     chest2.getComponent<SpriteComponent>().setActions();
     chest2.addComponent<ColliderComponent>("chest");
     chest2.addComponent<InteractComponent>();
+    chest2.addComponent<ChestScreen>();
     chest2.addGroup(Game::groupChests);
 }
 
@@ -394,13 +339,28 @@ void Game::handleEvents()
             inventory->toggle();  // Toggle the inventory screen
             }
             break;
+        case SDLK_c:
+            if (level == "lvl1")
+            {
+                loadLvl3();
+                level = "lvl3";
+            }
+            else if (level == "lvl3")
+            {
+                loadLvl2();
+                level = "lvl2";
+            }
+            else if (level == "lvl2")
+            {
+                loadLvl1();
+                level= "lvl1";
+            }
+            break;
         case SDLK_RETURN:
             i = 1;
             ChestScreen *chestScreen;
             for (auto& ch : chests)
             {
-            if (i == 1) {chestScreen = chestScreen1;}
-            else if (i == 2) {chestScreen = chestScreen2;}
             if (inventory->get_visibility() == false) {
                 InteractComponent& interact = ch->getComponent<InteractComponent>();
 
@@ -410,7 +370,7 @@ void Game::handleEvents()
                     std::cout << "Opened chest" << std::endl;
                     ch->getComponent<SpriteComponent>().Play("Active");
                     chest_open = true;
-                    chestScreen->toggle();
+                    ch->getComponent<ChestScreen>().toggle();
                     break;
                 }
                }
@@ -420,7 +380,7 @@ void Game::handleEvents()
                 chest_open = false;
                 std::cout << "Closed chest" << std::endl;
                 ch->getComponent<SpriteComponent>().Play("Inactive");
-                chestScreen->toggle();
+                ch->getComponent<ChestScreen>().toggle();
                 break;
                }
                }
@@ -445,41 +405,39 @@ void Game::handleEvents()
                inventory -> moveSelection(1);
                break;
 
-               /*
+
             case SDLK_u: // Assuming 'U' key is used to use an item
-            inventory -> useSelectedItem();
-            break;
-            */
+               inventory -> useSelectedItem();
+               break;
+
             }
             }
 
-            i = 0;
-            if (chestScreen1->isCurrentlyVisible()) {i = 1; chestScreen = chestScreen1;}
-            else if (chestScreen2->isCurrentlyVisible()) {i = 2; chestScreen = chestScreen2;}
-
-            if (i == 1 or i == 2) {
-            std::cout << "chest is " << i << std::endl;
-            switch (event.key.keysym.sym) {
-            case SDLK_UP:
+            for (auto& ch : chests)
+            {
+            if (ch->getComponent<ChestScreen>().isCurrentlyVisible()) {
+               std::cout << "chest is " << i << std::endl;
+               switch (event.key.keysym.sym) {
+               case SDLK_UP:
                std::cout << "going up" << std::endl;
-               chestScreen->moveSelection(-chestScreen->getTotalCols());
+               ch->getComponent<ChestScreen>().moveSelection(-(ch->getComponent<ChestScreen>().getTotalCols()));
                break;
-            case SDLK_DOWN:
-               chestScreen->moveSelection(chestScreen->getTotalCols());
+               case SDLK_DOWN:
+               ch->getComponent<ChestScreen>().moveSelection(ch->getComponent<ChestScreen>().getTotalCols());
                break;
-            case SDLK_LEFT:
-               chestScreen->moveSelection(-1);
+               case SDLK_LEFT:
+               ch->getComponent<ChestScreen>().moveSelection(-1);
                break;
-            case SDLK_RIGHT:
-               chestScreen->moveSelection(1);
+               case SDLK_RIGHT:
+               ch->getComponent<ChestScreen>().moveSelection(1);
                break;
-            case SDLK_m:
+               case SDLK_m:
                //move object
-               chestScreen->moveItem();
+               ch->getComponent<ChestScreen>().moveItem();
                break;
+               }
             }
             }
-
             break;
         }
 
@@ -1153,7 +1111,7 @@ void Game::render()
     SDL_Colour color = {0,0,0,255};
     if(minutes < 1)
     {
-       color = {200,0,0,255};
+       color = {0,200,0,255};
     }
     SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont("arial"),text.c_str(),color);
     timeLabel = SDL_CreateTextureFromSurface(Game::renderer, surf);
@@ -1201,6 +1159,7 @@ void Game::loadSetUpJSON(std::string path)
     assets->loadWorld(worldPath);
     assets->AddFont("arial",fontPath.c_str(),16);
     map->LoadMap(mapPath.c_str(),25,20);
+    Game::inventory->loadFromJSON(itemsPath);
 
 
     std::cout << "Trying to load music from: " << musicPath << std::endl;
@@ -1215,6 +1174,263 @@ void Game::loadSetUpJSON(std::string path)
     }
 
 }
+
+void Game::spawnEnemiesLvl1()
+{
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(1200,1000,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+}
+
+void Game::loadLvl1()
+{
+    delete map;
+    for (auto& t : tiles) { t->destroy(); }
+    for (auto& c : MapColliders) { c->destroy(); }
+    for (auto& e : enemies) { e->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
+    manager.refresh();
+
+    assets->AddTexture("terrain1", "/assets/terrainAssets/terrain_ss.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "map.map").string();
+    map = new Map("terrain1",4,32,&manager);
+    map->LoadMap2(mapPath.c_str(),25,20);
+
+
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+    auto& enemy4(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy4.addComponent<TransformComponent>(1000,1000,128,128,1);
+    enemy4.addComponent<SpriteComponent>(true, "enemy");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupEnemies);
+
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
+}
+
+void Game::loadLvl2()
+{
+    delete map;
+    for (auto& t : tiles) { t->destroy(); }
+    for (auto& c : MapColliders) { c->destroy(); }
+    for (auto& e : enemies) { e->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
+    manager.refresh();
+
+    assets->AddTexture("terrain2", "/assets/map/tileset-terrain.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map2.map").string();
+    map = new Map("terrain2",4,32,&manager);
+    map->LoadMap2(mapPath.c_str(),25,20);
+
+    player.getComponent<TransformComponent>().position.x = 2044;
+    player.getComponent<TransformComponent>().position.y = 480;
+
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+    auto& enemy4(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy4.addComponent<TransformComponent>(1000,1000,128,128,1);
+    enemy4.addComponent<SpriteComponent>(true, "enemy");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupEnemies);
+
+    camera.w = 3200 - screen_width;
+    camera.h = 2560 - screen_height;
+}
+
+void Game::loadLvl3()
+{
+    delete map;
+    for (auto& t : tiles) { t->destroy(); }
+    for (auto& c : MapColliders) { c->destroy(); }
+    for (auto& e : enemies) { e->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
+    manager.refresh();
+
+    assets->AddTexture("terrain3", "/assets/terrainAssets/Map3tile_set.png");
+    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
+    map = new Map("terrain3",4,32,&manager);
+    map->LoadMap3(mapPath.c_str(),50,40);
+
+    player.getComponent<TransformComponent>().position.x = 700;
+    player.getComponent<TransformComponent>().position.y = 532;
+
+    auto& enemy(manager.addEntity());
+    auto& enemy2(manager.addEntity());
+    auto& enemy3(manager.addEntity());
+    auto& enemy4(manager.addEntity());
+
+    //Enemy base definition
+
+    enemy.addComponent<TransformComponent>(500,700,128,128,1);
+    enemy.addComponent<SpriteComponent>(true, "enemy");
+    enemy.getComponent<SpriteComponent>().setActions();
+    enemy.addComponent<ColliderComponent>("enemy");
+    enemy.addComponent<Stats>();
+    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
+    Stats& playerStats = player.getComponent<Stats>();
+    Stats& enemyStats = enemy.getComponent<Stats>();
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
+    enemy.addGroup(Game::groupEnemies);
+
+    //create second enemy
+
+    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
+    enemy2.addComponent<SpriteComponent>(true, "enemy");
+    enemy2.getComponent<SpriteComponent>().setActions();
+    enemy2.addComponent<ColliderComponent>("enemy");
+    enemy2.addComponent<Stats>();
+    enemy2.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
+    enemy3.addComponent<SpriteComponent>(true, "enemy");
+    enemy3.getComponent<SpriteComponent>().setActions();
+    enemy3.addComponent<ColliderComponent>("enemy");
+    enemy3.addComponent<Stats>();
+    enemy3.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy3.addGroup(Game::groupEnemies);
+
+    //create turret enemy
+
+    enemy4.addComponent<TransformComponent>(1000,1000,128,128,1);
+    enemy4.addComponent<SpriteComponent>(true, "enemy");
+    enemy4.getComponent<SpriteComponent>().setActions();
+    enemy4.addComponent<ColliderComponent>("enemy");
+    enemy4.addComponent<Stats>();
+    enemy4.addComponent<TurretEnemy>(400,5,5,400,&manager,&player.getComponent<TransformComponent>());
+    enemy4.addGroup(Game::groupEnemies);
+
+    camera.w = 6400 - screen_width;
+    camera.h = 5120 - screen_height;
+}
+
+bool Game::isChestOpen()
+{
+    for (auto& ch : chests)
+    {
+        if(ch->getComponent<ChestScreen>().isCurrentlyVisible())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 void Game::clean()
 {

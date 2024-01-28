@@ -17,7 +17,7 @@ public:
     ~AssetManager();
 
     //gameobjects
-
+    Manager* manager;
 
     World world;
     void loadWorld(std::string path);
@@ -34,7 +34,7 @@ public:
 
 private:
 
-    Manager* manager;
+
     std::map<std::string, SDL_Texture*> textures;
     std::map<std::string, TTF_Font*> fonts;
 

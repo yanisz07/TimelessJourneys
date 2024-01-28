@@ -62,6 +62,7 @@ void Inventory::moveSelection(int offset) {
 }
 
 
+
 void Inventory::render(SDL_Renderer* renderer, bool forceRender) {
     if (!this->isVisible && forceRender) return;
 
@@ -155,33 +156,52 @@ const Item* Inventory::getItem(const int key) {
 }
 
 
+
 void Inventory::useItem(int index) {
     int currentRow = index / gridCols;
     int currentCol = index % gridCols;
-    int key = 10*currentRow+currentCol;
+    int key = 10 * currentRow + currentCol;
 
     Item* it = items[key];
     if (it != nullptr) {
+
         std::cout << "Used item: " << it->name << std::endl;
 
+
+
+
+        // Instead of removing the item, you might want to handle other states, like 'equipped'
+        if (!it->is_equipped) {
+            it->is_equipped = true;
+            std::cout << "Equipped: " << it->name << std::endl;
+
+        } else {
+            // If the item is already equipped, you might want to unequip or perform another action
+            it->is_equipped = false;
+            std::cout << "Unequipped: " << it->name << std::endl;
+        }
+        if(it->use() == 1)
+        {
+            removeItem(key);
+        }
+
+        // Note: The actual behavior of 'use' should be defined in each item's class (e.g., ArmorItem, Melee, RangedWeapon)
     } else {
         std::cout << "Item with index " << index << " not found." << std::endl;
     }
 }
 
-/* Example usage effect: restoring health
-    if (items[index].name == "Health Potion") {
-        player.restoreHealth(50); // Assuming 'player' is an instance of the Player class
-        removeItem(items[index]); */
 
-void Inventory::useSelectedItem(const std::string& name) {
+void Inventory::useSelectedItem() {
+    // check if item is equipped
+    if (items[selectedSlotIndex] != nullptr) {
+        if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
+            useItem(selectedSlotIndex);
+            selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
+        }
+        }
 
-    if (selectedSlotIndex >= 0 && selectedSlotIndex < items.size()) {
-        useItem(selectedSlotIndex);
-        // Optionally, after using the item, unselect it or select the next one
-        selectedSlotIndex = (selectedSlotIndex + 1) % items.size();
     }
-}
 
 
 void Inventory::pickUpItem(int index) {
@@ -239,6 +259,13 @@ void Inventory::loadFromJSON(const std::string& filePath) {
             Item* item = new ArmorItem(false,location,spritePath,name,dmg_multiplier,health_increase);
             addItem(item);
         }
+        if (type=="HealingPotion") {
+            int health_increase = itemData["health_increase"].get<int>();
+            Item* item = new HealingPotion(false,location,spritePath,name,health_increase);
+            addItem(item);
+        }
+
+
         std::cout << "Item " << name << "created and added" << std::endl;
     }
 
@@ -248,4 +275,12 @@ void Inventory::loadFromJSON(const std::string& filePath) {
 void Inventory::saveToJSON(const std::string& filePath) const {
 
 }
+
+
+
+void Inventory::setGame(Game* game)
+{
+    this->game = game;
+}
+
 

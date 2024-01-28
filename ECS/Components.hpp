@@ -21,5 +21,6 @@
 #include "collidercomponentcircle.hpp"
 #include "canon.h"
 #include "SpawnerComponent.h"
+#include "chestScreen.hpp"
 
 #endif // COMPONENTS_H

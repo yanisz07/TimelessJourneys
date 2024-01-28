@@ -94,10 +94,10 @@ add_executable(TimelessJourneys ${SOURCES}
     inventory.cpp
     inventory.hpp
     ECS/InteractComponent.hpp
-    chestScreen.cpp
-    chestScreen.h
     ECS/canon.cpp ECS/canon.h
     ECS/collidercomponentcircle.hpp ECS/collidercomponentcircle.cpp
+    ECS/chestScreen.cpp
+    ECS/chestScreen.hpp
     ECS/turretenemy.hpp ECS/turretenemy.cpp
     ECS/SpawnerComponent.h
     ECS/SpawnerComponent.cpp)

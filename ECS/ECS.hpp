@@ -15,6 +15,7 @@ class Manager;
 
 //Forward declaration of asset manager to access world data
 class AssetManager;
+class Game;
 
 using ComponentID = std::size_t;
 using Group = std::size_t;
@@ -153,6 +154,8 @@ private:
     std::array<std::vector<Entity*>, maxGroups> groupedEntities;
 public:
     AssetManager* assetManager;
+    Game* game;
+    void setGame(Game* g){game=g;}
     AssetManager* getAssetManager(){return assetManager;}
     void update()
     {

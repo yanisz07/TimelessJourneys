@@ -10,6 +10,11 @@
 #include "SDL_image.h"
 #include <map>
 
+
+class Sword;
+
+class RangeWeapon;
+
 class Item {
 public:
     bool is_equipped;
@@ -22,6 +27,10 @@ public:
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 
     virtual void displayInfo() const;
+    virtual int use() {
+                std::cout << "Using item: " << name << std::endl;
+        return 0;
+    }
 };
 
 class ArmorItem : public Item {
@@ -33,7 +42,11 @@ public:
           float dmgMult, int healthInc);
 
     void displayInfo() const override;
-};
+    int use() override {
+        std::cout << "Equipping armor: " << name << std::endl;
+        return 0;
+    }
+    };
 
 class Melee : public Item {
 public:
@@ -42,6 +55,13 @@ public:
     Melee(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, float dmgMult);
 
     void displayInfo() const override;
+    int use() override;
+
+    /*
+    {
+    std::cout << "Attacking with melee weapon: " << name << std::endl;
+    }
+    */
 };
 
 class RangedWeapon : public Item {
@@ -55,6 +75,17 @@ public:
                  float dmgMult, int rng, int arrowSpeed, int shootingSpeed);
 
     void displayInfo() const override;
+    int use() override;
+};
+
+class HealingPotion : public Item {
+public:
+float effect;
+
+HealingPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, int effect);
+
+void displayInfo() const override;
+int use() override;
 };
 
 #endif // ITEM_HPP
