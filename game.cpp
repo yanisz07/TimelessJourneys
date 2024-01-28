@@ -277,6 +277,8 @@ auto& EnemyProjectiles(manager.getGroup(Game::groupEnemyProjectiles));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& PlayerAttacks(manager.getGroup(Game::groupPlayerAttack));
 
+
+
 void Game::handleEvents()
 {
     SDL_PollEvent(&event);
@@ -296,6 +298,26 @@ void Game::handleEvents()
 
         }
         break;
+
+    if (event.type == SDL_MOUSEBUTTONDOWN && DisplayMap) {
+            int mouseX, mouseY;
+            SDL_GetMouseState(&mouseX, &mouseY);
+
+            // Convert screen coordinates to map coordinates
+            int mapWidth = 3200; // Full map width
+            int mapHeight = 2560; // Full map height
+            int mapDisplayWidth = 1200; // Displayed map width
+            int mapDisplayHeight = 800; // Displayed map height
+            int xStart = (screen_width - mapDisplayWidth) / 2;
+            int yStart = (screen_height - mapDisplayHeight) / 2;
+
+            float xRatio = static_cast<float>(mouseX - xStart) / mapDisplayWidth;
+            float yRatio = static_cast<float>(mouseY - yStart) / mapDisplayHeight;
+
+            mapPing.position.x = xRatio * mapWidth;
+            mapPing.position.y = yRatio * mapHeight;
+            mapPing.isActive = true; // Set the ping to active
+        }
 
 
     case SDL_MOUSEMOTION:
@@ -811,6 +833,11 @@ void Game::render()
         if (isFullscreen) {
                 RenderFullscreenMap( renderer, screenWidth, screenHeight, map);
                 renderPlayerPosition(renderer);
+
+                if (mapPing.isActive) {
+                        // Render the ping on the map
+                        renderMapPing(renderer); // Call a separate function to render the ping
+                }
             }
 
         else {
@@ -969,7 +996,7 @@ void Game::renderPlayerPosition(SDL_Renderer* renderer) {
     int xStart = (screen_width - MapDisplayWidth) / 2 + BorderSize;
     int yStart = (screen_height - MapDisplayHeight) / 2 + BorderSize;
 
-    // Calculate the player's position on the map display
+    //  the player's position on the map display
     float xRatio = static_cast<float>(playerPos.x) / mapWidth;
     float yRatio = static_cast<float>(playerPos.y) / mapHeight;
     int dotX = xStart + static_cast<int>(xRatio * (MapDisplayWidth - 2 * BorderSize));
@@ -977,16 +1004,28 @@ void Game::renderPlayerPosition(SDL_Renderer* renderer) {
 
     // Draw a red dot at the player's position
     const int dotSize = 10; // Size of the dot
-    SDL_Rect dotRect = {dotX - dotSize / 2, dotY - dotSize / 2, dotSize, dotSize};
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red
+    SDL_Rect dotRect = {dotX - dotSize / 2, dotY - dotSize / 2, dotSize, dotSize};    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // RGBA for red
     SDL_RenderFillRect(renderer, &dotRect);
 
     // Reset the renderer color
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
+void Game::renderMapPing(SDL_Renderer* renderer) {
+    int dotSize = 10;
+    SDL_Rect pingRect = {
+        static_cast<int>(mapPing.position.x * screen_width / 3200) - dotSize / 2,
+        static_cast<int>(mapPing.position.y * screen_height / 2560) - dotSize / 2,
+        dotSize,
+        dotSize
+    };
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // RGBA for blue
+    SDL_RenderFillRect(renderer, &pingRect);
 
+    // Reset the renderer color to whatever was the default before
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for default rendering
 
+}
 void Game::clean()
 {
     if (bgMusic != nullptr) {

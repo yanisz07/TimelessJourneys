@@ -14,6 +14,7 @@
 #include <filesystem>
 #include "sdl_mixer.h"
 #include "Map.hpp" // Assuming you have a header file for the Map type
+#include "Vector2D.hpp"
 
 
 extern std::filesystem::path projectDir;
@@ -46,6 +47,7 @@ public:
     void displayGameName(SDL_Renderer* renderer, const char* gameName, int screenWidth, int topPadding);
     void renderWindowedMap();
     void renderPlayerPosition(SDL_Renderer* renderer);
+    void renderMapPing(SDL_Renderer* renderer);
 
 
     bool is_running() {return isRunning;}
@@ -86,6 +88,12 @@ private:
     SDL_Point mousePosition;
     SDL_Rect retryButtonRect;
     SDL_Rect exitButtonRect;
+    struct MapPing {
+        Vector2D position;
+        bool isActive = false;
+    };
+
+    MapPing mapPing; // Member variable in Game class
 };
 
 #endif // GAME_H
