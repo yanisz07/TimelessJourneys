@@ -265,6 +265,11 @@ void Inventory::loadFromJSON(const std::string& filePath) {
             Item* item = new HealingPotion(false,location,spritePath,name,health_increase);
             addItem(item);
         }
+        if (type=="XPPotion") {
+            int experience_increase = itemData["experience_increase"].get<int>();
+            Item* item = new XPPotion(false,location,spritePath,name,experience_increase);
+            addItem(item);
+        }
 
 
         std::cout << "Item " << name << "created and added" << std::endl;

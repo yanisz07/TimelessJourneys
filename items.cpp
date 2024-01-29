@@ -89,3 +89,19 @@ int RangedWeapon::use() {
     return 0;
 
 }
+
+XPPotion::XPPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, int effect)
+    : Item(equipped, loc, path, itemName) {this->effect = effect;}
+
+int XPPotion::use(){
+    Stats& stats = Game::inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Stats>();
+    stats.addXP(effect);
+    return 1;
+
+}
+
+void XPPotion::displayInfo() const {
+    Item::displayInfo();
+    std::cout << "Potion Info:" << std::endl;
+    std::cout << "XP Addition: " << effect << std::endl;
+}

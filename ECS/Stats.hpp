@@ -75,6 +75,7 @@ public:
     void KillEntity(); // Only for enemies.
     void GameOver();
     void addHealth(int health);
+    void addXP(int xp);
 
     bool is_hit()
     {

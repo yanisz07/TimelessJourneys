@@ -43,7 +43,6 @@ int Game::windowSize_x = 100;
 int Game::windowSize_y = 100;
 
 
-//click Button sound
 
 
 //Add characters
@@ -416,22 +415,25 @@ void Game::handleEvents()
             //if click is within start button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Start_centerY && y < Start_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isMenuOpen = false;
                 isGameStarted = true;
             }
             //if click is within Setting button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Setting_centerY && y < Setting_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
-                isSettingsOpen = true;
-                isMenuOpen = false;
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1, clickButton, 0);}
+               isSettingsOpen = true;
+               isMenuOpen = false;
 
             }
             //if click is within Rules button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Rules_centerY && y < Rules_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+               if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isRuleOpen = true;
                 isMenuOpen = false;
 
@@ -439,7 +441,8 @@ void Game::handleEvents()
             // Check if click is within the Exit button boundary
             if (x > centerX && x < centerX + buttonWidth &&
                 y > exitCenterY && y < exitCenterY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isRunning = false;
             }
         }
@@ -462,13 +465,15 @@ void Game::handleEvents()
             //if click is within resume button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Start_centerY && y < Start_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isInGameMenuOpen = false;
             }
             //if click is within Setting button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Setting_centerY && y < Setting_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isSettingsOpen = true;
                 isInGameMenuOpen = false;
 
@@ -476,7 +481,8 @@ void Game::handleEvents()
             //if click is within Rules button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Rules_centerY && y < Rules_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isRuleOpen = true;
                 isInGameMenuOpen = false;
 
@@ -484,7 +490,8 @@ void Game::handleEvents()
             // Check if click is within the Exit button boundary
             if (x > centerX && x < centerX + buttonWidth &&
                 y > exitCenterY && y < exitCenterY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isRunning = false;
             }
         }
@@ -503,12 +510,14 @@ void Game::handleEvents()
             if (x > centerX && x < centerX + buttonWidth &&
                 y > backButtonCenterY && y < backButtonCenterY + buttonHeight) {
                 if (isGameStarted) {
-                Mix_PlayChannel(-1,clickButton, 0);
+               if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isRuleOpen = false;
                 isInGameMenuOpen = true;
                 }
                 else if (!isGameStarted){
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isRuleOpen = false;
                 isMenuOpen = true;
 
@@ -536,12 +545,14 @@ void Game::handleEvents()
             if (x > centerX && x < centerX + buttonWidth &&
                 y > Back_centerY && y < Back_centerY + buttonHeight) {
                 if (isGameStarted) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isSettingsOpen = false;
                 isInGameMenuOpen = true;
                 }
                 else if (!isGameStarted){
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                 isSettingsOpen = false;
                 isMenuOpen = true;
 
@@ -553,13 +564,15 @@ void Game::handleEvents()
                 y > Music_centerY && y < Music_centerY + buttonHeight) {
                 // Toggle music state
                 if (isMusic) { // Music is currently playing
-                    Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                     Mix_PauseMusic(); // Pause the music
                     isMusic = false; // Update the flag
                     Setting::volume_onoff(isMusic);
 
                 } else { // Music is currently paused
-                    Mix_PlayChannel(-1,clickButton, 0);
+                    if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1,clickButton, 0);}
                     Mix_ResumeMusic(); // Resume the music
                     isMusic = true; // Update the flag
                     Setting::volume_onoff(isMusic);
@@ -569,18 +582,21 @@ void Game::handleEvents()
             //if click is within Screen Dimension button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > ScreenDim_centerY && y < ScreenDim_centerY + buttonHeight) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+                    Mix_PlayChannel(-1,clickButton, 0);}
                 toggleFullScreen();
             }
             // if click is within Sound button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
                 y > SoundEffect_centerY && y < SoundEffect_centerY + buttonHeight) {
                 if (isSound) {
-                    Mix_PlayChannel(-1, clickButton, 0);
+                    if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1, clickButton, 0);}
                     isSound = false;
                     Setting::toggleSoundEffects();
                 } else {
-                    Mix_PlayChannel(-1, clickButton, 0);
+                    if (soundEffectsEnabled) {
+               Mix_PlayChannel(-1, clickButton, 0);}
                     isSound = true;
                     Setting::toggleSoundEffects();
 
@@ -605,7 +621,8 @@ void Game::handleEvents()
             if (x > retryButtonRect.x && x < retryButtonRect.x + retryButtonRect.w &&
                 y > retryButtonRect.y && y < retryButtonRect.y + retryButtonRect.h) {
                 // Reset game state to start again
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+                    Mix_PlayChannel(-1,clickButton, 0);}
                 player.getComponent<Stats>().set_health(100);
                 loadLvl3();
                 //player.getComponent<Stats>().set_health(50);
@@ -617,7 +634,8 @@ void Game::handleEvents()
             // Check if click is within exit button boundary
             if (x > exitButtonRect.x && x < exitButtonRect.x + exitButtonRect.w &&
                 y > exitButtonRect.y && y < exitButtonRect.y + exitButtonRect.h) {
-                Mix_PlayChannel(-1,clickButton, 0);
+                if (soundEffectsEnabled) {
+                    Mix_PlayChannel(-1,clickButton, 0);}
                 isRunning = false; // Exit the game
             }
         }
