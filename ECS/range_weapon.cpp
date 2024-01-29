@@ -5,6 +5,7 @@
 #include "Stats.hpp"
 #include "ProjectileComponent.hpp"
 #include <math.h>
+#include "../setting.hpp"
 
 Range_Weapon::Range_Weapon(Manager* man)
 {
@@ -111,7 +112,9 @@ int Range_Weapon::rangeAttack()
             CreateArrow(Vector2D(entityPos.x+10*scale,entityPos.y+(13+19-4)*scale),Vector2D(direction.x,direction.y),range,speed,"arrow",15,7,2,damage*entity->getComponent<Stats>().get_damage_mult(),135);
         }
     }
-    Mix_PlayChannel(-1,bowSound, 0);
+    if (soundEffectsEnabled) {
+        Mix_PlayChannel(-1, bowSound, 0);
+    }
     return 0;
 }
 

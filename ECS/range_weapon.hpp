@@ -8,6 +8,7 @@
 #include <string.h>
 #include <SDL.h>
 #include "Animation.hpp"
+#include "../setting.hpp"
 
 //forward decleration
 class TransformComponent;

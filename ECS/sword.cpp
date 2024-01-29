@@ -5,6 +5,7 @@
 #include "Stats.hpp"
 #include <math.h>
 #include "../inventory.hpp"
+#include "../setting.hpp"
 
 Sword::Sword(Manager *man) : dmg_multiplier(1.0f)
 {
@@ -172,7 +173,10 @@ int Sword::frontAttack()
             attackCol.addGroup(Game::groupPlayerAttack);
         }
     }
-    Mix_PlayChannel(-1,swordSwooshSound, 0);
+
+    if (soundEffectsEnabled) {
+        Mix_PlayChannel(-1, swordSwooshSound, 0);
+    }
     return 0;
 }
 

@@ -4,13 +4,17 @@
 #include <filesystem>
 
 extern std::filesystem::path projectDir;
+extern bool soundEffectsEnabled;
 
 class Setting {
 public:
     static void toggleSettingState(bool &isSettingsOpen);
-    static void renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const SDL_Point& mousePosition, bool isFullscreen, bool isMusic);
+    static void renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const SDL_Point& mousePosition, bool isFullscreen, bool isMusic, bool isSound);
     static void handleSliderEvent(const SDL_Point& mousePosition);
     static void volume_onoff(bool isMusic);
+    static void sound_onoff(bool isSound);
+    static void toggleSoundEffects();
+
 
 
 private:

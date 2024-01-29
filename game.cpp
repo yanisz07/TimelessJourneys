@@ -83,7 +83,8 @@ Game::Game()
     isGameOverOpen = false;
     isRuleOpen = false;
     isFullscreen = false; // full screen statusm, Starts fullscreen mode
-    isMusic = true; // music state, music on by default
+    isMusic = true;
+    isSound = true;// music state, music on by default
 
     Game::assets->manager->setGame(this);
 
@@ -253,7 +254,7 @@ auto& Spawners(manager.getGroup(Game::groupSpawners));
 void Game::handleEvents()
 {
     SDL_PollEvent(&event);
-    std::string click_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "click_button1.mp3").string();
+    std::string click_path = (projectDir / ".." / "TimelessJourneys" / "assets" / "soundAssets" /"click_button1.mp3").string();
     clickButton = Mix_LoadWAV(click_path.c_str());
     switch (event.type) {
     case SDL_QUIT:
@@ -526,7 +527,8 @@ void Game::handleEvents()
             int centerX = (screenWidth - buttonWidth) / 2;
             int ScreenDim_centerY = (screenHeight - 2 * buttonHeight - 20) / 2 + 100;
             int Music_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 60;
-            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 180;
+            int Back_centerY = ((screenHeight - 2 * buttonHeight - 20) / 2 + 100) + 240;
+            int SoundEffect_centerY = ((screenHeight - 2* buttonHeight - 20) / 2 + 100) + 180;
 
             Setting::handleSliderEvent({event.button.x, event.button.y});
 
@@ -569,6 +571,21 @@ void Game::handleEvents()
                 y > ScreenDim_centerY && y < ScreenDim_centerY + buttonHeight) {
                 Mix_PlayChannel(-1,clickButton, 0);
                 toggleFullScreen();
+            }
+            // if click is within Sound button boundary:
+            if (x > centerX && x < centerX + buttonWidth &&
+                y > SoundEffect_centerY && y < SoundEffect_centerY + buttonHeight) {
+                if (isSound) {
+                    Mix_PlayChannel(-1, clickButton, 0);
+                    isSound = false;
+                    Setting::toggleSoundEffects();
+                } else {
+                    Mix_PlayChannel(-1, clickButton, 0);
+                    isSound = true;
+                    Setting::toggleSoundEffects();
+
+                }
+
             }
         }
 
@@ -1088,7 +1105,7 @@ void Game::render()
         InGameMenu::renderInGameMenu(renderer, isInGameMenuOpen, mousePosition); // Render the In game menu if it's open
     }
     else if (isSettingsOpen) {
-        Setting::renderSetting(renderer, isSettingsOpen, mousePosition, isFullscreen, isMusic); // Render the setting menu if it's open
+        Setting::renderSetting(renderer, isSettingsOpen, mousePosition, isFullscreen, isMusic, isSound); // Render the setting menu if it's open
     }
     else{
 
