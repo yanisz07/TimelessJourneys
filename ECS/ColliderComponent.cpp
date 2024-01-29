@@ -146,3 +146,8 @@ void ColliderComponent::draw()
         }
     */
 }
+
+ColliderComponent::~ColliderComponent()
+{
+    SDL_DestroyTexture(tex);
+}

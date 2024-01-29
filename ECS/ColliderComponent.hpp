@@ -44,6 +44,8 @@ public:
 
     void draw() override;
 
+    ~ColliderComponent() override;
+
 };
 
 #endif // COLLIDERCOMPONENT_H

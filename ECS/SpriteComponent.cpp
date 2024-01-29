@@ -221,3 +221,8 @@ void SpriteComponent::Set_Dest_Rect(int w, int h)
     destRect.h = h;
     destRect.w = w;
 }
+
+SpriteComponent::~SpriteComponent()
+{
+    SDL_DestroyTexture(texture);
+}

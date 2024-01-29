@@ -83,6 +83,8 @@ public:
 
     void attack();
 
+    ~EnemyMovement() override;
+
 };
 
 #endif // ENEMYMOVEMENT_H

@@ -54,7 +54,7 @@ public:
         experience = exp;
         level = lvl;
     }
-    ~Stats() override = default;
+    ~Stats() override;
 
     int get_health() {return health;}
     float get_damage_mult() {return damage_mult;}

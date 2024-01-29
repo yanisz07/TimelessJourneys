@@ -31,6 +31,8 @@ public:
     void update() override;
 
     void draw() override;
+
+    ~ColliderComponentCircle() override;
 };
 
 #endif // COLLIDERCOMPONENTCIRCLE_H

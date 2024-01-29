@@ -27,6 +27,12 @@ public:
 
     void draw() override;
 
+    ~TurretEnemy() override
+    {
+        SDL_DestroyTexture(tex1);
+        SDL_DestroyTexture(tex2);
+    }
+
     void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
 
 private:

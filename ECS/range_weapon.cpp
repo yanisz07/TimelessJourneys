@@ -220,3 +220,11 @@ void Range_Weapon::CreateArrow(Vector2D pos, Vector2D vel, int range, int speed,
     arrow.getComponent<ColliderComponent>().SetAngle(angle);
     arrow.addGroup(Game::groupPlayerProjectiles);
 }
+
+Range_Weapon::~Range_Weapon()
+{
+    SDL_DestroyTexture(texture);
+    Mix_FreeChunk(bowSound);
+}
+
+
