@@ -683,11 +683,6 @@ void Game::toggleFullScreen() {
     {
         camera.w = 6400-screen_width;
         camera.h = 5120-screen_height;
-        std::cout << "YAAAAAAAA" << std::endl;
-        std::cout << camera.x << std::endl;
-        std::cout << camera.y << std::endl;
-        std::cout << camera.w << std::endl;
-        std::cout << camera.h << std::endl;
     }
     x_diff = (screen_width - 128)/2;
     y_diff = (screen_height - 128)/2;
@@ -743,6 +738,14 @@ void Game::update()
             }
         }
 
+        for (auto& c : Canons)
+        {
+            if(Collision::CheckCollision(c->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
+            {
+                player.getComponent<TransformComponent>().position = playerPos; // the player doesn't move
+            }
+        }
+
         for (auto& t : Turrets)
         {
             if(Collision::CheckCollision(t->getComponent<ColliderComponent>(), player.getComponent<ColliderComponent>()))
@@ -752,7 +755,8 @@ void Game::update()
             }
         }
         //with npcs:
-        /*for (auto& c : npcs)
+        /*
+        for (auto& c : npcs)
         {
             SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
             for (auto& e : enemies)
