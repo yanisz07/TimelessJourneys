@@ -34,3 +34,8 @@ void ColliderComponentCircle::draw()
     TextureManager::Draw(tex,srcR,destR,SDL_FLIP_NONE);
     */
 }
+
+ColliderComponentCircle::~ColliderComponentCircle()
+{
+    SDL_DestroyTexture(tex);
+}

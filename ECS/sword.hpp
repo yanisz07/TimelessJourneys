@@ -39,7 +39,7 @@ public:
 
     Sword(Manager *man);
 
-    ~Sword() override = default;
+    ~Sword() override;
 
     int equip();
     \
