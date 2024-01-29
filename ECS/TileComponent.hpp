@@ -21,9 +21,7 @@ public:
     TileComponent() = default;
 
     ~TileComponent()
-    {
-        SDL_DestroyTexture(texture);
-    }
+    {}
 
     TileComponent(int srcX, int srcY, int xpos, int ypos, int tsize, int tscale, std::string id)
     {
