@@ -57,6 +57,14 @@
             "spritePath" : "/assets/weaponAssets/health_potion.png",
             "dmg_multiplier": 0,
             "health_increase": 50
+        },
+        {
+            "name": "experience_potion",
+            "type": "XPPotion",
+            "location" : "chest1",
+            "spritePath" : "/assets/weaponAssets/xp_potion.png",
+            "dmg_multiplier": 0,
+            "experience_increase": 100
         }
     ]
 }

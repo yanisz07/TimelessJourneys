@@ -38,6 +38,11 @@ void ChestScreen::init()
 // Destructor
 ChestScreen::~ChestScreen() {
     // Clean up if needed
+
+    for (auto i = items.begin(); i != items.end(); i++)
+    {
+        delete (i->second);
+    }
 }
 
 void ChestScreen::show() {

@@ -1461,6 +1461,27 @@ void Game::loadItems(const std::string& filePath)
        }
     }
 
+    if(type == "XPPotion")
+    {
+       int experience_increase = itemData["experience_increase"].get<int>();
+       Item* item = new XPPotion(false,location,spritePath,name,experience_increase);
+       if(location == "inventory")
+       {
+            Game::inventory->addItem(item);
+
+       }
+       else
+       {
+            for (auto& ch : chests)
+            {
+                if(ch->tag == location)
+                {
+                    ch->getComponent<ChestScreen>().addItem(item);
+                }
+            }
+       }
+    }
+
 
     std::cout << "Item " << name << "created and added" << std::endl;
     }
