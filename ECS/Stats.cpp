@@ -68,7 +68,7 @@ void Stats::draw()
     SDL_Rect srcRect = {0,0,0,0};
     //Draw stats display
     //TODO: need to somehow get the current window size
-    if(entity->type == "player")
+    if(entityType == "player")
     {
     int texWidth;
     int texHeight;

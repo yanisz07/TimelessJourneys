@@ -35,13 +35,9 @@ int y_diff = 320; //Camera.y with respect to the position y of the player
 
 AssetManager* Game::assets = new AssetManager(&manager);
 Inventory* Game::inventory = new Inventory();
-ChestScreen* Game::chestScreen1 = new ChestScreen();
-ChestScreen* Game::chestScreen2 = new ChestScreen();
 
 bool Game::isRunning = false;
 bool Game::DisplayMap = false;
-
-int i;
 
 int Game::windowSize_x = 100;
 int Game::windowSize_y = 100;
@@ -212,20 +208,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Player created" << std::endl;
 
-    //Create enemies
-    loadLvl1();
-
-    //create second enemy
-    /*
-    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
-    enemy2.addComponent<SpriteComponent>(true, "enemy");
-    enemy2.getComponent<SpriteComponent>().setActions();
-    enemy2.addComponent<ColliderComponent>("enemy");
-    enemy2.addComponent<Stats>();
-    enemy2.addGroup(Game::groupEnemies);
-
-    std::cout << "Second Enemy created" << std::endl;
-    */
+    loadLvl3();
 
     //Create labels
     SDL_Color white = {0,0,0,255};
@@ -308,7 +291,6 @@ void Game::handleEvents()
             }
             break;
         case SDLK_RETURN:
-            i = 1;
             ChestScreen *chestScreen;
             for (auto& ch : chests)
             {
@@ -336,7 +318,6 @@ void Game::handleEvents()
                }
                }
                }
-            i++;
             }
             break;
 
@@ -367,7 +348,6 @@ void Game::handleEvents()
             for (auto& ch : chests)
             {
             if (ch->getComponent<ChestScreen>().isCurrentlyVisible()) {
-               std::cout << "chest is " << i << std::endl;
                switch (event.key.keysym.sym) {
                case SDLK_UP:
                std::cout << "going up" << std::endl;
@@ -609,8 +589,10 @@ void Game::handleEvents()
                 y > retryButtonRect.y && y < retryButtonRect.y + retryButtonRect.h) {
                 // Reset game state to start again
                 Mix_PlayChannel(-1,clickButton, 0);
-                player.getComponent<Stats>().set_health(50);
-                player.getComponent<TransformComponent>().position = Vector2D(1900, 1100);
+                player.getComponent<Stats>().set_health(100);
+                loadLvl3();
+                //player.getComponent<Stats>().set_health(50);
+                //player.getComponent<TransformComponent>().position = Vector2D(1900, 1100);
                 timeElapsed.start();
                 isGameOverOpen = false;
             }
@@ -1177,8 +1159,6 @@ void Game::render()
 
 
     inventory->render(renderer);
-    chestScreen1->render(renderer);
-    chestScreen2->render(renderer);
 
     //Render time remaining
     //TODO: set to screen size
@@ -1224,6 +1204,92 @@ void Game::render()
 
 }
 
+void Game::spawnEnemies(std::string JSONpath)
+{
+    std::ifstream inFile(JSONpath);
+    nlohmann::json j = nlohmann::json::parse(inFile);
+
+    // Load items from JSON
+    for (int i = 0; i < size(j["enemies"]); ++i) {
+    nlohmann::json enemyData = j["enemies"][i];
+    std::string type = enemyData["type"].get<std::string>();
+
+    //Transform Comp
+    int x_pos  = enemyData["trans"][0].get<int>();
+    int y_pos  = enemyData["trans"][1].get<int>();
+    int h = enemyData["trans"][2].get<int>();
+    int w = enemyData["trans"][3].get<int>();
+    int sc = enemyData["trans"][4].get<int>();
+
+
+    //sprite component
+    int animated = enemyData["sprite"][0].get<int>();
+    std::string t = enemyData["sprite"][1].get<std::string>();
+
+    //collider
+    std::string collider = enemyData["coll"].get<std::string>();
+
+    auto& enemy(manager.addEntity());
+
+     enemy.addComponent<TransformComponent>(x_pos,y_pos,h,w,sc);
+     enemy.addComponent<SpriteComponent>(animated, t);
+     enemy.getComponent<SpriteComponent>().setActions();
+     enemy.addComponent<ColliderComponent>(collider);
+
+     if(type != "spaw" && type!="can"){
+       enemy.addComponent<Stats>();}
+
+     if(type == "turr")
+     {
+       int rad = enemyData["turr"][0].get<int>();
+       int speed = enemyData["turr"][1].get<int>();
+       int dam = enemyData["turr"][2].get<int>();
+       int rt = enemyData["turr"][3].get<int>();
+       enemy.addComponent<TurretEnemy>(rad,speed,dam,rt,&manager,&(player.getComponent<TransformComponent>()));
+       enemy.addGroup(Game::groupTurrets);
+     }
+     else if(type == "can")
+     {
+       int rad = enemyData["can"][0].get<int>();
+       int speed = enemyData["can"][1].get<int>();
+       int dam = enemyData["can"][2].get<int>();
+       int rt = enemyData["can"][3].get<int>();
+       int dir = enemyData["can"][4].get<int>();
+       enemy.addComponent<Canon>(rad,speed,dam,rt,&manager,&(player.getComponent<TransformComponent>()),dir);
+       enemy.addGroup(Game::groupCanons);
+     }
+     else if(type == "spaw")
+     {
+       int inter = enemyData["spaw"][0].get<int>();
+       int max_e = enemyData["spaw"][1].get<int>();
+       enemy.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
+       enemy.getComponent<SpriteComponent>().setActions();
+       enemy.addComponent<SpawnerComponent>(manager, inter, max_e, &(player.getComponent<TransformComponent>()),
+                                            &(player.getComponent<Stats>()), &(player.getComponent<ColliderComponent>()));
+       enemy.addGroup(Game::groupSpawners);
+     }
+     else if(type == "mov")
+     {
+      int ty =  enemyData["mov"][0].get<int>();
+      int r_1 = enemyData["mov"][1].get<int>();
+      int r_2 = enemyData["mov"][2].get<int>();
+      int r_3 = enemyData["mov"][3].get<int>();
+      int d_1 = enemyData["mov"][4].get<int>();
+      int dam = enemyData["mov"][5].get<int>();
+      enemy.addComponent<EnemyMovement>(ty,r_1,r_2,r_3,d_1,dam,&(player.getComponent<TransformComponent>()),
+                                        &(player.getComponent<Stats>()), &(enemy.getComponent<Stats>()),&(player.getComponent<ColliderComponent>()));
+      enemy.addGroup(Game::groupEnemies);
+     }
+     else
+     {
+      enemy.addGroup(Game::groupEnemies);
+      enemy.addGroup(Game::groupMapColliders);
+     }
+
+     std::cout << "Enemy " << type << " created" << std::endl;
+
+    }
+}
 
 void Game::loadSetUpJSON(std::string path)
 {
@@ -1644,58 +1710,52 @@ void Game::loadLvl3()
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
     for (auto& n : npcs) {n->destroy();}
-    //for (auto& n : npcs) {n->destroy();}
+    for (auto& n : PlayerProjectiles) {n->destroy();}
+    for (auto& n : EnemyProjectiles) {n->destroy();}
+    for (auto& n : PlayerAttacks) {n->destroy();}
 
     manager.refresh();
+    //camera stuff
+    camera.x = 0;
+    camera.y = 0;
+    camera.w = 6400 - windowSize_x;
+    camera.h = 5120 - windowSize_y;
 
-    assets->AddTexture("terrain3", "/assets/terrainAssets/Map3tile_set.png");
+    //assets->AddTexture("terrain3", "/assets/terrainAssets/Map3tile_set.png");
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
     map = new Map("terrain3",4,32,&manager);
     map->LoadMap3(mapPath.c_str(),50,40);
-    manager.update();
-    manager.refresh();
+
 
 
     player.getComponent<TransformComponent>().position.x = 2440;
     player.getComponent<TransformComponent>().position.y = 4527;
 
+    camera.x = player.getComponent<TransformComponent>().position.x - x_diff;
+    camera.y = player.getComponent<TransformComponent>().position.y - y_diff;
+
+    if(camera.x <0)
+    {
+    camera.x = 0;
+    }
+    if(camera.y < 0)
+    {
+    camera.y = 0;
+    }
+    if (camera.x > camera.w)
+    {
+    camera.x = camera.w;
+    }
+    if(camera.y > camera.h)
+    {
+    camera.y = camera.h;
+    }
+
+    manager.update();
+
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     ColliderComponent& playerCol = player.getComponent<ColliderComponent>();
     Stats& playerStats = player.getComponent<Stats>();
-
-    auto& enemy1(manager.addEntity());
-    auto& enemy2(manager.addEntity());
-    auto& enemy3(manager.addEntity());
-    auto& enemy4(manager.addEntity());
-    auto& enemy5(manager.addEntity());
-
-
-
-    auto& enemy01(manager.addEntity());
-    auto& enemy02(manager.addEntity());
-    auto& enemy03(manager.addEntity());
-    auto& enemy04(manager.addEntity());
-    auto& enemy05(manager.addEntity());
-    auto& enemy06(manager.addEntity());
-    auto& enemy07(manager.addEntity());
-    auto& enemy08(manager.addEntity());
-    auto& enemy09(manager.addEntity());
-    auto& enemy10(manager.addEntity());
-    auto& enemy11(manager.addEntity());
-    auto& boss(manager.addEntity());
-
-
-    auto& canon1(manager.addEntity());
-    auto& canon2(manager.addEntity());
-    auto& canon3(manager.addEntity());
-    auto& canon4(manager.addEntity());
-    auto& canon5(manager.addEntity());
-
-    auto& canon6(manager.addEntity());
-    auto& canon7(manager.addEntity());
-    auto& canon8(manager.addEntity());
-    auto& canon9(manager.addEntity());
-    auto& canon10(manager.addEntity());
 
     auto& chest1(manager.addEntity());
     auto& chest2(manager.addEntity());
@@ -1760,363 +1820,16 @@ void Game::loadLvl3()
     chest2.addComponent<ChestScreen>();
     chest2.addGroup(Game::groupChests);
 
-    //Enemy base definition
-    enemy2.addComponent<TransformComponent>(635,4292,128,128,1);
-    enemy2.addComponent<SpriteComponent>(true, "enemy");
-    enemy2.getComponent<SpriteComponent>().setActions();
-    enemy2.addComponent<ColliderComponent>("enemy");
-    enemy2.addComponent<Stats>();
-    enemy2.addGroup(Game::groupEnemies);
-    enemy2.addGroup(Game::groupMapColliders);
 
-    enemy1.addComponent<TransformComponent>(695,4502,128,128,1);
-    enemy1.addComponent<SpriteComponent>(true, "enemy");
-    enemy1.getComponent<SpriteComponent>().setActions();
-    enemy1.addComponent<ColliderComponent>("enemy");
-    enemy1.addComponent<Stats>();
-    Stats& enemyStats = enemy1.getComponent<Stats>();
-    enemy1.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    enemy1.addGroup(Game::groupEnemies);
+    auto enemiesPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "enemiesLvl3.json").string();
+
+    spawnEnemies(enemiesPath);
+
+    itemsPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items_Lvl3.json").string();
+    loadItems(itemsPath);
 
 
-    enemy3.addComponent<TransformComponent>(680,4292,128,128,1);
-    enemy3.addComponent<SpriteComponent>(true, "enemy");
-    enemy3.getComponent<SpriteComponent>().setActions();
-    enemy3.addComponent<ColliderComponent>("enemy");
-    enemy3.addComponent<Stats>();
-    enemy3.addGroup(Game::groupEnemies);
-    enemy3.addGroup(Game::groupMapColliders);
-
-    enemy4.addComponent<TransformComponent>(760,4292,128,128,1);
-    enemy4.addComponent<SpriteComponent>(true, "enemy");
-    enemy4.getComponent<SpriteComponent>().setActions();
-    enemy4.addComponent<ColliderComponent>("enemy");
-    enemy4.addComponent<Stats>();
-    enemy4.addGroup(Game::groupEnemies);
-    enemy4.addGroup(Game::groupMapColliders);
-
-    enemy5.addComponent<TransformComponent>(840,4292,128,128,1);
-    enemy5.addComponent<SpriteComponent>(true, "enemy");
-    enemy5.getComponent<SpriteComponent>().setActions();
-    enemy5.addComponent<ColliderComponent>("enemy");
-    enemy5.addComponent<Stats>();
-    enemy5.addGroup(Game::groupEnemies);
-    enemy5.addGroup(Game::groupMapColliders);
-
-
-    //create spawner
-    enemy01.addComponent<TransformComponent>(3699,2744,500,250,1);
-    enemy01.addComponent<SpriteComponent>(true,"spawner");
-    enemy01.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
-    enemy01.getComponent<SpriteComponent>().setActions();
-    enemy01.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats,&playerCol);
-    enemy01.addGroup(Game::groupSpawners);
-
-    enemy02.addComponent<TransformComponent>(2898,3320,128,128,1);
-    enemy02.addComponent<SpriteComponent>(true, "enemy");
-    enemy02.getComponent<SpriteComponent>().setActions();
-    enemy02.addComponent<ColliderComponent>("enemy");
-    enemy02.addComponent<Stats>();
-    enemyStats = enemy02.getComponent<Stats>();
-    enemy02.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    enemy02.addGroup(Game::groupEnemies);
-
-    enemy03.addComponent<TransformComponent>(2325,2619,128,128,1);
-    enemy03.addComponent<SpriteComponent>(true, "enemy");
-    enemy03.getComponent<SpriteComponent>().setActions();
-    enemy03.addComponent<ColliderComponent>("enemy");
-    enemy03.addComponent<Stats>();
-    enemyStats = enemy03.getComponent<Stats>();
-    enemy03.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    enemy03.addGroup(Game::groupEnemies);
-
-    enemy04.addComponent<TransformComponent>(1544,3383,128,128,1);
-    enemy04.addComponent<SpriteComponent>(true, "enemy");
-    enemy04.getComponent<SpriteComponent>().setActions();
-    enemy04.addComponent<ColliderComponent>("enemy");
-    enemy04.addComponent<Stats>();
-    enemyStats = enemy04.getComponent<Stats>();
-    enemy04.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    enemy04.addGroup(Game::groupEnemies);
-
-    enemy05.addComponent<TransformComponent>(359,3383,128,128,1);
-    enemy05.addComponent<SpriteComponent>(true, "enemy");
-    enemy05.getComponent<SpriteComponent>().setActions();
-    enemy05.addComponent<ColliderComponent>("enemy");
-    enemy05.addComponent<Stats>();
-    enemyStats = enemy05.getComponent<Stats>();
-    enemy05.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    enemy05.addGroup(Game::groupEnemies);
-
-    enemy06.addComponent<TransformComponent>(1144,2253,500,250,1);
-    enemy06.addComponent<SpriteComponent>(true,"spawner");
-    enemy06.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
-    enemy06.getComponent<SpriteComponent>().setActions();
-    enemy06.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats,&playerCol);
-    enemy06.addGroup(Game::groupSpawners);
-
-    canon1.addComponent<TransformComponent>(394,2253,24,24,4);
-    canon1.addComponent<SpriteComponent>(true, "Canon_Right");
-    canon1.getComponent<SpriteComponent>().setActions();
-    canon1.addComponent<ColliderComponent>("canon");
-    canon1.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
-    canon1.addGroup(Game::groupCanons);
-
-    canon2.addComponent<TransformComponent>(394,2053,24,24,4);
-    canon2.addComponent<SpriteComponent>(true, "Canon_Right");
-    canon2.getComponent<SpriteComponent>().setActions();
-    canon2.addComponent<ColliderComponent>("canon");
-    canon2.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
-    canon2.addGroup(Game::groupCanons);
-
-    canon3.addComponent<TransformComponent>(394,1853,24,24,4);
-    canon3.addComponent<SpriteComponent>(true, "Canon_Right");
-    canon3.getComponent<SpriteComponent>().setActions();
-    canon3.addComponent<ColliderComponent>("canon");
-    canon3.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
-    canon3.addGroup(Game::groupCanons);
-
-    canon4.addComponent<TransformComponent>(394,1653,24,24,4);
-    canon4.addComponent<SpriteComponent>(true, "Canon_Right");
-    canon4.getComponent<SpriteComponent>().setActions();
-    canon4.addComponent<ColliderComponent>("canon");
-    canon4.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
-    canon4.addGroup(Game::groupCanons);
-
-    canon5.addComponent<TransformComponent>(394,1453,24,24,4);
-    canon5.addComponent<SpriteComponent>(true, "Canon_Right");
-    canon5.getComponent<SpriteComponent>().setActions();
-    canon5.addComponent<ColliderComponent>("canon");
-    canon5.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),0);
-    canon5.addGroup(Game::groupCanons);
-
-    canon6.addComponent<TransformComponent>(1144,2053,24,24,4);
-    canon6.addComponent<SpriteComponent>(true, "Canon_Left");
-    canon6.getComponent<SpriteComponent>().setActions();
-    canon6.addComponent<ColliderComponent>("canon");
-    canon6.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
-    canon6.addGroup(Game::groupCanons);
-
-    canon7.addComponent<TransformComponent>(1144,1853,24,24,4);
-    canon7.addComponent<SpriteComponent>(true,"Canon_Left");
-    canon7.getComponent<SpriteComponent>().setActions();
-    canon7.addComponent<ColliderComponent>("canon");
-    canon7.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
-    canon7.addGroup(Game::groupCanons);
-
-    canon8.addComponent<TransformComponent>(1144,1653,24,24,4);
-    canon8.addComponent<SpriteComponent>(true, "Canon_Left");
-    canon8.getComponent<SpriteComponent>().setActions();
-    canon8.addComponent<ColliderComponent>("canon");
-    canon8.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
-    canon8.addGroup(Game::groupCanons);
-
-    canon9.addComponent<TransformComponent>(1144,1453,24,24,4);
-    canon9.addComponent<SpriteComponent>(true, "Canon_Left");
-    canon9.getComponent<SpriteComponent>().setActions();
-    canon9.addComponent<ColliderComponent>("canon");
-    canon9.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
-    canon9.addGroup(Game::groupCanons);
-
-    canon10.addComponent<TransformComponent>(1144,1253,24,24,4);
-    canon10.addComponent<SpriteComponent>(true, "Canon_Left");
-    canon10.getComponent<SpriteComponent>().setActions();
-    canon10.addComponent<ColliderComponent>("canon");
-    canon10.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>(),1);
-    canon10.addGroup(Game::groupCanons);
-
-    enemy07.addComponent<TransformComponent>(328,1000,500,250,1);
-    enemy07.addComponent<SpriteComponent>(true,"spawner");
-    enemy07.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
-    enemy07.getComponent<SpriteComponent>().setActions();
-    enemy07.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats,&playerCol);
-    enemy07.addGroup(Game::groupSpawners);
-
-    enemy08.addComponent<TransformComponent>(1720,680,128,128,1);
-    enemy08.addComponent<SpriteComponent>(true, "enemy");
-    enemy08.getComponent<SpriteComponent>().setActions();
-    enemy08.addComponent<ColliderComponent>("enemy");
-    enemy08.addComponent<Stats>();
-    enemyStats = enemy08.getComponent<Stats>();
-    enemy08.addComponent<EnemyMovement>(1,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    enemy08.addGroup(Game::groupEnemies);
-
-    enemy09.addComponent<TransformComponent>(1128,504,48,48,2);
-    enemy09.addComponent<SpriteComponent>(true, "archer");
-    enemy09.getComponent<SpriteComponent>().setActions();
-    enemy09.addComponent<ColliderComponent>("turret");
-    enemy09.addComponent<Stats>();
-    enemy09.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
-    enemy09.addGroup(Game::groupTurrets);
-
-    enemy10.addComponent<TransformComponent>(328,504,48,48,2);
-    enemy10.addComponent<SpriteComponent>(true, "archer");
-    enemy10.getComponent<SpriteComponent>().setActions();
-    enemy10.addComponent<ColliderComponent>("turret");
-    enemy10.addComponent<Stats>();
-    enemy10.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
-    enemy10.addGroup(Game::groupTurrets);
-
-    enemy11.addComponent<TransformComponent>(2780,950,48,48,2);
-    enemy11.addComponent<SpriteComponent>(true, "archer");
-    enemy11.getComponent<SpriteComponent>().setActions();
-    enemy11.addComponent<ColliderComponent>("turret");
-    enemy11.addComponent<Stats>();
-    enemy11.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
-    enemy11.addGroup(Game::groupTurrets);
-
-    boss.addComponent<TransformComponent>(5404,2471,128,128,4);
-    boss.addComponent<SpriteComponent>(true, "enemy");
-    boss.getComponent<SpriteComponent>().setActions();
-    boss.addComponent<ColliderComponent>("enemy");
-    boss.addComponent<Stats>(2000,1,0);
-    enemyStats = boss.getComponent<Stats>();
-    boss.addComponent<EnemyMovement>(1,500,200,1200,60,50,&playerTransform, &playerStats, &enemyStats,&playerCol); //To be changed later on
-    boss.addGroup(Game::groupEnemies);
-
-    //Enemy base definition
-
-    /*enemy.addComponent<TransformComponent>(500,900,128,128,1);
-    enemy.addComponent<SpriteComponent>(true, "enemy");
-    enemy.getComponent<SpriteComponent>().setActions();
-    enemy.addComponent<ColliderComponent>("enemy");
-    enemy.addComponent<Stats>();
-    Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
-    enemy.addGroup(Game::groupEnemies);
-
-    //create second enemy
-
-    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
-    enemy2.addComponent<SpriteComponent>(true, "enemy");
-    enemy2.getComponent<SpriteComponent>().setActions();
-    enemy2.addComponent<ColliderComponent>("enemy");
-    enemy2.addComponent<Stats>();
-    enemy2.addGroup(Game::groupEnemies);
-
-    //create turret enemy
-
-    enemy3.addComponent<TransformComponent>(2000,1000,48,48,2);
-    enemy3.addComponent<SpriteComponent>(true, "archer");
-    enemy3.getComponent<SpriteComponent>().setActions();
-    enemy3.addComponent<ColliderComponent>("turret");
-    enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
-    enemy3.addGroup(Game::groupTurrets);
-
-    //create turret enemy
-
-    enemy4.addComponent<TransformComponent>(1000,1000,48,48,2);
-    enemy4.addComponent<SpriteComponent>(true, "archer");
-    enemy4.getComponent<SpriteComponent>().setActions();
-    enemy4.addComponent<ColliderComponent>("turret");
-    enemy4.addComponent<Stats>();
-    enemy4.addComponent<TurretEnemy>(800,5,5,2000,&manager,&player.getComponent<TransformComponent>());
-    enemy4.addGroup(Game::groupTurrets);*/
-
-    camera.w = 6400 - screen_width;
-    camera.h = 5120 - screen_height;
 }
-
-/*void Game::loadLvl3()
-{
-    delete map;
-    for (auto& t : tiles) { t->destroy(); }
-    for (auto& c : MapColliders) { c->destroy(); }
-    for (auto& e : EnemyProjectiles) { e->destroy(); }
-    for (auto& e : enemies) { e->destroy(); }
-    for (auto& ch : chests) { ch->destroy(); }
-    for (auto& ch : Turrets) { ch->destroy(); }
-    for (auto& ch : Canons) { ch->destroy(); }
-    for (auto& ch : Spawners) { ch->destroy(); }
-
-    manager.refresh();
-
-    assets->AddTexture("terrain3", "/assets/terrainAssets/Map3tile_set.png");
-    std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
-    map = new Map("terrain3",4,32,&manager);
-    map->LoadMap3(mapPath.c_str(),50,40);
-
-    player.getComponent<TransformComponent>().position.x = 700;
-    player.getComponent<TransformComponent>().position.y = 532;
-
-    TransformComponent& playerTransform = player.getComponent<TransformComponent>();
-    Stats& playerStats = player.getComponent<Stats>();
-
-    auto& enemy(manager.addEntity());
-    auto& enemy2(manager.addEntity());
-    auto& enemy3(manager.addEntity());
-    auto& enemy4(manager.addEntity());
-    auto& spawner(manager.addEntity());
-    auto& canon(manager.addEntity());
-    auto& chest1(manager.addEntity());
-
-    chest1.addComponent<TransformComponent>(900,900,16,16,5);
-    chest1.addComponent<SpriteComponent>(true, "chest");
-    chest1.getComponent<SpriteComponent>().setActions();
-    chest1.addComponent<ColliderComponent>("chest");
-    chest1.addComponent<InteractComponent>();
-    chest1.addComponent<ChestScreen>();
-    chest1.addGroup(Game::groupChests);
-
-    //Enemy base definition
-
-    enemy.addComponent<TransformComponent>(500,900,128,128,1);
-    enemy.addComponent<SpriteComponent>(true, "enemy");
-    enemy.getComponent<SpriteComponent>().setActions();
-    enemy.addComponent<ColliderComponent>("enemy");
-    enemy.addComponent<Stats>();
-    Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,&playerTransform, &playerStats, &enemyStats); //To be changed later on
-    enemy.addGroup(Game::groupEnemies);
-
-    //create second enemy
-
-    enemy2.addComponent<TransformComponent>(1300,1000,128,128,1);
-    enemy2.addComponent<SpriteComponent>(true, "enemy");
-    enemy2.getComponent<SpriteComponent>().setActions();
-    enemy2.addComponent<ColliderComponent>("enemy");
-    enemy2.addComponent<Stats>();
-    enemy2.addGroup(Game::groupEnemies);
-
-    //create turret enemy
-
-    enemy3.addComponent<TransformComponent>(2000,1000,128,128,1);
-    enemy3.addComponent<SpriteComponent>(true, "enemy");
-    enemy3.getComponent<SpriteComponent>().setActions();
-    enemy3.addComponent<ColliderComponent>("enemy");
-    enemy3.addComponent<Stats>();
-    enemy3.addComponent<TurretEnemy>(900,5,5,900,&manager,&player.getComponent<TransformComponent>());
-    enemy3.addGroup(Game::groupTurrets);
-
-    //create spawner
-    spawner.addComponent<TransformComponent>(1200,1000,500,250,1);
-    spawner.addComponent<SpriteComponent>(true,"spawner");
-    spawner.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
-    spawner.getComponent<SpriteComponent>().setActions();
-    spawner.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats);
-    spawner.addGroup(Game::groupSpawners);
-
-    //create turret enemy
-
-    enemy4.addComponent<TransformComponent>(1000,1000,128,128,1);
-    enemy4.addComponent<SpriteComponent>(true, "enemy");
-    enemy4.getComponent<SpriteComponent>().setActions();
-    enemy4.addComponent<ColliderComponent>("enemy");
-    enemy4.addComponent<Stats>();
-    enemy4.addComponent<TurretEnemy>(900,5,5,900,&manager,&player.getComponent<TransformComponent>());
-    enemy4.addGroup(Game::groupTurrets);
-    //create Canon
-    canon.addComponent<TransformComponent>(1500,500,24,24,4);
-    canon.addComponent<SpriteComponent>(true, "Canon");
-    canon.getComponent<SpriteComponent>().setActions();
-    canon.addComponent<ColliderComponent>("canon");
-    canon.addComponent<Canon>(1000,7,10,4000,&manager,&player.getComponent<TransformComponent>());
-    canon.addGroup(Game::groupCanons);
-
-    camera.w = 6400 - screen_width;
-    camera.h = 5120 - screen_height;
-}  */
 
 bool Game::isChestOpen()
 {

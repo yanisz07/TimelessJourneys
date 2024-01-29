@@ -11,3 +11,8 @@ void Component::setPriority(int priorityLevel)
     priority = priorityLevel;
     entity->orderComponents();
 }
+
+std::string Component::getEntityType()
+{
+    return entity->type;
+}

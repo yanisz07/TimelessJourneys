@@ -16,7 +16,7 @@ Range_Weapon::Range_Weapon(Manager* man)
     std::string bow_effect_path = (projectDir / ".." / "TimelessJourneys" / "assets" /"soundAssets"/ "bow_effect1.mp3").string();
     bowSound = Mix_LoadWAV(bow_effect_path.c_str());
 
-    texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
+    texture = nullptr;//IMG_LoadTexture(Game::renderer,spritePath.c_str());
     srcR.w = animation.width;
     srcR.h = animation.height;
     destR.w = animation.width*3;
@@ -60,6 +60,10 @@ void Range_Weapon::update()
 
 int Range_Weapon::rangeAttack()
 {
+    if(texture == nullptr)
+    {
+        return 0;
+    }
     Vector2D entityPos = transform->position;
     Vector2D direction = Vector2D(transform->x_direction,transform->y_direction);
     int scale = transform->scale;

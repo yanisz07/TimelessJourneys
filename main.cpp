@@ -13,7 +13,7 @@ int main(int argc, char* args[]) {
 
     game = new Game();
 
-    game->init("GameWindow",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600,1250,false);
+    game->init("GameWindow",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600,1280,false);
 
 
 
@@ -26,10 +26,12 @@ int main(int argc, char* args[]) {
         game->render();
 
         frameTime = SDL_GetTicks() - frameStart;
-
+        //std::cout << frameTime << std::endl;
         if (frameDelay > frameTime)
         {
+            //std::cout << frameDelay - frameTime << std::endl;
             SDL_Delay(frameDelay - frameTime);
+
         }
     }
 

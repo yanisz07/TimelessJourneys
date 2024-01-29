@@ -46,6 +46,10 @@ public:
     int priority = 1;
     Entity* entity;
 
+    std::string entityType;
+
+    void setType(std::string type){entityType = type;}
+
     static  bool checkPriority(const std::unique_ptr<Component>& component1, const std::unique_ptr<Component>& component2)
     {
         if(component1->priority < component2->priority)
@@ -61,6 +65,8 @@ public:
     virtual void setPriority(int priorityLevel);
 
     virtual ~Component() = default;
+
+    virtual std::string getEntityType();
 
 };
 
@@ -79,6 +85,8 @@ public:
     Manager& manager;
     std::string type = "any";
     std::string tag = "None";
+
+    std::string getType(){return type;}
 
     Entity(Manager& mManager) : manager(mManager){}
 
@@ -129,6 +137,7 @@ public:
         componentArray[getComponentTypeID<T>()] = c;
         componentBitSet[getComponentTypeID<T>()] = true;
 
+        c->setType(type);
         c->init();
         return *c;
 

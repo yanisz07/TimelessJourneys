@@ -43,5 +43,10 @@
         "name": "we count on you adventurer",
         "path": "/assets/we_count_on_you_adventurer.png"
       }
+      ,
+      {
+        "name": "terrain3",
+        "path": "/assets/terrainAssets/Map3tile_set.png"
+      }
     ]
  }

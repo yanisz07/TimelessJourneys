@@ -1,4 +1,4 @@
-#include "sword.hpp""
+#include "sword.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"
@@ -21,7 +21,7 @@ Sword::Sword(Manager *man) : dmg_multiplier(1.0f)
     attack = "sword";
     damage = 5;
     std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "weaponAssets" / "BlueSword.png").string();
-    texture = IMG_LoadTexture(Game::renderer,spritePath.c_str());
+    texture = nullptr; //IMG_LoadTexture(Game::renderer,spritePath.c_str());
     srcR.w = animation.width;
     srcR.h = animation.height;
     destR.w = 27;
@@ -88,6 +88,10 @@ void Sword::update()
 
 int Sword::frontAttack()
 {
+    if(texture == nullptr)
+    {
+        return 0;
+    }
     //attack implemented below only for player
     Vector2D entityPos = entityTransform->position;
     int scale = entityTransform->scale;
@@ -300,7 +304,7 @@ void Sword::sword_equip(Inventory& inventory)
 
 
 void Sword::setSprite(std::string spritePath){
-    this -> sprite = sprite;
+    this->spritePath = spritePath;
 }
 
 

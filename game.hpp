@@ -17,15 +17,11 @@
 #include "items.h"
 #include "ECS/chestScreen.hpp"
 #include "timer.hpp"
-#include "Map.hpp" // Assuming you have a header file for the Map type
+#include "map.hpp"
 #include "Vector2D.hpp"
 
 
 extern std::filesystem::path projectDir;
-
-#ifndef ROOT_DIR
-#define ROOT_DIR ""
-#endif
 
 class ColliderComponent;
 
@@ -74,9 +70,6 @@ public:
 
     static int windowSize_x,windowSize_y;
 
-    static ChestScreen* chestScreen1;
-    static ChestScreen* chestScreen2;
-
     static AssetManager* assets;
     Mix_Chunk* clickButton;
 
@@ -118,7 +111,7 @@ private:
     std::string itemsPath;
     std::string worldPath;
     std::string musicPath;
-    void spawnEnemiesLvl1();
+    void spawnEnemies(std::string JSONpath);
     void loadLvl1();
     void loadLvl2();
     void loadLvl3();

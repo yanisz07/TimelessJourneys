@@ -109,7 +109,7 @@ void EnemyMovement:: explosion(){
     knock_direction = Vector2D(playerTransform->position.x - transform->position.x, playerTransform->position.y - transform->position.y).Normalize();
     if (dist_from_player <explosion_radius){
         in_range = true;
-        playerStats->SubtractHealth(25);
+        playerStats->SubtractHealth(5);
 
     }
 
@@ -251,6 +251,7 @@ void EnemyMovement::update()
         //Explosion knockout end
         if (delay>= 250){
             stats->KillEntity();
+            //Game::assets->manager->refresh();
             std::cout << "Creeper Exploded" << std::endl;
         }
 

@@ -12,7 +12,7 @@ class ProjectileComponent : public Component
 public:
 
     ProjectileComponent(int rng, int sp, Vector2D vel, int dam = 5) : range(rng), speed(sp), velocity(vel), damage(dam)
-    {}
+    {timer.start();}
     ~ProjectileComponent()
     {}
 
@@ -33,8 +33,9 @@ private:
     int damage;
     int range;
     int speed;
-    int distance;
+    double distance;
     Vector2D velocity;
+    Timer timer;
 
 };
 

@@ -129,7 +129,7 @@ void Canon::draw()
             frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
             animation1.index = frame;
             srcR1.x = animation1.width*animation1.index;
-            if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE) == 0) {
+            if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,0,NULL,SDL_FLIP_NONE) == 0) {
                 // The rendering was successful
                 // Add any additional code you want to execute on success
             } else {
@@ -149,7 +149,7 @@ void Canon::draw()
             frame = static_cast<int>((timer1.getTimeStart() / animation1.speed) % animation1.frames);
             animation1.index = frame;
             srcR1.x = animation1.width*animation1.index;
-            if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE) == 0) {
+            if (SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,0Z,NULL,SDL_FLIP_NONE) == 0) {
                 // The rendering was successful
                 // Add any additional code you want to execute on success
             } else {
