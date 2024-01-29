@@ -39,8 +39,6 @@ public:
 
     Sword(Manager *man);
 
-    ~Sword() override;
-
     int equip();
     \
     float dmg_multiplier;

@@ -19,10 +19,7 @@ public:
 
         SetLabelText(labelText, labelFont);
     }
-    ~UILabel() override
-    {
-        SDL_DestroyTexture(labelTexture);
-    }
+    ~UILabel() override = default;
 
     void SetLabelText(std::string text, std::string font)
     {

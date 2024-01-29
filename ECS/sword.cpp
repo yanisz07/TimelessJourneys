@@ -326,9 +326,3 @@ void Sword::setIcon(SDL_Texture* texture){
     this -> texture = texture;
 }
 
-Sword::~Sword()
-{
-    SDL_DestroyTexture(texture);
-    Mix_FreeChunk(swordSwooshSound);
-}
-

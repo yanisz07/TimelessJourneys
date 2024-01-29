@@ -43,7 +43,8 @@ public:
 
     void addAnimation(std::string animName,Animation animation);
 
-    ~SpriteComponent() override;
+    ~SpriteComponent()
+    {}
 
     void setAngle(double angle);
 

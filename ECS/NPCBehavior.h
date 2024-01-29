@@ -39,8 +39,6 @@ public:
 
     void draw() override;
 
-    ~NPCBehavior() override;
-
 };
 
 

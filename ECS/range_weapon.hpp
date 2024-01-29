@@ -36,7 +36,7 @@ public:
 
     Range_Weapon(Manager* man);
 
-    ~Range_Weapon() override;
+    ~Range_Weapon() override = default;
 
     int get_damage(){return damage;}
     int get_range(){return range;}
@@ -70,8 +70,6 @@ private:
     SpriteComponent* sprite;
     Manager* manager;
     Uint32 reloadTime = 400;
-
-
 };
 
 #endif // RANGE_WEAPON_H

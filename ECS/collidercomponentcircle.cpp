@@ -35,7 +35,3 @@ void ColliderComponentCircle::draw()
     */
 }
 
-ColliderComponentCircle::~ColliderComponentCircle()
-{
-    SDL_DestroyTexture(tex);
-}

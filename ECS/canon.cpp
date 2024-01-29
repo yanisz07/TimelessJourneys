@@ -26,10 +26,6 @@ Canon::Canon(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* p
     destR1.h = 39;
 }
 
-Canon::~Canon()
-{
-    SDL_DestroyTexture(tex1);
-}
 void Canon::init()
 {
     timer.setTimeOut(reloadTime);

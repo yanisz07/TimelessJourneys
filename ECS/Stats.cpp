@@ -216,10 +216,3 @@ void Stats::GainExp(int exp) {
     std::cout << level << std::endl;
     std::cout << damage_mult << std::endl;
 }
-
-Stats::~Stats()
-{
-    SDL_DestroyTexture(healthLabel);
-    SDL_DestroyTexture(expLabel);
-    SDL_DestroyTexture(levelLabel);
-}

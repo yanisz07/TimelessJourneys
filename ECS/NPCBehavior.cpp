@@ -56,8 +56,3 @@ void NPCBehavior::draw()
     }
     //SDL_RenderCopy(Game::renderer,texture,NULL,destRect);
 }
-
-NPCBehavior::~NPCBehavior()
-{
-    SDL_DestroyTexture(texture);
-}

@@ -26,8 +26,6 @@ public:
 
     void draw() override;
 
-    ~Canon() override;
-
     void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam);
 
 private:

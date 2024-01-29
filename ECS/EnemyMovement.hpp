@@ -82,6 +82,7 @@ public:
     void explosion();
 
     void attack();
+
 };
 
 #endif // ENEMYMOVEMENT_H
