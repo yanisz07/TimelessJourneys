@@ -157,7 +157,7 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_RenderCopy(renderer, MusicTexture, NULL, &MusicTextRect);
 
         // Render Sound Effect Text
-        std::string SoundText = isSound ? "Sound: On" : "Sound: Off";
+        std::string SoundText = isSound ? "Sound Effect: On" : "Sound Effect: Off";
         SDL_Surface* soundEffectSurface = TTF_RenderText_Solid(font, SoundText.c_str(), textColor);
         SDL_Texture* soundEffectTexture = SDL_CreateTextureFromSurface(renderer, soundEffectSurface);
         int soundEffectTextWidth, soundEffectTextHeight;
