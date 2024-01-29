@@ -162,8 +162,8 @@ void EnemyMovement::update()
             {
                 if (delay <= 140)
                 {
-                    test_col.x = playerCol.x + attackPushbackDirection.x * 15;
-                    test_col.y = playerCol.y + attackPushbackDirection.y * 15;
+                    test_col.x = playerCol.x + attackPushbackDirection.x * 20;
+                    test_col.y = playerCol.y + attackPushbackDirection.y * 20;
 
                     for (auto& c : mapColliders)
                     {
@@ -180,8 +180,8 @@ void EnemyMovement::update()
                 }
                 else if (delay <= 180)
                 {
-                    test_col.x = playerCol.x + attackPushbackDirection.x * 8;
-                    test_col.y = playerCol.y + attackPushbackDirection.y * 8;
+                    test_col.x = playerCol.x + attackPushbackDirection.x * 15;
+                    test_col.y = playerCol.y + attackPushbackDirection.y * 15;
 
                     for (auto& c : mapColliders)
                     {
@@ -198,8 +198,8 @@ void EnemyMovement::update()
                 }
                 else
                 {
-                    test_col.x = playerCol.x + attackPushbackDirection.x * 3;
-                    test_col.y = playerCol.y + attackPushbackDirection.y * 3;
+                    test_col.x = playerCol.x + attackPushbackDirection.x * 8;
+                    test_col.y = playerCol.y + attackPushbackDirection.y * 8;
 
                     for (auto& c : mapColliders)
                     {
