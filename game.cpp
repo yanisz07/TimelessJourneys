@@ -103,8 +103,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     screen_height = height;
 
     //3200 * 2560 is the size of the map
-    camera.w = 3200 - screen_width;
-    camera.h = 2560 - screen_height;
+    camera.w = 6400 - screen_width;
+    camera.h = 5120 - screen_height;
     x_diff = (width - 128)/2;
     y_diff = (height - 128)/2;
 
@@ -661,15 +661,18 @@ void Game::toggleFullScreen() {
         camera.w = 3200-screen_width;
         camera.h = 2560-screen_height;
     }
-    if (level =="lvl3")
+    if (level == "lvl3")
     {
         camera.w = 6400-screen_width;
         camera.h = 5120-screen_height;
+        std::cout << "YAAAAAAAA" << std::endl;
+        std::cout << camera.x << std::endl;
+        std::cout << camera.y << std::endl;
+        std::cout << camera.w << std::endl;
+        std::cout << camera.h << std::endl;
     }
     x_diff = (screen_width - 128)/2;
     y_diff = (screen_height - 128)/2;
-    std::cout << player.getComponent<TransformComponent>().position.x << std::endl;
-    std::cout << player.getComponent<TransformComponent>().position.y << std::endl;
 }
 
 
@@ -1583,6 +1586,8 @@ void Game::loadLvl1()
 
     camera.w = 3200 - screen_width;
     camera.h = 2560 - screen_height;
+    x_diff = (screen_width - 128)/2;
+    y_diff = (screen_height - 128)/2;
 }
 void Game::loadLvl2()
 {
@@ -1714,6 +1719,8 @@ void Game::loadLvl2()
 
     camera.w = 3200 - screen_width;
     camera.h = 2560 - screen_height;
+    x_diff = (screen_width - 128)/2;
+    y_diff = (screen_height - 128)/2;
 }
 
 void Game::loadLvl3()
@@ -1735,15 +1742,15 @@ void Game::loadLvl3()
     //camera stuff
     camera.x = 0;
     camera.y = 0;
-    camera.w = 6400 - windowSize_x;
-    camera.h = 5120 - windowSize_y;
+    camera.w = 6400 - screen_width;
+    camera.h = 5120 - screen_height;
+    x_diff = (screen_width - 128)/2;
+    y_diff = (screen_height - 128)/2;
 
     //assets->AddTexture("terrain3", "/assets/terrainAssets/Map3tile_set.png");
     std::string mapPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "map" / "Map3.map").string();
     map = new Map("terrain3",4,32,&manager);
     map->LoadMap3(mapPath.c_str(),50,40);
-
-
 
     player.getComponent<TransformComponent>().position.x = 2440;
     player.getComponent<TransformComponent>().position.y = 4527;
