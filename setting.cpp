@@ -44,8 +44,9 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Rect titleButtonBorder = {titleCenterX - borderThickness, titleCenterY - borderThickness, titleButtonWidth + borderThickness * 2, titleButtonHeight + borderThickness * 2};
         SDL_Rect screendimButtonBorder = {centerX - borderThickness, centerY  - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
         SDL_Rect MusicButtonBorder = {centerX - borderThickness, centerY + buttonHeight + 20 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect SoundEffectButtonBorder = {centerX - borderThickness, centerY + 3*buttonHeight + 60 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
-        SDL_Rect backButtonBorder = {centerX - borderThickness, centerY +4*buttonHeight + 80 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect SoundEffectButtonBorder = {centerX - borderThickness, centerY +3*buttonHeight + 60 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect backButtonBorder = {centerX - borderThickness, centerY + 4*buttonHeight + 80 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
+        SDL_Rect ChooseMusicBorder = {centerX - borderThickness, centerY +5*buttonHeight + 100 - borderThickness, buttonWidth + borderThickness * 2, buttonHeight + borderThickness * 2};
 
         int volumeSliderX = (screenWidth - volumeSliderBar.w) / 2;
         int volumeSliderY = centerY + 2*buttonHeight + 40;
@@ -60,6 +61,8 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_RenderDrawRect(renderer, &MusicButtonBorder);
         SDL_RenderDrawRect(renderer, &SoundEffectButtonBorder);
         SDL_RenderDrawRect(renderer, &screendimButtonBorder);
+        SDL_RenderDrawRect(renderer, &ChooseMusicBorder);
+
 
 
 
@@ -71,12 +74,15 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_Rect MusicButton = {centerX, centerY + buttonHeight + 20, buttonWidth, buttonHeight};
         SDL_Rect SoundEffectButton = {centerX, centerY + 3*buttonHeight + 60, buttonWidth, buttonHeight};
         SDL_Rect backButton = {centerX, centerY + 4*buttonHeight + 80, buttonWidth, buttonHeight};
+        SDL_Rect ChooseMusicButton = {centerX, centerY + 5*buttonHeight + 100, buttonWidth, buttonHeight};
 
         //hover effect
         bool isHoveringScreenDim = SDL_PointInRect(&mousePosition, &ScreenDimButton);
         bool isHoveringMusic = SDL_PointInRect(&mousePosition, &MusicButton);
         bool isHoveringback = SDL_PointInRect(&mousePosition, &backButton);
         bool isHoveringSoundEffect = SDL_PointInRect(&mousePosition, &SoundEffectButton);
+        bool isHoveringChooseMusic = SDL_PointInRect(&mousePosition, &ChooseMusicButton);
+
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for borders
         SDL_RenderDrawRect(renderer, &titleButton);
@@ -84,6 +90,9 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_RenderDrawRect(renderer, &ScreenDimButton);
         SDL_RenderDrawRect(renderer, &MusicButton);
         SDL_RenderDrawRect(renderer, &SoundEffectButton);
+        SDL_RenderDrawRect(renderer, &ChooseMusicButton);
+
+
 
         SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Beige color for buttons
         SDL_RenderFillRect(renderer, &titleButton);
@@ -119,6 +128,14 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
             SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
         }
         SDL_RenderFillRect(renderer, &SoundEffectButton);
+
+        // hover effect for ,usic choice button
+        if (isHoveringChooseMusic) {
+            SDL_SetRenderDrawColor(renderer, 253, 254, 224, 255); // Lighter color for hover
+        } else {
+            SDL_SetRenderDrawColor(renderer, 253, 244, 214, 255); // Original color
+        }
+        SDL_RenderFillRect(renderer, &ChooseMusicButton);
 
 
 
@@ -157,13 +174,21 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_RenderCopy(renderer, MusicTexture, NULL, &MusicTextRect);
 
         // Render Sound Effect Text
-        std::string SoundText = isSound ? "Sound Effect: On" : "Sound Effect: Off";
+        std::string SoundText = isSound ? "Sound: On" : "Sound: Off";
         SDL_Surface* soundEffectSurface = TTF_RenderText_Solid(font, SoundText.c_str(), textColor);
         SDL_Texture* soundEffectTexture = SDL_CreateTextureFromSurface(renderer, soundEffectSurface);
         int soundEffectTextWidth, soundEffectTextHeight;
         TTF_SizeText(font, SoundText.c_str(), &soundEffectTextWidth, &soundEffectTextHeight);
         SDL_Rect soundEffectTextRect = {centerX + (buttonWidth - soundEffectTextWidth) / 2, centerY + 3*buttonHeight + 60 + (buttonHeight - soundEffectTextHeight) / 2, soundEffectTextWidth, soundEffectTextHeight};
         SDL_RenderCopy(renderer, soundEffectTexture, NULL, &soundEffectTextRect);
+
+        // Render Choice music button
+        SDL_Surface* MusicChoiceSurface = TTF_RenderText_Solid(font, "Pick Your Music", textColor);
+        SDL_Texture* MusicChoiceTexture = SDL_CreateTextureFromSurface(renderer, MusicChoiceSurface);
+        int MusicChoiceTextWidth, MusicChoiceTextHeight;
+        TTF_SizeText(font, "Pick Your Music", &MusicChoiceTextWidth, &MusicChoiceTextHeight);
+        SDL_Rect MusicChoiceTextRect = {centerX + (buttonWidth - MusicChoiceTextWidth) / 2, centerY + 5*buttonHeight + 100 + (buttonHeight - MusicChoiceTextHeight) / 2, MusicChoiceTextWidth, MusicChoiceTextHeight};
+        SDL_RenderCopy(renderer, MusicChoiceTexture, NULL, &MusicChoiceTextRect);
 
 
         // Render slider
@@ -174,6 +199,13 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_SetRenderDrawColor(renderer, 0, 122, 204, 255); // Blue color for handle
         SDL_RenderFillRect(renderer, &volumeSliderHandle);
 
+
+        // Render Back Text
+        SDL_Surface* backSurface = TTF_RenderText_Solid(font, "back", textColor);
+        SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backSurface);
+        TTF_SizeText(font, "back", &textWidth, &textHeight);
+        SDL_Rect backTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 4*buttonHeight + 80 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
+        SDL_RenderCopy(renderer, backTexture, NULL, &backTextRect);
 
 
         TTF_CloseFont(font);
@@ -197,13 +229,6 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         TTF_SetFontStyle(font, TTF_STYLE_NORMAL); // reset to not italics
 
 
-        // Render Back Text
-        SDL_Surface* backSurface = TTF_RenderText_Solid(font, "back", textColor);
-        SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backSurface);
-        TTF_SizeText(font, "back", &textWidth, &textHeight);
-        SDL_Rect backTextRect = {centerX + (buttonWidth - textWidth) / 2, centerY + 4*buttonHeight + 80 + (buttonHeight - textHeight) / 2, textWidth, textHeight};
-        SDL_RenderCopy(renderer, backTexture, NULL, &backTextRect);
-
 
 
 
@@ -215,6 +240,8 @@ void Setting::renderSetting(SDL_Renderer* renderer, bool isSettingsOpen, const S
         SDL_FreeSurface(MusicSurface);
         SDL_DestroyTexture(soundEffectTexture);
         SDL_FreeSurface(soundEffectSurface);
+        SDL_DestroyTexture(MusicChoiceTexture);
+        SDL_FreeSurface(MusicChoiceSurface);
         TTF_CloseFont(font);
         SDL_DestroyTexture(backgroundTexture);
         SDL_RenderPresent(renderer);
