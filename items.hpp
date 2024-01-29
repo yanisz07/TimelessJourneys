@@ -88,4 +88,13 @@ void displayInfo() const override;
 int use() override;
 };
 
+class XPPotion : public Item {
+public:
+float effect;
+XPPotion(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, int effect);
+
+void displayInfo() const override;
+int use() override;
+};
+
 #endif // ITEM_HPP

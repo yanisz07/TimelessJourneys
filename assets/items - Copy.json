@@ -65,7 +65,7 @@
             "name": "healing_potion",
             "type": "HealingPotion",
             "location" : "any",
-            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/health_potion.png",
             "sprites": [
                 {
                     "name": "Diamond_Bow_Sprite",
@@ -95,7 +95,7 @@
             "name": "healing_potion",
             "type": "HealingPotion",
             "location" : "any",
-            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/health_potion.png",
             "sprites": [
                 {
                     "name": "Diamond_Bow_Sprite",
@@ -122,10 +122,40 @@
             "health_increase": 50
         },
         {
+            "name": "experience_potion",
+            "type": "XPPotion",
+            "location" : "any",
+            "spritePath" : "/assets/weaponAssets/xp_potion.png",
+            "sprites": [
+                {
+                    "name": "Diamond_Bow_Sprite",
+                    "path": "/assets/weaponAssets/bow3.png",
+                    "actions": [
+                        {
+                            "name": "Idle",
+                            "values": [
+                                48,
+                                6
+                            ]
+                        },
+                        {
+                            "name": "Attack",
+                            "values": [
+                                48,
+                                4
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dmg_multiplier": 0,
+            "experience_increase": 100
+        },
+        {
             "name": "healing_potion",
             "type": "HealingPotion",
             "location" : "any",
-            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/health_potion.png",
             "sprites": [
                 {
                     "name": "Diamond_Bow_Sprite",
