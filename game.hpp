@@ -116,7 +116,7 @@ private:
     void loadLvl1();
     void loadLvl2();
     void loadLvl3();
-    std::string level = "lvl1";
+    std::string level = "lvl3";
     struct MapPing {
         Vector2D position;
         bool isActive = false;
