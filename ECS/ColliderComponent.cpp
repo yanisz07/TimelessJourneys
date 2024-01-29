@@ -1,4 +1,6 @@
 #include "ColliderComponent.hpp"
+#include "../game.hpp"
+#include "../AssetManager.hpp"
 
 ColliderComponent::ColliderComponent(std::string t)
 {
@@ -80,7 +82,8 @@ void ColliderComponent::init()
         collider.h = 28*transform->scale;
     }
 
-    tex = TextureManager::LoadTexture("/assets/ColTex.png");
+    //tex = TextureManager::LoadTexture("/assets/ColTex.png");
+    tex = Game::assets->GetTexture("ColTex");
     srcR = {0, 0, 32, 32 };
 
     destR = { collider.x, collider.y, collider.w, collider.h };

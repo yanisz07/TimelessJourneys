@@ -15,8 +15,9 @@ TurretEnemy::TurretEnemy(int r, int s, int d, Uint32 rt, Manager* man, Transform
     reloadTime = rt;
     playertransform = player;
 
-    std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "propAssets" / "turret.png").string();
-    tex1 = IMG_LoadTexture(Game::renderer,spritePath.c_str());
+    //std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "propAssets" / "turret.png").string();
+    //tex1 = IMG_LoadTexture(Game::renderer,spritePath.c_str());
+    tex1 = Game::assets->GetTexture("Turret");
 
     srcR1.w = animation1.width;
     srcR1.h = animation1.height;

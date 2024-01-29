@@ -24,6 +24,19 @@ public:
 
     void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, bool player, int dam=5);
 
+    void free()
+    {
+        for (auto i = textures.begin(); i != textures.end(); i++)
+        {
+            SDL_DestroyTexture(i->second);
+        }
+
+        for (auto i = fonts.begin(); i != fonts.end(); i++)
+        {
+            TTF_CloseFont(i->second);
+        }
+    }
+
 
     //texture management
     void AddTexture(std::string id, const char* path);

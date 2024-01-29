@@ -26,6 +26,11 @@ public:
 
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 
+    ~Item()
+    {
+        SDL_DestroyTexture(icon);
+    }
+
     virtual void displayInfo() const;
     virtual int use() {
                 std::cout << "Using item: " << name << std::endl;

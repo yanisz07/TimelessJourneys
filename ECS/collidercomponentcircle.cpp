@@ -8,7 +8,7 @@ ColliderComponentCircle::ColliderComponentCircle(std::string t, double r)
 
 void ColliderComponentCircle::init()
 {
-    tex = TextureManager::LoadTexture("/assets/Circle.png");
+    //tex = TextureManager::LoadTexture("/assets/Circle.png");
     if (entity->hasComponent<TransformComponent>())
     {
         transform = &entity->getComponent<TransformComponent>();

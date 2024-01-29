@@ -30,9 +30,9 @@ public:
 
 private:
     Manager* manager;
-    TransformComponent* transform;
-    TransformComponent* playertransform;
-    SpriteComponent* sprite;
+    TransformComponent* transform = nullptr;
+    TransformComponent* playertransform = nullptr;
+    SpriteComponent* sprite = nullptr;
     int radius;
     int speed;
     int damage;
@@ -47,7 +47,7 @@ private:
 
     int type;
 
-    SDL_Texture* tex1;
+    SDL_Texture* tex1 =  nullptr;
     Animation animation1 = Animation(14,13,0,5,100,"Canon_Bullet");
     SDL_Rect srcR1, destR1;
     Timer timer1;

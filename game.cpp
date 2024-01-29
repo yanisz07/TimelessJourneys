@@ -2071,6 +2071,11 @@ void Game::clean()
         bgMusic = nullptr;
     }
     isGameOverOpen = false;
+    inventory->init();
+    assets->free();
+    TTF_Quit();
+    Mix_Quit();
+    IMG_Quit();
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
