@@ -18,6 +18,11 @@ Inventory::Inventory() : isVisible(false), windowRect{100, 400, 400, 400} {
 // Destructor
 Inventory::~Inventory() {
     // Perform necessary cleanup
+
+    for (auto i = items.begin(); i != items.end(); i++)
+    {
+        delete (i->second);
+    }
 }
 
 void Inventory::init()

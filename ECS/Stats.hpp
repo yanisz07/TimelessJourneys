@@ -54,7 +54,6 @@ public:
         experience = exp;
         level = lvl;
     }
-    ~Stats() override = default;
 
     int get_health() {return health;}
     float get_damage_mult() {return damage_mult;}
@@ -116,6 +115,12 @@ public:
     void set_hit_direction(Vector2D hit_direction)
     {
         this->hit_direction = hit_direction;
+    }
+    ~Stats() override
+    {
+        SDL_DestroyTexture(healthLabel);
+        SDL_DestroyTexture(expLabel);
+        SDL_DestroyTexture(levelLabel);
     }
 
 private:

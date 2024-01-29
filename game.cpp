@@ -1465,6 +1465,27 @@ void Game::loadItems(const std::string& filePath)
        }
     }
 
+    if(type == "XPPotion")
+    {
+       int experience_increase = itemData["experience_increase"].get<int>();
+       Item* item = new XPPotion(false,location,spritePath,name,experience_increase);
+       if(location == "inventory")
+       {
+            Game::inventory->addItem(item);
+
+       }
+       else
+       {
+            for (auto& ch : chests)
+            {
+                if(ch->tag == location)
+                {
+                    ch->getComponent<ChestScreen>().addItem(item);
+                }
+            }
+       }
+    }
+
 
     std::cout << "Item " << name << "created and added" << std::endl;
     }
@@ -2093,6 +2114,11 @@ void Game::clean()
         bgMusic = nullptr;
     }
     isGameOverOpen = false;
+    inventory->init();
+    assets->free();
+    TTF_Quit();
+    Mix_Quit();
+    IMG_Quit();
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();

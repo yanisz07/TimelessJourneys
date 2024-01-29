@@ -16,8 +16,20 @@
           "path": "/assets/weaponAssets/bullet.png"
       },
       {
+        "name": "explosion_anim",
+        "path": "/assets/Canon/Explosion_anim.png"
+      },
+      {
+        "name": "ColTex",
+        "path": "/assets/ColTex.png"
+      },
+      {
+        "name": "Turret",
+        "path": "/assets/propAssets/turret.png"
+      },
+      {
         "name": "projectile",
-        "path": "/assets/weaponAssets/enemyArrow.png"
+        "path": "/assets/weaponAssets/enemy_arrow.png"
       },
       {
         "name": "arrow",
