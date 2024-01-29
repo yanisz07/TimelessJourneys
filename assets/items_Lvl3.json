@@ -38,7 +38,7 @@
             "name": "healing_potion",
             "type": "HealingPotion",
             "location" : "chest1",
-            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/health_potion.png",
             "dmg_multiplier": 0,
             "health_increase": 50
         },
@@ -46,7 +46,7 @@
             "name": "healing_potion",
             "type": "HealingPotion",
             "location" : "chest2",
-            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/health_potion.png",
             "dmg_multiplier": 0,
             "health_increase": 50
         },
@@ -54,7 +54,7 @@
             "name": "healing_potion",
             "type": "HealingPotion",
             "location" : "chest1",
-            "spritePath" : "/assets/weaponAssets/arrow.png",
+            "spritePath" : "/assets/weaponAssets/health_potion.png",
             "dmg_multiplier": 0,
             "health_increase": 50
         }
