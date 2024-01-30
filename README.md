@@ -40,6 +40,19 @@ brew info sdl2_mixer
 ## Compilation
 To run the project, open the Cmake file in the Qt Creator IDE. Configure the project to work with your preferred compiler in 64-bit systems, in Release mode. 
 Once configured, press the run button to build, compile and execute the application.
+(depending if you are azerty or qwerty you can adapt but here is the azerty one) Z (Attack): Press this key to perform an attack. Depending on your current weapon or the context, this might mean a melee swipe, a ranged shot, or another form of attack.
 
+## Rules
+A (Switch Range/Melee): This key toggles your combat mode between ranged and melee. Use it to adapt your fighting style to different enemies or situations.
+
+E (Open Inventory): Opens your inventory, allowing you to view the items you've collected, equip gear, or use consumable items.
+
+Escape (Opens Menu): Pressing the Escape key brings up the game's main menu. From here, you can adjust settings, save your progress, or exit to the main menu.
+
+M (Opens Map): Displays the game map, showing your current location, important landmarks, and possibly unexplored areas. It's crucial for navigation.
+
+Arrow Keys (Movement): Use the arrow keys to move your character in the game world. Up moves forward, down moves backward, and left/right turn or move sideways depending on the game's control scheme.
+
+C (Switch Worlds): This key allows you to switch between different worlds or dimensions within the game. Each world may have unique characteristics, challenges, and enemies. Use this function to discover new areas, or complete specific objectives that require action in more than one world.
 
  
