@@ -1,0 +1,35 @@
+Week 1: We brainstormed about how the game would look like, the resources we would use and the organisation. We concluded 
+that the game would be a role-playing game in 2D (top view). The player would incarnate the hero with different attributes 
+(weapons, shields, inventory…). The goal of the game is to kill enemies without getting killed yourself before the countdown ends.
+
+Week 2: Different aspects of the game need to be worked on: Core Mechanics, Graphics, character programming, game programming, 
+game design. The core mechanics, to which I was assigned, refers to the set of actions that players will repeat over and over 
+as they move through the game. 
+
+Week 3: A specific library needed to be used in order to code the game efficiently: SDL2. It is a is a library designed to 
+provide access to audio, keyboard, mouse, joystick, and graphics hardware. The goal now is to install SDL2 on all the computers 
+and understand how the library works.
+
+Week 4: Downloaded SDL2 on mac through the terminal.  I tested a prototype of the game that had been coded and tried to understand 
+the basic lines of code that was written to get to that point. YouTube tutorials were useful for the task (YouTube channel 
+frequently checked: https://www.youtube.com/@CarlBirch).
+
+Week 5: My goal is to implement talking NPCs into the game. I am working collaboratively with another team member to created text 
+bubbles that appear and disappear depending on the distance between the player and the NPC. The idea is to create a function that 
+calculates the distance between the player and the NPC and check how this distance compare to a threshold distance under which the 
+bubble pops up next to the NPC’s head.
+
+Week 6: The implementation is more complicated than expected. Indeed, we managed to implement our first NPC as well as 
+the prototype of a text bubble, but it does not yet disappear and reappear as desired. For now, the bubbles have been implemented 
+as a separate entity. However, this might need to change unless I find a solution to manage it this way.
+
+Week 7: I created and added several bubble texts in the “assets” document, where all the “sprites” for the characters 
+weapons and NPCs are. This is easier than generating different texts every time the player approaches the NPC. What the goal 
+is now is to reorganize ourselves, possibly start a new branch to make the text bubbles work as desired.
+
+
+Week 8: The way I (and a colleague) started implementing the text bubbles was not optimal. Indeed, I first tried to introduce 
+a new “Entity” into the game.cpp file, which essentially creates an object that can be used in the code for different purposes. 
+However, the NPCs were also separate entities which might be why it was difficult to make them work together. Therefore, we created 
+a new branch and implement the bubble trough the NPCs, passing them as arguments in the NPC class. The rendering was then much easier, 
+all the functions and the conditions for the bubble text to be rendered were implemented in the NPC class.
