@@ -1,15 +1,19 @@
-Week 1: I worked on the gamplay mechanics of the player and ennemies 
+Week 1: I worked on the gamplay mechanics of the player and ennemies
 
 Week2: I worked on installing SDL2 on my pc and watched tutorials to help me understand this library
 
 Week3: same as Week 2
 
-Week 4 (first week of vacations): 
-- I worked first on creating a document summarizing point by point the game design work I had done on player and ennemies and share it to the rest of the group. I have not committed it on github as it is a google docs featuring text and diagrams, which would thus have to be separated into into multiple document in the github. Thus you can find the link to access it right under here (if there is any problem accessing it I am at your entire disposal):
-https://docs.google.com/document/d/1Ip18gFoaHXx7uPgk4eB3GfzHTCFg8rTlY-4U0BzM6W0/edit?usp=sharing
+Week 4 (first week of vacations):
+- I worked first on creating a document summarizing point by point the game design work I had done on player and ennemies and share it to the rest of the group. I have not committed it on github as it is a google docs featuring text and diagrams, which would thus have to be separated into into multiple document in the github. Thus you can find the link to access it right under here (if there is any problem accessing it I am at your entire disposal): https://docs.google.com/document/d/1Ip18gFoaHXx7uPgk4eB3GfzHTCFg8rTlY-4U0BzM6W0/edit?usp=sharing
 - I also worked on the update function of the Game class. The update function was very long and for the sake clarity I was tasked with separating it into multiple smaller functions. This however brought bugs with the attack of the player which I spent most of the week trying to fix before committing the new update function to the feature_update_function_(based_on_develop_attack) branch.
 
 Week 5 (second week of the vacations): I worked on the attack of the player. As Amine had finished doing the attack of the player in the up, down, and sideways directions I worked on a prototype of attack in the diagonal directions. The attack which Amine had coded made a rectangular collision block spawn in the direction of the attack, for diagonal attacks I made two different blocks spawn forming an angle in the direction of the attack. This was committed in the feature_diagonal_melee_attack.
 
+Week 6: We did not keep the attack which I coded last week as Amine find a better way to implement it, indeed instead of spawing two different blocks like I did he managed to make one diagonal one. I was thus tasked with making the npc with Martin. The goal being that the npcs "talk" to the player by displaying a bubble with text as soon as he gets close enough. This week's work was thus centered on implementing the npc main compenent and we dealt with the bubble the next weeks. We followed the following architecture: the npc was an entity which had multiple components plus a "NPCBehavior" component which was responsible for displaying the bubble.
 
+Week 7: We did a first implementation of the bubble which can be found in the feature_bubble_npc branch. We created an entity bubble with a sprite component which was supposed to be passed as an argument to the NPCBehavior component of the npc which would then decide wheather or not to display it in function of the position of the player. However this was not possible as entity could not be passed as arguments. We had multiple ideas to solve it: we tried passing only the sprite component of the bubble to the npc, using the "bubbles" list of entities instead of bubble or including the definition of the component in the game.cpp file but all were source of new problems. For example, the latter made it so that it was not necessary to pass the bubble by argument anymore, but once it was displayed it could not be undisplayed.
 
+Week 8: We stoped working on the feature_bubble_npc branch as creating the bubble as an entity was not feasable, and found a solution by making the bubble a part of the NPCBehavior component. Indeed by creating a function draw in this class and overriding that of the entity we were able to display the sprite of the bubble. We then adjusted the distance at which the npc would display the bubble, indeed because of the way we calculate distances certain distance, notably odd ones, created bugs.
+
+We decided not to merge my update function to the main and develp branch as it had became too far from the actual update function. Thus neither this work nor the prototype of diagonal attack of week 5 was kept in the final product and they are thus not counted in my number of lines.
