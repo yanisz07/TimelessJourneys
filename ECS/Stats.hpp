@@ -13,10 +13,8 @@ public:
     {
         health = 10;
 
-        damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
+        damage_mult = 5.0;
         exp_worth = 50;
-        damage_mult = 1.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
-        exp_worth = 500;
 
         hit = false;
         hit_type = false;
@@ -75,7 +73,6 @@ public:
     void KillEntity(); // Only for enemies.
     void GameOver();
     void addHealth(int health);
-    void addXP(int xp);
 
     bool is_hit()
     {

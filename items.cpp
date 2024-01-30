@@ -95,7 +95,7 @@ XPPotion::XPPotion(bool equipped, const std::string& loc, const std::string& pat
 
 int XPPotion::use(){
     Stats& stats = Game::inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Stats>();
-    stats.addXP(effect);
+    stats.GainExp(effect);
     return 1;
 
 }

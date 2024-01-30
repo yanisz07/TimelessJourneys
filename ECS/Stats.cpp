@@ -47,10 +47,6 @@ void Stats::addHealth(int health){
     }
 }
 
-void Stats::addXP(int xp){
-    this->experience += xp;
-}
-
 void Stats::KillEntity() {
     entity->destroy();
 }
