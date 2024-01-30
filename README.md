@@ -24,6 +24,7 @@ Ensure that you have XCode Command Line Tools installed. You can install them us
 
 In case of path-related errors, run the following command:
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$(whoami)/.zshrc eval "$(/opt/homebrew/bin/brew shellenv)"
+
 To install SDL2,
 1) Run the following commands to install the corresponding libraries:
 brew install sdl2
