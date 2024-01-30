@@ -1,5 +1,7 @@
 #ifndef TURRETENEMY_H
 #define TURRETENEMY_H
+#include "../game.hpp"
+#include "../AssetManager.hpp"
 
 #include "ECS.hpp"
 #include "../game.hpp"
@@ -26,6 +28,8 @@ public:
     void update() override;
 
     void draw() override;
+
+    void kill() override;
 
     void CreateProjectile(Vector2D pos, Vector2D vel, int range, int speed, std::string id, int w, int h, int sc, int dam, double angle);
 
