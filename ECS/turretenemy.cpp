@@ -5,6 +5,8 @@
 #include "math.h"
 #include "ProjectileComponent.hpp"
 #include "SpriteComponent.hpp"
+#include "chestScreen.hpp"
+#include "InteractComponent.hpp"
 
 TurretEnemy::TurretEnemy(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* player)
 {
@@ -175,4 +177,19 @@ void TurretEnemy::draw()
     animation1.index = frame;
     srcR1.x = animation1.width*animation1.index;
     SDL_RenderCopyEx(Game::renderer,tex1,&srcR1,&destR1,NULL,NULL,SDL_FLIP_NONE);
+}
+
+void TurretEnemy::kill()
+{
+    auto& chest1(Game::assets->manager->addEntity());
+    chest1.setTag("chest1");
+    chest1.addComponent<TransformComponent>(transform->position.x,transform->position.y,16,16,5);
+    chest1.addComponent<SpriteComponent>(true, "chest");
+    chest1.getComponent<SpriteComponent>().setActions();
+    chest1.addComponent<ColliderComponent>("chest");
+    chest1.addComponent<InteractComponent>();
+    chest1.addComponent<ChestScreen>();
+    chest1.addGroup(Game::groupChests);
+
+
 }

@@ -62,6 +62,7 @@ public:
     virtual void init() {}
     virtual void update() {}
     virtual void draw() {}
+    virtual void kill() {}
     virtual void setPriority(int priorityLevel);
 
     virtual ~Component() = default;
@@ -97,12 +98,17 @@ public:
         for (auto& c : components) c->update();
     }
 
+    void kill()
+    {
+        for (auto& c : components) c->kill();
+    }
+
     void draw()
     {
         for (auto& c : components) c->draw();
     }
     bool isActive() {return active;}
-    void destroy() {active=false;}
+    void destroy() {kill(); active=false;}
 
     bool hasGroup(Group mGroup)
     {
