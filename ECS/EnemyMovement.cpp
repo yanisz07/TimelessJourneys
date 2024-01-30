@@ -471,7 +471,7 @@ void EnemyMovement:: swordsmanBehavior(){
                     int xDirection = 0;  // Start with no movement
                     int yDirection = 0;
 
-                    float tolerance = 0; // Define a tolerance interval
+                    float tolerance = 0; // Define a tolerance interval to move only horizontally or vertically (not used at the end)
 
                     // Determine horizontal direction
                     float xDistance = std::abs(playerTransform->position.x - transform->position.x);
