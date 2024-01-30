@@ -159,7 +159,7 @@
         ],
         "sprite":[
           1,
-          "enemy"
+          "enemy_creeper"
         ],
         "coll":"enemy",
         "mov":[

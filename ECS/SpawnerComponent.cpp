@@ -54,7 +54,15 @@ void SpawnerComponent::spawnEnemy() {
     // Spawn an enemy at the spawner's location
     Entity& enemy = manager.addEntity();
     enemy.addComponent<TransformComponent>(spawnLocation.x, spawnLocation.y, 128, 128, 1);
-    enemy.addComponent<SpriteComponent>(true, "enemy");
+    if (enemy_type ==2)
+    {
+        std::cout << "creeper created" << std::endl;
+        enemy.addComponent<SpriteComponent>(true, "enemy_creeper");
+    }
+    if (enemy_type ==1)
+    {
+        enemy.addComponent<SpriteComponent>(true, "enemy");
+    }
     enemy.getComponent<SpriteComponent>().setActions();
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();

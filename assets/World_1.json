@@ -429,6 +429,63 @@
         ]
       },
       {
+        "name": "enemy_creeper",
+        "sprites": [
+          {
+            "name" : "Enemy_Idle_Sprite_Green",
+            "path": "/assets/Green_Slime/Idle.png",
+            "actions": [
+              {
+                "name": "Idle",
+                "values": [
+                  128,
+                  8
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Attack_1_Sprite_Green",
+            "path": "/assets/Green_Slime/Attack_3.png",
+            "actions": [
+              {
+                "name": "Attack_3",
+                "values": [
+                  128,
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Hurt_Sprite_Green",
+            "path": "/assets/Green_Slime/Hurt.png",
+            "actions": [
+              {
+                "name": "Hurt",
+                "values": [
+                  128,
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "Enemy_Explosion_Sprite_Green",
+            "path": "/assets/Green_Slime/Explosion.png",
+            "actions": [
+              {
+                "name": "Explosion",
+                "values": [
+                  800,
+                  10
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "archer",
         "sprites": [
           {
