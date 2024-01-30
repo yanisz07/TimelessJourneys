@@ -652,10 +652,10 @@ void Game::handleEvents()
 void Game::toggleFullScreen() {
     if (isFullscreen) {
         SDL_SetWindowFullscreen(window, 0);// Set to windowed mode
-        SDL_SetWindowSize(window,800,640); //Fix size
+        SDL_SetWindowSize(window,1600,1280); //Fix size
         //fix camera
-        screen_width = 800;
-        screen_height = 640;
+        screen_width = 1600;
+        screen_height = 1280;
         isFullscreen = false;
     } else
     {
