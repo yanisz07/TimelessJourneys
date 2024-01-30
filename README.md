@@ -15,10 +15,10 @@ Example: SDL2-devel-2.28.5-mingw.zip
 On macOS,
 To install the SDL libraries we recommend using the Homebrew software package management system.
 To install Homebrew,
-I) Copy and paste the following command into the Terminal and press Enter:
+1) Copy and paste the following command into the Terminal and press Enter:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-II) Verify the installation using the following command: brew doctor
-III) Update Homebrew using this command: brew update
+2) Verify the installation using the following command: brew doctor
+3) Update Homebrew using this command: brew update
 Ensure that you have XCode Command Line Tools installed. You can install them using this command: xcode-select --install
 In case of path-related errors, run the following command:
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$(whoami)/.zshrc eval "$(/opt/homebrew/bin/brew shellenv)"
