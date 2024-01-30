@@ -3,12 +3,14 @@
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"
 #include "EnemyMovement.hpp"
+#include "armor.hpp"
 
 
-SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats, ColliderComponent* playerCol)
+SpawnerComponent::SpawnerComponent(Manager& m, Uint32 interval, int max_enemies, TransformComponent* playerTrans, Stats* playerstats, ColliderComponent* playerCol, Armor* playerArmor)
     : manager(m), spawnInterval(interval), max_spawn(max_enemies), playerTransform(playerTrans), playerStats(playerstats), hasSpawned(false) {
     lastSpawnTime = SDL_GetTicks();
     playerCollider = playerCol;
+    this->playerArmor = playerArmor;
 }
 
 void SpawnerComponent::init() {
@@ -67,7 +69,7 @@ void SpawnerComponent::spawnEnemy() {
     enemy.addComponent<ColliderComponent>("enemy");
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
-    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,3,playerTransform, playerStats, &enemyStats, playerCollider);
+    enemy.addComponent<EnemyMovement>(enemy_type,500,200,1200,60,3,playerTransform, playerStats, &enemyStats, playerCollider, playerArmor);
     enemy.addGroup(Game::groupEnemies);
 
     spawnedEnemies.push_back(&enemy);

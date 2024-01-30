@@ -6,6 +6,7 @@
 #include "../Vector2D.hpp"
 
 class Stats;
+class Armor;
 
 class ProjectileComponent : public Component
 {
@@ -25,7 +26,7 @@ public:
     void update() override;
 
     void DoDamage(Stats &entity1,Stats &entity2);
-    void DoDamage(Stats &entity1);
+    void DoDamage(Stats &entity1, Armor &entity1armor);
 
 private:
 

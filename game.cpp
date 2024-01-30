@@ -829,7 +829,7 @@ void Game::update()
                 if(Collision::CheckCollision(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponent>()))
                 {
                     std::cout << "Hit player!" << std::endl;
-                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
+                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>(),player.getComponent<Armor>());
                     p->destroy();
                 }
             }
@@ -838,7 +838,7 @@ void Game::update()
                 if(Collision::CollisionRectCircle(player.getComponent<ColliderComponent>(),p->getComponent<ColliderComponentCircle>()))
                 {
                     std::cout << "Hit player!" << std::endl;
-                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>());
+                    p->getComponent<ProjectileComponent>().DoDamage(player.getComponent<Stats>(),player.getComponent<Armor>());
                     p->destroy();
                 }
             }
@@ -1335,7 +1335,7 @@ void Game::spawnEnemies(std::string JSONpath)
        enemy.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
        enemy.getComponent<SpriteComponent>().setActions();
        enemy.addComponent<SpawnerComponent>(manager, inter, max_e, &(player.getComponent<TransformComponent>()),
-                                            &(player.getComponent<Stats>()), &(player.getComponent<ColliderComponent>()));
+                                            &(player.getComponent<Stats>()), &(player.getComponent<ColliderComponent>()),&(player.getComponent<Armor>()));
        enemy.addGroup(Game::groupSpawners);
      }
      else if(type == "mov")
@@ -1347,7 +1347,7 @@ void Game::spawnEnemies(std::string JSONpath)
       int d_1 = enemyData["mov"][4].get<int>();
       int dam = enemyData["mov"][5].get<int>();
       enemy.addComponent<EnemyMovement>(ty,r_1,r_2,r_3,d_1,dam,&(player.getComponent<TransformComponent>()),
-                                        &(player.getComponent<Stats>()), &(enemy.getComponent<Stats>()),&(player.getComponent<ColliderComponent>()));
+                                        &(player.getComponent<Stats>()), &(enemy.getComponent<Stats>()),&(player.getComponent<ColliderComponent>()),&(player.getComponent<Armor>()));
       enemy.addGroup(Game::groupEnemies);
      }
      else
@@ -1546,6 +1546,7 @@ void Game::loadLvl1()
     TransformComponent& playerTransform = player.getComponent<TransformComponent>();
     ColliderComponent& playerCol = player.getComponent<ColliderComponent>();
     Stats& playerStats = player.getComponent<Stats>();
+    Armor& playerArmor = player.getComponent<Armor>();
 
     auto& enemy(manager.addEntity());
     auto& enemy2(manager.addEntity());
@@ -1576,7 +1577,7 @@ void Game::loadLvl1()
     enemy.addComponent<Stats>();
     Stats& enemyStats = enemy.getComponent<Stats>();
 
-    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats, &playerCol); //To be changed later on
+    enemy.addComponent<EnemyMovement>(2,500,200,1200,60,3,&playerTransform, &playerStats, &enemyStats, &playerCol, &playerArmor); //To be changed later on
     enemy.addGroup(Game::groupEnemies);
 
     //create second enemy
@@ -1603,7 +1604,7 @@ void Game::loadLvl1()
     spawner.addComponent<SpriteComponent>(true,"spawner");
     spawner.getComponent<SpriteComponent>().Set_Dest_Rect(100,200);
     spawner.getComponent<SpriteComponent>().setActions();
-    spawner.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats, &playerCol);
+    spawner.addComponent<SpawnerComponent>(manager, 8000, 4, &playerTransform, &playerStats, &playerCol, &playerArmor);
     spawner.addGroup(Game::groupSpawners);
 
 

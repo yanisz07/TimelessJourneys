@@ -213,7 +213,6 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
         animations[currentAction].speed = speed;
         animations[currentAction].timer.start();
     }
-
 }
 
 
