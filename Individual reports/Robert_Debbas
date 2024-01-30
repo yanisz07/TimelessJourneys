@@ -26,7 +26,7 @@ my algorithm for the reaction of the enemy to a map collider, to avoid bugs, and
 
 Week 6:
 
-It has implemented an algorithm that allows the enemy to "bounce" whenever it encounters a square map collider. 
+I implemented an algorithm that allows the enemy to "bounce" whenever it encounters a square map collider. 
 
 Week 7:
 
