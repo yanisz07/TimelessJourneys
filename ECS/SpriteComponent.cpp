@@ -194,6 +194,12 @@ void SpriteComponent::Play(const std::string animName, bool flip, const int repe
         animations[currentAction].repeat = repeat;
         animations[currentAction].speed = speed;
         animations[currentAction].timer.start();
+        if (type == "enemy_creeper")
+        {
+            std::cout << "YAAAAAAAAA CREEPER ANIM" << std::endl;
+            std::cout << currentAction<< std::endl;
+            std::cout << animations[currentAction].spriteName << std::endl;
+        }
     }
 
     if (type=="spawner")
