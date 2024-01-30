@@ -19,6 +19,7 @@ To install Homebrew,
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 2) Verify the installation using the following command: brew doctor
 3) Update Homebrew using this command: brew update
+
 Ensure that you have XCode Command Line Tools installed. You can install them using this command: xcode-select --install
 In case of path-related errors, run the following command:
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$(whoami)/.zshrc eval "$(/opt/homebrew/bin/brew shellenv)"
