@@ -194,7 +194,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     //Create player
     player.setType("player");
-    player.addComponent<TransformComponent>(1900,1100,48,48,3,5);
+    player.addComponent<TransformComponent>(1900,1100,48,48,3,10);
     player.addComponent<SpriteComponent>(true, "player");
     player.getComponent<SpriteComponent>().setActions();
     player.addComponent<Armor>();
