@@ -12,6 +12,7 @@ NPCBehavior::NPCBehavior(float distance_1, TransformComponent *playerTrans, std:
 
 void NPCBehavior::init()
 {
+    lastTime = SDL_GetTicks();
     transform = &entity->getComponent<TransformComponent>();
     srand(time(NULL));
 
@@ -22,19 +23,39 @@ void NPCBehavior::init()
 
 }
 
+void NPCBehavior::update() {
 
-
-void NPCBehavior::update()
-{
-    float d=calculateDistanceToPlayer();
-    bool display=(d<trigger_distance);
+    float d = calculateDistanceToPlayer();
+    bool display = (d < trigger_distance);
     if (display) {
-
-        bubble_displayed=1;
+        bubble_displayed = 1;
     } else {
-        bubble_displayed=0;
+        bubble_displayed = 0;
     }
 
+    // Movement
+    Uint32 currentTime = SDL_GetTicks();
+    if (!waiting) {
+        if (movingRight) {
+            transform->position.x += speed;
+            if (transform->position.x >= originalPosition.x + moveDistance) {
+                movingRight = false;
+                waiting = true;
+                lastTime = currentTime;
+            }
+        } else {
+            transform->position.x -= speed;
+            if (transform->position.x <= originalPosition.x) {
+                movingRight = true;
+                waiting = true;
+                lastTime = currentTime;
+            }
+        }
+    } else {
+        if (currentTime - lastTime >= waitTime) {
+            waiting = false;
+        }
+    }
 
     destRect.x = static_cast<int>(transform->position.x) +80 - Game::camera.x;
     destRect.y = static_cast<int>(transform->position.y) -40 - Game::camera.y;
