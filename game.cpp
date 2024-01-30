@@ -715,6 +715,27 @@ void Game::update()
         manager.refresh();
         manager.update();
 
+        if(level == "lvl3"){
+            bool tf = true;
+            for(auto& e : enemies){
+                if(e->tag == "juan"){
+                    tf = false;
+                }
+            }
+            if(tf){
+            auto& chest1(manager.addEntity());
+
+            chest1.setTag("chest");
+            chest1.addComponent<TransformComponent>(5404,2471,16,16,5);
+            chest1.addComponent<SpriteComponent>(true, "chest");
+            chest1.getComponent<SpriteComponent>().setActions();
+            chest1.addComponent<ColliderComponent>("chest");
+            chest1.addComponent<InteractComponent>();
+            chest1.addComponent<ChestScreen>();
+            chest1.addGroup(Game::groupChests);
+            }
+        }
+
         if(player.getComponent<TransformComponent>().position.x <= 4749 && player.getComponent<TransformComponent>().position.x >= 4690 &&
             player.getComponent<TransformComponent>().position.y <= 3843 && player.getComponent<TransformComponent>().position.y >= 3800)
         {
@@ -1854,6 +1875,8 @@ void Game::loadLvl3()
     auto enemiesPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "enemiesLvl3.json").string();
 
     spawnEnemies(enemiesPath);
+
+    enemies[10]->setTag("juan");
 
     itemsPath = (projectDir / ".." / "TimelessJourneys" / "assets" / "items_Lvl3.json").string();
     loadItems(itemsPath);
