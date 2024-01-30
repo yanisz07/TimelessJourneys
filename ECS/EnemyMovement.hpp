@@ -15,6 +15,7 @@
 class TransformComponent;
 class SpriteComponent;
 class ColliderComponent;
+class Armor;
 //end;
 
 class EnemyMovement : public Component
@@ -27,6 +28,7 @@ public:
     ColliderComponent* playerCollider;
     Stats* playerStats;
     Stats* stats;
+    Armor* playerArmor;
     int collisionCooldown = 0;
     const int collisionCooldownMax = 10;
     int moveTimer = 0;
@@ -54,14 +56,14 @@ public:
     bool attack_bool = false;
     Uint32 attackPushbackStartTime;
     Vector2D attackPushbackDirection;
-    int attackDamage = 3;
+    int attackDamage = 5;
 
 
 
     Vector2D initial_position;
 
 
-    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats, ColliderComponent* playerCol);
+    EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent* playerTrans, Stats* playerstats, Stats* e_stats, ColliderComponent* playerCol, Armor* playerArmor);
 
 
 

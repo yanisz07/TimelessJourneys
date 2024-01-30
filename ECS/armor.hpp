@@ -21,9 +21,11 @@ public:
 
     void set_type(std::string t);
 
+    double get_armor() {return armor;}
+
 private:
     std::string type;
-    int armor;
+    double armor;
     SpriteComponent* sprite = nullptr;
 };
 

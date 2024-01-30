@@ -8,9 +8,10 @@
 #include <cmath>
 #include "Stats.hpp"
 #include "../Collision.hpp"
+#include "armor.hpp"
 
 const double pi = M_PI;
-EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1,int damage, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats, ColliderComponent* playerCol)
+EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, float radius_3, float distance_1, int damage, TransformComponent *playerTrans, Stats *playerstats, Stats* e_stats, ColliderComponent* playerCol, Armor *playerArmor)
 {
     attackDamage = damage;
     enemyType = enemy_type;
@@ -22,6 +23,7 @@ EnemyMovement::EnemyMovement(int enemy_type, float radius_1, float radius_2, flo
     radius_of_pursuit=radius_3;
     mindist_enemy_player= distance_1;
     playerCollider = playerCol;
+    this->playerArmor = playerArmor;
 }
 
 void EnemyMovement::init()
@@ -158,7 +160,7 @@ void EnemyMovement:: explosion(){
     knock_direction = Vector2D(playerTransform->position.x - transform->position.x, playerTransform->position.y - transform->position.y).Normalize();
     if (dist_from_player <explosion_radius){
         in_range = true;
-        playerStats->SubtractHealth(5);
+        playerStats->SubtractHealth(static_cast<int>(25/playerArmor->get_armor()));
 
     }
 
@@ -167,7 +169,7 @@ void EnemyMovement:: explosion(){
 
 void EnemyMovement:: attack(){
     std::cout << "Enemy Attack" << std::endl;
-    playerStats->SubtractHealth(attackDamage);
+    playerStats->SubtractHealth(static_cast<int>(attackDamage/playerArmor->get_armor()));
     sprite->Play("Attack_3",false,1);
     attackPushbackDirection = Vector2D(
                                   playerTransform->position.x - transform->position.x,

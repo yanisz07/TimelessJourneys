@@ -1,5 +1,6 @@
 #include "ProjectileComponent.hpp"
 #include "Stats.hpp"
+#include "armor.hpp""
 
 void ProjectileComponent::init()
 {
@@ -31,7 +32,7 @@ void ProjectileComponent::DoDamage(Stats &entity1, Stats &entity2)
     }
 }
 
-void ProjectileComponent::DoDamage(Stats &entity1)
+void ProjectileComponent::DoDamage(Stats &entity1, Armor &entity1armor)
 {
-    entity1.SubtractHealth(damage);
+    entity1.SubtractHealth(static_cast<int>(damage/entity1armor.get_armor()));
 }

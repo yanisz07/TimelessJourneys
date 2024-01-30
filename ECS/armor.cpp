@@ -4,7 +4,7 @@
 Armor::Armor()
 {
     type="";
-    armor=0;
+    armor=1;
 }
 
 void Armor::init()
@@ -19,5 +19,22 @@ std::string Armor::get_type()
 
 void Armor::set_type(std::string t)
 {
+    if (t == "Silver")
+    {
+        armor = 1.2;
+    }
+    else if (t == "Gold")
+    {
+        armor = 1.5;
+    }
+    else if (t == "Diamond")
+    {
+        armor = 2;
+    }
+    else
+    {
+        armor = 1;
+    }
     type=t;
+    std::cout << armor << std::endl;
 }
