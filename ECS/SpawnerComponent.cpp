@@ -46,7 +46,7 @@ void SpawnerComponent::spawnEnemy() {
     int enemy_type = (rand() % 3) + 1;
 
     if (enemy_type == 3) {
-        enemy_type = 2; // Change a 3 to a 2 to make the chances of getting a 2 two-thirds.
+        enemy_type = 1; // Change a 3 to a 2 to make the chances of getting a 2 two-thirds.
     } // 1/3 creeper and 2/3 swordsman
 
 
