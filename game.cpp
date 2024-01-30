@@ -713,6 +713,14 @@ void Game::update()
         // Clear inactive entities and run update
         manager.refresh();
         manager.update();
+
+        if(player.getComponent<TransformComponent>().position.x <= 4749 && player.getComponent<TransformComponent>().position.x >= 4690 &&
+            player.getComponent<TransformComponent>().position.y <= 3843 && player.getComponent<TransformComponent>().position.y >= 3800)
+        {
+            loadLvl2();
+            level = "lvl2";
+        }
+
         //End
 
         //Check and solve player collisions.
