@@ -1,4 +1,4 @@
-#include "canon.h"
+#include "canon.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "ColliderComponentCircle.hpp"

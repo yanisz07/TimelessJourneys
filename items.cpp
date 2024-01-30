@@ -1,4 +1,4 @@
-#include "items.h"
+#include "items.hpp"
 #include "TextureManager.hpp"
 #include "game.hpp"
 #include "ECS/sword.hpp"

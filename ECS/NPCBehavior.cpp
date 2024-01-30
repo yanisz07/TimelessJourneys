@@ -1,4 +1,4 @@
-#include "NPCBehavior.h"
+#include "NPCBehavior.hpp"
 #include <SDL.h>.
 #include "TransformComponent.hpp"
 
@@ -21,8 +21,6 @@ void NPCBehavior::init()
     srcRect.h = 100;
 
 }
-
-
 
 void NPCBehavior::update()
 {

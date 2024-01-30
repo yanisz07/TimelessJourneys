@@ -59,7 +59,7 @@ set(SOURCES
     ECS/TileComponent.hpp
     ECS/ECS.cpp
     ECS/Animation.hpp
-    items.h
+    items.hpp
     items.cpp
     AssetManager.hpp
     AssetManager.cpp
@@ -69,7 +69,7 @@ set(SOURCES
     ECS/Stats.cpp
     json.hpp
     timer.hpp
-    rule.cpp rule.h
+    rule.cpp rule.hpp
     world.hpp world.cpp
     menu.hpp
     menu.cpp
@@ -94,14 +94,14 @@ add_executable(TimelessJourneys ${SOURCES}
     inventory.cpp
     inventory.hpp
     ECS/InteractComponent.hpp
-    ECS/canon.cpp ECS/canon.h
+    ECS/canon.cpp ECS/canon.hpp
     ECS/collidercomponentcircle.hpp ECS/collidercomponentcircle.cpp
     ECS/chestScreen.cpp
     ECS/chestScreen.hpp
     ECS/turretenemy.hpp ECS/turretenemy.cpp
-    ECS/SpawnerComponent.h
+    ECS/SpawnerComponent.hpp
     ECS/SpawnerComponent.cpp
-    ECS/NPCBehavior.h
+    ECS/NPCBehavior.hpp
     ECS/NPCBehavior.cpp)
 
 if (APPLE)

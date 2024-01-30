@@ -3,7 +3,7 @@
 #include "SDL_image.h"
 #include "TextureManager.hpp"
 #include <fstream>
-#include "items.h"
+#include "items.hpp"
 
 
 const int ITEM_ICON_WIDTH = 32;
