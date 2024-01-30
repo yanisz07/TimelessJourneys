@@ -205,7 +205,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     player.addComponent<Range_Weapon>(&manager);
     player.addGroup(Game::groupPlayers);
     timeElapsed = Timer();
-    timeElapsed.start();
 
     std::cout << "Player created" << std::endl;
 
@@ -420,6 +419,7 @@ void Game::handleEvents()
                Mix_PlayChannel(-1,clickButton, 0);}
                 isMenuOpen = false;
                 isGameStarted = true;
+                timeElapsed.start();
             }
             //if click is within Setting button boundary:
             if (x > centerX && x < centerX + buttonWidth &&
