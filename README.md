@@ -21,6 +21,7 @@ To install Homebrew,
 3) Update Homebrew using this command: brew update
 
 Ensure that you have XCode Command Line Tools installed. You can install them using this command: xcode-select --install
+
 In case of path-related errors, run the following command:
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$(whoami)/.zshrc eval "$(/opt/homebrew/bin/brew shellenv)"
 To install SDL2,
