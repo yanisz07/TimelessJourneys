@@ -1,6 +1,6 @@
 #include "ProjectileComponent.hpp"
 #include "Stats.hpp"
-#include "armor.hpp""
+#include "armor.hpp"
 
 void ProjectileComponent::init()
 {
