@@ -21,3 +21,9 @@ Created an item file that is meant to display the items in the inventory. Change
 <br>
 Week 6: <br>
 During this week I kept my focus on the Items_fix branch, remake of items functionality, and changed a lot of functions and added the class Items, the subclasses Armor, Melee and RangedWeapon. After that, I attempted to adapt it to the currently working inventory, then after a significant step I was able to merge develop (current best branch) into the items_fix branch. We decided to again change some functionalities but overall the structure stayed the same. 
+<br>
+<br>
+Week 7: <br>
+I managed to make the items work!
+During this week, I developed the functionality of using an item, equipping an item, and further expanded the items class. I also added some assets, made an alternative bow, and editted the .json file accordingly. Some changes have been made in the inventory files for this to be properly functionning, and some minor changes have occured in other files. Moreover, I created an XP potion, changed all of the files accordingly, and added assets for all of the potions. The transfer between chests and inventory works well, and the classes for respective items are well defined, along with their respective functions, namely the use functions. I also added some functions to the Stats files to make this possible.
+<br>

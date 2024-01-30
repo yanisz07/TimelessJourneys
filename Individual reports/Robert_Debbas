@@ -1,2 +1,34 @@
 Week 1:
-I devoted the majority of my time to setting up SDL2 and attempting to grasp the functioning of the library.
+I devoted the majority of my time to setting up SDL2 and attempting to grasp the functioning of the library. 
+
+Week 2:
+
+I devoted my time to watching tutorial videos to understand how to code the general structure of a role-player game.
+
+Week 3: 
+
+I continued watching the videos and started discussing with Yanis Zaamoun how would the enemies in the game move, and
+react to the player. 
+
+Week 4: 
+
+I implemented several features for the enemy movement. First, boundedness of the enemy's movement: 
+if the player is not close enough to the enemy or the enemy is too far from its initial position, 
+the enemy will return to its initial position. Second, reaction to map colliders. Whenever the enemy 
+is confronted by a map collider, it goes in the opposite direction. In addition, I created a system to
+reduce the frequency of the collision checks, otherwise, the velocity vector is updated too often and the 
+enemy remains "stuck" to the wall since it wouldn't have enough time to escape.
+
+Week 5:
+
+Discussed with Yanis Zaamoun how to implement an enemy that attacks with a sword. I brainstormed about how I could change 
+my algorithm for the reaction of the enemy to a map collider, to avoid bugs, and make the enemy seem more natural.
+
+Week 6:
+
+I implemented an algorithm that allows the enemy to "bounce" whenever it encounters a square map collider. 
+
+Week 7:
+
+Created and implemented a generalized algorithm that allows the enemy to bounce whenever it hits an inclined rectangular
+map collider. Created and implemented an algorithm that allows to do the same for circle colliders. 
