@@ -5,14 +5,14 @@
             "type": "Melee",
             "location" : "inventory",
             "spritePath":"/assets/weaponAssets/sword.png",
-            "dmg_multiplier": 100.0
+            "dmg_multiplier": 3.0
         },
         {
             "name": "dimond_sword",
             "type": "Melee",
             "location" : "chest1",
             "spritePath":"/assets/weaponAssets/BlueSword.png",
-            "dmg_multiplier": 1.5
+            "dmg_multiplier": 5.0
         },
         {
             "name": "woden_bow",
