@@ -132,6 +132,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     }
 
+    //Initialize systems
     if(SDL_Init(SDL_INIT_EVERYTHING)==0)
     {
         std::cout << "Subsystems initialized!..." << std::endl;
@@ -219,18 +220,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     lastProjectileTime = SDL_GetTicks();
 
-
-    TestCol.addComponent<TransformComponent>(1900,1500,100,200);
+    //Experimental collision
+   /* TestCol.addComponent<TransformComponent>(1900,1500,100,200);
     TestCol.addComponent<ColliderComponent>("terrain");
     TestCol.getComponent<ColliderComponent>().SetAngle(30); // SET UP ALWAYS IN DEGREES NOT RAD
 
-    //Initialize all items as hide
-    std::string handPath =  (projectDir / ".." / "TimelessJourneys" / "assets" / "hand.png").string();
-
-    //inventory.addNewItem(Items* items,handPath,renderer);
-
     TestCircle.addComponent<TransformComponent>(1900,1500,200,200);
-    TestCircle.addComponent<ColliderComponentCircle>("circle",100);
+    TestCircle.addComponent<ColliderComponentCircle>("circle",100);*/
 
     std::cout << "Game initialized" << std::endl;
 
