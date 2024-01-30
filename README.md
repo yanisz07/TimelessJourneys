@@ -44,7 +44,7 @@ Once configured, press the run button to build, compile and execute the applicat
 
 
 ## Rules 
-
+(depending if you are azerty or qwerty you can adapt but here is the azerty one)
 Z (Attack): Press this key to perform an attack. Depending on your current weapon or the context, this might mean a melee swipe, a ranged shot, or another form of attack.
 
 A (Switch Range/Melee): This key toggles your combat mode between ranged and melee. Use it to adapt your fighting style to different enemies or situations.
