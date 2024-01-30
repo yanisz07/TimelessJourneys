@@ -6,7 +6,7 @@ The project is supported for Windows and macOS machines. It utilizes the SDL sui
 Installation guides are provided below. 
 
 On Windows,
-1) Create a new folder called SDL2_sources in your C drive directory(C:\)
+1) Create a new folder called SDL2_sources in the C drive directory(C:\)
 2) Navigate to the SDL2 releases GitHub page (https://github.com/libsdl-org/SDL/releases) and download the latest stable release of SDL2 for the MinGW compiler system.
 Example: SDL2-devel-2.28.5-mingw.zip
 3) Repeat the previous step for the SDL2_image, SDL_tff and SDL_mixer libraries.
