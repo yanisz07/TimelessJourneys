@@ -67,7 +67,7 @@ HealingPotion::HealingPotion(bool equipped, const std::string& loc, const std::s
 
 int HealingPotion::use(){
     Stats& stats = Game::inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Stats>();
-    stats.addHealth(effect);
+    stats.SubtractHealth(-effect);
     return 1;
 
 }
