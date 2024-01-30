@@ -1,11 +1,8 @@
 #include "chestScreen.hpp"
-#include "../items.h"
+#include "../items.hpp"
 #include "../game.hpp"
 #include <algorithm>
 #include <iostream>
-
-
-
 
 // Constructor
 ChestScreen::ChestScreen(){
@@ -38,6 +35,11 @@ void ChestScreen::init()
 // Destructor
 ChestScreen::~ChestScreen() {
     // Clean up if needed
+
+    for (auto i = items.begin(); i != items.end(); i++)
+    {
+        delete (i->second);
+    }
 }
 
 void ChestScreen::show() {

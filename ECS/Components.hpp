@@ -19,8 +19,8 @@
 #include "range_weapon.hpp"
 #include "turretenemy.hpp"
 #include "collidercomponentcircle.hpp"
-#include "canon.h"
-#include "SpawnerComponent.h"
+#include "canon.hpp"
+#include "SpawnerComponent.hpp"
 #include "chestScreen.hpp"
-#include "NPCBehavior.h"
+#include "NPCBehavior.hpp"
 #endif // COMPONENTS_H

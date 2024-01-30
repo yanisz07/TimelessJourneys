@@ -26,6 +26,11 @@ public:
 
     Item(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName);
 
+    ~Item()
+    {
+        SDL_DestroyTexture(icon);
+    }
+
     virtual void displayInfo() const;
     virtual int use() {
                 std::cout << "Using item: " << name << std::endl;
@@ -50,6 +55,7 @@ public:
 
 class Melee : public Item {
 public:
+    SDL_Texture* sprite = nullptr;
     float dmg_multiplier;
 
     Melee(bool equipped, const std::string& loc, const std::string& path, const std::string& itemName, float dmgMult);
@@ -66,6 +72,7 @@ public:
 
 class RangedWeapon : public Item {
 public:
+    SDL_Texture* sprite = nullptr;
     float dmg_multiplier;
     int range;
     int speed_arrow;

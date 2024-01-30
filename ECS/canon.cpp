@@ -1,4 +1,4 @@
-#include "canon.h"
+#include "canon.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "ColliderComponentCircle.hpp"
@@ -16,8 +16,7 @@ Canon::Canon(int r, int s, int d, Uint32 rt, Manager* man, TransformComponent* p
     playertransform = player;
     this->type = type;
 
-    std::string spritePath = (projectDir / ".." / "TimelessJourneys" / "assets" / "Canon" / "Explosion_anim.png").string();
-    tex1 = IMG_LoadTexture(Game::renderer,spritePath.c_str());
+    tex1 = Game::assets->GetTexture("explosion_anim");
     timer1.start();
 
     srcR1.w = animation1.width;

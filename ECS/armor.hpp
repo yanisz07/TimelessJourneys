@@ -24,7 +24,7 @@ public:
 private:
     std::string type;
     int armor;
-    SpriteComponent* sprite;
+    SpriteComponent* sprite = nullptr;
 };
 
 #endif // ARMOR_H

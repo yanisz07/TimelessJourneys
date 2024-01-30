@@ -36,7 +36,10 @@ public:
 
     Range_Weapon(Manager* man);
 
-    ~Range_Weapon() override = default;
+    ~Range_Weapon() override
+    {
+        Mix_FreeChunk(bowSound);
+    }
 
     int get_damage(){return damage;}
     int get_range(){return range;}

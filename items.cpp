@@ -1,4 +1,4 @@
-#include "items.h"
+#include "items.hpp"
 #include "TextureManager.hpp"
 #include "game.hpp"
 #include "ECS/sword.hpp"
@@ -67,7 +67,7 @@ HealingPotion::HealingPotion(bool equipped, const std::string& loc, const std::s
 
 int HealingPotion::use(){
     Stats& stats = Game::inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Stats>();
-    stats.addHealth(effect);
+    stats.SubtractHealth(-effect);
     return 1;
 
 }
@@ -95,7 +95,7 @@ XPPotion::XPPotion(bool equipped, const std::string& loc, const std::string& pat
 
 int XPPotion::use(){
     Stats& stats = Game::inventory->game->assets->manager->getGroup(Game::groupPlayers)[0]->getComponent<Stats>();
-    stats.addXP(effect);
+    stats.GainExp(effect);
     return 1;
 
 }

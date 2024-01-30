@@ -39,6 +39,11 @@ public:
 
     Sword(Manager *man);
 
+    ~Sword()
+    {
+        Mix_FreeChunk(swordSwooshSound);
+    }
+
     int equip();
     \
     float dmg_multiplier;

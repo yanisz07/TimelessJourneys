@@ -2,6 +2,7 @@
 #define VECTOR2D_H
 
 #include "iostream"
+#include <cmath>
 
 class Vector2D
 {
@@ -19,13 +20,11 @@ public:
     Vector2D& Divide(const Vector2D& vec);
     float distance(const Vector2D& vec);
     Vector2D& Normalize();
-
-
+    Vector2D Rotation(double theta, bool clockwise); // in Rad!!
     double angle(const Vector2D& vec);
-
     double norm();
 
-    friend Vector2D& operator+(Vector2D& v1, const Vector2D& v2);
+    friend Vector2D operator+(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D operator-(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator*(Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator/(Vector2D& v1, const Vector2D& v2);

@@ -3,7 +3,7 @@
 #include "SDL_image.h"
 #include "TextureManager.hpp"
 #include <fstream>
-#include "items.h"
+#include "items.hpp"
 
 
 const int ITEM_ICON_WIDTH = 32;
@@ -18,6 +18,11 @@ Inventory::Inventory() : isVisible(false), windowRect{100, 400, 400, 400} {
 // Destructor
 Inventory::~Inventory() {
     // Perform necessary cleanup
+
+    for (auto i = items.begin(); i != items.end(); i++)
+    {
+        delete (i->second);
+    }
 }
 
 void Inventory::init()

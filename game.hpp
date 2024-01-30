@@ -10,11 +10,11 @@
 #include "charconv"
 #include "vector"
 #include "menu.hpp"
-#include "rule.h"
+#include "rule.hpp"
 #include "game_over.hpp"
 #include <filesystem>
 #include "sdl_mixer.h"
-#include "items.h"
+#include "items.hpp"
 #include "ECS/chestScreen.hpp"
 #include "timer.hpp"
 #include "map.hpp"

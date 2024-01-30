@@ -1,4 +1,4 @@
-#include "SpawnerComponent.h"
+#include "SpawnerComponent.hpp"
 #include "SDL_timer.h"
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"

@@ -13,10 +13,8 @@ public:
     {
         health = 10;
 
-        damage_mult = 5.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
+        damage_mult = 5.0;
         exp_worth = 50;
-        damage_mult = 1.0; // TODO Should be changed to 1.0 when Damage is fixed for balance purposes.
-        exp_worth = 500;
 
         hit = false;
         hit_type = false;
@@ -35,9 +33,9 @@ public:
     {
         if (pc) {
             player = pc;
-            health = 50000;
+            health = 50;
             damage_mult = 1.0;
-            max_health = 50000;
+            max_health = 50;
             experience = 0;
             level = 1;
         } else {
@@ -54,7 +52,6 @@ public:
         experience = exp;
         level = lvl;
     }
-    ~Stats() override = default;
 
     int get_health() {return health;}
     float get_damage_mult() {return damage_mult;}
@@ -75,8 +72,6 @@ public:
     void GainExp(int); // Handles level ups. Supports negative values. Will level down the player down to level 1 if necessary.
     void KillEntity(); // Only for enemies.
     void GameOver();
-    void addHealth(int health);
-    void addXP(int xp);
 
     bool is_hit()
     {
@@ -116,6 +111,12 @@ public:
     void set_hit_direction(Vector2D hit_direction)
     {
         this->hit_direction = hit_direction;
+    }
+    ~Stats() override
+    {
+        SDL_DestroyTexture(healthLabel);
+        SDL_DestroyTexture(expLabel);
+        SDL_DestroyTexture(levelLabel);
     }
 
 private:

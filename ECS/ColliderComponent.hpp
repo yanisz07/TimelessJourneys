@@ -15,7 +15,7 @@ public:
     SDL_Rect collider;
     std::string tag;
 
-    SDL_Texture* tex;
+    SDL_Texture* tex = nullptr;
     SDL_Rect srcR, destR;
 
     TransformComponent* transform;
