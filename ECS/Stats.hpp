@@ -33,9 +33,9 @@ public:
     {
         if (pc) {
             player = pc;
-            health = 50000;
+            health = 50;
             damage_mult = 1.0;
-            max_health = 50000;
+            max_health = 50;
             experience = 0;
             level = 1;
         } else {
