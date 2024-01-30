@@ -23,6 +23,7 @@
 #include <cmath>
 #include "world.hpp"
 #include "inventory.hpp"
+#include "ECS/chestScreen.hpp"
 
 Map* map;
 Manager manager;
@@ -733,6 +734,10 @@ void Game::update()
             chest1.addComponent<InteractComponent>();
             chest1.addComponent<ChestScreen>();
             chest1.addGroup(Game::groupChests);
+
+            Item* item= new Melee(false, "chest" , "/assets/weaponAssets/BlueSword.png","dimond_sword" , 1.5);
+            chest1.getComponent<ChestScreen>().addItem(item);
+
             }
         }
 
@@ -1548,8 +1553,9 @@ void Game::loadLvl1()
     for (auto& t : tiles) { t->destroy(); }
     for (auto& c : MapColliders) { c->destroy(); }
     for (auto& e : enemies) { e->destroy(); }
-    for (auto& ch : chests) { ch->destroy(); }
     for (auto& ch : Turrets) { ch->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
     for (auto& n : npcs) {n->destroy();}
@@ -1688,8 +1694,9 @@ void Game::loadLvl2()
     for (auto& t : tiles) { t->destroy(); }
     for (auto& c : MapColliders) { c->destroy(); }
     for (auto& e : enemies) { e->destroy(); }
-    for (auto& ch : chests) { ch->destroy(); }
     for (auto& ch : Turrets) { ch->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
     for (auto& n : npcs) {n->destroy();}
@@ -1757,8 +1764,9 @@ void Game::loadLvl3()
     for (auto& t : tiles) { t->destroy(); }
     for (auto& c : MapColliders) { c->destroy(); }
     for (auto& e : enemies) { e->destroy(); }
-    for (auto& ch : chests) { ch->destroy(); }
     for (auto& ch : Turrets) { ch->destroy(); }
+    for (auto& ch : chests) { ch->destroy(); }
+
     for (auto& ch : Canons) { ch->destroy(); }
     for (auto& ch : Spawners) { ch->destroy(); }
     for (auto& n : npcs) {n->destroy();}
