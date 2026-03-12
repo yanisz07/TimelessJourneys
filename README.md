@@ -8,6 +8,11 @@ The game was developed by a **team of 17 students** and focuses on applying obje
 
 ---
 
+## Individual Contributions
+
+A **one-page report describing each team member’s individual contribution** to the project is available in the `individual reports` folder.
+
+---
 ## External dependencies
 The project is supported for Windows and macOS machines. It utilizes the SDL suite of cross-platform development libraries to manage user inputs and image rendering.
 Installation guides are provided below. 
