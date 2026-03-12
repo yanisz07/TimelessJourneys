@@ -1,5 +1,11 @@
-# TimelessJourneys
-Timeless Journeys is a single-player top-down view hack-and-slash PC video game.
+# Timeless Journeys
+
+**Timeless Journeys** is a single-player top-down hack-and-slash PC game developed in **C++**.
+
+This project was created as part of the course **CSE201 – Object Oriented Programming in C++** at **École Polytechnique**.  
+The game was developed by a **team of 17 students** and focuses on applying object-oriented programming concepts to game development, including modular architecture, entity systems, and real-time interaction.
+
+---
 
 ## External dependencies
 The project is supported for Windows and macOS machines. It utilizes the SDL suite of cross-platform development libraries to manage user inputs and image rendering.
