@@ -3,6 +3,7 @@
 **Timeless Journeys** is a single-player top-down hack-and-slash PC game developed in **C++**.
 
 This project was created as part of the course **CSE201 – Object Oriented Programming in C++** at **École Polytechnique**.  
+
 The game was developed by a **team of 17 students** and focuses on applying object-oriented programming concepts to game development, including modular architecture, entity systems, and real-time interaction.
 
 ---
