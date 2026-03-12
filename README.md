@@ -10,7 +10,7 @@ The game was developed by a **team of 17 students** and focuses on applying obje
 
 ## Individual Contributions
 
-A **one-page report describing each team member’s individual contribution** to the project is available in the `individual reports` folder.
+A **one-page report for each team member describing their individual contribution** to the project is available in the `individual reports` folder.
 
 ---
 ## External dependencies
